@@ -4,8 +4,8 @@
 /**
  * express-generator generated file
  *
- * Markus Bähr, HOST
- * März 2018
+ * Markus Bï¿½hr, HOST
+ * Mï¿½rz 2018
  */
 
 /**
@@ -13,8 +13,8 @@
  */
 
 var mongoPath = '../mongodb/';
-var mongo = require(mongoPath + 'initialize');
-var database = require(mongoPath + 'testdb');
+//var mongo = require(mongoPath + 'initialize');
+//var database = require(mongoPath + 'testdb');
 
 var app = require('../app');
 var debug = require('debug')('nodejsprototype:server');

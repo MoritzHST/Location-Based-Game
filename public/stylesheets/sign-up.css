@@ -1,0 +1,28 @@
+.jumbotron {
+}
+
+.fill-screen {
+    min-height: 100vh;
+}
+
+.no-padding {
+    padding: 0px;
+}
+
+.no-margin {
+    margin: 0px;
+}
+
+.host-button, .host-button:hover {
+    background-color: #e1232b;
+    color: #EEE;
+    border: #BBB;
+}
+
+.host-button:active:focus, .host-button:active {
+    background-color: #ad0000 !important;
+}
+
+.text-container {
+    padding: 15px;
+}

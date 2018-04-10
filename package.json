@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "bad-words": "^1.6.1",
     "basic-auth-connect": "~1.0.0",
     "body-parser": "~1.15.1",
     "cookie-parser": "~1.4.3",

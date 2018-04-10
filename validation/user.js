@@ -4,7 +4,6 @@ const regex = new RegExp("^([a-zA-Z]{1,3})$");
 const filter = new BadwordFilter();
 
 function BadwordFilter() {
-
     this.filter = new Filter();
     this.length = function () {
         return filter.list.length;
@@ -28,12 +27,8 @@ function BadwordFilter() {
      */
     this.filter.addWords(wordList["words"]);
     console.log("Badword-List has been initialized and contains " + this.filter.list.length + " words");
-
 }
 
-
 module.exports = {
-
     filter: filter
-
 };

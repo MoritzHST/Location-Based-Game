@@ -11,11 +11,12 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.2.0",
     "express": "~4.13.4",
-    "http-errors": "^1.6.2",
+    "file-system": "^2.2.2",
+    "http-errors": "^1.6.3",
     "jade": "~1.11.0",
-    "mongodb": "^3.0.5",
+    "mongodb": "^3.0.6",
     "morgan": "~1.7.0",
     "serve-favicon": "~2.3.0",
-    "swagger-ui-express": "^3.0.4"
+    "swagger-ui-express": "^3.0.6"
   }
 }

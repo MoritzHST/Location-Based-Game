@@ -1,20 +1,56 @@
+const fs = require('file-system');
+const MongoClient = require('mongodb').MongoClient;
 const logging = require('./logging');
+const _conf = '../mongod.conf';
 
-Mongo =  {
-    client:require('mongodb').MongoClient,
-    url:'mongodb://localhost:27017',
-    database:'LocationBasedGame'
-};
+Conf = {
+	    port:'27017',
+	    bindIp: '127.0.0.1',
+	    defaultDb:'LocationBasedGame',
+}
 
-module.exports = {
-	call: function(pCallback, pMessage) {
-		Mongo.client.connect(Mongo.url, function (err, db) {
-	    	if (db == null) {
-	    		logging.Error("[" + pMessage + "]: Die Datenbank ist derzeit nicht erreichbar.");
-	    		return;
-	    	}
-	    		        
-	        pCallback(db.db(Mongo.database), db);   
-	    })
+/**
+ * Sucht innerhalb der _conf Datei nach angegebenen Mongo-Konfigurationen
+ * und ersetzt im Erfolgsfall die im Mongo-Objekt angegebenen mit dem ersten Treffer (der Zeile)
+ */
+
+var content = fs.readFileSync(require('path').resolve(__dirname, _conf), 'utf8').toString();
+
+if (!content) {
+	logging.Error(_conf + " ist nicht lesbar oder existiert nicht");
+} else {
+	var delimeters = [ ',', '#' ];
+	var lines = content.split('\n');
+	
+	for (key in Conf) {
+		
+		for (var line = 0; line < lines.length; line++) {
+			var keyIndex = lines[line].indexOf(key + ":");
+	
+			if (keyIndex >= 0 && !lines[line].trim().startsWith("#")) {
+				var value = lines[line].trim().substring(keyIndex + key.length)
+				
+				for (var i = 0; i < delimeters.length; i++) {
+					if (value.includes(delimeters[i])) {
+						value = value.substring(0, value.indexOf(delimeters[i])).trim();
+					}
+				}
+				
+				Conf[key] = value;
+			}
+		}
 	}
 }
+
+function MongoWrapper(database) {
+	this.Client = MongoClient;
+	this.Url = 'mongodb://' + Conf.bindIp + ':' + Conf.port;
+	this.Database = database ? database : Conf.defaultDb;
+}
+
+
+module.exports = {
+	    Object: function(database) {
+	    	return new MongoWrapper(database);
+	    }
+};

@@ -12,6 +12,8 @@
 
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -31,29 +33,44 @@
 </div>
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
-        <div class="panel panel-default">
-            <form class="form form-signup" role="form">
-                <div class="panel-body">
+        <div id="signup_signin_switch">
+            <ul class="navbar host-color switch_container">
+                <li class="sign-up-tabelement"><a href="#sign-up">Registrieren</a></li>
+                <li class="sign-up-tabelement"><a href="#sign-in">Anmelden</a></li>
+            </ul>
+            <div id="sign-up" class="panel panel-default">
+                <form class="form form-signup" role="form">
+                    <div class="panel-body">
 
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                            <input type="text" class="form-control" placeholder="Benutzername"/>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                <input type="text" class="form-control" placeholder="Benutzername"/>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="checkAGB">
-                        <label class="form-check-label" for="checkAGB">AGB's gelesen</label>
-                    </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="checkAGB">
+                            <label class="form-check-label" for="checkAGB">AGB's gelesen</label>
+                        </div>
 
-                </div>
-                <a class="btn btn-sm btn-primary btn-block host-button" role="button">
-                    Abschicken</a>
-            </form>
+                    </div>
+                    <a class="btn btn-sm btn-primary btn-block host-button" role="button">
+                        Abschicken</a>
+                </form>
+            </div>
         </div>
+
     </div>
 </div>
-</body>
 
+</body>
+<footer class="page-footer font-small host-footer">
+    <div class="host-agb">
+        AGB
+    </div>
+    <div class="host-impressum">
+        Impressum
+    </div>
+</footer>
 </html>

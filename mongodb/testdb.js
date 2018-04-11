@@ -1,5 +1,6 @@
 const objects = require('./objects');
 const operations = require('./operations');
+const logging = require('./logging');
 
 var testUser = new objects.User("Harald");
 var testQuiz = new objects.Quiz("Was ist eine Banane?", "Obst", "Gemüse");
@@ -12,8 +13,11 @@ var testEventTemplate = new objects.EventTemplate("Tag der offenen Tür", testMi
  * In diesem Fall alle Benutzer mit den Namen Harald.
  */
 
-operations.deleteObjects("users", {name: 'Harald'}, function (result) {
-    console.log(result.n + " Objekte gelöscht.");
+operations.deleteObjects("users", {name: 'Harald'}, function (err, result) {
+	if (!err)
+		logging.Info(result.n + " Objekte gelöscht.");
+	else
+		logging.Error(err);
 });
 
 /**
@@ -21,29 +25,41 @@ operations.deleteObjects("users", {name: 'Harald'}, function (result) {
  * (In diesem Fall delayed um 2 Sekunden)
  */
 setTimeout(function () {
-    operations.updateObject("users", testUser, null, function (result) {
-        console.log("Benutzer erstellt: " + result.value.name);
+    operations.updateObject("users", testUser, null, function (err, result) {
+    	if (!err)
+    		logging.Info("Benutzer erstellt: " + result.value.name);
+    	else
+    		logging.Error(err);    	
     });
 }, 2000);
 
 /**
  * Beispielaufruf: Sucht nach allen Benutzern in der Datenbank und gibt diese zurück.
  */
-operations.findAllObjects("users", function (items) {
-    console.log("USERS: " + items);
+operations.findAllObjects("users", function (err, items) {
+	if (!err)
+		logging.Info("USERS: " + items);
+	else
+		logging.Error(err);	
 });
 
 /**
  * Beispielaufruf: Sucht in der Datenbank nach einem Benutzer mit dem Namen 'Harald'
  * und gibt den ersten Treffer als Objekt zurück.
  */
-operations.findObject("users", {name: 'Harald'}, function (item) {
-    console.log("HARALD: " + JSON.stringify(item));
+operations.findObject("users", {name: 'Harald'}, function (err, item) {
+    if (!err)
+    	logging.Info("HARALD: " + JSON.stringify(item));
+	else
+		logging.Error(err);
 });
 
 /**
  * Beispielaufruf: Sucht in der Datenbank nach allen Collections und gibt diese aus.
  */
-operations.getCollection(null, function (collectionList) {
-    console.log(collectionList);
+operations.getCollection(null, function (err, collectionList) {
+	if (!err)
+		logging.Info(collectionList);
+	else
+		logging.Error(err);	
 });

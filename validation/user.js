@@ -1,6 +1,6 @@
 const Filter = require('bad-words');
 const wordList = require('./badwords.json');
-const regex = new RegExp("^([a-zA-Z]{1,3})$");
+const regex = new RegExp("^([a-zA-Z]{3,20})$");
 const filter = new BadwordFilter();
 
 function BadwordFilter() {

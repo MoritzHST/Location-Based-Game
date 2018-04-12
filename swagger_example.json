@@ -2,8 +2,8 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "Beispiel Swagger",
-    "description": "Beispiel Swagger Aufrufe",
+    "title": "Swagger",
+    "description": "Testen von verschiedenen GET/POST Methoden",
     "license": {
       "name": "MIT",
       "url": "https://opensource.org/licenses/MIT"
@@ -11,12 +11,6 @@
   },
   "host": "localhost:3000",
   "basePath": "/admin/test",
-  "tags": [
-    {
-      "name": "Test",
-      "description": "API for tests in the system"
-    }
-  ],
   "schemes": [
     "http"
   ],

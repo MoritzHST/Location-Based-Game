@@ -1,9 +1,9 @@
 const Filter = require('bad-words');
 const wordList = require('./badwords.json');
 const regex = new RegExp("^([a-zA-Z]{3,20})$");
-const filter = new BadwordFilter();
+const filter = new badwordFilter();
 
-function BadwordFilter() {
+function badwordFilter() {
     this.filter = new Filter();
     this.length = function () {
         return filter.list.length;
@@ -26,7 +26,6 @@ function BadwordFilter() {
      * Badword list by http://www.hyperhero.com/de/insults.htm (10.04.2018)
      */
     this.filter.addWords(wordList["words"]);
-    console.log("Badword-List has been initialized and contains " + this.filter.list.length + " words");
 }
 
 module.exports = {

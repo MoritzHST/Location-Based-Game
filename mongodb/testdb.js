@@ -10,12 +10,12 @@ var testEventTemplate = new objects.EventTemplate("Tag der offenen Tür", testMi
 
 /**
  * Beispielaufruf: entfernt alle übergebenden Benutzer aus der Datenbank.
- * In diesem Fall alle Benutzer mit den Namen Harald.
+ * Wird null übergeben, werden alle benutzer gelöscht.
  */
 
-operations.deleteObjects("users", {name: 'Harald'}, function (err, result) {
+operations.deleteObjects("users", null, function (err, result) {
 	if (!err)
-		logging.Info(result.n + " Objekte gelöscht.");
+		logging.Info("Alle Benutzer gelöscht.");
 	else
 		logging.Error(err);
 });
@@ -36,7 +36,7 @@ setTimeout(function () {
 /**
  * Beispielaufruf: Sucht nach allen Benutzern in der Datenbank und gibt diese zurück.
  */
-operations.findAllObjects("users", function (err, items) {
+operations.findObject("users", null, function (err, items) {
 	if (!err)
 		logging.Info("USERS: " + items);
 	else

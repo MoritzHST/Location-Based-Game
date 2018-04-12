@@ -3,7 +3,7 @@
   "info": {
     "version": "1.0.0",
     "title": "Beispiel Swagger",
-    "description": "Beispiel Swagger Aufrufe (User)",
+    "description": "Beispiel Swagger Aufrufe",
     "license": {
       "name": "MIT",
       "url": "https://opensource.org/licenses/MIT"
@@ -13,8 +13,8 @@
   "basePath": "/admin/test",
   "tags": [
     {
-      "name": "Users",
-      "description": "API for users in the system"
+      "name": "Test",
+      "description": "API for tests in the system"
     }
   ],
   "schemes": [
@@ -27,47 +27,132 @@
     "application/json"
   ],
   "paths": {
-    "/users": {
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Get all users in system (ok)",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Users"
-            }
-          }
-        }
-      }
-    },
-    "/users/{name}": {
-      "parameters": [
-        {
-          "name": "name",
-          "in": "path",
-          "required": true,
-          "description": "Name des zu suchenden Benutzers",
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Get Benutzer mit Name",
-        "responses": {
-          "200": {
-            "description": "Benutzer wurde gefunden",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          }
-        }
-      }
-    }
+     "/find/users": {
+       "parameters": [
+    	 {
+    	   "name": "_id",
+      	   "in": "query",
+      	   "required": false,
+      	   "description": "ID des Benutzers"
+    	 },
+      	 {
+      	   "name": "name",
+      	   "in": "query",
+      	   "required": false,
+      	   "description": "Name des Benutzers"
+      	 }
+       ],
+       "get": {
+         "tags": [
+           "Users"
+         ],
+         "summary": "Get User",
+         "responses": {
+           "200": {
+             "description": "Benutzer wurde(n) gefunden",
+             "schema": {
+               "$ref": "#/definitions/User"
+             }
+           }
+         }
+       }
+     },
+     "/insert/users": {
+         "parameters": [
+             {
+        	   "name": "name",
+        	   "in": "query",
+        	   "required": true,
+        	   "description": "Name des Benutzers"
+             },
+             {
+          	   "name": "token",
+          	   "in": "query",
+          	   "required": true,
+          	   "description": "Token des Benutzers"
+             }             
+           ],
+           "post": {
+               "tags": [
+                 "Users"
+               ],
+               "summary": "Insert User",
+               "responses": {
+                 "200": {
+                   "description": "Benutzer wurde hinzugefügt",
+                   "schema": {
+                     "$ref": "#/definitions/User"
+                   }
+                 }
+               }
+             }
+     },
+     "/update/users/{_id}": {
+    	 "parameters": [
+    		 {
+    			 "name": "_id",
+    			 "in": "path",
+    			 "required": true,
+    			 "description": "ID des Benutzers"
+    		 },
+    		 {
+    			 "name": "name",
+    			 "in": "query",
+    			 "required": false,
+    			 "description": "Neuer Name des Benutzers"
+    		 },
+    		 {
+    			 "name": "token",
+    			 "in": "query",
+    			 "required": false,
+    			 "description": "Neuer Token des Benutzers"
+    		 }
+    	 ],
+    	 "post": {
+    		 "tags": [
+    			 "Users"
+    		 ],
+    		 "summary": "Update User",
+    		 "responses": {
+    			 "200": {
+    				 "description": "Benutzerinformation wurden aktualisiert",
+    				 "schema": {
+    					 "$ref": "#/definitions/User"
+    				 }
+    			 }
+    		 }
+    	 }
+     },
+     "/delete/users": {
+    	 "parameters": [
+        	 {
+          	   "name": "_id",
+        	   "in": "query",
+        	   "required": true,
+        	   "description": "ID des Benutzers"
+          	 },    		 
+    		 {
+    			 "name": "name",
+    			 "in": "query",
+    			 "required": false,
+    			 "description": "Name des Benutzers"
+    		 }
+		 ],
+		 "post": {
+			 "tags": [
+				 "Users"
+			 ],
+			 "summary": "Delete User",
+			 "responses": {
+				 "200": {
+					 "description": "Benutzer wurde gelöscht",
+					 "schema": {
+						 "$ref": "#/definitions/User"
+					 }
+				 }
+			 }
+    	}    	 
+     }
   },
   "definitions": {
     "User": {
@@ -76,7 +161,7 @@
       ],
       "properties": {
         "_id": {
-          "type": "string",
+          "type": "integer",
           "uniqueItems": true
         },
         "name": {
@@ -84,13 +169,9 @@
           "uniqueItems": true
         },
         "token": {
-          "type": "string"
+          "type": "integer"
         }
       }
-    },
-    "Users": {
-      "type": "array",
-      "$ref": "#/definitions/User"
     }
   }
 }

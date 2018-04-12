@@ -5,6 +5,7 @@
 const assert = require('assert');
 const logging = require('./logging');
 const mongo = require('./mongo');
+const handler = require('./handler');
 
 module.exports = {
 
@@ -27,7 +28,10 @@ module.exports = {
      **********************************************/
 
     /**
-     * sucht nach einem Objekt in der Datenbank und gibt dieses im Erfolgsfall zurück
+     * ToDo: bei pObject prüfen, ob es sich um eine _id handelt
+     * 
+     * sucht nach einem Objekt in der Datenbank und gibt dieses im Erfolgsfall zurück.
+     * Wurde kein Objekt übergeben, werden Alle Objekte der Collection zurückgegeben.
      * pCollection -->
      * pObject -->
      * pCallback -->
@@ -38,31 +42,20 @@ module.exports = {
     		if (error) {
     			pCallback(error, null)
     		} else {
-	    		result.db(database.Database).collection(pCollection).findOne(pObject, function (err, db) {
-	    			result.close();
-	                pCallback(err, db);
-	            });     
+    			if (pObject) {
+		    		result.db(database.Database).collection(pCollection).findOne(handler.idFriendlyQuery(pObject), function (err, db) {
+		    			result.close();
+		                pCallback(err, db);
+		            });     
+    			} else {
+    	    		result.db(database.Database).collection(pCollection).find({}).toArray(function (err, db) {
+    	    			result.close();
+    	                pCallback(err, db);
+    	            });       				
+    			}
     		}
     	});    	
     },
-
-    /**
-     * 
-     */
-    findAllObjects: function (pCollection, pCallback) {
-    	var database = mongo.Object();
-    	database.Client.connect(database.Url, function(error, result) {
-    		if (error) {
-    			pCallback(error, null)
-    		} else {    		
-	    		result.db(database.Database).collection(pCollection).find({}).toArray(function (err, db) {
-	    			result.close();
-	                pCallback(err, db);
-	            });       		
-    		}
-    	});
-    },
-
 
     /**
      * ---
@@ -75,8 +68,9 @@ module.exports = {
     		if (error) {
     			pCallback(error, null)
     		} else {    		
-	    		result.db(database.Database).collection(pCollection).findAndModify(pObject, [['_id', 'asc']],
-	                    {'$set': ((pQuery) ? pQuery : pObject)}, {new: true, upsert: true}, function (err, db) {
+    			var friendlyObject = handler.idFriendlyQuery(pObject);
+	    		result.db(database.Database).collection(pCollection).findAndModify(friendlyObject, [['_id', 'asc']],
+	                    {'$set': ((pQuery) ? pQuery : friendlyObject)}, {new: true, upsert: true}, function (err, db) {
 	                result.close();
 	                pCallback(err, db);
 	            });    
@@ -96,7 +90,7 @@ module.exports = {
     		if (error) {
     			pCallback(error, null)
     		} else {    		
-	    		result.db(database.Database).collection(pCollection).deleteMany(pObjects, function (err, db) {
+	    		result.db(database.Database).collection(pCollection).deleteMany(handler.idFriendlyQuery(pObjects), function (err, db) {
 	    			result.close();
 	                pCallback(err, db);
 	            });       		

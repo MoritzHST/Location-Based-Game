@@ -5,20 +5,18 @@ const filter = new badwordFilter();
 
 function badwordFilter() {
     this.filter = new Filter();
-    this.length = function () {
-        return filter.list.length;
-    };
 
     /**
      * only letters are allowed for usernames
      * the maximum length is 20 Characters
      * the minimim length is 3 Characters
      */
-    this.isValid = function (pUsername) {
-        if (!regex.test(pUsername)) {
-            return false;
-        }
+    this.isKind = function (pUsername) {
         return !this.filter.isProfane(pUsername);
+    };
+
+    this.matchesRegex = function (pUsername) {
+        return regex.test(pUsername);
     };
 
     /**

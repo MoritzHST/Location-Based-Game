@@ -1,7 +1,6 @@
 const operations = require('../mongodb/operations');
 const handler = require('../mongodb/handler');
 const router = require('express').Router();
-const validator = require('../validation/user').filter;
 
 /* Global */
 
@@ -18,9 +17,9 @@ router.get('/find/users', function (req, res) {
 router.post('/insert/users', function (req, res) {
     const username = req.query.name;
 
-    if (!isValidUsername(username, res)) {
-        return;
-    }
+    handler.checkUsernameValidity(username, function (pErr) {
+        res.status(422).jsonp(pErr);
+    });
 
     //generiere zufälligen User-Token
     req.query.token = operations.generateToken();
@@ -39,8 +38,10 @@ router.post('/insert/users', function (req, res) {
 /* Update User */
 router.post('/update/users/:id', function (req, res) {
     let username = req.query.name;
-    if (username !== undefined && !isValidUsername(username, res)) {
-        return;
+    if (username !== undefined) {
+        handler.checkUsernameValidity(username, function (pErr) {
+            res.status(422).jsonp(pErr);
+        });
     }
 
     if (handler.checkIfValidQuery(req.query)) {
@@ -68,21 +69,5 @@ router.post('/delete/users', function (req, res) {
         });
     }
 });
-
-function isValidUsername(pUsername, res) {
-    if (!validator.matchesRegex(pUsername)) {
-        res.status(422).jsonp({
-            "error": "Der Nutzername muss zwischen 3 und 20 Zeichen lang sein und darf nur Buchstaben enthalten."
-        });
-        return false;
-    }
-    if (!validator.isKind(pUsername)) {
-        res.status(422).jsonp({
-            "error": "Der Nutzername enthält unzulässige Begrifflichkeiten."
-        });
-        return false;
-    }
-    return true;
-}
 
 module.exports = router;

@@ -1,0 +1,3 @@
+# ignore all files and folders starting with a dot, also the local mongo config
+.*
+mongod.conf

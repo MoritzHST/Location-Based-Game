@@ -73,7 +73,7 @@
 				"summary": "Insert User",
 				"responses": {
 					"200": {
-						"description": "Benutzer wurde hinzugefügt",
+						"description": "Benutzer wurde hinzugefï¿½gt",
 						"schema": {
 							"$ref": "#/definitions/User"
 						}
@@ -139,9 +139,159 @@
 				"summary": "Delete User",
 				"responses": {
 					"200": {
-						"description": "Benutzer wurde gelöscht",
+						"description": "Benutzer wurde geloescht",
 						"schema": {
 							"$ref": "#/definitions/User"
+						}
+					}
+				}
+			}
+		},
+		"/find/rooms": {
+			"parameters": [
+				{
+					"name": "_id",
+					"in": "query",
+					"required": false,
+					"description": "ID des Raumes"
+				},
+				{
+					"name": "roomnumber",
+					"in": "query",
+					"required": false,
+					"description": "Raumnummer"
+				},
+				{
+					"name": "name",
+					"in": "query",
+					"required": false,
+					"description": "Name des Raumes"
+				}
+			],
+			"get": {
+				"tags": [
+					"Rooms"
+				],
+				"summary": "Get Room",
+				"responses": {
+					"200": {
+						"description": "RÃ¤um wurde gefunden",
+						"schema": {
+							"$ref": "#/definitions/Room"
+						}
+					}
+				}
+			}
+		},
+		"/insert/rooms": {
+			"parameters": [
+				{
+					"name": "roomnumber",
+					"in": "query",
+					"required": true,
+					"description": "Raumnummer"
+				},
+				{
+					"name": "name",
+					"in": "query",
+					"required": true,
+					"description": "Name des Raumes"
+				},
+				{
+					"name": "description",
+					"in": "query",
+					"required": false,
+					"description": "Beschreibung des Raumes"
+				}
+			],
+			"post": {
+				"tags": [
+					"Rooms"
+				],
+				"summary": "Insert Room",
+				"responses": {
+					"200": {
+						"description": "Raum wurde hinzugefÃ¼gt",
+						"schema": {
+							"$ref": "#/definitions/Room"
+						}
+					}
+				}
+			}
+		},
+		"/update/rooms/{_id}": {
+			"parameters": [
+				{
+					"name": "_id",
+					"in": "path",
+					"required": true,
+					"description": "ID des Raumes"
+				},
+				{
+					"name": "roomnumber",
+					"in": "query",
+					"required": false,
+					"description": "Raumnummer"
+				},
+				{
+					"name": "name",
+					"in": "query",
+					"required": false,
+					"description": "Name des Raumes"
+				},
+				{
+					"name": "description",
+					"in": "query",
+					"required": false,
+					"description": "Beschreibung des Raumes"
+				}
+			],
+			"post": {
+				"tags": [
+					"Rooms"
+				],
+				"summary": "Update Room",
+				"responses": {
+					"200": {
+						"description": "Rauminformationen wurden aktualisiert",
+						"schema": {
+							"$ref": "#/definitions/Room"
+						}
+					}
+				}
+			}
+		},
+		"/delete/rooms": {
+			"parameters": [
+				{
+					"name": "_id",
+					"in": "query",
+					"required": true,
+					"description": "ID des Raumes"
+				},
+				{
+					"name": "roomnumber",
+					"in": "query",
+					"required": false,
+					"description": "Raumnummer"
+				},
+				{
+					"name": "name",
+					"in": "query",
+					"required": false,
+					"description": "Name des Raumes"
+				}
+			],
+			"post": {
+				"tags": [
+					"Rooms"
+				],
+				"summary": "Delete Room",
+				"responses": {
+					"200": {
+						"description": "Raum wurde geloescht",
+						"schema": {
+							"$ref": "#/definitions/Rooms"
 						}
 					}
 				}
@@ -164,6 +314,28 @@
 				},
 				"token": {
 					"type": "integer"
+				}
+			}
+		},
+		"Room": {
+			"required": [
+				"_id"
+			],
+			"properties": {
+				"_id": {
+					"type": "integer",
+					"uniqueItems": true
+				},
+				"name": {
+					"type": "string",
+					"uniqueItems": true
+				},
+				"roomnumber": {
+					"type": "string",
+					"uniqueItems": true
+				},
+				"description": {
+					"type": "string"
 				}
 			}
 		}

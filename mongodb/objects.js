@@ -64,7 +64,7 @@ module.exports = {
      * pMinigame -> vom Typ eines Minigames (Quiz, ...), hinterlegt ein Minigameobjekt
      */
     MinigameRoomMapping: function (pRoom, pMinigame) {
-        logging.Info("initializing new MinigameRoomMapping")
+        logging.Info("initializing new MinigameRoomMapping");
         logging.Parameter("pRoom", pRoom);
         logging.Parameter("pMinigame", pMinigame);
         this.room = pRoom;
@@ -75,15 +75,17 @@ module.exports = {
     /**
      * Erzeugt ein neues Raumobjekt bestehend aus Raumnummer und optionalem Usernamen
      *
-     * pRoomnumber -> Nummer des Raums als String
+     * pRoomnumber -> Nummer des Raumes als String
      * pName -> Name des Raumes
+     * pDescription -> Info zum Raum
      */
-    Room: function (pRoomnumber, pName) {
+    Room: function (pRoomnumber, pName, pDescription) {
         logging.Info("initializing new Room");
         logging.Parameter("pRoomnumber", pRoomnumber);
         logging.Parameter("pName", pName);
         this.roomnumber = pRoomnumber;
         this.name = pName;
+        this.description = pDescription;
         logging.Info("initializing Room done");
     }
-}
+};

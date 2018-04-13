@@ -73,7 +73,7 @@
 				"summary": "Insert User",
 				"responses": {
 					"200": {
-						"description": "Benutzer wurde hinzugef�gt",
+                      "description": "Benutzer wurde hinzugefügt",
 						"schema": {
 							"$ref": "#/definitions/User"
 						}
@@ -139,7 +139,7 @@
 				"summary": "Delete User",
 				"responses": {
 					"200": {
-						"description": "Benutzer wurde geloescht",
+                      "description": "Benutzer wurde gelöscht",
 						"schema": {
 							"$ref": "#/definitions/User"
 						}
@@ -175,7 +175,7 @@
 				"summary": "Get Room",
 				"responses": {
 					"200": {
-						"description": "Räum wurde gefunden",
+                      "description": "Raum wurde gefunden",
 						"schema": {
 							"$ref": "#/definitions/Room"
 						}
@@ -289,7 +289,7 @@
 				"summary": "Delete Room",
 				"responses": {
 					"200": {
-						"description": "Raum wurde geloescht",
+                      "description": "Raum wurde gelöscht",
 						"schema": {
 							"$ref": "#/definitions/Rooms"
 						}

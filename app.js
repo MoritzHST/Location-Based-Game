@@ -1,16 +1,14 @@
 var createError = require('http-errors');
 var express = require('express');
+var fs = require('file-system');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var testRouter = require('./routes/test');
-
 var app = express();
 var swaggerUi = require('swagger-ui-express');
-var swaggerDocument = require('./swagger_example.json');
+var swaggerDocument = require('./swagger.json');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,8 +22,13 @@ app.use(express.static(path.join(__dirname, 'public'), {
     extensions: ['html', 'htm']
 }));
 
-app.use('/', indexRouter);
-app.use('/admin/test', testRouter);
+// use routes for each collection
+
+fs.readdirSync('../routes/').forEach(file => {
+  app.use('/', require('./routes/' + file));
+});
+
+// use routes for swagger tests
 app.use('/admin/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // catch 404 and forward to error handler

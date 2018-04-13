@@ -14,11 +14,12 @@ Conf = {
  * und ersetzt im Erfolgsfall die im Mongo-Objekt angegebenen mit dem ersten Treffer (der Zeile)
  */
 
-var content = fs.readFileSync(require('path').resolve(__dirname, _conf), 'utf8').toString();
+const file = require('path').resolve(__dirname, _conf);
 
-if (!content) {
+if (!fs.existsSync(file)) {
 	logging.Error(_conf + " ist nicht lesbar oder existiert nicht");
 } else {
+	var content = fs.readFileSync(file, 'utf8').toString();
 	var delimeters = [ ',', '#' ];
 	var lines = content.split('\n');
 	

@@ -1,12 +1,12 @@
 #host-header {
-    background-color: #e1232b;
-    border: none;
+	background-color: #e1232b;
+	border: none;
 }
 
 .host-logo-image {
-    width: 100%;
+	width: 100%;
 }
 
 .host-logo-image-container {
-    max-width: 25%;
+	max-width: 25%;
 }

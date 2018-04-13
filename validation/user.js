@@ -12,11 +12,11 @@ function badwordFilter() {
      * the minimim length is 3 Characters
      */
     this.isKind = function (pUsername) {
-        return !this.filter.isProfane(pUsername);
+        return pUsername !== undefined && pUsername !== null && !this.filter.isProfane(pUsername);
     };
 
     this.matchesRegex = function (pUsername) {
-        return regex.test(pUsername);
+        return pUsername !== undefined && pUsername !== null && regex.test(pUsername);
     };
 
     /**

@@ -1,9 +1,11 @@
-function ajaxRequest(pUrl, pMethod, pCallback) {
+const baseUrl = "admin/test/";
+
+function ajaxRequest(pUrl, pMethod, pObject, pCallback, pFailCallback) {
     $.ajax({
-        type: "POST",
-        url: pUrl,
-        success: function (data) {
-            callback(data, passData)
-        }
+        type: pMethod,
+        url: baseUrl + pUrl + pObject,
+        data: pObject,
+        success: pCallback,
+        error: pFailCallback
     });
 }

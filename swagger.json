@@ -10,7 +10,7 @@
 		}
 	},
 	"host": "localhost:3000",
-	"basePath": "/admin/test",
+	"basePath": "/",
 	"schemes": [
 		"http"
 	],

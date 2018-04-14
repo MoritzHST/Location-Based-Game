@@ -17,24 +17,32 @@ router.get('/find/users', function (req, res) {
 router.post('/insert/users', function (req, res) {
     const username = req.query.name;
 
-    const validity = handler.getUsernameValidity(username);
-    if (!validity.isValid) {
-        res.status(422).jsonp(validity.err);
-        return;
-    }
+    operations.findObject("users", {"name": username}, function (err, item) {
+        if (item !== null) {
+            res.status(422).jsonp({
+                "error": "Nutzername ist bereits vergeben"
+            });
+            return;
+        }
+        const validity = handler.getUsernameValidity(username);
+        if (!validity.isValid) {
+            res.status(422).jsonp(validity.err);
+            return;
+        }
 
-    //generiere zufälligen User-Token
-    req.query.token = operations.generateToken();
+        //generiere zufälligen User-Token
+        req.query.token = operations.generateToken();
 
-    if (handler.checkIfValidQuery(req.query)) {
-        operations.updateObject("users", req.query, null, function (err, item) {
-            handler.dbResult(err, res, item, "Das Item " + JSON.stringify(req.query).replace(/\"/g, '') + " kann nicht hinzugefüt werden.");
-        });
-    } else {
-        res.status(422).jsonp({
-            "error": "Die übergebenen Parameter sind ungültig"
-        });
-    }
+        if (handler.checkIfValidQuery(req.query)) {
+            operations.updateObject("users", req.query, null, function (err, item) {
+                handler.dbResult(err, res, item, "Das Item " + JSON.stringify(req.query).replace(/\"/g, '') + " kann nicht hinzugefüt werden.");
+            });
+        } else {
+            res.status(422).jsonp({
+                "error": "Die übergebenen Parameter sind ungültig"
+            });
+        }
+    });
 });
 
 /* Update User */

@@ -17,9 +17,11 @@ router.get('/find/users', function (req, res) {
 router.post('/insert/users', function (req, res) {
     const username = req.query.name;
 
-    handler.checkUsernameValidity(username, function (pErr) {
-        res.status(422).jsonp(pErr);
-    });
+    const validity = handler.getUsernameValidity(username);
+    if (!validity.isValid) {
+        res.status(422).jsonp(validity.err);
+        return;
+    }
 
     //generiere zufälligen User-Token
     req.query.token = operations.generateToken();
@@ -39,9 +41,11 @@ router.post('/insert/users', function (req, res) {
 router.post('/update/users/:id', function (req, res) {
     let username = req.query.name;
     if (username !== undefined) {
-        handler.checkUsernameValidity(username, function (pErr) {
-            res.status(422).jsonp(pErr);
-        });
+        const validity = handler.getUsernameValidity(username);
+        if (!validity.isValid) {
+            res.status(422).jsonp(validity.err);
+            return;
+        }
     }
 
     if (handler.checkIfValidQuery(req.query)) {

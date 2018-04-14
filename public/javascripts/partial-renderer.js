@@ -1,4 +1,4 @@
-function setNodeHookFromFile(pHeader, pNodeHook, pFilePath) {
+function setNodeHookFromFile(pHeader, pNodeHook, pFilePath, pCallback, pCallbackObject) {
     return fetch(pFilePath)
         .then(function (response) {
             return response.text();
@@ -7,5 +7,8 @@ function setNodeHookFromFile(pHeader, pNodeHook, pFilePath) {
             pNodeHook.innerHTML = html;
             $(pNodeHook.getElementsByTagName('link')).appendTo(pHeader);
             $(pNodeHook.getElementsByTagName('script')).appendTo(pHeader);
+            if (pCallback != undefined) {
+                pCallback(pCallbackObject);
+            }
         });
 }

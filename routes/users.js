@@ -15,24 +15,66 @@ router.get('/find/users', function(req, res) {
 /* POST */
 /* Insert User */
 router.post('/insert/users', function(req, res) {
-    if (handler.checkIfValidQuery(req.query)) {
-        operations.updateObject("users", req.query, null, function(err, item) {
-            handler.dbResult(err, res, item, "Das Item " + JSON.stringify(req.query).replace(/\"/g, '') + " kann nicht hinzugefüt werden.");
-        });
-    } else {
-        res.status(422).jsonp({
-            "error" : "Die übergebenen Parameter sind ungültig"
-        });
-    }
+    const username = req.query.name;
+
+    operations.findObject("users", {
+        "name" : username.trim()
+    }, function(err, item) {
+        if (item !== null) {
+            res.status(422).jsonp({
+                "error" : "Nutzername ist bereits vergeben"
+            });
+            return;
+        }
+        const validity = handler.getUsernameValidity(username);
+        if (!validity.isValid) {
+            res.status(422).jsonp(validity.err);
+            return;
+        }
+
+        // generiere zufälligen User-Token
+        req.query.token = operations.generateToken();
+
+        if (handler.checkIfValidQuery(req.query)) {
+            operations.updateObject("users", req.query, null, function(err, item) {
+                handler.dbResult(err, res, item, "Das Item " + JSON.stringify(req.query).replace(/\"/g, '') + " kann nicht hinzugefüt werden.");
+            });
+        } else {
+            res.status(422).jsonp({
+                "error" : "Die übergebenen Parameter sind ungültig"
+            });
+        }
+    });
 });
 
 /* Update User */
 router.post('/update/users/:id', function(req, res) {
     if (handler.checkIfValidQuery(req.query)) {
-        operations.updateObject("users", handler.idFriendlyQuery({
-            _id : req.params.id
-        }), req.query, function(err, item) {
-            handler.dbResult(err, res, item, "Das Item " + req.params.id + " konnte nicht mit " + JSON.stringify(req.query).replace(/\"/g, '') + " geupdatet werden.");
+
+        // prüfe, ob der eingegebene Name zulässig ist.
+        let username = req.query.name;
+        if (username !== undefined) {
+            const validity = handler.getUsernameValidity(username);
+            if (!validity.isValid) {
+                res.status(422).jsonp(validity.err);
+                return;
+            }
+        }
+
+        // prüfe, ob der eingegebene Name bereits verwendet wird.
+        operations.findObject("users", req.query, function(err, item) {
+            if (item && item._id !== req.params.id) {
+                res.status(422).jsonp("Es existiert bereits ein Benutzer mit diesem Namen.");
+            } else {
+                // wenn alle tests bestanden wurden, versuche die
+                // Benutzerinformationen zu updaten.
+
+                operations.updateObject("users", handler.idFriendlyQuery({
+                    _id : req.params.id
+                }), req.query, function(err, item) {
+                    handler.dbResult(err, res, item, "Das Item " + req.params.id + " konnte nicht mit " + JSON.stringify(req.query).replace(/\"/g, '') + " geupdatet werden.");
+                });
+            }
         });
     } else {
         res.status(422).jsonp({

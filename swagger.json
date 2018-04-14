@@ -58,12 +58,6 @@
 					"in": "query",
 					"required": true,
 					"description": "Name des Benutzers"
-				},
-				{
-					"name": "token",
-					"in": "query",
-					"required": true,
-					"description": "Token des Benutzers"
 				}
 			],
 			"post": {

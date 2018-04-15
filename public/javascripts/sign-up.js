@@ -6,8 +6,8 @@ function init() {
 
     //Register-Button Funktion registrieren
     $("#btn-sign-up").click(function () {
-        let $textfieldName = $("#textfield-name-sign-up");
-        const name = ($textfieldName.val() == "" || $textfieldName.val() == undefined) ? "" : "name=" + $textfieldName.val();
+        const textfieldName = $("#textfield-name-sign-up");
+        const name = (textfieldName.val() === "" || textfieldName.val() === undefined) ? "" : "name=" + textfieldName.val();
         ajaxRequest("insert/users?", "POST", name, redirectOnSuccess, displayFailureMessage);
         $(this).addClass('disabled');
     });
@@ -44,7 +44,7 @@ function setHooks() {
 }
 
 function redirectOnSuccess() {
-    window.location = "game-overview.html";
+    window.location = "play";
 }
 
 function displayFailureMessage(callbackObj) {

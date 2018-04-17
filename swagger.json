@@ -196,6 +196,13 @@
 					"in": "query",
 					"required": false,
 					"description": "Beschreibung des Raumes"
+                },
+              {
+                "name": "image",
+                "in": "formData",
+                "description": "Bild",
+                "required": false,
+                "type": "file"
 				}
 			],
 			"post": {
@@ -238,6 +245,13 @@
 					"in": "query",
 					"required": false,
 					"description": "Beschreibung des Raumes"
+                },
+              {
+                "name": "image",
+                "in": "formData",
+                "description": "Bild",
+                "required": false,
+                "type": "file"
 				}
 			],
 			"post": {

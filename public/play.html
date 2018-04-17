@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LocationBasedGame</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/jquery.mmenu.all.css">
+    <link rel="stylesheet" href="stylesheets/slide-in-menu.css">
+
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="stylesheets/play.css">
+
+    <!-- jQuery library -->
+    <script src="javascripts/jquery.min.js"></script>
+    <script src="javascripts/jquery-ui.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="javascripts/bootstrap.min.js"></script>
+
+    <script src="javascripts/play.js"></script>
+    <script src="javascripts/partial-renderer.js"></script>
+    <script src="javascripts/ajax-call.js"></script>
+    <script src='javascripts/jquery.mmenu.all.js'></script>
+</head>
+<body>
+<div class="page">
+    <div class="header">
+        <!-- SlideIn-Menu Button -->
+        <a class="glyphicon glyphicon-menu-hamburger" href="#menu"></a>
+    </div>
+    <div id="header-hook"></div>
+    <!-- SlideIn-Menu Box -->
+    <nav id="menu" class="host-menu">
+        <ul>
+            <li><a href="#">Spielübersicht</a></li>
+            <li><a href="#">Score-Board</a></li>
+            <li><a href="#">Lageplan</a></li>
+
+            <li class="Divider host-divider">Abmelden</li>
+
+            <li><a href="#">Logout</a></li>
+
+            <li class="Divider host-divider">Hinweise</li>
+            <li><a href="#">Spielanleitung</a></li>
+            <li><a href="#">AGBs</a></li>
+        </ul>
+    </nav>
+
+    <!-- Content Box -->
+    <div id="content-hook"></div>
+
+    <!-- Footer einblenden -->
+    <div id="footer-hook"></div>
+</div>
+
+</body>
+</html>

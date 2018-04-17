@@ -6,27 +6,6 @@ html, body {
     overflow-x: hidden;
 }
 
-.host-footer {
-    padding-top: 50px;
-    width: 100%;
-    text-align: center;
-    color: #e1232b;
-    display: inline-flex;
-}
-
-.host-agb {
-    padding-right: 5px;
-    text-align: right;
-    width: 50%;
-    border-right: 1px solid #e1232b;
-}
-
-.host-impressum {
-    padding-left: 5px;
-    text-align: left;
-    width: 50%;
-}
-
 .host-button, .host-button:hover, .host-color, a:hover, a:focus {
     background-color: #e1232b !important;
     color: #EEE !important;

@@ -10,6 +10,9 @@ function init() {
     setSlideInMenu();
 }
 
+/**
+ * jQuery mmenu konfigurieren
+ */
 function setSlideInMenu() {
     $("#menu").mmenu({
         navbar: {

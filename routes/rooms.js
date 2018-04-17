@@ -1,17 +1,18 @@
 const operations = require('../mongodb/operations');
 const handler = require('../mongodb/handler');
 const router = require('express').Router();
+
+const fs = require('fs');
 const multer = require('multer');
 const upload = multer(
     {
-        dest: '../uploads/',
-        fileFilter: function fileFilter(req, file, cb) {
+        dest: '../public/uploads/images/room',
+        fileFilter: function (req, file, cb) {
             if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-                return cb(new Error('Only image files are allowed!'));
+                return cb(null, false);
             }
             cb(null, true);
         }
-
     });
 
 /* Global */
@@ -27,10 +28,11 @@ router.get('/find/rooms', function (req, res) {
 /* POST */
 /* Insert Room */
 router.post('/insert/rooms', upload.single('image'), function (req, res) {
-    if (req.file !== undefined && req.file !== null) {
-        req.query["image"] = req.file.path;
+    const file = req.file;
+    if (file !== undefined && file !== null) {
+        req.query["image"] = file.path.replace("..\\public\\", "");
     }
-    console.log(req.file);
+
     if (handler.checkIfValidQuery(req.query)) {
         operations.updateObject("rooms", req.query, null, function (err, item) {
             handler.dbResult(err, res, item, "Das Item " + JSON.stringify(req.query).replace(/\"/g, '') + " kann nicht hinzugefüt werden.");
@@ -43,7 +45,34 @@ router.post('/insert/rooms', upload.single('image'), function (req, res) {
 });
 
 /* Update Room */
-router.post('/update/rooms/:id', function (req, res) {
+router.post('/update/rooms/:id', upload.single('image'), function (req, res) {
+    const file = req.file;
+    if (file !== undefined && file !== null) {
+        deleteFileForRoom(req.params.id, function () {
+            req.query["image"] = file.path.replace("..\\public\\", "");
+            updateRoom(req, res);
+        });
+    } else {
+        updateRoom(req, res);
+    }
+});
+
+/* Delete Room(s) */
+router.post('/delete/rooms', function (req, res) {
+    deleteFileForRoom(req.params.id, function () {
+        if (handler.checkIfValidQuery(req.query)) {
+            operations.deleteObjects("rooms", req.query, function (err, item) {
+                handler.dbResult(err, res, item, "Die Items mit den Eigenschaften " + JSON.stringify(req.query).replace(/\"/g, '') + " konnten nicht gelöscht werden.");
+            });
+        } else {
+            res.status(422).jsonp({
+                "error": "Die übergebenen Parameter sind ungültig"
+            });
+        }
+    });
+});
+
+function updateRoom(req, res) {
     if (handler.checkIfValidQuery(req.query)) {
         operations.updateObject("rooms", handler.idFriendlyQuery({
             _id: req.params.id
@@ -55,19 +84,23 @@ router.post('/update/rooms/:id', function (req, res) {
             "error": "Die übergebenen Parameter sind ungültig"
         });
     }
-});
+}
 
-/* Delete Room(s) */
-router.post('/delete/rooms', function (req, res) {
-    if (handler.checkIfValidQuery(req.query)) {
-        operations.deleteObjects("rooms", req.query, function (err, item) {
-            handler.dbResult(err, res, item, "Die Items mit den Eigenschaften " + JSON.stringify(req.query).replace(/\"/g, '') + " konnten nicht gelöscht werden.");
-        });
-    } else {
-        res.status(422).jsonp({
-            "error": "Die übergebenen Parameter sind ungültig"
-        });
-    }
-});
+function deleteFileForRoom(pId, pCallback) {
+    operations.findObject(
+        "rooms",
+        handler.idFriendlyQuery({"_id": pId}),
+        function (err, item) {
+            pCallback();
+            if (item === null || item.image === null || item.image === undefined) {
+                return;
+            }
+            if (item.image !== null && item.image !== undefined) {
+                fs.unlink("..\\public\\" + item.image, function () {
+                });
+            }
+        }
+    );
+}
 
 module.exports = router;

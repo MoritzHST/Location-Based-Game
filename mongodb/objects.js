@@ -79,14 +79,14 @@ module.exports = {
      * pName -> Name des Raumes
      * pDescription -> Info zum Raum
      */
-    Room: function (pRoomnumber, pName, pDescription, pImagePath) {
+    Room: function (pRoomnumber, pName, pDescription, pImage) {
         logging.Info("initializing new Room");
         logging.Parameter("pRoomnumber", pRoomnumber);
         logging.Parameter("pName", pName);
         this.roomnumber = pRoomnumber;
         this.name = pName;
         this.description = pDescription;
-        this.imagePath = pImagePath;
+        this.image = pImage;
         logging.Info("initializing Room done");
     }
 };

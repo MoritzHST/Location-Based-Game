@@ -40,7 +40,10 @@ function init() {
  * Füllt Hooks der HTML Datei
  */
 function setHooks() {
-    setNodeHookFromFile($('head'), document.getElementById("header-hook"), "../partials/header/header.html");
+
+    const head = $('head');
+    setNodeHookFromFile(head, document.getElementById("header-hook"), "../partials/header/header.html");
+    setNodeHookFromFile(head, document.getElementById("footer-hook"), "../partials/footer/footer.html");
 }
 
 function redirectOnSuccess() {

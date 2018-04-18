@@ -22,8 +22,11 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(cookieSession({
     name: 'session',
-    secret: randomstring.generate(),
-    maxAge: 24 * 60 * 60 * 1000
+    //secret: randomstring.generate(),
+    keys: [""],
+    signed: true,
+    maxAge: 24 * 60 * 60 * 1000,
+    httpOnly: false
 }));
 
 // use routes for swagger tests

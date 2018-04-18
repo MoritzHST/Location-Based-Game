@@ -6,7 +6,7 @@ html, body {
     overflow-x: hidden;
 }
 
-.host-button, .host-button:hover, .host-color, a:hover, a:focus {
+.host-button, .host-button:hover, .host-color, form a:hover, form a:focus {
     background-color: #e1232b !important;
     color: #EEE !important;
     border: #BBB !important;

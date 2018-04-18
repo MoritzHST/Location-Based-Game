@@ -9,12 +9,12 @@ nav:not(.mm-menu) {
 }
 
 /* Custom Styles for JQuery mmenu */
-.header a {
+.header a, .header a:active, .header a:focus, .header a:hover {
     position: fixed;
     border-radius: 0 4px 4px 0;
-    background-color: #333333;
+    background-color: #333333 !important;
     z-index: 100 !important;
-    color: #EEEEEE;
+    color: #EEEEEE !important;
     font-size: 1.5em;
     padding: 5px;
     top: 0;

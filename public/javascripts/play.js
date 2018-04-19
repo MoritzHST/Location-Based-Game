@@ -1,12 +1,12 @@
 window.onload = init;
 
-$(function () {
+$(function() {
     $('nav#menu').mmenu();
 });
 
 function init() {
     setHooks();
-    //initialize SlideInMenu
+    // initialize SlideInMenu
     setSlideInMenu();
 
 }
@@ -16,16 +16,16 @@ function init() {
  */
 function setSlideInMenu() {
     const cookie = getObjectFromCookie("session");
-    const userName = cookie.user[0].name;
-    const userToken = cookie.user[0].token;
+    const userName = cookie.user.name;
+    const userToken = cookie.user.token;
     $("#menu").mmenu({
-        navbar: {
-            title: ""
+        navbar : {
+            title : ""
         },
-        navbars: [{
-            position: "top",
-            content: ["prev", "title"]
-        }]
+        navbars : [ {
+            position : "top",
+            content : [ "prev", "title" ]
+        } ]
     });
 
     $('#play-user-information').html("Name: " + userName + "<br/> Token: " + userToken);
@@ -42,7 +42,7 @@ function setHooks() {
 
 function getObjectFromCookie(pCookieName) {
     const cookieStrings = document.cookie.split(";");
-    for (let i in cookieStrings) {
+    for ( let i in cookieStrings) {
         if (cookieStrings[i].startsWith(pCookieName)) {
             return JSON.parse(atob(cookieStrings[i].substr(pCookieName.length + 1)));
         }

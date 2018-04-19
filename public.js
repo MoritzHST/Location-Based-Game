@@ -16,14 +16,19 @@ router.use('/sign-up', function(req, res, next) {
 /* Only allowed when session exists */
 
 router.post('/login', function(req, res) {
-    operations.findObject("users", (handler.checkIfValidQuery(req.query) ? req.query : null), function(err, user) {
-        if (err) {
-            res.status(422).jsonp(err);
-        } else {
-            req.session.user = user;
-            res.status(200).jsonp(user);
-        }
-    });
+    req.query = JSON.parse(JSON.stringify(req.body));
+    if (req.query.name && req.query.token) {
+        operations.findObject("users", req.query, function(err, user) {
+            if (err) {
+                res.status(422).jsonp(err);
+            } else {
+                req.session.user = user;
+                res.status(200).jsonp(user);
+            }
+        });
+    } else {
+        res.status(422).jsonp({ "error": "Die übergebenen Daten sind nicht gültig." });
+    }
 });
 
 /* Whenever used, redirect to default site */

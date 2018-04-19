@@ -2,7 +2,7 @@ const logging = require('./logging');
 const ObjectID = require('mongodb').ObjectID;
 const validator = require('../validation/user').filter;
 
-function UserValidityWrapper(pIsValid, pErr) {
+function userValidityWrapper(pIsValid, pErr) {
     this.isValid = pIsValid;
     this.err = pErr;
 }
@@ -50,16 +50,16 @@ module.exports = {
     },
     getUsernameValidity : function(pUsername) {
         if (!validator.matchesRegex(pUsername)) {
-            return new UserValidityWrapper(false, {
+            return new userValidityWrapper(false, {
                 "error" : "Der Nutzername muss zwischen 3 und 20 Zeichen lang sein und darf nur Buchstaben enthalten."
             });
         }
         if (!validator.isKind(pUsername)) {
-            return new UserValidityWrapper(false, {
+            return new userValidityWrapper(false, {
                 "error" : "Der Nutzername enthält unzulässige Begrifflichkeiten."
             });
         }
-        return new UserValidityWrapper(true, {});
+        return new userValidityWrapper(true, {});
     },
     stringStartsWith : function(array, string) {
         var isCorrect = false;

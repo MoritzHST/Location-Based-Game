@@ -47,7 +47,7 @@ function setHooks() {
  * Callback, welches bei erfolgreichem AJAX-Registrierungs-Aufruf ausgeführt werden soll
  */
 function redirectOnSuccess(user) {
-    $.post("login", user.value).done(function(result) {
+    $.post("login", user.value).done(function() {
         window.location = "play";
     });
 }

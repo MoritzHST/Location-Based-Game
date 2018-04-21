@@ -5,7 +5,7 @@ const logging = require('./logging');
 var testUser = new objects.User("Harald");
 var testAnswer = new objects.Answer("Obst", true);
 var testAnswer2 = new objects.Answer("Gemüse", false);
-var testQuiz = new objects.Quiz("Was ist eine Banane?", [testAnswer, testAnswer2]);
+var testQuiz = new objects.SimpleQuiz("Was ist eine Banane?", [testAnswer, testAnswer2]);
 var testRoom = new objects.Room("103a", "Multimedia-Labor", "Hier werden Multimedia-Projekte durchgeführt...");
 var testMinigameRoomMapping = new objects.MinigameRoomMapping(testRoom, testQuiz);
 var testEventTemplate = new objects.EventTemplate("Tag der offenen Tür", testMinigameRoomMapping);
@@ -41,7 +41,7 @@ setTimeout(function () {
     });
     operations.updateObject("minigames", testQuiz, null, function (err, result) {
         if (!err)
-            logging.Info("Quiz erstellt: " + result.value.name);
+            logging.Info("SimpleQuiz erstellt: " + result.value.name);
         else
             logging.Error(err);
     });

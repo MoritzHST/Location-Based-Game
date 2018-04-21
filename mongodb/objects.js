@@ -41,19 +41,23 @@ module.exports = {
      * Datenebene die Richtige von den falschen Antworten zu trennen
      *
      * pQuestion -> die Frage als String
-     * pRightAnswer -> die richtige Antwort auf die Frage als String
-     * pWrongAnswer -> die falschen Antworten auf die Frage als Strings
+     * pAnswers -> die Antworten auf die Frage
      */
-    Quiz: function (pQuestion, pRightAnswer, pWrongAnswer) {
+    Quiz: function (pQuestion, pAnswers) {
         logging.Info("initializing new Quiz");
-        logging.Parameter("pQuestion", pQuestion);
-        logging.Parameter("pRightAnswer", pRightAnswer);
-        logging.Parameter("pWrongAnswer", pWrongAnswer);
-        this.type = "quiz";
         this.question = pQuestion;
-        this.rightAnswer = pRightAnswer;
-        this.wrongAnswer = pWrongAnswer;
-        logging.Info("initializing Quiz done");
+        this.answers = pAnswers;
+    },
+
+    /**
+     * Antworten auf Quiz fragen
+     * @param pAnswer Antwort als String
+     * @param pIsCorrect Boolean der definiert, ob diese Antwort eine korrekte Antwort auf die Frage ist
+     * @constructor
+     */
+    Answer: function (pAnswer, pIsCorrect) {
+        this.answer = pAnswer;
+        this.isCorrect = pIsCorrect;
     },
 
     /**

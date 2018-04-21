@@ -156,6 +156,12 @@
           "description": "Raumnummer"
         },
         {
+          "name": "identifier",
+          "in": "query",
+          "required": false,
+          "description": "Raum-Identifier"
+        },
+        {
           "name": "name",
           "in": "query",
           "required": false,
@@ -196,6 +202,12 @@
           "in": "query",
           "required": false,
           "description": "Beschreibung des Raumes"
+        },
+        {
+          "name": "identifier",
+          "in": "query",
+          "required": false,
+          "description": "Raum-Identifier"
         },
         {
           "name": "image",
@@ -247,6 +259,12 @@
           "description": "Beschreibung des Raumes"
         },
         {
+          "name": "identifier",
+          "in": "query",
+          "required": false,
+          "description": "Raum-Identifier"
+        },
+        {
           "name": "image",
           "in": "formData",
           "description": "Bild",
@@ -282,6 +300,12 @@
           "in": "query",
           "required": false,
           "description": "Raumnummer"
+        },
+        {
+          "name": "identifier",
+          "in": "query",
+          "required": false,
+          "description": "Raum-Identifier"
         },
         {
           "name": "name",
@@ -464,10 +488,10 @@
     "/find/scan": {
       "parameters": [
         {
-          "name": "roomnumber",
+          "name": "identifier",
           "in": "query",
           "required": true,
-          "description": "ID des Raumes"
+          "description": "Raum-Identifier"
         }
       ],
       "get": {
@@ -519,6 +543,10 @@
           "uniqueItems": true
         },
         "roomnumber": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "identifier": {
           "type": "string",
           "uniqueItems": true
         },

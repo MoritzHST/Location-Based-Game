@@ -5,7 +5,7 @@ const router = require('express').Router();
 /* Global */
 
 /* GET */
-/* Find Room(s) */
+/* Find ScanResult(s) */
 router.get('/find/scan', function (req, res) {
     operations.findObject("rooms", (handler.checkIfValidQuery(req.query) ? req.query : null), function (err, item) {
         getMinigamesForRoom(item._id, function (minigames) {

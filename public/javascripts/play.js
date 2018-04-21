@@ -1,10 +1,12 @@
 window.onload = init;
+let user;
 
 $(function () {
     $('nav#menu').mmenu();
 });
 
 function init() {
+    user = {};
     setHooks();
     //initialize SlideInMenu
     setSlideInMenu();
@@ -29,8 +31,7 @@ function setSlideInMenu() {
  * Füllt Hooks der HTML Datei
  */
 function setHooks() {
-    const head = $('head');
-    setNodeHookFromFile(head, document.getElementById("header-hook"), "../partials/header/header.html");
-    setNodeHookFromFile(head, document.getElementById("footer-hook"), "../partials/footer/footer.html");
-    setNodeHookFromFile(head, document.getElementById("content-hook"), "../partials/game-overview-content/game-overview-content.html")
+    setNodeHookFromFile(document.getElementById("header-hook"), "../partials/header/header.html");
+    setNodeHookFromFile(document.getElementById("footer-hook"), "../partials/footer/footer.html");
+    setNodeHookFromFile(document.getElementById("content-hook"), "../partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent");
 }

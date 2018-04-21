@@ -312,6 +312,12 @@
           "in": "query",
           "required": false,
           "description": "ID des Minigames"
+        },
+        {
+          "name": "room_id",
+          "in": "query",
+          "required": false,
+          "description": "ID des Raumes"
         }
       ],
       "get": {
@@ -336,6 +342,12 @@
           "in": "query",
           "required": true,
           "description": "Text zum Minigame"
+        },
+        {
+          "name": "room_id",
+          "in": "query",
+          "required": true,
+          "description": "ID des Raumes"
         },
         {
           "name": "anwers",
@@ -372,6 +384,12 @@
           "in": "path",
           "required": true,
           "description": "ID des Minigames"
+        },
+        {
+          "name": "room_id",
+          "in": "query",
+          "required": false,
+          "description": "ID des Raumes"
         },
         {
           "name": "question",
@@ -416,6 +434,12 @@
           "description": "ID des Raumes"
         },
         {
+          "name": "room_id",
+          "in": "query",
+          "required": false,
+          "description": "ID des Raumes"
+        },
+        {
           "name": "question",
           "in": "query",
           "required": false,
@@ -432,6 +456,30 @@
             "description": "Raum wurde gelöscht",
             "schema": {
               "$ref": "#/definitions/Minigame"
+            }
+          }
+        }
+      }
+    },
+    "/find/scan": {
+      "parameters": [
+        {
+          "name": "roomnumber",
+          "in": "query",
+          "required": true,
+          "description": "ID des Raumes"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Scans"
+        ],
+        "summary": "Get ScanResult",
+        "responses": {
+          "200": {
+            "description": "Minigame wurde gefunden",
+            "schema": {
+              "$ref": "#/definitions/Room"
             }
           }
         }
@@ -507,6 +555,20 @@
         },
         "isCorrect": {
           "type": "boolean"
+        }
+      }
+    },
+    "Scan": {
+      "required": [],
+      "properties": {
+        "room": {
+          "$ref": "#/definitions/Room"
+        },
+        "minigames": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Minigame"
+          }
         }
       }
     }

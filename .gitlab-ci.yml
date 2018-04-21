@@ -1,6 +1,17 @@
-image: node:8.11.1
+image: node:latest
 
-all_tests:
+cache:
+  paths:
+  - node_modules/
+
+before_script:
+  - echo "run test"
+
+stages:
+  - test
+
+test_mocha:
+  stage: test
   script:
-   - npm install
-   - npm test
+  - npm install
+  - npm test

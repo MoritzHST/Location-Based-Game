@@ -40,9 +40,8 @@ function init() {
  * Füllt Hooks der HTML Datei
  */
 function setHooks() {
-    const head = $('head');
-    setNodeHookFromFile(head, document.getElementById("header-hook"), "../partials/header/header.html");
-    setNodeHookFromFile(head, document.getElementById("footer-hook"), "../partials/footer/footer.html");
+    setNodeHookFromFile(document.getElementById("header-hook"), "../partials/header/header.html");
+    setNodeHookFromFile(document.getElementById("footer-hook"), "../partials/footer/footer.html");
 }
 
 /**
@@ -57,7 +56,7 @@ function redirectOnSuccess() {
  * @param callbackObj "Objekt, welches beim AJAX-Aufruft erzeugt wurde
  */
 function displayFailureMessage(callbackObj) {
-    setNodeHookFromFile($('head'), document.getElementById("sign-up-in-failure-box-hook"), "../partials/sign-up-in-failure-box/sign-up-in-failure-box.html", function (pObj) {
+    setNodeHookFromFile(document.getElementById("sign-up-in-failure-box-hook"), "../partials/sign-up-in-failure-box/sign-up-in-failure-box.html", function (pObj) {
         document.getElementById("sign-up-in-failure-box-error-message").innerHTML = pObj.responseJSON.error;
     }, callbackObj);
 

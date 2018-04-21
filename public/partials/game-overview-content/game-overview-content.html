@@ -10,3 +10,35 @@
 
 <!-- Label für Labore -->
 <h2>Laborübersicht</h2>
+
+<!-- Buttongroup für Laborübersicht -->
+<div class="button-group-wrapper">
+    <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-secondary host-button-group-button">Alle</button>
+        <button type="button" class="btn btn-secondary host-button-group-button">Offene</button>
+        <button type="button" class="btn btn-secondary host-button-group-button">Abgeschlossen</button>
+    </div>
+</div>
+
+<!-- Laborübersicht -->
+
+<div class="labor-wrapper">
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#outdoor" aria-controls="home" role="tab" data-toggle="tab">Draußen</a>
+        </li>
+        <li role="presentation"><a href="#eg" aria-controls="profile" role="tab" data-toggle="tab">EG</a></li>
+        <li role="presentation"><a href="#1og" aria-controls="messages" role="tab" data-toggle="tab">1. OG</a></li>
+        <li role="presentation"><a href="#2og" aria-controls="settings" role="tab" data-toggle="tab">2. OG</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="outdoor"></div>
+        <div role="tabpanel" class="tab-pane" id="eg"></div>
+        <div role="tabpanel" class="tab-pane" id="1og"></div>
+        <div role="tabpanel" class="tab-pane" id="2og"></div>
+    </div>
+
+</div>

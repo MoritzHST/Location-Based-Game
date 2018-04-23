@@ -2,6 +2,8 @@ const objects = require('./objects');
 const operations = require('./operations');
 const logging = require('./logging');
 
+const test = require('./relationshipHelper');
+
 var testUser = new objects.User("Harald");
 var testAnswer = new objects.Answer("Obst", true);
 var testAnswer2 = new objects.Answer("Gemüse", false);
@@ -27,6 +29,8 @@ operations.deleteObjects("users", null, function (err) {
  * (In diesem Fall delayed um 2 Sekunden)
  */
 setTimeout(function () {
+    testUser["_id"]="aaaaaaaaaaaa";
+    testRoom["_id"]="aaaaaaaaaaaa";
     operations.updateObject("users", testUser, null, function (err, result) {
         if (!err)
             logging.Info("Benutzer erstellt: " + result.value.name);
@@ -42,6 +46,16 @@ setTimeout(function () {
     operations.updateObject("minigames", testQuiz, null, function (err, result) {
         if (!err)
             logging.Info("SimpleQuiz erstellt: " + result.value.name);
+        else
+            logging.Error(err);
+    });
+    operations.updateObject("users_rooms", {
+        "user_id": "616161616161616161616161",
+        "room_id": "616161616161616161616161"
+    }, null, function (err, result) {
+        test.test();
+        if (!err)
+            logging.Info("UsersRooms erstellt: " + result.value.name);
         else
             logging.Error(err);
     });

@@ -34,41 +34,44 @@ module.exports = {
      * pCollection --> pObject --> pCallback -->
      */
     findObject: function (pCollection, pObject, pCallback) {
-      var database = mongo.Object();
-      database.Client.connect(database.Url, function(error, result) {
-        if (error) {
-          pCallback(error, null);
-        } else {
-          if (pObject) {
-            result.db(database.Database).collection(pCollection).findOne(handler.idFriendlyQuery(pObject), function (err, db) {
-              result.close();
-              pCallback(err, db);
-            });
-          } else {
-            result.db(database.Database).collection(pCollection).find({}).toArray(function (err, db) {
-              result.close();
-              pCallback(err, db);
-            });
-          }
-        }
-      });
+        var database = mongo.Object();
+        database.Client.connect(database.Url, function (error, result) {
+            if (error) {
+                pCallback(error, null);
+            } else {
+                if (pObject) {
+                    result.db(database.Database).collection(pCollection).findOne(handler.idFriendlyQuery(pObject), function (err, db) {
+                        result.close();
+                        pCallback(err, db);
+                    });
+                } else {
+                    result.db(database.Database).collection(pCollection).find({}).toArray(function (err, db) {
+                        result.close();
+                        pCallback(err, db);
+                    });
+                }
+            }
+        });
     },
 
     /**
      * --- pCollection --> pObject -->
      */
     updateObject: function (pCollection, pObject, pQuery, pCallback) {
-      var database = mongo.Object();
-        database.Client.connect(database.Url, function(error, result) {
-          if (error) {
-            pCallback(error, null);
-          } else {
-            var friendlyObject = handler.idFriendlyQuery(pObject);
-            result.db(database.Database).collection(pCollection).findAndModify(friendlyObject, [['_id', 'asc']],{'$set': (pQuery ? pQuery : friendlyObject)}, {new: true, upsert: true}, function (err, db) {
-              result.close();
-              pCallback(err, db);
-            });
-          }
+        var database = mongo.Object();
+        database.Client.connect(database.Url, function (error, result) {
+            if (error) {
+                pCallback(error, null);
+            } else {
+                var friendlyObject = handler.idFriendlyQuery(pObject);
+                result.db(database.Database).collection(pCollection).findAndModify(friendlyObject, [['_id', 'asc']], {'$set': (pQuery ? pQuery : friendlyObject)}, {
+                    new: true,
+                    upsert: true
+                }, function (err, db) {
+                    result.close();
+                    pCallback(err, db);
+                });
+            }
         });
     },
 
@@ -77,17 +80,17 @@ module.exports = {
      * erfolgreich false, wenn löschen nicht erfolgreich
      */
     deleteObjects: function (pCollection, pObjects, pCallback) {
-      var database = mongo.Object();
-      database.Client.connect(database.Url, function(error, result) {
-        if (error) {
-          pCallback(error, null);
-        } else {
-          result.db(database.Database).collection(pCollection).deleteMany(handler.idFriendlyQuery(pObjects), function (err, db) {
-            result.close();
-            pCallback(err, db);
-          });
-        }
-      });
+        var database = mongo.Object();
+        database.Client.connect(database.Url, function (error, result) {
+            if (error) {
+                pCallback(error, null);
+            } else {
+                result.db(database.Database).collection(pCollection).deleteMany(handler.idFriendlyQuery(pObjects), function (err, db) {
+                    result.close();
+                    pCallback(err, db);
+                });
+            }
+        });
     },
 
     /***************************************************************************
@@ -99,17 +102,17 @@ module.exports = {
      * Name der neuen Datenbank-Collection
      */
     createCollection: function (pCollection, pCallback) {
-      var database = mongo.Object();
-      database.Client.connect(database.Url, function(error, result) {
-        if (error) {
-          pCallback(error, null);
-        } else {
-          result.db(database.Database).createCollection(pCollection, function (err, db) {
-            result.close();
-            pCallback(err, db);
-          });
-        }
-      });
+        var database = mongo.Object();
+        database.Client.connect(database.Url, function (error, result) {
+            if (error) {
+                pCallback(error, null);
+            } else {
+                result.db(database.Database).createCollection(pCollection, function (err, db) {
+                    result.close();
+                    pCallback(err, db);
+                });
+            }
+        });
     },
 
     /**
@@ -118,29 +121,29 @@ module.exports = {
      * Collections zurückgegeben. pCollection --> pCallback -->
      */
     getCollection: function (pCollection, pCallback) {
-      var database = mongo.Object();
+        var database = mongo.Object();
         if (pCollection) {
-          database.Client.connect(database.Url, function(error, result) {
-            if (error) {
-              pCallback(error, null);
-            } else {
-              result.db(database.Database).collection(pCollection).find({}).toArray(function (err, db) {
-                result.close();
-                pCallback(err, db);
-              });
-            }
-          });
+            database.Client.connect(database.Url, function (error, result) {
+                if (error) {
+                    pCallback(error, null);
+                } else {
+                    result.db(database.Database).collection(pCollection).find({}).toArray(function (err, db) {
+                        result.close();
+                        pCallback(err, db);
+                    });
+                }
+            });
         } else {
-          database.Client.connect(database.Url, function(error, result) {
-            if (error) {
-              pCallback(error, null);
-            } else {
-              result.db(database.Database).listCollections().toArray(function (err, db) {
-                result.close();
-                pCallback(err, db);
-              });
-            }
-          });
+            database.Client.connect(database.Url, function (error, result) {
+                if (error) {
+                    pCallback(error, null);
+                } else {
+                    result.db(database.Database).listCollections().toArray(function (err, db) {
+                        result.close();
+                        pCallback(err, db);
+                    });
+                }
+            });
         }
     },
 
@@ -149,16 +152,36 @@ module.exports = {
      * der zu löschenden Datenbank pCallback -->
      */
     dropCollection: function (pCollection, pCallback) {
-      var database = mongo.Object();
-      database.Client.connect(database.Url, function(error, result) {
-        if (error) {
-          pCallback(error, null);
-        } else {
-          result.db(database.Database).servercollection(pCollection).drop(function (err, db) {
-            result.close();
-            pCallback(err, db);
-          });
-        }
-      });
+        var database = mongo.Object();
+        database.Client.connect(database.Url, function (error, result) {
+            if (error) {
+                pCallback(error, null);
+            } else {
+                result.db(database.Database).servercollection(pCollection).drop(function (err, db) {
+                    result.close();
+                    pCallback(err, db);
+                });
+            }
+        });
+    },
+
+    joinCollection: function (pCollection, pLookup, pCallback) {
+        const database = mongo.Object();
+        database.Client.connect(database.Url, function (err, result) {
+            if (err) {
+                pCallback(err, null);
+            } else {
+                result.db(database.Database)
+                    .collection(pCollection)
+                    .aggregate(pLookup)
+                    .toArray(function (err, res) {
+                        if (err) {
+                            pCallback(error, null);
+                        }
+                        result.close();
+                        pCallback(null, res);
+                    });
+            }
+        });
     }
 };

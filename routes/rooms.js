@@ -2,7 +2,7 @@ const operations = require('../mongodb/operations');
 const handler = require('../mongodb/handler');
 const router = require('express').Router();
 
-const fs = require('fs');
+const fileHelper = require('../mongodb/fileHelper');
 const multer = require('multer');
 const upload = multer(
     {
@@ -28,6 +28,8 @@ router.get('/find/rooms', function (req, res) {
 /* POST */
 /* Insert Room */
 router.post('/insert/rooms', upload.single('image'), function (req, res) {
+
+    //hinterlege Pfad zum File, wenn File hochgeladen wurde
     const file = req.file;
     if (file !== undefined && file !== null) {
         req.query["image"] = file.path.replace("..\\public\\", "");
@@ -46,9 +48,10 @@ router.post('/insert/rooms', upload.single('image'), function (req, res) {
 
 /* Update Room */
 router.post('/update/rooms/:id', upload.single('image'), function (req, res) {
+    //lösche File wenn ein neues hochgeladen wird
     const file = req.file;
     if (file !== undefined && file !== null) {
-        deleteFileForRoom(req.params.id, function () {
+        fileHelper.deleteFile("rooms", req.params.id, function () {
             req.query["image"] = file.path.replace("..\\public\\", "");
             updateRoom(req, res);
         });
@@ -59,7 +62,7 @@ router.post('/update/rooms/:id', upload.single('image'), function (req, res) {
 
 /* Delete Room(s) */
 router.post('/delete/rooms', function (req, res) {
-    deleteFileForRoom(req.params.id, function () {
+    fileHelper.deleteFile("rooms", req.query._id, function () {
         if (handler.checkIfValidQuery(req.query)) {
             operations.deleteObjects("rooms", req.query, function (err, item) {
                 handler.dbResult(err, res, item, "Die Items mit den Eigenschaften " + JSON.stringify(req.query).replace(/\"/g, '') + " konnten nicht gelöscht werden.");
@@ -86,21 +89,5 @@ function updateRoom(req, res) {
     }
 }
 
-function deleteFileForRoom(pId, pCallback) {
-    operations.findObject(
-        "rooms",
-        handler.idFriendlyQuery({"_id": pId}),
-        function (err, item) {
-            pCallback();
-            if (item === null || item.image === null || item.image === undefined) {
-                return;
-            }
-            if (item.image !== null && item.image !== undefined) {
-                fs.unlink("..\\public\\" + item.image, function () {
-                });
-            }
-        }
-    );
-}
 
 module.exports = router;

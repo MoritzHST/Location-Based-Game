@@ -13,10 +13,7 @@ sonarqube-reports:
   variables: 
     SONAR_ANALYSIS_MODE: publish
     SONAR_URL: "https://cdelivery.fh-stralsund.de"
-sonarqube_master_job: 
-  only: 
-    - master
-  stage: test
+
 stages: 
   - test
   - analysis

@@ -19,8 +19,8 @@ router.post('/login', function(req, res) {
     req.query = JSON.parse(JSON.stringify(req.body));
     if (req.query.name && req.query.token) {
         operations.findObject("users", req.query, function(err, user) {
-            if (err) {
-                res.status(422).jsonp(err);
+            if (err || !user) {
+                res.status(422).jsonp({"error": "Die übergebenen Daten sind nicht gültig."});
             } else {
                 req.session.user = user;
                 res.status(200).jsonp(user);

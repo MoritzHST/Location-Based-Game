@@ -10,6 +10,12 @@ function init() {
     setHooks();
     // initialize SlideInMenu
     setSlideInMenu();
+
+    $("#game-logout").on("click", function () {
+        $.get("sign-out").done(function () {
+            window.location = "sign-up";
+        });
+    });
 }
 
 /**

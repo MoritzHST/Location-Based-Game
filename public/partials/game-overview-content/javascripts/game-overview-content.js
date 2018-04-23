@@ -7,6 +7,11 @@ function initGameOverviewContent() {
     };
 
     ajaxRequest('find/rooms', 'GET', "", setLocations);
+
+    $("#scan-qr-code").on("click", function () {
+        setNodeHookFromFile(document.getElementById("content-hook"),
+            "../partials/qr-scanner/qr-scanner.html", undefined, undefined, "initQRScanner");
+    });
 }
 
 /**

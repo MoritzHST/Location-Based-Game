@@ -11,6 +11,7 @@
     "basic-auth-connect": "~1.0.0",
     "body-parser": "~1.15.1",
     "cookie-parser": "~1.4.3",
+    "cookie-session": "^2.0.0-beta.3",
     "debug": "~2.2.0",
     "express": "~4.13.4",
     "file-system": "^2.2.2",
@@ -19,7 +20,7 @@
     "mocha": "^5.0.5",
     "mongodb": "^3.0.6",
     "morgan": "~1.7.0",
-    "multer": "^1.3.0",
+    "randomstring": "^1.1.5",
     "serve-favicon": "~2.3.0",
     "swagger-ui-express": "^3.0.6"
   }

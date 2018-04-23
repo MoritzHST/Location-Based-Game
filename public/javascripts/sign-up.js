@@ -4,35 +4,33 @@ function init() {
 
     setHooks();
 
-    //Register-Button Funktion registrieren
-    $("#btn-sign-up").click(function () {
+    // Register-Button Funktion registrieren
+    $("#btn-sign-up").click(function() {
         const textfieldName = $("#textfield-name-sign-up");
-        const name = (textfieldName.val() === "" || textfieldName.val() === undefined) ? "" : "name=" + textfieldName.val();
+        const name = textfieldName.val() === "" || textfieldName.val() === undefined ? "" : "name=" + textfieldName.val();
         ajaxRequest("insert/users?", "POST", name, redirectOnSuccess, displayFailureMessage);
         $(this).addClass('disabled');
     });
 
-    //Tabs setzen
-    $(function () {
+    // Tabs setzen
+    $(function() {
         $("#signup_signin_switch").tabs();
     });
 
-    //Enabled Disabled Status für Pflichtfeld AGB's setzen
+    // Enabled Disabled Status für Pflichtfeld AGB's setzen
     const checkAGB = $("#checkAGB");
 
-    checkAGB.on("click", function () {
+    checkAGB.on("click", function() {
         if (!this.checked) {
             $("#btn-sign-up").addClass('disabled');
 
-        }
-        else {
+        } else {
             $("#btn-sign-up").removeClass("disabled");
         }
     });
 
-    //Checkbox onload disabled
+    // Checkbox onload disabled
     checkAGB.prop("checked", false);
-
 
 }
 
@@ -47,8 +45,10 @@ function setHooks() {
 /**
  * Callback, welches bei erfolgreichem AJAX-Registrierungs-Aufruf ausgeführt werden soll
  */
-function redirectOnSuccess() {
-    window.location = "play";
+function redirectOnSuccess(user) {
+    $.post("login", user.value).done(function() {
+        window.location = "play";
+    });
 }
 
 /**
@@ -60,7 +60,7 @@ function displayFailureMessage(callbackObj) {
         document.getElementById("sign-up-in-failure-box-error-message").innerHTML = pObj.responseJSON.error;
     }, callbackObj);
 
-    //Fehler aufgetreten -> registrieren Button wieder aktivieren
+    // Fehler aufgetreten -> registrieren Button wieder aktivieren
     $("#btn-sign-up").removeClass("disabled");
 
 }

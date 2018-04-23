@@ -7,3 +7,8 @@
     padding: 5px;
     border-radius: 0 5px 5px 0;
 }
+
+.mm-navbar__title {
+    color: #EEEEEE !important;
+    font-size: 0.5px;
+}

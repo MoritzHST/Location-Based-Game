@@ -3,6 +3,6 @@
   <component name="SonarLintProjectSettings">
     <option name="bindingEnabled" value="true" />
     <option name="projectKey" value="spo:hslbg18" />
-    <option name="serverId" value="fhstralsund" />
+    <option name="serverId" value="sonarqube" />
   </component>
 </project>

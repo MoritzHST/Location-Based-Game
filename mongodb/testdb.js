@@ -53,7 +53,7 @@ setTimeout(function () {
         "user_id": "616161616161616161616161",
         "room_id": "616161616161616161616161"
     }, null, function (err, result) {
-        test.test();
+        test.getUserWithRooms("616161616161616161616161");
         if (!err)
             logging.Info("UsersRooms erstellt: " + result.value.name);
         else

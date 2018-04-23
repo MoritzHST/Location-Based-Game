@@ -12,7 +12,10 @@
     margin-top: 10px !important;
 }
 
-.media-image-size, .media-left {
-    height: 100% !important;
+.media-left {
     width: 25% !important;
+}
+
+.media-left img {
+    max-width: 100%;
 }

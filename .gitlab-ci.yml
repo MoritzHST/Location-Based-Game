@@ -21,7 +21,7 @@ sonarqube:
     SONAR_URL: "https://cdelivery.fh-stralsund.de"
     SONAR_ANALYSIS_MODE: issues
   script:
-  - gitlab-sonar-scanner
+  - gitlab-sonar-scanner -X
 
 sonarqube-reports:
   stage: analysis
@@ -30,7 +30,7 @@ sonarqube-reports:
     SONAR_URL: "https://cdelivery.fh-stralsund.de"
     SONAR_ANALYSIS_MODE: publish
   script:
-  - gitlab-sonar-scanner
+  - gitlab-sonar-scanner -X
   
 test_mocha:
   stage: test

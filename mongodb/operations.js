@@ -162,7 +162,51 @@ module.exports = {
             }
         });
     },
-
+    
+    joinCollections: function(pCollection, pFrom, pLocalField, pForeignField, pAs) {
+    	const database = mongo.Object();
+    	const joinQuery = {
+    			$lookup: {
+    				"from": pFrom,
+    				"localField": pLocalField,
+    				"foreignField": pForeignField,
+    				"as": pAs
+    			}
+    	};
+    	
+    	database.Client.connect(database.Url, function (err, result) {
+    		if (err) {
+    			pCallback(err, null);
+    		} else {
+                result.db(database.Database).collection(pCollection).aggregate(handler.idFriendlyQuery(joinQuery)).toArray(function (error, res) {
+                        if (error) {
+                            pCallback(error, null);
+                        }
+                        result.close();
+                        pCallback(null, res);
+                    });    			
+    		}
+    	})
+    }
+    
+    /*
+    joinCollection: function (pCollection, pJoin, pCallback) {
+        const database = mongo.Object();
+        database.Client.connect(database.Url, function (err, result) {
+            if (err) {
+                pCallback(err, null);
+            } else {
+                result.db(database.Database).collection(pCollection).aggregate(handler.idFriendlyQuery(pJoin)).toArray(function (error, res) {
+                        if (error) {
+                            pCallback(error, null);
+                        }
+                        result.close();
+                        pCallback(null, res);
+                    });
+            }
+        });
+  	*/  
+    /*
     joinCollection: function (pCollection, pLookup, pCallback) {
         const database = mongo.Object();
         database.Client.connect(database.Url, function (err, result) {
@@ -181,5 +225,5 @@ module.exports = {
                     });
             }
         });
-    }
+        */
 };

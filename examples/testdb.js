@@ -9,7 +9,7 @@ var testAnswer = new objects.Answer("Obst", true);
 var testAnswer2 = new objects.Answer("Gemüse", false);
 var testQuiz = new objects.SimpleQuiz("Was ist eine Banane?", [testAnswer, testAnswer2]);
 var testRoom = new objects.Room("103a", "Multimedia-Labor", "Hier werden Multimedia-Projekte durchgeführt...");
-var testMinigameRoomMapping = new objects.MinigameRoomMapping(testRoom, testQuiz);
+var testMinigameRoomMapping = new objects.MinigameRoomMapping(null, testRoom, testQuiz);
 var testEventTemplate = new objects.EventTemplate("Tag der offenen Tür", testMinigameRoomMapping);
 
 /**

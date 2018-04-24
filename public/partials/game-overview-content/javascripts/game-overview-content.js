@@ -47,12 +47,15 @@ function updateTables() {
 }
 
 function setLayer(pLayer) {
-    for (let i in user.locations[pLayer]) {
-        $('<div/>', {
-            id: user.locations[pLayer][i]._id + "-hook"
-        }).appendTo($("#" + pLayer));
-        setNodeHookFromFile(document.getElementById(user.locations[pLayer][i]._id + "-hook"),
-            "../partials/overview-table-cell/overview-table-cell.html", setTableContent, (user.locations[pLayer][i]));
+    var locations = user.locations[pLayer];
+    for (let i in locations) {
+        if (locations.hasOwnProperty(i)) {
+            $('<div/>', {
+                id: locations[i]._id + "-hook"
+            }).appendTo($("#" + pLayer));
+            setNodeHookFromFile(document.getElementById(locations[i]._id + "-hook"),
+                "../partials/overview-table-cell/overview-table-cell.html", setTableContent, (locations[i]));
+        }
     }
 }
 

@@ -42,7 +42,7 @@ function init() {
     $("#btn-sign-in").on("click", function () {
         const userName = $("#textfield-name-sign-in").val();
         const token = $("#textfield-token-sign-in").val();
-        $.post("login", {"name": userName, "token": token}).done(function (obj) {
+        $.post("login", {"name": userName, "token": token}).done(function () {
             window.location = "play";
         }).fail(function (obj) {
             renderFailureMessage(obj);

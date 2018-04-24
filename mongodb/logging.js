@@ -14,4 +14,4 @@ module.exports = {
     Parameter: function (pParameterName, pParameterValue) {
         console.log("[PARAMETER] " + pParameterName + " -> " + pParameterValue);
     }
-}
+};

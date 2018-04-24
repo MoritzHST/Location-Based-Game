@@ -40,36 +40,25 @@ function setLocations(pObj) {
  */
 function updateTables() {
     //Outdoor setzen
-    for (let i in user.locations["outdoor"]) {
-        $('<div/>', {
-            id: user.locations["outdoor"][i]._id + "-hook"
-        }).appendTo($("#outdoor"));
-        setNodeHookFromFile(document.getElementById(user.locations["outdoor"][i]._id + "-hook"),
-            "../partials/overview-table-cell/overview-table-cell.html", setTableContent, (user.locations["outdoor"][i]));
-    }
+    setLayer("outdoor");
     //EG setzen
-    for (let i in user.locations["eg"]) {
-        $('<div/>', {
-            id: user.locations["eg"][i]._id + "-hook"
-        }).appendTo($("#eg"));
-        setNodeHookFromFile(document.getElementById(user.locations["eg"][i]._id + "-hook"),
-            "../partials/overview-table-cell/overview-table-cell.html", setTableContent, (user.locations["eg"][i]));
-    }
+    setLayer("eg");
     //1OG setzen
-    for (let i in user.locations["1og"]) {
-        $('<div/>', {
-            id: user.locations["1og"][i]._id + "-hook"
-        }).appendTo($("#1og"));
-        setNodeHookFromFile(document.getElementById(user.locations["1og"][i]._id + "-hook"),
-            "../partials/overview-table-cell/overview-table-cell.html", setTableContent, (user.locations["1og"][i]));
-    }
+    setLayer("1og");
     //2OG setzen
-    for (let i in user.locations["2og"]) {
-        $('<div/>', {
-            id: user.locations["2og"][i]._id + "-hook"
-        }).appendTo($("#2og"));
-        setNodeHookFromFile(document.getElementById(user.locations["2og"][i]._id + "-hook"),
-            "../partials/overview-table-cell/overview-table-cell.html", setTableContent, (user.locations["2og"][i]));
+    setLayer("2og");
+}
+
+function setLayer(pLayer) {
+    var locations = user.locations[pLayer];
+    for (let i in locations) {
+        if (locations.hasOwnProperty(i)) {
+            $('<div/>', {
+                id: locations[i]._id + "-hook"
+            }).appendTo($("#" + pLayer));
+            setNodeHookFromFile(document.getElementById(locations[i]._id + "-hook"),
+                "../partials/overview-table-cell/overview-table-cell.html", setTableContent, (locations[i]));
+        }
     }
 }
 

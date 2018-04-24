@@ -10,15 +10,17 @@ var dbNames = [
     "templates"
 ];
 
+function onCreatedCollection(err, pDbObject) {
+    if (!err) {
+        logging.Info("Created Collection: " + pDbObject.s.name);
+    }
+    else {
+        logging.Error(err);
+    }
+}
+
 for (var name in dbNames) {
     if (dbNames.hasOwnProperty(name)) {
-        operations.createCollection(dbNames[name], function (err) {
-            if (!err) {
-                logging.Info(dbNames[name] + " erfolgreich erstellt");
-            }
-            else {
-                logging.Error(err);
-            }
-        });
+        operations.createCollection(dbNames[name], onCreatedCollection);
     }
 }

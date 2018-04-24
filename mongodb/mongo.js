@@ -3,11 +3,11 @@ const MongoClient = require('mongodb').MongoClient;
 const logging = require('./logging');
 const _conf = '../mongod.conf';
 
-Conf = {
+const Conf = {
     port: '27017',
     bindIp: '127.0.0.1',
     defaultDb: 'LocationBasedGame'
-}
+};
 
 /**
  * Sucht innerhalb der _conf Datei nach angegebenen Mongo-Konfigurationen

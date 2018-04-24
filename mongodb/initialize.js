@@ -10,13 +10,15 @@ var dbNames = [
     "templates"
 ];
 
+var onCreatedCollection = function (err) {
+    if (!err)
+        logging.Info(dbNames[name] + " erfolgreich erstellt");
+    else
+        logging.Error(err);
+};
+
 for (var name in dbNames) {
     if (dbNames.hasOwnProperty(name)) {
-        operations.createCollection(dbNames[name], function (err, result) {
-            if (!err)
-                logging.Info(dbNames[name] + " erfolgreich erstellt");
-            else
-                logging.Error(err);
-        });
+        operations.createCollection(dbNames[name], onCreatedCollection);
     }
 }

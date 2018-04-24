@@ -1,6 +1,7 @@
 # ignore all files and folders starting with a dot, also the local mongo config
 .*
 mongod.conf
+node_modules
 
 # do not ignore these files
 !.gitlab-ci.yml

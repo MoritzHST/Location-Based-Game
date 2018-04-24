@@ -59,21 +59,26 @@ module.exports = {
         this.answer = pAnswer;
         this.isCorrect = pIsCorrect;
     },
+    
+
 
     /**
      * Für unterschiedliche Räume können unterschiedliche Minigames aktiv sein, es
      * muss also möglich sein, diese flexibel zu mappen
      *
+     * pEvent -> vom typ Event, hinterlegt ein Event
      * pRoom -> vom Typ Room, hinterlegt ein Raumobjekt
      * pMinigame -> vom Typ eines Minigames (SimpleQuiz, ...), hinterlegt ein Minigameobjekt
      */
-    MinigameRoomMapping: function (pRoom, pMinigame) {
+    MinigameRoomMapping: function (pEvent, pRoom, pMinigame) { //ZWISCHENTABELLE
         logging.Info("initializing new MinigameRoomMapping");
+        logging.Parameter("pEvent", pEvent);
         logging.Parameter("pRoom", pRoom);
         logging.Parameter("pMinigame", pMinigame);
+        this.event = pEvent;
         this.room = pRoom;
         this.minigame = pMinigame;
-        logging.Info("initializing MinigameRoomMapping done");
+        logging.Info("initializing MinigameRoomMapping done");    	
     },
 
     /**

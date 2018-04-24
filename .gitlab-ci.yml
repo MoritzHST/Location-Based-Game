@@ -1,17 +1,38 @@
-image: node:latest
+image: "node:latest"
 
 cache:
   paths:
   - node_modules/
 
-before_script:
-  - echo "run test"
-
 stages:
+  - build
+  - analysis
   - test
 
+build:
+  stage: build
+  script:
+    - "npm update"
+
+sonarqube:
+  stage: analysis
+  image: ciricihq/gitlab-sonar-scanner
+  variables:
+    SONAR_URL: "https://cdelivery.fh-stralsund.de"
+    SONAR_ANALYSIS_MODE: issues
+  script:
+  - gitlab-sonar-scanner -X
+
+sonarqube-reports:
+  stage: analysis
+  image: ciricihq/gitlab-sonar-scanner
+  variables:
+    SONAR_URL: "https://cdelivery.fh-stralsund.de"
+    SONAR_ANALYSIS_MODE: publish
+  script:
+  - gitlab-sonar-scanner -X
+  
 test_mocha:
   stage: test
   script:
-  - npm install
-  - npm test
+    - "npm test"

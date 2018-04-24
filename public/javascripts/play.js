@@ -1,36 +1,57 @@
 window.onload = init;
+let user;
 
-$(function () {
+$(function() {
     $('nav#menu').mmenu();
 });
 
 function init() {
+    user = {};
     setHooks();
-    //initialize SlideInMenu
+    // initialize SlideInMenu
     setSlideInMenu();
+
+    $("#game-logout").on("click", function () {
+        $.get("sign-out").done(function () {
+            window.location = "sign-up";
+        });
+    });
 }
 
 /**
  * jQuery mmenu konfigurieren
  */
 function setSlideInMenu() {
+    const cookie = getObjectFromCookie("session");
+    const userName = cookie.user.name;
+    const userToken = cookie.user.token;
     $("#menu").mmenu({
-        navbar: {
-            title: ""
+        navbar : {
+            title : ""
         },
-        navbars: [{
-            position: "top",
-            content: ["prev", "title"]
-        }]
+        navbars : [ {
+            position : "top",
+            content : [ "prev", "title" ]
+        } ]
     });
+
+    $('#play-user-information').html("Name: " + userName + "<br/> Token: " + userToken);
 }
 
 /**
  * Füllt Hooks der HTML Datei
  */
 function setHooks() {
-    const head = $('head');
-    setNodeHookFromFile(head, document.getElementById("header-hook"), "../partials/header/header.html");
-    setNodeHookFromFile(head, document.getElementById("footer-hook"), "../partials/footer/footer.html");
-    setNodeHookFromFile(head, document.getElementById("content-hook"), "../partials/game-overview-content/game-overview-content.html")
+    setNodeHookFromFile(document.getElementById("header-hook"), "../partials/header/header.html");
+    setNodeHookFromFile(document.getElementById("footer-hook"), "../partials/footer/footer.html");
+    setNodeHookFromFile(document.getElementById("content-hook"), "../partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent");
+}
+
+function getObjectFromCookie(pCookieName) {
+    const cookieStrings = document.cookie.split(";");
+    for ( let i in cookieStrings) {
+        if (cookieStrings[i].startsWith(pCookieName)) {
+            return JSON.parse(atob(cookieStrings[i].substr(pCookieName.length + 1)));
+        }
+    }
 }

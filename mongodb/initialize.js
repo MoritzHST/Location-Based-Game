@@ -12,10 +12,14 @@ var dbNames = [
 ];
 
 for (var name in dbNames) {
-    operations.createCollection(dbNames[name], function (err, result) {
-        if (!err)
-        	logging.Info(dbNames[name] + " erfolgreich erstellt");
-        else
-        	logging.Error(err);
-    });
+    if (dbNames.hasOwnProperty(name)) {
+        operations.createCollection(dbNames[name], function (err) {
+            if (!err) {
+                logging.Info(dbNames[name] + " erfolgreich erstellt");
+            }
+            else {
+                logging.Error(err);
+            }
+        });
+    }
 }

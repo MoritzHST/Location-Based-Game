@@ -4,3 +4,11 @@ h2 {
     padding: 0 5px 15px 5px;
     margin-top: 15px;
 }
+
+.button-group-wrapper {
+    text-align: right;
+}
+
+.labor-wrapper {
+    margin-top: 10px;
+}

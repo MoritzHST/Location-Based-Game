@@ -13,7 +13,7 @@ stages:
 build:
   stage: build
   script:
-    - "npm install"
+    - "npm update"
 
 execute:
   stage: execute

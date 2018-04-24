@@ -2,6 +2,7 @@
 .*
 mongod.conf
 node_modules
+public/uploads/*
 
 # do not ignore these files
 !.gitlab-ci.yml

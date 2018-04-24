@@ -34,7 +34,7 @@ app.use('/admin/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // use routes for each collection
 
-fs.readdirSync('./routes/').forEach(file => {
+fs.readdirSync('../routes/').forEach(file => {
     app.use('/', require('./routes/' + file));
 });
 

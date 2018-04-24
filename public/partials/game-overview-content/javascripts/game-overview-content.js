@@ -10,6 +10,8 @@ function initGameOverviewContent() {
     };
 
     ajaxRequest('find/rooms', 'GET', "", setLocations);
+
+    $("#eg").addClass("active");
 }
 
 /**
@@ -18,7 +20,7 @@ function initGameOverviewContent() {
  */
 function setLocations(pObj) {
     for (let i in pObj) {
-        if (pObj[i].roomnumber === null) {
+        if (!pObj[i].roomnumber) {
             user.locations["outdoor"].push(pObj[i]);
         }
         if (pObj[i].roomnumber.startsWith("1")) {

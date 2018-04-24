@@ -1,15 +1,17 @@
 window.onload = init;
 let user;
 
-$(function() {
+$(function () {
     $('nav#menu').mmenu();
 });
 
 function init() {
     user = {};
-    setHooks();
     // initialize SlideInMenu
     setSlideInMenu();
+
+    setHooks();
+
 
     $("#game-logout").on("click", function () {
         $.get("sign-out").done(function () {
@@ -27,19 +29,19 @@ function init() {
  */
 function setSlideInMenu() {
     const cookie = getObjectFromCookie("session");
-    const userName = cookie.user.name;
-    const userToken = cookie.user.token;
+    user.name = cookie.user.name;
+    user.token = cookie.user.token;
     $("#menu").mmenu({
-        navbar : {
-            title : ""
+        navbar: {
+            title: ""
         },
-        navbars : [ {
-            position : "top",
-            content : [ "prev", "title" ]
-        } ]
+        navbars: [{
+            position: "top",
+            content: ["prev", "title"]
+        }]
     });
 
-    $('#play-user-information').html("Name: " + userName + "<br/> Token: " + userToken);
+    $('#play-user-information').html("Name: " + user.name + "<br/> Token: " + user.token);
 }
 
 /**
@@ -49,13 +51,24 @@ function setHooks() {
     setNodeHookFromFile(document.getElementById("header-hook"), "../partials/header/header.html");
     setNodeHookFromFile(document.getElementById("footer-hook"), "../partials/footer/footer.html");
     setNodeHookFromFile(document.getElementById("content-hook"), "../partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent");
+    setNodeHookFromFile(document.getElementById("warning-hook"), "../partials/play-warning-box/play-warning-box.html", hideWarning());
 }
 
 function getObjectFromCookie(pCookieName) {
     const cookieStrings = document.cookie.split(";");
-    for ( let i in cookieStrings) {
+    for (let i in cookieStrings) {
         if (cookieStrings[i].startsWith(pCookieName)) {
             return JSON.parse(atob(cookieStrings[i].substr(pCookieName.length + 1)));
         }
     }
+}
+
+function hideWarning() {
+    if (document.readyState === 'complete') {
+        setTimeout(function () {
+            $("#warning-hook").html("");
+        }, 10000)
+    }
+
+
 }

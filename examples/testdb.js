@@ -29,6 +29,7 @@ operations.deleteObjects("users", null, function (err) {
  * (In diesem Fall delayed um 2 Sekunden)
  */
 setTimeout(function () {
+
     testUser["_id"]="aaaaaaaaaaaa";
     testRoom["_id"]="aaaaaaaaaaaa";
     operations.updateObject("users", testUser, null, function (err, result) {
@@ -59,6 +60,7 @@ setTimeout(function () {
         else
             logging.Error(err);
     });
+
 }, 2000);
 
 /**

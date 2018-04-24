@@ -22,8 +22,8 @@ var mongo = require(mongoPath + 'initialize');
 
 var examplePath = '../examples/';
 require(examplePath + 'user');
-//require(examplePath + 'room');
-//require(examplePath + 'quiz');
+require(examplePath + 'room');
+require(examplePath + 'quiz');
 require(examplePath + 'minigameRoomMapping');
 
 

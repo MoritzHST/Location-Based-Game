@@ -188,7 +188,7 @@
         {
           "name": "roomnumber",
           "in": "query",
-          "required": true,
+          "required": false,
           "description": "Raumnummer"
         },
         {
@@ -206,7 +206,7 @@
         {
           "name": "identifier",
           "in": "query",
-          "required": false,
+          "required": true,
           "description": "Raum-Identifier"
         },
         {

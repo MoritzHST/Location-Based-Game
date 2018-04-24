@@ -6,6 +6,7 @@ const exampleRoom = require('./room');
 const exampleQuiz = require('./quiz');
 
 var exampleMapping = new objects.MinigameRoomMapping(null, exampleRoom, exampleQuiz);
+var exampleMapping = new objects.MinigameRoomMapping(null, exampleRoom, exampleQuiz);
 
 /**
  * 

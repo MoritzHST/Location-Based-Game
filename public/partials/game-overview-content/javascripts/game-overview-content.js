@@ -15,8 +15,9 @@ function initGameOverviewContent() {
  */
 function setLocations(pObj) {
     for (let i in pObj) {
-        if (pObj[i].roomnumber === null) {
+        if (!pObj[i].roomnumber) {
             user.locations["outdoor"].push(pObj[i]);
+            continue;
         }
         if (pObj[i].roomnumber.startsWith("1")) {
             user.locations["eg"].push(pObj[i]);

@@ -37,23 +37,27 @@ module.exports = {
      * Minigames sollten flexibel sein, das heißt es müssen unterschiedliche Objekte
      * für unterschiedliche Minigames existieren.
      *******************************************************************************
-     * Ein Quiz besteht aus einer Frage und einer Antwort, es ist sinnvoll auf
+     * Ein SimpleQuiz besteht aus einer Frage und einer Antwort, es ist sinnvoll auf
      * Datenebene die Richtige von den falschen Antworten zu trennen
      *
      * pQuestion -> die Frage als String
-     * pRightAnswer -> die richtige Antwort auf die Frage als String
-     * pWrongAnswer -> die falschen Antworten auf die Frage als Strings
+     * pAnswers -> die Antworten auf die Frage
      */
-    Quiz: function (pQuestion, pRightAnswer, pWrongAnswer) {
-        logging.Info("initializing new Quiz");
-        logging.Parameter("pQuestion", pQuestion);
-        logging.Parameter("pRightAnswer", pRightAnswer);
-        logging.Parameter("pWrongAnswer", pWrongAnswer);
-        this.type = "quiz";
+    SimpleQuiz: function (pQuestion, pAnswers) {
+        logging.Info("initializing new SimpleQuiz");
         this.question = pQuestion;
-        this.rightAnswer = pRightAnswer;
-        this.wrongAnswer = pWrongAnswer;
-        logging.Info("initializing Quiz done");
+        this.answers = pAnswers;
+    },
+
+    /**
+     * Antworten auf SimpleQuiz fragen
+     * @param pAnswer Antwort als String
+     * @param pIsCorrect Boolean der definiert, ob diese Antwort eine korrekte Antwort auf die Frage ist
+     * @constructor
+     */
+    Answer: function (pAnswer, pIsCorrect) {
+        this.answer = pAnswer;
+        this.isCorrect = pIsCorrect;
     },
 
     /**
@@ -61,7 +65,7 @@ module.exports = {
      * muss also möglich sein, diese flexibel zu mappen
      *
      * pRoom -> vom Typ Room, hinterlegt ein Raumobjekt
-     * pMinigame -> vom Typ eines Minigames (Quiz, ...), hinterlegt ein Minigameobjekt
+     * pMinigame -> vom Typ eines Minigames (SimpleQuiz, ...), hinterlegt ein Minigameobjekt
      */
     MinigameRoomMapping: function (pRoom, pMinigame) {
         logging.Info("initializing new MinigameRoomMapping");

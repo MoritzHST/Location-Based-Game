@@ -16,6 +16,10 @@ function init() {
             window.location = "sign-up";
         });
     });
+
+    $("#game-room-map").on("click", function () {
+        setNodeHookFromFile(document.getElementById("content-hook"), "../partials/room-map/room-map.html", undefined, undefined, "initRoomMap");
+    });
 }
 
 /**

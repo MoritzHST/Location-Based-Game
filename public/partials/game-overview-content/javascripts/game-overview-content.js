@@ -1,4 +1,7 @@
 function initGameOverviewContent() {
+    //Preselect Button Alle (Button Navbar)
+    $("#play_all_rooms").focus();
+
     user.locations = {
         "outdoor": [],
         "eg": [],

@@ -1,5 +1,9 @@
 image: "node:latest"
 
+cache:
+  paths:
+  - node_modules/
+
 stages:
   - build
   - execute
@@ -10,9 +14,6 @@ build:
   stage: build
   script:
     - "npm install"
-  artifacts:
-    paths:
-     - node_modules/
 
 execute:
   stage: execute

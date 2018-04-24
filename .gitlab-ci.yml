@@ -37,7 +37,7 @@ sonarqube-reports:
   script:
   - gitlab-sonar-scanner
   
-test_mocha: 
+test_mocha:
+  stage: test
   script:
     - "npm test"
-    stage: test

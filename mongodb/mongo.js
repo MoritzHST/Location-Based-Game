@@ -25,21 +25,25 @@ if (!fs.existsSync(file)) {
 
     for (var key in Conf) {
         if (Conf.hasOwnProperty(key)) {
-            for (var line = 0; line < lines.length; line++) {
-                var keyIndex = lines[line].indexOf(key + ":");
+            prepareDB(lines, key);
+        }
+    }
+}
 
-                if (keyIndex >= 0 && !lines[line].trim().startsWith("#")) {
-                    var value = lines[line].trim().substring(keyIndex + key.length);
+function prepareDB(lines, key) {
+    for (var line = 0; line < lines.length; line++) {
+        var keyIndex = lines[line].indexOf(key + ":");
 
-                    for (var i = 0; i < delimeters.length; i++) {
-                        if (value.includes(delimeters[i])) {
-                            value = value.substring(0, value.indexOf(delimeters[i])).trim();
-                        }
-                    }
+        if (keyIndex >= 0 && !lines[line].trim().startsWith("#")) {
+            var value = lines[line].trim().substring(keyIndex + key.length);
 
-                    Conf[key] = value;
+            for (var i = 0; i < delimeters.length; i++) {
+                if (value.includes(delimeters[i])) {
+                    value = value.substring(0, value.indexOf(delimeters[i])).trim();
                 }
             }
+
+            Conf[key] = value;
         }
     }
 }

@@ -6,7 +6,6 @@ cache:
 
 stages:
   - build
-  - execute
   - analysis
   - test
 
@@ -14,11 +13,6 @@ build:
   stage: build
   script:
     - "npm update"
-
-execute:
-  stage: execute
-  script: 
-    - "node ./bin/www"
 
 sonarqube:
   stage: analysis

@@ -18,7 +18,7 @@ sonarqube:
   stage: analysis
   image: ciricihq/gitlab-sonar-scanner
   variables:
-    SONAR_URL: http://cdelivery.fh-stralsund.de
+    SONAR_URL: "https://cdelivery.fh-stralsund.de"
     SONAR_ANALYSIS_MODE: issues
   script:
   - gitlab-sonar-scanner
@@ -27,7 +27,7 @@ sonarqube-reports:
   stage: analysis
   image: ciricihq/gitlab-sonar-scanner
   variables:
-    SONAR_URL: http://cdelivery.fh-stralsund.de
+    SONAR_URL: "https://cdelivery.fh-stralsund.de"
     SONAR_ANALYSIS_MODE: publish
   script:
   - gitlab-sonar-scanner

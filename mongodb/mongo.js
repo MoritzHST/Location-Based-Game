@@ -4,9 +4,9 @@ const logging = require('./logging');
 const _conf = '../mongod.conf';
 
 Conf = {
-	    port:'27017',
-	    bindIp: '127.0.0.1',
-	    defaultDb:'LocationBasedGame',
+    port:'27017',
+    bindIp: '127.0.0.1',
+    defaultDb:'LocationBasedGame',
 }
 
 /**
@@ -17,41 +17,41 @@ Conf = {
 const file = require('path').resolve(__dirname, _conf);
 
 if (!fs.existsSync(file)) {
-	logging.Error(_conf + " ist nicht lesbar oder existiert nicht");
+    logging.Error(_conf + " ist nicht lesbar oder existiert nicht");
 } else {
-	var content = fs.readFileSync(file, 'utf8').toString();
-	var delimeters = [ ',', '#' ];
-	var lines = content.split('\n');
-	
-	for (key in Conf) {
-		
-		for (var line = 0; line < lines.length; line++) {
-			var keyIndex = lines[line].indexOf(key + ":");
-	
-			if (keyIndex >= 0 && !lines[line].trim().startsWith("#")) {
-				var value = lines[line].trim().substring(keyIndex + key.length)
-				
-				for (var i = 0; i < delimeters.length; i++) {
-					if (value.includes(delimeters[i])) {
-						value = value.substring(0, value.indexOf(delimeters[i])).trim();
-					}
-				}
-				
-				Conf[key] = value;
-			}
-		}
-	}
+    var content = fs.readFileSync(file, 'utf8').toString();
+    var delimeters = [ ',', '#' ];
+    var lines = content.split('\n');
+
+    for (key in Conf) {
+
+        for (var line = 0; line < lines.length; line++) {
+            var keyIndex = lines[line].indexOf(key + ":");
+
+            if (keyIndex >= 0 && !lines[line].trim().startsWith("#")) {
+                var value = lines[line].trim().substring(keyIndex + key.length)
+
+                for (var i = 0; i < delimeters.length; i++) {
+                    if (value.includes(delimeters[i])) {
+                        value = value.substring(0, value.indexOf(delimeters[i])).trim();
+                    }
+                }
+
+                Conf[key] = value;
+            }
+        }
+    }
 }
 
 function MongoWrapper(database) {
-	this.Client = MongoClient;
-	this.Url = 'mongodb://' + Conf.bindIp + ':' + Conf.port;
-	this.Database = database ? database : Conf.defaultDb;
+    this.Client = MongoClient;
+    this.Url = 'mongodb://' + Conf.bindIp + ':' + Conf.port;
+    this.Database = database ? database : Conf.defaultDb;
 }
 
 
 module.exports = {
-	    Object: function(database) {
-	    	return new MongoWrapper(database);
-	    }
+    Object: function(database) {
+        return new MongoWrapper(database);
+    }
 };

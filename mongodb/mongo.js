@@ -3,11 +3,11 @@ const MongoClient = require('mongodb').MongoClient;
 const logging = require('./logging');
 const _conf = '../mongod.conf';
 
-const Conf = {
-    port: '27017',
+Conf = {
+    port:'27017',
     bindIp: '127.0.0.1',
-    defaultDb: 'LocationBasedGame'
-};
+    defaultDb:'LocationBasedGame',
+}
 
 /**
  * Sucht innerhalb der _conf Datei nach angegebenen Mongo-Konfigurationen
@@ -20,32 +20,25 @@ if (!fs.existsSync(file)) {
     logging.Error(_conf + " ist nicht lesbar oder existiert nicht");
 } else {
     var content = fs.readFileSync(file, 'utf8').toString();
-    var delimeters = [',', '#'];
+    var delimeters = [ ',', '#' ];
     var lines = content.split('\n');
 
-    for (var key in Conf) {
-        if (Conf.hasOwnProperty(key)) {
-            prepareDB(lines, key, delimeters);
-        }
-    }
-}
+    for (key in Conf) {
 
-function prepareDB(lines, key, delimeters) {
-    for (var line = 0; line < lines.length; line++) {
-        var keyIndex = lines[line].indexOf(key + ":");
+        for (var line = 0; line < lines.length; line++) {
+            var keyIndex = lines[line].indexOf(key + ":");
 
-        if (keyIndex >= 0 && !lines[line].trim().startsWith("#")) {
-            var value = lines[line].trim().substring(keyIndex + key.length);
-            value = getValue(delimeters, value);
-            Conf[key] = value;
-        }
-    }
-}
+            if (keyIndex >= 0 && !lines[line].trim().startsWith("#")) {
+                var value = lines[line].trim().substring(keyIndex + key.length)
 
-function getValue(delimeters, value) {
-    for (var i = 0; i < delimeters.length; i++) {
-        if (value.includes(delimeters[i])) {
-            return value.substring(0, value.indexOf(delimeters[i])).trim();
+                for (var i = 0; i < delimeters.length; i++) {
+                    if (value.includes(delimeters[i])) {
+                        value = value.substring(0, value.indexOf(delimeters[i])).trim();
+                    }
+                }
+
+                Conf[key] = value;
+            }
         }
     }
 }
@@ -58,7 +51,7 @@ function MongoWrapper(database) {
 
 
 module.exports = {
-    Object: function (database) {
+    Object: function(database) {
         return new MongoWrapper(database);
     }
 };

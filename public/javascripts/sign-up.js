@@ -1,7 +1,6 @@
 window.onload = init;
 
 function init() {
-
     setHooks();
 
     // Register-Button Funktion registrieren

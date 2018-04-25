@@ -5,17 +5,13 @@ function setNodeHookFromFile(pNodeHook, pFilePath, pCallback, pCallbackObject, p
         })
         .then(function (html) {
             let head = $('head');
-
+            //Alte Stylesheets und JavaScript für Hook entfernen
+            $('.partial.style.' + pNodeHook.id).remove();
+            $('.partial.js.' + pNodeHook.id).remove();
             pNodeHook.innerHTML = html;
             //Stylesheets und JavaScript für den Hook taggen
             $(pNodeHook.getElementsByTagName('link')).addClass('partial style ' + pNodeHook.id);
             $(pNodeHook.getElementsByTagName('script')).addClass('partial js ' + pNodeHook.id);
-
-            //Alte Stylesheets und JavaScript für Hook entfernen
-
-
-            $('partial style ' + pNodeHook.id).remove();
-            $('partial js ' + pNodeHook.id).remove();
 
             //JavaScript laden und hinzufügen
             let counter = 0;
@@ -26,20 +22,19 @@ function setNodeHookFromFile(pNodeHook, pFilePath, pCallback, pCallbackObject, p
                 let scriptTag = document.createElement('script');
                 scriptTag.src = this.src;
                 scriptTag.className = this.className;
-
-                scriptTag.onload = function () {
-                    //Mögl. Initialisierungsfunktion des Partials
-                    //Nur wenn es sich um das letzte Script handelt
+                $(scriptTag).ready(function () {
                     if (pPartialInitFunction !== undefined && elements === counter) {
                         const fn = window[pPartialInitFunction];
                         if (typeof fn === 'function') {
+                            console.log(fn());
                             fn();
                         }
                     }
-                };
-
-                document.head.appendChild(scriptTag);
+                });
+                head.append(scriptTag);
             });
+            //Javascript aus Hook entfernen
+            $('#' + pNodeHook.id + '>.partial.js.' + pNodeHook.id).remove();
 
             //Neue Stylesheets hinzufügen
             $(pNodeHook.getElementsByTagName('link')).appendTo(head);
@@ -48,4 +43,11 @@ function setNodeHookFromFile(pNodeHook, pFilePath, pCallback, pCallbackObject, p
                 pCallback(pCallbackObject);
             }
         });
+}
+
+function clearNodeHook(pNodeHookId) {
+    $("#" + pNodeHookId).html("");
+    //Alte Stylesheets und JavaScript für Hook entfernen
+    $('.partial.style.' + pNodeHookId).remove();
+    $('.partial.js.' + pNodeHookId).remove();
 }

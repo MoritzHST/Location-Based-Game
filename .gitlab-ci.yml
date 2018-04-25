@@ -1,6 +1,38 @@
-image: node:8.11.1
+image: "node:latest"
 
-all_tests:
+cache:
+  paths:
+  - node_modules/
+
+stages:
+  - build
+  - analysis
+  - test
+
+build:
+  stage: build
   script:
-   - npm install
-   - npm test
+    - "npm install"
+
+sonarqube:
+  stage: analysis
+  image: ciricihq/gitlab-sonar-scanner
+  variables:
+    SONAR_URL: "https://cdelivery.fh-stralsund.de"
+    SONAR_ANALYSIS_MODE: issues
+  script:
+  - gitlab-sonar-scanner -X
+
+sonarqube-reports:
+  stage: analysis
+  image: ciricihq/gitlab-sonar-scanner
+  variables:
+    SONAR_URL: "https://cdelivery.fh-stralsund.de"
+    SONAR_ANALYSIS_MODE: publish
+  script:
+  - gitlab-sonar-scanner -X
+  
+test_mocha:
+  stage: test
+  script:
+    - "npm test"

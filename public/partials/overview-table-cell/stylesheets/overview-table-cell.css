@@ -1,0 +1,21 @@
+.padding-10 {
+    padding: 10px 5px 10px 5px;
+}
+
+.media-border {
+    border-radius: 0 4px 4px 0;
+    border: 1px #BBBBBB solid;
+}
+
+.media {
+    min-height: 75px;
+    margin-top: 10px !important;
+}
+
+.media-left {
+    width: 25% !important;
+}
+
+.media-left img {
+    max-width: 100%;
+}

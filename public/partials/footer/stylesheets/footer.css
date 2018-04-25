@@ -7,6 +7,7 @@
 }
 
 .host-agb {
+    box-sizing: border-box;
     padding-right: 5px;
     text-align: right;
     width: 50%;
@@ -14,6 +15,7 @@
 }
 
 .host-impressum {
+    box-sizing: border-box;
     padding-left: 5px;
     text-align: left;
     width: 50%;

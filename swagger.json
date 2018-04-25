@@ -1,337 +1,351 @@
 {
-	"swagger": "2.0",
-	"info": {
-		"version": "1.0.0",
-		"title": "Swagger",
-		"description": "Testen von verschiedenen GET/POST Methoden",
-		"license": {
-			"name": "MIT",
-			"url": "https://opensource.org/licenses/MIT"
-		}
-	},
-	"host": "localhost:3000",
-	"basePath": "/",
-	"schemes": [
-		"http"
-	],
-	"consumes": [
-		"application/json"
-	],
-	"produces": [
-		"application/json"
-	],
-	"paths": {
-		"/find/users": {
-			"parameters": [
-				{
-					"name": "_id",
-					"in": "query",
-					"required": false,
-					"description": "ID des Benutzers"
-				},
-				{
-					"name": "name",
-					"in": "query",
-					"required": false,
-					"description": "Name des Benutzers"
-				}
-			],
-			"get": {
-				"tags": [
-					"Users"
-				],
-				"summary": "Get User",
-				"responses": {
-					"200": {
-						"description": "Benutzer wurde(n) gefunden",
-						"schema": {
-							"$ref": "#/definitions/User"
-						}
-					}
-				}
-			}
-		},
-		"/insert/users": {
-			"parameters": [
-				{
-					"name": "name",
-					"in": "query",
-					"required": true,
-					"description": "Name des Benutzers"
-				}
-			],
-			"post": {
-				"tags": [
-					"Users"
-				],
-				"summary": "Insert User",
-				"responses": {
-					"200": {
-                      "description": "Benutzer wurde hinzugefügt",
-						"schema": {
-							"$ref": "#/definitions/User"
-						}
-					}
-				}
-			}
-		},
-		"/update/users/{_id}": {
-			"parameters": [
-				{
-					"name": "_id",
-					"in": "path",
-					"required": true,
-					"description": "ID des Benutzers"
-				},
-				{
-					"name": "name",
-					"in": "query",
-					"required": false,
-					"description": "Neuer Name des Benutzers"
-				},
-				{
-					"name": "token",
-					"in": "query",
-					"required": false,
-					"description": "Neuer Token des Benutzers"
-				}
-			],
-			"post": {
-				"tags": [
-					"Users"
-				],
-				"summary": "Update User",
-				"responses": {
-					"200": {
-						"description": "Benutzerinformation wurden aktualisiert",
-						"schema": {
-							"$ref": "#/definitions/User"
-						}
-					}
-				}
-			}
-		},
-		"/delete/users": {
-			"parameters": [
-				{
-					"name": "_id",
-					"in": "query",
-					"required": true,
-					"description": "ID des Benutzers"
-				},
-				{
-					"name": "name",
-					"in": "query",
-					"required": false,
-					"description": "Name des Benutzers"
-				}
-			],
-			"post": {
-				"tags": [
-					"Users"
-				],
-				"summary": "Delete User",
-				"responses": {
-					"200": {
-                      "description": "Benutzer wurde gelöscht",
-						"schema": {
-							"$ref": "#/definitions/User"
-						}
-					}
-				}
-			}
-		},
-		"/find/rooms": {
-			"parameters": [
-				{
-					"name": "_id",
-					"in": "query",
-					"required": false,
-					"description": "ID des Raumes"
-				},
-				{
-					"name": "roomnumber",
-					"in": "query",
-					"required": false,
-					"description": "Raumnummer"
-				},
-				{
-					"name": "name",
-					"in": "query",
-					"required": false,
-					"description": "Name des Raumes"
-				}
-			],
-			"get": {
-				"tags": [
-					"Rooms"
-				],
-				"summary": "Get Room",
-				"responses": {
-					"200": {
-                      "description": "Raum wurde gefunden",
-						"schema": {
-							"$ref": "#/definitions/Room"
-						}
-					}
-				}
-			}
-		},
-		"/insert/rooms": {
-			"parameters": [
-				{
-					"name": "roomnumber",
-					"in": "query",
-					"required": true,
-					"description": "Raumnummer"
-				},
-				{
-					"name": "name",
-					"in": "query",
-					"required": true,
-					"description": "Name des Raumes"
-				},
-				{
-					"name": "description",
-					"in": "query",
-					"required": false,
-					"description": "Beschreibung des Raumes"
-				}
-			],
-			"post": {
-				"tags": [
-					"Rooms"
-				],
-				"summary": "Insert Room",
-				"responses": {
-					"200": {
-						"description": "Raum wurde hinzugefügt",
-						"schema": {
-							"$ref": "#/definitions/Room"
-						}
-					}
-				}
-			}
-		},
-		"/update/rooms/{_id}": {
-			"parameters": [
-				{
-					"name": "_id",
-					"in": "path",
-					"required": true,
-					"description": "ID des Raumes"
-				},
-				{
-					"name": "roomnumber",
-					"in": "query",
-					"required": false,
-					"description": "Raumnummer"
-				},
-				{
-					"name": "name",
-					"in": "query",
-					"required": false,
-					"description": "Name des Raumes"
-				},
-				{
-					"name": "description",
-					"in": "query",
-					"required": false,
-					"description": "Beschreibung des Raumes"
-				}
-			],
-			"post": {
-				"tags": [
-					"Rooms"
-				],
-				"summary": "Update Room",
-				"responses": {
-					"200": {
-						"description": "Rauminformationen wurden aktualisiert",
-						"schema": {
-							"$ref": "#/definitions/Room"
-						}
-					}
-				}
-			}
-		},
-		"/delete/rooms": {
-			"parameters": [
-				{
-					"name": "_id",
-					"in": "query",
-					"required": true,
-					"description": "ID des Raumes"
-				},
-				{
-					"name": "roomnumber",
-					"in": "query",
-					"required": false,
-					"description": "Raumnummer"
-				},
-				{
-					"name": "name",
-					"in": "query",
-					"required": false,
-					"description": "Name des Raumes"
-				}
-			],
-			"post": {
-				"tags": [
-					"Rooms"
-				],
-				"summary": "Delete Room",
-				"responses": {
-					"200": {
-                      "description": "Raum wurde gelöscht",
-						"schema": {
-							"$ref": "#/definitions/Rooms"
-						}
-					}
-				}
-			}
-		}
-	},
-	"definitions": {
-		"User": {
-			"required": [
-				"_id"
-			],
-			"properties": {
-				"_id": {
-					"type": "integer",
-					"uniqueItems": true
-				},
-				"name": {
-					"type": "string",
-					"uniqueItems": true
-				},
-				"token": {
-					"type": "integer"
-				}
-			}
-		},
-		"Room": {
-			"required": [
-				"_id"
-			],
-			"properties": {
-				"_id": {
-					"type": "integer",
-					"uniqueItems": true
-				},
-				"name": {
-					"type": "string",
-					"uniqueItems": true
-				},
-				"roomnumber": {
-					"type": "string",
-					"uniqueItems": true
-				},
-				"description": {
-					"type": "string"
-				}
-			}
-		}
-	}
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Swagger",
+    "description": "Testen von verschiedenen GET/POST Methoden",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/find/users": {
+      "parameters": [
+        {
+          "name": "_id",
+          "in": "query",
+          "required": false,
+          "description": "ID des Benutzers"
+        },
+        {
+          "name": "name",
+          "in": "query",
+          "required": false,
+          "description": "Name des Benutzers"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get User",
+        "responses": {
+          "200": {
+            "description": "Benutzer wurde(n) gefunden",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/insert/users": {
+      "parameters": [
+        {
+          "name": "name",
+          "in": "query",
+          "required": true,
+          "description": "Name des Benutzers"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Insert User",
+        "responses": {
+          "200": {
+            "description": "Benutzer wurde hinzugefügt",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/update/users/{_id}": {
+      "parameters": [
+        {
+          "name": "_id",
+          "in": "path",
+          "required": true,
+          "description": "ID des Benutzers"
+        },
+        {
+          "name": "name",
+          "in": "query",
+          "required": false,
+          "description": "Neuer Name des Benutzers"
+        },
+        {
+          "name": "token",
+          "in": "query",
+          "required": false,
+          "description": "Neuer Token des Benutzers"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update User",
+        "responses": {
+          "200": {
+            "description": "Benutzerinformation wurden aktualisiert",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/delete/users": {
+      "parameters": [
+        {
+          "name": "_id",
+          "in": "query",
+          "required": true,
+          "description": "ID des Benutzers"
+        },
+        {
+          "name": "name",
+          "in": "query",
+          "required": false,
+          "description": "Name des Benutzers"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Delete User",
+        "responses": {
+          "200": {
+            "description": "Benutzer wurde gelöscht",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/find/rooms": {
+      "parameters": [
+        {
+          "name": "_id",
+          "in": "query",
+          "required": false,
+          "description": "ID des Raumes"
+        },
+        {
+          "name": "roomnumber",
+          "in": "query",
+          "required": false,
+          "description": "Raumnummer"
+        },
+        {
+          "name": "name",
+          "in": "query",
+          "required": false,
+          "description": "Name des Raumes"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Rooms"
+        ],
+        "summary": "Get Room",
+        "responses": {
+          "200": {
+            "description": "Raum wurde gefunden",
+            "schema": {
+              "$ref": "#/definitions/Room"
+            }
+          }
+        }
+      }
+    },
+    "/insert/rooms": {
+      "parameters": [
+        {
+          "name": "roomnumber",
+          "in": "query",
+          "required": true,
+          "description": "Raumnummer"
+        },
+        {
+          "name": "name",
+          "in": "query",
+          "required": true,
+          "description": "Name des Raumes"
+        },
+        {
+          "name": "description",
+          "in": "query",
+          "required": false,
+          "description": "Beschreibung des Raumes"
+        },
+        {
+          "name": "image",
+          "in": "formData",
+          "description": "Bild",
+          "required": false,
+          "type": "file"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Rooms"
+        ],
+        "summary": "Insert Room",
+        "responses": {
+          "200": {
+            "description": "Raum wurde hinzugefügt",
+            "schema": {
+              "$ref": "#/definitions/Room"
+            }
+          }
+        }
+      }
+    },
+    "/update/rooms/{_id}": {
+      "parameters": [
+        {
+          "name": "_id",
+          "in": "path",
+          "required": true,
+          "description": "ID des Raumes"
+        },
+        {
+          "name": "roomnumber",
+          "in": "query",
+          "required": false,
+          "description": "Raumnummer"
+        },
+        {
+          "name": "name",
+          "in": "query",
+          "required": false,
+          "description": "Name des Raumes"
+        },
+        {
+          "name": "description",
+          "in": "query",
+          "required": false,
+          "description": "Beschreibung des Raumes"
+        },
+        {
+          "name": "image",
+          "in": "formData",
+          "description": "Bild",
+          "required": false,
+          "type": "file"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Rooms"
+        ],
+        "summary": "Update Room",
+        "responses": {
+          "200": {
+            "description": "Rauminformationen wurden aktualisiert",
+            "schema": {
+              "$ref": "#/definitions/Room"
+            }
+          }
+        }
+      }
+    },
+    "/delete/rooms": {
+      "parameters": [
+        {
+          "name": "_id",
+          "in": "query",
+          "required": true,
+          "description": "ID des Raumes"
+        },
+        {
+          "name": "roomnumber",
+          "in": "query",
+          "required": false,
+          "description": "Raumnummer"
+        },
+        {
+          "name": "name",
+          "in": "query",
+          "required": false,
+          "description": "Name des Raumes"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Rooms"
+        ],
+        "summary": "Delete Room",
+        "responses": {
+          "200": {
+            "description": "Raum wurde gelöscht",
+            "schema": {
+              "$ref": "#/definitions/Rooms"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "required": [
+        "_id"
+      ],
+      "properties": {
+        "_id": {
+          "type": "integer",
+          "uniqueItems": true
+        },
+        "name": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "token": {
+          "type": "integer"
+        }
+      }
+    },
+    "Room": {
+      "required": [
+        "_id"
+      ],
+      "properties": {
+        "_id": {
+          "type": "integer",
+          "uniqueItems": true
+        },
+        "name": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "roomnumber": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    }
+  }
 }

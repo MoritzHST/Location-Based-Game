@@ -6,12 +6,69 @@ html, body {
     overflow-x: hidden;
 }
 
-.host-button, .host-button:hover, .host-color, a:hover, a:focus {
+.host-button, .host-button:hover, .host-color, form a:hover, form a:focus {
     background-color: #e1232b !important;
     color: #EEE !important;
     border: #BBB !important;
+    font-size: 1.2em;
+    font-weight: bold;
 }
 
 .host-button:active:focus, .host-button:active {
     background-color: #ad0000 !important;
+}
+
+.host-button-group-button {
+    background-color: #FFF !important;
+    color: #e1232b !important;
+    border: #e1232b 1px solid !important;
+}
+
+.host-button-group-button:active, .host-button-group-button:focus, .host-button-group-button.active {
+    color: #EEE !important;
+    background-color: #e1232b !important;
+    border: #e1232b 1px solid !important;
+}
+
+h2 {
+    color: #e1232b;
+    width: 100%;
+    border-bottom: #e1232b solid 1px;
+    margin-bottom: 20px;
+    font-size: 1.7em;
+}
+
+@media (min-width: 0) {
+    h2 {
+        padding-top: 0;
+    }
+
+    .navbar {
+        margin-bottom: 0;
+    }
+
+    h2:first-of-type {
+        margin-top: 0 !important;
+    }
+}
+
+@media (min-width: 768px) {
+    h2 {
+        margin-top: 15px !important;
+        padding: 15px 5px 5px 5px;
+    }
+
+    .navbar {
+        margin-bottom: 20px;
+    }
+
+    h2:first-of-type {
+        margin-top: 25px !important;
+    }
+}
+
+@media (min-width: 992px) {
+    h2 {
+        margin-top: 25px !important;
+    }
 }

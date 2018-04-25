@@ -6,11 +6,12 @@
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="stylesheets/jquery.mmenu.all.css">
+    <link rel="stylesheet" href="stylesheets/jquery.mmenu.min.css">
     <link rel="stylesheet" href="stylesheets/slide-in-menu.css">
 
     <!-- Custom Style -->
     <link rel="stylesheet" href="stylesheets/play.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
 
     <!-- jQuery library -->
     <script src="javascripts/jquery.min.js"></script>
@@ -22,7 +23,7 @@
     <script src="javascripts/play.js"></script>
     <script src="javascripts/partial-renderer.js"></script>
     <script src="javascripts/ajax-call.js"></script>
-    <script src='javascripts/jquery.mmenu.all.js'></script>
+    <script src='javascripts/jquery.mmenu.min.js'></script>
 </head>
 <body>
 <div class="page">
@@ -36,11 +37,11 @@
         <ul>
             <li><a href="#">Spielübersicht</a></li>
             <li><a href="#">Score-Board</a></li>
-            <li><a href="#">Lageplan</a></li>
+            <li><a id="game-room-map" href="#">Lageplan</a></li>
 
             <li class="Divider host-divider">Abmelden</li>
 
-            <li><a href="#">Logout</a></li>
+            <li><a id="game-logout" href="#">Logout</a></li>
 
             <li class="Divider host-divider">Hinweise</li>
             <li><a href="#">Spielanleitung</a></li>
@@ -48,10 +49,15 @@
             <li class="Divider host-divider" id="play-user-information"></li>
         </ul>
     </nav>
-
-    <!-- Content Box -->
-    <div id="content-hook"></div>
-
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div id="warning-hook"></div>
+                <!-- Content Box -->
+                <div id="content-hook"></div>
+            </div>
+        </div>
+    </div>
     <!-- Footer einblenden -->
     <div id="footer-hook"></div>
 </div>

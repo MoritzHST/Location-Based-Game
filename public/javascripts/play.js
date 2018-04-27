@@ -3,7 +3,7 @@ let user;
 let loginHintTimer;
 let logoutHintTimer;
 
-$(function () {
+$(function() {
     $('nav#menu').mmenu();
 });
 
@@ -22,7 +22,7 @@ function init() {
         setNodeHookFromFile(document.getElementById("warning-hook"), "../partials/play-warning-box/play-warning-box.html", setLogoutHint);
     });
 
-    $("#game-room-map").on("click", function () {
+    $("#game-room-map").on("click", function() {
         setNodeHookFromFile(document.getElementById("content-hook"), "../partials/room-map/room-map.html", undefined, undefined, "initRoomMap");
     });
 }
@@ -31,17 +31,18 @@ function init() {
  * jQuery mmenu konfigurieren
  */
 function setSlideInMenu() {
-    const cookie = getObjectFromCookie("session");
+    let cookie = getObjectFromCookie("session");
     user.name = cookie.user.name;
     user.token = cookie.user.token;
+
     $("#menu").mmenu({
-        navbar: {
-            title: ""
+        navbar : {
+            title : ""
         },
-        navbars: [{
-            position: "top",
-            content: ["prev", "title"]
-        }]
+        navbars : [ {
+            position : "top",
+            content : [ "prev", "title" ]
+        } ]
     });
 
     $('#play-user-information').html("Name: " + user.name + "<br/> Token: " + user.token);
@@ -58,10 +59,12 @@ function setHooks() {
 }
 
 function getObjectFromCookie(pCookieName) {
-    const cookieStrings = document.cookie.split(";");
-    for (let i in cookieStrings) {
+    let cookieStrings = document.cookie.split(";");
+    for ( let i in cookieStrings) {
         if (cookieStrings[i].startsWith(pCookieName)) {
-            return JSON.parse(atob(cookieStrings[i].substr(pCookieName.length + 1)));
+            let cookieValue = cookieStrings[i].substr(pCookieName.length + 1);
+            if (cookieValue.length > 0)
+                return JSON.parse(atob(cookieValue));
         }
     }
 }
@@ -72,7 +75,7 @@ function hideWarning() {
     if (!loginHintTimer) {
         loginHintTimer = setTimeout(function () {
             $("#warning-hook").html("");
-        }, 10000)
+        }, 10000);
     }
 }
 
@@ -104,6 +107,7 @@ function setLogoutHint() {
                 clearInterval(this);
                 logoutHintTimer = undefined;
                 $.get("sign-out").done(function () {
+                    clearLocalCookies();
                     window.location = "sign-up";
                 });
             }

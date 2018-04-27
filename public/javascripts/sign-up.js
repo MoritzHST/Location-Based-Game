@@ -1,7 +1,37 @@
 window.onload = init;
 
-function init() {
+/**
+ * Switch-Case für Session-Events, welche von Node gefeuert werden können
+ **/
+$(document).ready(function() {
+    switch (getURLParameter("reason")) {
+    case "login":
+        renderFailureMessage({
+            responseJSON : {
+                "error" : "Du wurdest ausgeloggt, weil sich jemand anderes mit deinen Daten angemeldet hat."
+            }
+        });
+        break;
+    case "error":
+        renderFailureMessage({
+            responseJSON : {
+                "error" : "Es trat ein Fehler beim Verbinden mit dem Server auf, wodurch du ausgeloggt wurdest."
+            }
+        });
+        break;
+    case "close":
+        renderFailureMessage({
+            responseJSON : {
+                "error" : "Deine Sitzung wurde vom Server aus beendet."
+            }
+        });
+        break;
+    default:
+        break;
+    }
+});
 
+function init() {
     setHooks();
 
     // Register-Button Funktion registrieren

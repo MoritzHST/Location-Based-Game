@@ -1,5 +1,8 @@
 window.onload = init;
 
+/**
+ * Switch-Case für Session-Events, welche von Node gefeuert werden können
+ **/
 $(document).ready(function() {
     switch (getURLParameter("reason")) {
     case "login":
@@ -12,7 +15,7 @@ $(document).ready(function() {
     case "error":
         renderFailureMessage({
             responseJSON : {
-                "error" : "Es trat ein Fehler beim verbinden mit dem Server auf, wodurch du wurdest ausgeloggt wurdest."
+                "error" : "Es trat ein Fehler beim Verbinden mit dem Server auf, wodurch du ausgeloggt wurdest."
             }
         });
         break;

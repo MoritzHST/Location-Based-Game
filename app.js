@@ -15,14 +15,13 @@ var swaggerDocument = require('./swagger.json');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
-
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(cookieSession({
     name: 'session',
-    //secret: randomstring.generate(),
+    // secret: randomstring.generate(),
     keys: [""],
     signed: true,
     maxAge: 24 * 60 * 60 * 1000,

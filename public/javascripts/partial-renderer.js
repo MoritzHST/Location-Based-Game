@@ -5,9 +5,13 @@ function setNodeHookFromFile(pNodeHook, pFilePath, pCallback, pCallbackObject, p
         })
         .then(function (html) {
             let head = $('head');
+            let partialJS = $('.partial.js.' + pNodeHook.id);
+            let partialCSS = $('.partial.style.' + pNodeHook.id)
+
             //Alte Stylesheets und JavaScript für Hook entfernen
-            $('.partial.style.' + pNodeHook.id).remove();
-            $('.partial.js.' + pNodeHook.id).remove();
+            partialCSS.remove();
+            partialJS.remove();
+
             pNodeHook.innerHTML = html;
             //Stylesheets und JavaScript für den Hook taggen
             $(pNodeHook.getElementsByTagName('link')).addClass('partial style ' + pNodeHook.id);
@@ -15,7 +19,7 @@ function setNodeHookFromFile(pNodeHook, pFilePath, pCallback, pCallbackObject, p
 
             //JavaScript laden und hinzufügen
             let counter = 0;
-            const jsList = $('.partial.js.' + pNodeHook.id);
+            const jsList = partialJS;
             let elements = jsList.length;
             jsList.each(function () {
                 counter++;

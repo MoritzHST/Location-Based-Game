@@ -67,7 +67,7 @@ router.use('*', function(req, res, next) {
     if (handler.stringStartsWith([ "javascripts", "stylesheets", "partials" ], req.originalUrl)) {
         next();
     } else {
-        if (req.originalUrl !== '/sign-up' && (!req.session || !req.session.user)) {
+        if (!req.originalUrl.startsWith('/sign-up') && (!req.session || !req.session.user)) {
             res.status(302).redirect('/sign-up');
         } else {
             next();

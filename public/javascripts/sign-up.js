@@ -1,5 +1,33 @@
 window.onload = init;
 
+$(document).ready(function() {
+    switch (getURLParameter("reason")) {
+    case "login":
+        renderFailureMessage({
+            responseJSON : {
+                "error" : "Du wurdest ausgeloggt, weil sich jemand anderes mit deinen Daten angemeldet hat."
+            }
+        });
+        break;
+    case "error":
+        renderFailureMessage({
+            responseJSON : {
+                "error" : "Es trat ein Fehler beim verbinden mit dem Server auf, wodurch du wurdest ausgeloggt wurdest."
+            }
+        });
+        break;
+    case "close":
+        renderFailureMessage({
+            responseJSON : {
+                "error" : "Deine Sitzung wurde vom Server aus beendet."
+            }
+        });
+        break;
+    default:
+        break;
+    }
+});
+
 function init() {
     setHooks();
 

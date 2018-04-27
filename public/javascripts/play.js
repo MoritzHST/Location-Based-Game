@@ -1,13 +1,5 @@
 window.onload = init;
 let user;
-/*
- * $(document).ready(function() { const cookie = getObjectFromCookie("session");
- * createSocket("session", 'echo-protocol', null, function(evt) { if (evt.data
- * === cookie.user._id) { $.get("sign-out").done(function() { window.location =
- * "sign-up"; }); } }); });
- */
-
-/* -------------------- */
 
 $(function() {
     $('nav#menu').mmenu();
@@ -36,7 +28,7 @@ function init() {
  * jQuery mmenu konfigurieren
  */
 function setSlideInMenu() {
-    const cookie = getObjectFromCookie("session");
+    let cookie = getObjectFromCookie("session");
     user.name = cookie.user.name;
     user.token = cookie.user.token;
 
@@ -64,10 +56,12 @@ function setHooks() {
 }
 
 function getObjectFromCookie(pCookieName) {
-    const cookieStrings = document.cookie.split(";");
+    let cookieStrings = document.cookie.split(";");
     for ( let i in cookieStrings) {
         if (cookieStrings[i].startsWith(pCookieName)) {
-            return JSON.parse(atob(cookieStrings[i].substr(pCookieName.length + 1)));
+            let cookieValue = cookieStrings[i].substr(pCookieName.length + 1);
+            if (cookieValue.length > 0)
+                return JSON.parse(atob(cookieValue));
         }
     }
 }

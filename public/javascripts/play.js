@@ -15,15 +15,15 @@ function init() {
     setHooks();
 
     $("#game-play-overview").on("click", function () {
-        setNodeHookFromFile(document.getElementById("content-hook"), "../partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent");
+        setNodeHookFromFile($("#content-hook"), "../partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent");
     });
 
     $("#game-logout").on("click", function () {
-        setNodeHookFromFile(document.getElementById("warning-hook"), "../partials/play-warning-box/play-warning-box.html", setLogoutHint);
+        setNodeHookFromFile($("#warning-hook"), "../partials/play-warning-box/play-warning-box.html", setLogoutHint);
     });
 
     $("#game-room-map").on("click", function() {
-        setNodeHookFromFile(document.getElementById("content-hook"), "../partials/room-map/room-map.html", undefined, undefined, "initRoomMap");
+        setNodeHookFromFile($("#content-hook"), "../partials/room-map/room-map.html", undefined, undefined, "initRoomMap");
     });
 }
 
@@ -52,10 +52,10 @@ function setSlideInMenu() {
  * Füllt Hooks der HTML Datei
  */
 function setHooks() {
-    setNodeHookFromFile(document.getElementById("header-hook"), "../partials/header/header.html");
-    setNodeHookFromFile(document.getElementById("footer-hook"), "../partials/footer/footer.html");
-    setNodeHookFromFile(document.getElementById("content-hook"), "../partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent");
-    setNodeHookFromFile(document.getElementById("warning-hook"), "../partials/play-warning-box/play-warning-box.html", hideWarning);
+    setNodeHookFromFile($("#header-hook"), "../partials/header/header.html");
+    setNodeHookFromFile($("#footer-hook"), "../partials/footer/footer.html");
+    setNodeHookFromFile($("#content-hook"), "../partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent");
+    setNodeHookFromFile($("#warning-hook"), "../partials/play-warning-box/play-warning-box.html", hideWarning);
 }
 
 function getObjectFromCookie(pCookieName) {

@@ -59,7 +59,7 @@ function setLayer(pLayer) {
             $('<div/>', {
                 id: locations[i]._id + "-hook"
             }).appendTo($("#" + pLayer));
-            setNodeHookFromFile(document.getElementById(locations[i]._id + "-hook"),
+            setNodeHookFromFile($("#" + locations[i]._id + "-hook"),
                 "../partials/overview-table-cell/overview-table-cell.html", setTableContent, (locations[i]));
         }
     }

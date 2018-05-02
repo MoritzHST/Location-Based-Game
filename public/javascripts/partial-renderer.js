@@ -5,21 +5,21 @@ function setNodeHookFromFile(pNodeHook, pFilePath, pCallback, pCallbackObject, p
         })
         .then(function (html) {
             let head = $('head');
-            let partialJS = $('.partial.js.' + pNodeHook.id);
-            let partialCSS = $('.partial.style.' + pNodeHook.id)
+            let partialJS = $('.partial.js.' + pNodeHook.attr("id"));
+            let partialCSS = $('.partial.style.' + pNodeHook.attr("id"))
 
             //Alte Stylesheets und JavaScript für Hook entfernen
             partialCSS.remove();
             partialJS.remove();
 
-            pNodeHook.innerHTML = html;
+            pNodeHook.html(html);
             //Stylesheets und JavaScript für den Hook taggen
-            $(pNodeHook.getElementsByTagName('link')).addClass('partial style ' + pNodeHook.id);
-            $(pNodeHook.getElementsByTagName('script')).addClass('partial js ' + pNodeHook.id);
+            pNodeHook.find("link").addClass('partial style ' + pNodeHook.attr("id"));
+            pNodeHook.find("script").addClass('partial js ' + pNodeHook.attr("id"));
 
             //JavaScript laden und hinzufügen
             let counter = 0;
-            const jsList = partialJS;
+            const jsList = $('.partial.js.' + pNodeHook.attr("id"));
             let elements = jsList.length;
             jsList.each(function () {
                 counter++;
@@ -30,7 +30,6 @@ function setNodeHookFromFile(pNodeHook, pFilePath, pCallback, pCallbackObject, p
                     if (pPartialInitFunction !== undefined && elements === counter) {
                         const fn = window[pPartialInitFunction];
                         if (typeof fn === 'function') {
-                            console.log(fn());
                             fn();
                         }
                     }
@@ -38,10 +37,10 @@ function setNodeHookFromFile(pNodeHook, pFilePath, pCallback, pCallbackObject, p
                 head.append(scriptTag);
             });
             //Javascript aus Hook entfernen
-            $('#' + pNodeHook.id + '>.partial.js.' + pNodeHook.id).remove();
+            $('#' + pNodeHook.attr("id") + '>.partial.js.' + pNodeHook.attr("id")).remove();
 
             //Neue Stylesheets hinzufügen
-            $(pNodeHook.getElementsByTagName('link')).appendTo(head);
+            pNodeHook.find("link").appendTo(head);
             //Funktion die global ausgeführt werden sollte, wenn das Partial in den Hook eingefügt wird
             if (pCallback !== undefined) {
                 pCallback(pCallbackObject);

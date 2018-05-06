@@ -82,8 +82,8 @@ function init() {
  * Füllt Hooks der HTML Datei
  */
 function setHooks() {
-    setNodeHookFromFile(document.getElementById("header-hook"), "../partials/header/header.html");
-    setNodeHookFromFile(document.getElementById("footer-hook"), "../partials/footer/footer.html");
+    setNodeHookFromFile($("#header-hook"), "../partials/header/header.html");
+    setNodeHookFromFile($("#footer-hook"), "../partials/footer/footer.html");
 }
 
 /**

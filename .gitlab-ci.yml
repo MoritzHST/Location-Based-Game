@@ -1,24 +1,38 @@
---- 
-before_script: 
-  - "echo \"run test\""
-cache: 
-  paths: 
-    - node_modules/
 image: "node:latest"
-sonarqube-reports: 
-  image: ciricihq/gitlab-sonar-scanner
-  script: 
-    - gitlab-sonar-scanner
-  stage: analysis
-  variables: 
-    SONAR_ANALYSIS_MODE: publish
-    SONAR_URL: "https://cdelivery.fh-stralsund.de"
 
-stages: 
+cache:
+  paths:
+  - node_modules/
+
+stages:
+  - build
   - test
   - analysis
-test_mocha: 
-  script: 
+
+build:
+  stage: build
+  script:
     - "npm install"
-    - "npm test"
+
+test_mocha:
   stage: test
+  script:
+    - "npm test"
+
+sonarqube:
+  stage: analysis
+  image: ciricihq/gitlab-sonar-scanner
+  variables:
+    SONAR_URL: "https://cdelivery.fh-stralsund.de"
+    SONAR_ANALYSIS_MODE: issues
+  script:
+  - gitlab-sonar-scanner -X
+
+sonarqube-reports:
+  stage: analysis
+  image: ciricihq/gitlab-sonar-scanner
+  variables:
+    SONAR_URL: "https://cdelivery.fh-stralsund.de"
+    SONAR_ANALYSIS_MODE: publish
+  script:
+  - gitlab-sonar-scanner -X

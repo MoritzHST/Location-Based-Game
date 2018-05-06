@@ -15,14 +15,12 @@ var swaggerDocument = require('./swagger.json');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
-
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(cookieSession({
     name: 'session',
-    //secret: randomstring.generate(),
     keys: [""],
     signed: true,
     maxAge: 24 * 60 * 60 * 1000,
@@ -33,7 +31,6 @@ app.use(cookieSession({
 app.use('/admin/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // use routes for each collection
-
 fs.readdirSync('../routes/').forEach(file => {
     app.use('/', require('./routes/' + file));
 });
@@ -42,7 +39,7 @@ app.use('/', require('./public'));
 
 // catch 404 and forward to overview
  app.use(function (req, res) {
-     res.status(302).redirect('/play');
+     res.status(302).redirect('/sign-up');
  });
 
 // error handler

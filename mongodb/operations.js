@@ -18,8 +18,6 @@ module.exports = {
      */
     generateToken: function () {
         var returnObj = String(Math.floor(Math.random() * 10000)).padStart(4, "0");
-        // var returnObj = ("0000" + Math.floor(Math.random() *
-        // 10000)).slice(-4);
         logging.Info("Token " + returnObj + " generated");
         return returnObj;
     },

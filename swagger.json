@@ -141,7 +141,7 @@
         }
       }
     },
-    "/find/rooms": {
+    "/find/locations": {
       "parameters": [
         {
           "name": "_id",
@@ -160,30 +160,24 @@
           "in": "query",
           "required": false,
           "description": "Raum-Identifier"
-        },
-        {
-          "name": "name",
-          "in": "query",
-          "required": false,
-          "description": "Name des Raumes"
         }
       ],
       "get": {
         "tags": [
-          "Rooms"
+          "Locations"
         ],
-        "summary": "Get Room",
+        "summary": "Get Location",
         "responses": {
           "200": {
-            "description": "Raum wurde gefunden",
+            "description": "Location wurde gefunden",
             "schema": {
-              "$ref": "#/definitions/Room"
+              "$ref": "#/definitions/Location"
             }
           }
         }
       }
     },
-    "/insert/rooms": {
+    "/insert/locations": {
       "parameters": [
         {
           "name": "roomnumber",
@@ -192,47 +186,28 @@
           "description": "Raumnummer"
         },
         {
-          "name": "name",
-          "in": "query",
-          "required": true,
-          "description": "Name des Raumes"
-        },
-        {
-          "name": "description",
-          "in": "query",
-          "required": false,
-          "description": "Beschreibung des Raumes"
-        },
-        {
           "name": "identifier",
           "in": "query",
           "required": true,
           "description": "Raum-Identifier"
-        },
-        {
-          "name": "image",
-          "in": "formData",
-          "description": "Bild",
-          "required": false,
-          "type": "file"
         }
       ],
       "post": {
         "tags": [
-          "Rooms"
+          "Locations"
         ],
-        "summary": "Insert Room",
+        "summary": "Insert Location",
         "responses": {
           "200": {
-            "description": "Raum wurde hinzugefügt",
+            "description": "Location wurde hinzugefügt",
             "schema": {
-              "$ref": "#/definitions/Room"
+              "$ref": "#/definitions/Location"
             }
           }
         }
       }
     },
-    "/update/rooms/{_id}": {
+    "/update/locations/{_id}": {
       "parameters": [
         {
           "name": "_id",
@@ -247,47 +222,28 @@
           "description": "Raumnummer"
         },
         {
-          "name": "name",
-          "in": "query",
-          "required": false,
-          "description": "Name des Raumes"
-        },
-        {
-          "name": "description",
-          "in": "query",
-          "required": false,
-          "description": "Beschreibung des Raumes"
-        },
-        {
           "name": "identifier",
           "in": "query",
           "required": false,
           "description": "Raum-Identifier"
-        },
-        {
-          "name": "image",
-          "in": "formData",
-          "description": "Bild",
-          "required": false,
-          "type": "file"
         }
       ],
       "post": {
         "tags": [
-          "Rooms"
+          "Locations"
         ],
-        "summary": "Update Room",
+        "summary": "Update Location",
         "responses": {
           "200": {
-            "description": "Rauminformationen wurden aktualisiert",
+            "description": "Locationinformationen wurden aktualisiert",
             "schema": {
-              "$ref": "#/definitions/Room"
+              "$ref": "#/definitions/Location"
             }
           }
         }
       }
     },
-    "/delete/rooms": {
+    "/delete/locations": {
       "parameters": [
         {
           "name": "_id",
@@ -306,24 +262,18 @@
           "in": "query",
           "required": false,
           "description": "Raum-Identifier"
-        },
-        {
-          "name": "name",
-          "in": "query",
-          "required": false,
-          "description": "Name des Raumes"
         }
       ],
       "post": {
         "tags": [
-          "Rooms"
+          "Locations"
         ],
-        "summary": "Delete Room",
+        "summary": "Delete Location",
         "responses": {
           "200": {
-            "description": "Raum wurde gelöscht",
+            "description": "Location wurde gelöscht",
             "schema": {
-              "$ref": "#/definitions/Rooms"
+              "$ref": "#/definitions/Location"
             }
           }
         }
@@ -336,12 +286,6 @@
           "in": "query",
           "required": false,
           "description": "ID des Minigames"
-        },
-        {
-          "name": "room_id",
-          "in": "query",
-          "required": false,
-          "description": "ID des Raumes"
         }
       ],
       "get": {
@@ -362,16 +306,16 @@
     "/insert/minigames": {
       "parameters": [
         {
-          "name": "question",
+          "name": "type",
           "in": "query",
           "required": true,
-          "description": "Text zum Minigame"
+          "description": "Typ des Minispiels"
         },
         {
-          "name": "room_id",
+          "name": "points",
           "in": "query",
           "required": true,
-          "description": "ID des Raumes"
+          "description": "Anzahl Punkte für die richtige Beantwortung"
         },
         {
           "name": "anwers",
@@ -410,16 +354,16 @@
           "description": "ID des Minigames"
         },
         {
-          "name": "room_id",
-          "in": "query",
-          "required": false,
-          "description": "ID des Raumes"
-        },
-        {
           "name": "question",
           "in": "query",
           "required": false,
           "description": "Text zum Minigame"
+        },
+        {
+          "name": "type",
+          "in": "query",
+          "required": false,
+          "description": "Typ des Minispiels"
         },
         {
           "name": "anwers",
@@ -529,17 +473,13 @@
         }
       }
     },
-    "Room": {
+    "Location": {
       "required": [
         "_id"
       ],
       "properties": {
         "_id": {
           "type": "integer",
-          "uniqueItems": true
-        },
-        "name": {
-          "type": "string",
           "uniqueItems": true
         },
         "roomnumber": {
@@ -549,9 +489,6 @@
         "identifier": {
           "type": "string",
           "uniqueItems": true
-        },
-        "description": {
-          "type": "string"
         }
       }
     },

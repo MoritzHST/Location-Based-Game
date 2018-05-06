@@ -1,7 +1,7 @@
 <script src="partials/game-overview-content/javascripts/game-overview-content.js"></script>
 <link rel="stylesheet" href="partials/game-overview-content/stylesheets/game-overview-content.css">
 <!-- Label für Schnellfreischaltung -->
-<h2>Schnellfreischaltung</h2>
+<h2>Wo bin ich?</h2>
 
 <div class="row">
     <!-- Button QR-Code Scannen -->
@@ -14,10 +14,17 @@
     </div>
 </div>
 <!-- Label für Labore -->
-<h2>Laborübersicht</h2>
+<h2>Missionsübersicht</h2>
 
+<!-- Checkboxen für Filter -->
+<div class="checkbox-wrapper">
+    <label class="checkbox-inline"><input id="eg" type="checkbox" value="">EG</label>
+    <label class="checkbox-inline"><input id="1og" type="checkbox" value="">1OG</label>
+    <label class="checkbox-inline"><input id="2og" type="checkbox" value="">2OG</label>
+    <label class="checkbox-inline"><input id="outdoor" type="checkbox" value="">Draußen</label>
+</div>
 <!-- Buttongroup für Laborübersicht -->
-<div class="button-group-wrapper">
+<div class="button-group-wrapper row">
     <div id="play_rooms" class="btn-group btn-group-toggle" data-toggle="buttons" role="group" aria-label="Filter">
         <label class="btn btn-secondary host-button-group-button active">
             <input type="radio" name="options" id="play_all_rooms" autocomplete="off" checked
@@ -33,24 +40,4 @@
 
 <!-- Laborübersicht -->
 
-<div class="labor-wrapper">
-
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#eg" aria-controls="eg" role="tab" data-toggle="tab">EG</a>
-        </li>
-        <li role="presentation"><a href="#1og" aria-controls="1og" role="tab" data-toggle="tab">1. OG</a></li>
-        <li role="presentation"><a href="#2og" aria-controls="2og" role="tab" data-toggle="tab">2. OG</a></li>
-        <li role="presentation"><a href="#outdoor" aria-controls="outdoor" role="tab" data-toggle="tab">Draußen</a>
-        </li>
-    </ul>
-
-    <!-- Tab panes -->
-    <div class="tab-content">
-        <div role="tabpanel" class="tab-pane" id="outdoor"></div>
-        <div role="tabpanel" class="tab-pane" id="eg"></div>
-        <div role="tabpanel" class="tab-pane" id="1og"></div>
-        <div role="tabpanel" class="tab-pane" id="2og"></div>
-    </div>
-
-</div>
+<div id="labor-frame-container" class="labor-wrapper"></div>

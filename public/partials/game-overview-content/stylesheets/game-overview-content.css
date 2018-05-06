@@ -9,3 +9,7 @@
 .host-function-button:last-child {
     margin-top: 10px;
 }
+
+.checkbox-wrapper {
+    margin-bottom: 10px;
+}

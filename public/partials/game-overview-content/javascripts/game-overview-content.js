@@ -1,4 +1,7 @@
 function initGameOverviewContent() {
+    //Preselect Button Alle (Button Navbar)
+    $("#play_all_rooms").focus();
+
     user.locations = {
         "outdoor": [],
         "eg": [],
@@ -7,6 +10,8 @@ function initGameOverviewContent() {
     };
 
     ajaxRequest('find/rooms', 'GET', "", setLocations);
+
+    $("#outdoor, #eg, #1og, #2og").on("click", updateTables);
 }
 
 /**
@@ -37,37 +42,38 @@ function setLocations(pObj) {
  * Initialisiert die Tabellarische Übersicht für die einzelnen Locations
  */
 function updateTables() {
+    $("#labor-frame-container > .labor-frame").each(function () {
+        clearNodeHook(this.id);
+    });
     //Outdoor setzen
-    for (let i in user.locations["outdoor"]) {
-        $('<div/>', {
-            id: user.locations["outdoor"][i]._id + "-hook"
-        }).appendTo($("#outdoor"));
-        setNodeHookFromFile(document.getElementById(user.locations["outdoor"][i]._id + "-hook"),
-            "../partials/overview-table-cell/overview-table-cell.html", setTableContent, (user.locations["outdoor"][i]));
+    if ($("#outdoor").prop("checked")) {
+        setLayer("outdoor");
     }
     //EG setzen
-    for (let i in user.locations["eg"]) {
-        $('<div/>', {
-            id: user.locations["eg"][i]._id + "-hook"
-        }).appendTo($("#eg"));
-        setNodeHookFromFile(document.getElementById(user.locations["eg"][i]._id + "-hook"),
-            "../partials/overview-table-cell/overview-table-cell.html", setTableContent, (user.locations["eg"][i]));
+    if ($("#eg").prop("checked")) {
+        setLayer("eg");
     }
     //1OG setzen
-    for (let i in user.locations["1og"]) {
-        $('<div/>', {
-            id: user.locations["1og"][i]._id + "-hook"
-        }).appendTo($("#1og"));
-        setNodeHookFromFile(document.getElementById(user.locations["1og"][i]._id + "-hook"),
-            "../partials/overview-table-cell/overview-table-cell.html", setTableContent, (user.locations["1og"][i]));
+    if ($("#1og").prop("checked")) {
+        setLayer("1og");
     }
     //2OG setzen
-    for (let i in user.locations["2og"]) {
-        $('<div/>', {
-            id: user.locations["2og"][i]._id + "-hook"
-        }).appendTo($("#2og"));
-        setNodeHookFromFile(document.getElementById(user.locations["2og"][i]._id + "-hook"),
-            "../partials/overview-table-cell/overview-table-cell.html", setTableContent, (user.locations["2og"][i]));
+    if ($("#2og").prop("checked")) {
+        setLayer("2og");
+    }
+}
+
+function setLayer(pLayer) {
+    var locations = user.locations[pLayer];
+    for (let i in locations) {
+        if (locations.hasOwnProperty(i)) {
+            $('<div/>', {
+                id: locations[i]._id + "-hook",
+                class: "labor-frame"
+            }).appendTo($("#labor-frame-container"));
+            setNodeHookFromFile($("#" + locations[i]._id + "-hook"),
+                "../partials/overview-table-cell/overview-table-cell.html", setTableContent, (locations[i]));
+        }
     }
 }
 

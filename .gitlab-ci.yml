@@ -6,13 +6,18 @@ cache:
 
 stages:
   - build
-  - analysis
   - test
+  - analysis
 
 build:
   stage: build
   script:
-    - "npm update"
+    - "npm install"
+
+test_mocha:
+  stage: test
+  script:
+    - "npm test"
 
 sonarqube:
   stage: analysis
@@ -31,8 +36,3 @@ sonarqube-reports:
     SONAR_ANALYSIS_MODE: publish
   script:
   - gitlab-sonar-scanner -X
-  
-test_mocha:
-  stage: test
-  script:
-    - "npm test"

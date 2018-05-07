@@ -7,7 +7,12 @@ const userCollection = require('../mongodb/collections').USERS;
 /* Global */
 
 /* GET */
-/* Find User(s) */
+/**
+ * Gibt einen oder alle Benutzer aus der Datenbak aus.
+ * @param req Request mit JSON-Query, welche Informationen zum gesuchten Benutzer enthält. Ist diese NULL, so werden alle Benutzer ausgegeben.
+ * @param res Result Status, welcher unter anderem den return-Code enthält
+ * @returns Genau einen oder mehrere Benutzer (oder eine Fehlermeldung)
+ */
 router.get('/find/users', function(req, res) {
     operations.findObject(userCollection, (handler.checkIfValidQuery(req.query) ? req.query : null), function (err, item) {
         handler.dbResult(err, res, item, "Das Item " + JSON.stringify(req.query).replace(/\"/g, '') + " existiert nicht.");
@@ -15,7 +20,13 @@ router.get('/find/users', function(req, res) {
 });
 
 /* POST */
-/* Insert User */
+/**
+ * Fügt einem Benutzer der Datenbank hinzu. Ist der Name nicht erlaubt oder bereits in der Datenbank vorhanden,
+ * wird der Benutzer nicht angelegt und ein Fehler zurückgegeben
+ * @param req Request mit JSON-Query, welche Informationen zum gesuchten Benutzer enthält
+ * @param res Result Status, welcher unter anderem den return-Code enthält
+ * @returns Den hinzugefügten Benutzer (oder eine Fehlermeldung)
+ */
 router.post('/insert/users', function(req, res) {
     const username = req.query.name;
 
@@ -39,7 +50,7 @@ router.post('/insert/users', function(req, res) {
 
         if (handler.checkIfValidQuery(req.query)) {
             operations.updateObject(userCollection, req.query, null, function (err, item) {
-                handler.dbResult(err, res, item, "Das Item " + JSON.stringify(req.query).replace(/\"/g, '') + " kann nicht hinzugefüt werden.");
+                handler.dbResult(err, res, item, "Der Benutzer " + JSON.stringify(req.query).replace(/\"/g, '') + " kann nicht hinzugefüt werden.");
             });
         } else {
             res.status(422).jsonp({
@@ -49,7 +60,13 @@ router.post('/insert/users', function(req, res) {
     });
 });
 
-/* Update User */
+/**
+ * Aktualisiert ein Benutzerobjekt. Ist der Name nicht erlaubt oder bereits in der Datenbank vorhanden,
+ * wird der Benutzer nicht aktualisiert und ein Fehler zurückgegeben
+ * @param req Request mit JSON-Query, welche Informationen zum gesuchten Benutzer enthält.
+ * @param res Result Status, welcher unter anderem den return-Code enthält
+ * @returns Den aktualisierten Benutzer
+ */
 router.post('/update/users/:id', function(req, res) {
     if (handler.checkIfValidQuery(req.query)) {
 
@@ -74,7 +91,7 @@ router.post('/update/users/:id', function(req, res) {
                 operations.updateObject(userCollection, handler.idFriendlyQuery({
                     _id : req.params.id
                 }), req.query, function(err, item) {
-                    handler.dbResult(err, res, item, "Das Item " + req.params.id + " konnte nicht mit " + JSON.stringify(req.query).replace(/\"/g, '') + " geupdatet werden.");
+                    handler.dbResult(err, res, item, "Der Benutzer " + req.params.id + " konnte nicht mit " + JSON.stringify(req.query).replace(/\"/g, '') + " aktualisiert werden.");
                 });
             }
         });
@@ -85,7 +102,12 @@ router.post('/update/users/:id', function(req, res) {
     }
 });
 
-/* Delete User(s) */
+/**
+ * Löscht einen Benutzer aus der Datenbank.
+ * @param req Request mit JSON-Query, welche Informationen zum gesuchten Benutzer enthält.
+ * @param res Result Status, welcher unter anderem den return-Code enthält
+ * @returns Der gelöschte Benutzer
+ */
 router.post('/delete/users', function(req, res) {
     if (handler.checkIfValidQuery(req.query)) {
         operations.deleteObjects(userCollection, req.query, function (err, item) {

@@ -141,7 +141,7 @@
         }
       }
     },
-    "/find/rooms": {
+    "/find/locations": {
       "parameters": [
         {
           "name": "_id",
@@ -156,71 +156,58 @@
           "description": "Raumnummer"
         },
         {
-          "name": "name",
+          "name": "identifier",
           "in": "query",
           "required": false,
-          "description": "Name des Raumes"
+          "description": "Raum-Identifier"
         }
       ],
       "get": {
         "tags": [
-          "Rooms"
+          "Locations"
         ],
-        "summary": "Get Room",
+        "summary": "Get Location",
         "responses": {
           "200": {
-            "description": "Raum wurde gefunden",
+            "description": "Location wurde gefunden",
             "schema": {
-              "$ref": "#/definitions/Room"
+              "$ref": "#/definitions/Location"
             }
           }
         }
       }
     },
-    "/insert/rooms": {
+    "/insert/locations": {
       "parameters": [
         {
           "name": "roomnumber",
           "in": "query",
-          "required": true,
+          "required": false,
           "description": "Raumnummer"
         },
         {
-          "name": "name",
+          "name": "identifier",
           "in": "query",
           "required": true,
-          "description": "Name des Raumes"
-        },
-        {
-          "name": "description",
-          "in": "query",
-          "required": false,
-          "description": "Beschreibung des Raumes"
-        },
-        {
-          "name": "image",
-          "in": "formData",
-          "description": "Bild",
-          "required": false,
-          "type": "file"
+          "description": "Raum-Identifier"
         }
       ],
       "post": {
         "tags": [
-          "Rooms"
+          "Locations"
         ],
-        "summary": "Insert Room",
+        "summary": "Insert Location",
         "responses": {
           "200": {
-            "description": "Raum wurde hinzugefügt",
+            "description": "Location wurde hinzugefügt",
             "schema": {
-              "$ref": "#/definitions/Room"
+              "$ref": "#/definitions/Location"
             }
           }
         }
       }
     },
-    "/update/rooms/{_id}": {
+    "/update/locations/{_id}": {
       "parameters": [
         {
           "name": "_id",
@@ -235,41 +222,28 @@
           "description": "Raumnummer"
         },
         {
-          "name": "name",
+          "name": "identifier",
           "in": "query",
           "required": false,
-          "description": "Name des Raumes"
-        },
-        {
-          "name": "description",
-          "in": "query",
-          "required": false,
-          "description": "Beschreibung des Raumes"
-        },
-        {
-          "name": "image",
-          "in": "formData",
-          "description": "Bild",
-          "required": false,
-          "type": "file"
+          "description": "Raum-Identifier"
         }
       ],
       "post": {
         "tags": [
-          "Rooms"
+          "Locations"
         ],
-        "summary": "Update Room",
+        "summary": "Update Location",
         "responses": {
           "200": {
-            "description": "Rauminformationen wurden aktualisiert",
+            "description": "Locationinformationen wurden aktualisiert",
             "schema": {
-              "$ref": "#/definitions/Room"
+              "$ref": "#/definitions/Location"
             }
           }
         }
       }
     },
-    "/delete/rooms": {
+    "/delete/locations": {
       "parameters": [
         {
           "name": "_id",
@@ -284,22 +258,184 @@
           "description": "Raumnummer"
         },
         {
-          "name": "name",
+          "name": "identifier",
           "in": "query",
           "required": false,
-          "description": "Name des Raumes"
+          "description": "Raum-Identifier"
         }
       ],
       "post": {
         "tags": [
-          "Rooms"
+          "Locations"
         ],
-        "summary": "Delete Room",
+        "summary": "Delete Location",
+        "responses": {
+          "200": {
+            "description": "Location wurde gelöscht",
+            "schema": {
+              "$ref": "#/definitions/Location"
+            }
+          }
+        }
+      }
+    },
+    "/find/games": {
+      "parameters": [
+        {
+          "name": "_id",
+          "in": "query",
+          "required": false,
+          "description": "ID des Games"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Get Game",
+        "responses": {
+          "200": {
+            "description": "Game wurde gefunden",
+            "schema": {
+              "$ref": "#/definitions/Game"
+            }
+          }
+        }
+      }
+    },
+    "/insert/games": {
+      "parameters": [
+        {
+          "name": "type",
+          "in": "query",
+          "required": true,
+          "description": "Typ des Spiels"
+        },
+        {
+          "name": "points",
+          "in": "query",
+          "required": true,
+          "description": "Anzahl Punkte für die richtige Beantwortung"
+        },
+        {
+          "name": "anwers",
+          "in": "body",
+          "required": false,
+          "description": "Antworten",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/Answer"
+            }
+          }
+        }
+      ],
+      "post": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Insert Game",
+        "responses": {
+          "200": {
+            "description": "Spiel wurde hinzugefügt",
+            "schema": {
+              "$ref": "#/definitions/Game"
+            }
+          }
+        }
+      }
+    },
+    "/update/games/{_id}": {
+      "parameters": [
+        {
+          "name": "_id",
+          "in": "path",
+          "required": true,
+          "description": "ID des Games"
+        },
+        {
+          "name": "question",
+          "in": "query",
+          "required": false,
+          "description": "Text zum Game"
+        },
+        {
+          "name": "type",
+          "in": "query",
+          "required": false,
+          "description": "Typ des Spiels"
+        },
+        {
+          "name": "anwers",
+          "in": "body",
+          "required": false,
+          "description": "Antworten",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/Answer"
+            }
+          }
+        }
+      ],
+      "post": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Update Games",
+        "responses": {
+          "200": {
+            "description": "Spielinformationen wurden aktualisiert",
+            "schema": {
+              "$ref": "#/definitions/Game"
+            }
+          }
+        }
+      }
+    },
+    "/delete/games": {
+      "parameters": [
+        {
+          "name": "_id",
+          "in": "query",
+          "required": true,
+          "description": "ID des Spieles"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Delete Game",
         "responses": {
           "200": {
             "description": "Raum wurde gelöscht",
             "schema": {
-              "$ref": "#/definitions/Rooms"
+              "$ref": "#/definitions/Game"
+            }
+          }
+        }
+      }
+    },
+    "/find/scan": {
+      "parameters": [
+        {
+          "name": "identifier",
+          "in": "query",
+          "required": true,
+          "description": "Raum-Identifier"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Scans"
+        ],
+        "summary": "Get ScanResult",
+        "responses": {
+          "200": {
+            "description": "Scan war erfolgreic",
+            "schema": {
+              "$ref": "#/definitions/Scan"
             }
           }
         }
@@ -325,7 +461,7 @@
         }
       }
     },
-    "Room": {
+    "Location": {
       "required": [
         "_id"
       ],
@@ -334,16 +470,58 @@
           "type": "integer",
           "uniqueItems": true
         },
-        "name": {
-          "type": "string",
-          "uniqueItems": true
-        },
         "roomnumber": {
           "type": "string",
           "uniqueItems": true
         },
-        "description": {
+        "identifier": {
+          "type": "string",
+          "uniqueItems": true
+        }
+      }
+    },
+    "Game": {
+      "required": [
+        "answer",
+        "isCorrect"
+      ],
+      "properties": {
+        "question": {
           "type": "string"
+        },
+        "answers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Answer"
+          }
+        }
+      }
+    },
+    "Answer": {
+      "required": [
+        "answer",
+        "isCorrect"
+      ],
+      "properties": {
+        "answer": {
+          "type": "string"
+        },
+        "isCorrect": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Scan": {
+      "required": [],
+      "properties": {
+        "room": {
+          "$ref": "#/definitions/Location"
+        },
+        "games": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Game"
+          }
         }
       }
     }

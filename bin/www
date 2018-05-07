@@ -14,7 +14,24 @@
 
 var mongoPath = '../mongodb/';
 var mongo = require(mongoPath + 'initialize');
-var database = require(mongoPath + 'testdb');
+//var database = require(mongoPath + 'testdb');
+
+/**
+ * Object examples
+ */
+
+var examplePath = '../examples/';
+
+require(examplePath + 'user');
+require(examplePath + 'location');
+require(examplePath + 'quiz');
+require(examplePath + 'exposition');
+require(examplePath + 'locationMapping');
+
+
+/**
+ * Server Requirements
+ */
 
 var app = require('../app');
 var debug = require('debug')('nodejsprototype:server');

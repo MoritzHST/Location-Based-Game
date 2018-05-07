@@ -1,26 +1,16 @@
 const assert = require('assert');
 const operations = require('./operations');
 const logging = require('./logging');
+const collections = require('./collections');
 
-var dbNames = [
-    "minigames_rooms",
-    "rooms",
-    "users",
-    "minigames",
-    "templates"
-];
-
-function onCreatedCollection(err, pDbObject) {
-    if (!err) {
-        logging.Info("Created Collection: " + pDbObject.s.name);
-    }
-    else {
-        logging.Error(err);
-    }
-}
-
-for (var name in dbNames) {
-    if (dbNames.hasOwnProperty(name)) {
-        operations.createCollection(dbNames[name], onCreatedCollection);
-    }
+for (var collection in collections) {
+    var name = collections[collection];
+    operations.createCollection(name, function (err, db) {
+        if (!err) {
+            logging.Info(db.s.name + " erfolgreich erstellt");
+        }
+        else {
+            logging.Error(err);
+        }
+    });
 }

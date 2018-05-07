@@ -1,4 +1,4 @@
-{
+{    
 	"bitwise": true,// Prohibit bitwise operators (&, |, ^, etc.).
 	"curly": true,// Require {} for every new block or scope.
 	"eqeqeq": true,// Require triple equals i.e. `===`.

@@ -21,10 +21,12 @@ var mongo = require(mongoPath + 'initialize');
  */
 
 var examplePath = '../examples/';
+
 require(examplePath + 'user');
-require(examplePath + 'room');
+require(examplePath + 'location');
 require(examplePath + 'quiz');
-require(examplePath + 'minigameRoomMapping');
+require(examplePath + 'exposition');
+require(examplePath + 'locationMapping');
 
 
 /**

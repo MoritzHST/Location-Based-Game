@@ -19,7 +19,7 @@ function initGameOverviewContent() {
 
     ajaxRequest('find/rooms', 'GET', "", setLocations);
 
-    $("#eg").addClass("active");
+    $("#outdoor, #eg, #1og, #2og").on("click", updateTables);
 }
 
 /**
@@ -50,14 +50,25 @@ function setLocations(pObj) {
  * Initialisiert die Tabellarische Übersicht für die einzelnen Locations
  */
 function updateTables() {
+    $("#labor-frame-container > .labor-frame").each(function () {
+        clearNodeHook(this.id);
+    });
     //Outdoor setzen
-    setLayer("outdoor");
+    if ($("#outdoor").prop("checked")) {
+        setLayer("outdoor");
+    }
     //EG setzen
-    setLayer("eg");
+    if ($("#eg").prop("checked")) {
+        setLayer("eg");
+    }
     //1OG setzen
-    setLayer("1og");
+    if ($("#1og").prop("checked")) {
+        setLayer("1og");
+    }
     //2OG setzen
-    setLayer("2og");
+    if ($("#2og").prop("checked")) {
+        setLayer("2og");
+    }
 }
 
 function setLayer(pLayer) {
@@ -65,8 +76,9 @@ function setLayer(pLayer) {
     for (let i in locations) {
         if (locations.hasOwnProperty(i)) {
             $('<div/>', {
-                id: locations[i]._id + "-hook"
-            }).appendTo($("#" + pLayer));
+                id: locations[i]._id + "-hook",
+                class: "labor-frame"
+            }).appendTo($("#labor-frame-container"));
             setNodeHookFromFile($("#" + locations[i]._id + "-hook"),
                 "../partials/overview-table-cell/overview-table-cell.html", setTableContent, (locations[i]));
         }

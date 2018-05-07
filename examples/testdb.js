@@ -8,9 +8,11 @@ var testUser = new objects.User("Harald");
 var testAnswer = new objects.Answer("Obst", true);
 var testAnswer2 = new objects.Answer("Gemüse", false);
 var testQuiz = new objects.SimpleQuiz("Was ist eine Banane?", [testAnswer, testAnswer2]);
-var testRoom = new objects.Room("103a", "Multimedia-Labor", "Hier werden Multimedia-Projekte durchgeführt...");
-var testMinigameRoomMapping = new objects.MinigameRoomMapping(null, testRoom, testQuiz);
-var testEventTemplate = new objects.EventTemplate("Tag der offenen Tür", testMinigameRoomMapping);
+var testLocation = new objects.Location("103a", "h4r103a");
+var testExposition = new objects.Exposition("Multimedia-Labor", "Hier werden Multimedia-Projekte durchgeführt...", undefined);
+var testLocationMapping = new objects.LocationMapping(testLocation, testExposition);
+var testEvent = new objects.Event("TestEvent", Date.now());
+var testEventMapping = new objects.MinigameRoomMapping(testEvent, testLocationMapping);
 
 /**
  * Beispielaufruf: entfernt alle übergebenden Benutzer aus der Datenbank.
@@ -31,14 +33,14 @@ operations.deleteObjects("users", null, function (err) {
 setTimeout(function () {
 
     testUser["_id"]="aaaaaaaaaaaa";
-    testRoom["_id"]="aaaaaaaaaaaa";
+    testLocation["_id"] = "161616161616161616161616";
     operations.updateObject("users", testUser, null, function (err, result) {
         if (!err)
             logging.Info("Benutzer erstellt: " + result.value.name);
         else
             logging.Error(err);
     });
-    operations.updateObject("rooms", testRoom, null, function (err, result) {
+    operations.updateObject("rooms", testLocation, null, function (err, result) {
         if (!err)
             logging.Info("Raum erstellt: " + result.value.name);
         else
@@ -52,11 +54,13 @@ setTimeout(function () {
     });
     operations.updateObject("users_rooms", {
         "user_id": "616161616161616161616161",
-        "room_id": "616161616161616161616161"
+        "room_id": "161616161616161616161616"
     }, null, function (err, result) {
         test.getUserWithRooms("616161616161616161616161");
-        if (!err)
+        if (!err) {
             logging.Info("UsersRooms erstellt: " + result.value.name);
+            logging.Info(result.value.name);
+        }
         else
             logging.Error(err);
     });

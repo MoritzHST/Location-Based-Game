@@ -17,6 +17,7 @@ build:
 test_mocha:
   stage: test
   script:
+    - "npm install -g mocha"
     - "npm test"
 
 sonarqube:

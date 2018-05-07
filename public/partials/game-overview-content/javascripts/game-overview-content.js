@@ -2,6 +2,14 @@ function initGameOverviewContent() {
     //Preselect Button Alle (Button Navbar)
     $("#play_all_rooms").focus();
 
+    //On-Click event für QR-Code Button
+    $("#btn-scan-qr").on("click", function () {
+        setNodeHookFromFile($("#content-hook"), "../partials/qr-scanner/qr-scanner.html", function () {
+            $(document).ready(function () {
+                initScanner();
+            });
+        });
+    });
     user.locations = {
         "outdoor": [],
         "eg": [],

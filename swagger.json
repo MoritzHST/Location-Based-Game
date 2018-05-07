@@ -279,37 +279,37 @@
         }
       }
     },
-    "/find/minigames": {
+    "/find/games": {
       "parameters": [
         {
           "name": "_id",
           "in": "query",
           "required": false,
-          "description": "ID des Minigames"
+          "description": "ID des Games"
         }
       ],
       "get": {
         "tags": [
-          "Minigames"
+          "Games"
         ],
-        "summary": "Get Minigame",
+        "summary": "Get Game",
         "responses": {
           "200": {
-            "description": "Minigame wurde gefunden",
+            "description": "Game wurde gefunden",
             "schema": {
-              "$ref": "#/definitions/Minigame"
+              "$ref": "#/definitions/Game"
             }
           }
         }
       }
     },
-    "/insert/minigames": {
+    "/insert/games": {
       "parameters": [
         {
           "name": "type",
           "in": "query",
           "required": true,
-          "description": "Typ des Minispiels"
+          "description": "Typ des Spiels"
         },
         {
           "name": "points",
@@ -332,38 +332,38 @@
       ],
       "post": {
         "tags": [
-          "Minigames"
+          "Games"
         ],
-        "summary": "Insert Minigame",
+        "summary": "Insert Game",
         "responses": {
           "200": {
-            "description": "Raum wurde hinzugefügt",
+            "description": "Spiel wurde hinzugefügt",
             "schema": {
-              "$ref": "#/definitions/Minigame"
+              "$ref": "#/definitions/Game"
             }
           }
         }
       }
     },
-    "/update/minigames/{_id}": {
+    "/update/games/{_id}": {
       "parameters": [
         {
           "name": "_id",
           "in": "path",
           "required": true,
-          "description": "ID des Minigames"
+          "description": "ID des Games"
         },
         {
           "name": "question",
           "in": "query",
           "required": false,
-          "description": "Text zum Minigame"
+          "description": "Text zum Game"
         },
         {
           "name": "type",
           "in": "query",
           "required": false,
-          "description": "Typ des Minispiels"
+          "description": "Typ des Spiels"
         },
         {
           "name": "anwers",
@@ -380,50 +380,38 @@
       ],
       "post": {
         "tags": [
-          "Minigames"
+          "Games"
         ],
-        "summary": "Update Minigames",
+        "summary": "Update Games",
         "responses": {
           "200": {
             "description": "Spielinformationen wurden aktualisiert",
             "schema": {
-              "$ref": "#/definitions/Minigame"
+              "$ref": "#/definitions/Game"
             }
           }
         }
       }
     },
-    "/delete/minigames": {
+    "/delete/games": {
       "parameters": [
         {
           "name": "_id",
           "in": "query",
           "required": true,
-          "description": "ID des Raumes"
-        },
-        {
-          "name": "room_id",
-          "in": "query",
-          "required": false,
-          "description": "ID des Raumes"
-        },
-        {
-          "name": "question",
-          "in": "query",
-          "required": false,
-          "description": "Text zum Minigame"
+          "description": "ID des Spieles"
         }
       ],
       "post": {
         "tags": [
-          "Minigames"
+          "Games"
         ],
-        "summary": "Delete Room",
+        "summary": "Delete Game",
         "responses": {
           "200": {
             "description": "Raum wurde gelöscht",
             "schema": {
-              "$ref": "#/definitions/Minigame"
+              "$ref": "#/definitions/Game"
             }
           }
         }
@@ -445,9 +433,9 @@
         "summary": "Get ScanResult",
         "responses": {
           "200": {
-            "description": "Minigame wurde gefunden",
+            "description": "Scan war erfolgreic",
             "schema": {
-              "$ref": "#/definitions/Room"
+              "$ref": "#/definitions/Scan"
             }
           }
         }
@@ -492,7 +480,7 @@
         }
       }
     },
-    "Minigame": {
+    "Game": {
       "required": [
         "answer",
         "isCorrect"
@@ -527,12 +515,12 @@
       "required": [],
       "properties": {
         "room": {
-          "$ref": "#/definitions/Room"
+          "$ref": "#/definitions/Location"
         },
-        "minigames": {
+        "games": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Minigame"
+            "$ref": "#/definitions/Game"
           }
         }
       }

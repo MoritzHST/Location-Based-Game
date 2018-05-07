@@ -15,7 +15,7 @@ router.get('/find/scan', function (req, res) {
             "location.identifier": identifier
         }, function (err, item) {
             handler.dbResult(err, res, item, "Zu diesem Code konnten leider keine Minispiele gefunden werden. Tut uns Leid. Really, we are sorry :(");
-    });
+        });
 });
 
 module.exports = router;

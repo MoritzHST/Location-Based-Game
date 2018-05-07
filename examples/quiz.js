@@ -16,7 +16,7 @@ module.exports = exampleQuiz;
  * @param result
  * @returns
  */
-operations.updateObject(collections.MINIGAMES, exampleQuiz, null, function (err, result) {
+operations.updateObject(collections.GAMES, exampleQuiz, null, function (err, result) {
     if (!err)
         logging.Info("SimpleQuiz erstellt: " + result.value.name);
     else

@@ -4,7 +4,7 @@ const collectionEnum = {
     LOCATIONS: "locations",
     LOCATION_MAPPING: "location_mapping",
     EXPOSITIONS: "expositions",
-    MINIGAMES: "minigames",
+    GAMES: "games",
     USERS: "users",
     TEMPLATES: "templates"
 };

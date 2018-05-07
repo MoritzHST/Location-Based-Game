@@ -112,13 +112,13 @@ module.exports = {
      * Mapping um Zugehörigkeit einer Ausstellung zu einer Location auszudrücken
      * @param pLocation Location an der die Ausstellung stattfindet
      * @param pExposition Ausstellung die an der Location stattfindet
-     * @param pMinigames Liste an Minigames die an dieser Station zu spielen sind
+     * @param pGames Liste an Minigames die an dieser Station zu spielen sind
      * @constructor
      */
-    LocationMapping: function (pLocation, pExposition, pMinigames) {
+    LocationMapping: function (pLocation, pExposition, pGames) {
         this.location = pLocation;
         this.exposition = pExposition;
-        this.minigames = pMinigames;
+        this.games = pGames;
     },
 
     /**

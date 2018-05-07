@@ -2,7 +2,7 @@ const operations = require('../mongodb/operations');
 const handler = require('../mongodb/handler');
 const router = require('express').Router();
 
-const minigamesCollection = require('../mongodb/collections').MINIGAMES;
+const minigamesCollection = require('../mongodb/collections').GAMES;
 
 /* Global */
 

@@ -9,7 +9,7 @@
 function ajaxRequest(pUrl, pMethod, pObject, pCallback, pFailCallback) {
     $.ajax({
         type: pMethod,
-        url: pUrl + pObject,
+        url: pUrl,
         data: pObject,
         success: pCallback,
         error: pFailCallback

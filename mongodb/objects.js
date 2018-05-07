@@ -20,8 +20,12 @@ module.exports = {
      * @constructor
      */
     Event: function (pEventName, pDate) {
+        logging.Info("initializing new Event");
+        logging.Parameter("pEventName", pEventName);
+        logging.Parameter("pDate", pDate);
         this.name = pEventName;
         this.date = pDate;
+        logging.Info("initializing Event done");
     },
 
     /**
@@ -44,9 +48,12 @@ module.exports = {
      * @param pIdentifier Identifier anhand dessen ein Scan zu diesem Raum führt
      */
     Location: function (pRoomnumber, pIdentifier) {
+        logging.Info("initializing new Location");
+        logging.Parameter("pRoomnumber", pRoomnumber);
+        logging.Parameter("pIdentifier", pIdentifier);
         this.roomnumber = pRoomnumber;
         this.identifier = pIdentifier;
-        logging.Info("initialized Location");
+        logging.Info("initializing Location done");
     },
 
     /**
@@ -58,9 +65,14 @@ module.exports = {
      * @constructor
      */
     Exposition: function (pName, pDescription, pImagePath) {
+        logging.Info("initializing new Exposition");
+        logging.Parameter("pName", pName);
+        logging.Parameter("pDescription", pDescription);
+        logging.Parameter("pImagePath", pImagePath);
         this.name = pName;
         this.description = pDescription;
         this.image = pImagePath;
+        logging.Info("initializing Exposition done")
     },
 
     /**
@@ -76,10 +88,14 @@ module.exports = {
      */
     SimpleQuiz: function (pQuestion, pAnswers, pPoints) {
         logging.Info("initializing new SimpleQuiz");
+        logging.Parameter("pQuestion", pQuestion);
+        logging.Parameter("pAnswers", pAnswers);
+        logging.Parameter("pPoints", pPoints);
         this.type = Game.SINGLE_CHOICE;
         this.question = pQuestion;
         this.answers = pAnswers;
         this.points = pPoints;
+        logging.Info("initializing SimpleQuiz done");
     },
 
     /**
@@ -90,9 +106,14 @@ module.exports = {
      * @constructor
      */
     Answer: function (pAnswer, pIsCorrect, pImagePath) {
+        logging.Info("initializing new Answer");
+        logging.Parameter("pAnswer", pAnswer);
+        logging.Parameter("pIsCorrect", pIsCorrect);
+        logging.Parameter("pImagePath", pImagePath);
         this.isCorrect = pIsCorrect;
         this.answer = pAnswer;
         this.imagePath = pImagePath;
+        logging.Info("initializing Answer done");
     },
 
     /**
@@ -103,9 +124,14 @@ module.exports = {
      * @constructor
      */
     Visit: function (pLocation, pGame, pIsSuccessful) {
+        logging.Info("initializing new Visit");
+        logging.Parameter("pLocation", pLocation);
+        logging.Parameter("pGame", pGame);
+        logging.Parameter("pIsSuccessful", pIsSuccessful);
         this.location = pLocation;
         this.game = pGame;
         this.success = pIsSuccessful;
+        logging.Info("initializing Visit done");
     },
 
     /**
@@ -116,9 +142,14 @@ module.exports = {
      * @constructor
      */
     LocationMapping: function (pLocation, pExposition, pGames) {
+        logging.Info("initializing new LocationMapping");
+        logging.Parameter("pLocation", pLocation);
+        logging.Parameter("pExposition", pExposition);
+        logging.Parameter("pGames", pGames);
         this.location = pLocation;
         this.exposition = pExposition;
         this.games = pGames;
+        logging.Info("initializing LocationMapping done");
     },
 
     /**

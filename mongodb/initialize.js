@@ -7,6 +7,7 @@ var dbNames = [
     "rooms",
     "users",
     "minigames",
+    "users_rooms",
     "templates"
 ];
 

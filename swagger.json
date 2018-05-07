@@ -156,6 +156,12 @@
           "description": "Raumnummer"
         },
         {
+          "name": "identifier",
+          "in": "query",
+          "required": false,
+          "description": "Raum-Identifier"
+        },
+        {
           "name": "name",
           "in": "query",
           "required": false,
@@ -182,7 +188,7 @@
         {
           "name": "roomnumber",
           "in": "query",
-          "required": true,
+          "required": false,
           "description": "Raumnummer"
         },
         {
@@ -196,6 +202,12 @@
           "in": "query",
           "required": false,
           "description": "Beschreibung des Raumes"
+        },
+        {
+          "name": "identifier",
+          "in": "query",
+          "required": true,
+          "description": "Raum-Identifier"
         },
         {
           "name": "image",
@@ -247,6 +259,12 @@
           "description": "Beschreibung des Raumes"
         },
         {
+          "name": "identifier",
+          "in": "query",
+          "required": false,
+          "description": "Raum-Identifier"
+        },
+        {
           "name": "image",
           "in": "formData",
           "description": "Bild",
@@ -284,6 +302,12 @@
           "description": "Raumnummer"
         },
         {
+          "name": "identifier",
+          "in": "query",
+          "required": false,
+          "description": "Raum-Identifier"
+        },
+        {
           "name": "name",
           "in": "query",
           "required": false,
@@ -300,6 +324,186 @@
             "description": "Raum wurde gelöscht",
             "schema": {
               "$ref": "#/definitions/Rooms"
+            }
+          }
+        }
+      }
+    },
+    "/find/minigames": {
+      "parameters": [
+        {
+          "name": "_id",
+          "in": "query",
+          "required": false,
+          "description": "ID des Minigames"
+        },
+        {
+          "name": "room_id",
+          "in": "query",
+          "required": false,
+          "description": "ID des Raumes"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Minigames"
+        ],
+        "summary": "Get Minigame",
+        "responses": {
+          "200": {
+            "description": "Minigame wurde gefunden",
+            "schema": {
+              "$ref": "#/definitions/Minigame"
+            }
+          }
+        }
+      }
+    },
+    "/insert/minigames": {
+      "parameters": [
+        {
+          "name": "question",
+          "in": "query",
+          "required": true,
+          "description": "Text zum Minigame"
+        },
+        {
+          "name": "room_id",
+          "in": "query",
+          "required": true,
+          "description": "ID des Raumes"
+        },
+        {
+          "name": "anwers",
+          "in": "body",
+          "required": false,
+          "description": "Antworten",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/Answer"
+            }
+          }
+        }
+      ],
+      "post": {
+        "tags": [
+          "Minigames"
+        ],
+        "summary": "Insert Minigame",
+        "responses": {
+          "200": {
+            "description": "Raum wurde hinzugefügt",
+            "schema": {
+              "$ref": "#/definitions/Minigame"
+            }
+          }
+        }
+      }
+    },
+    "/update/minigames/{_id}": {
+      "parameters": [
+        {
+          "name": "_id",
+          "in": "path",
+          "required": true,
+          "description": "ID des Minigames"
+        },
+        {
+          "name": "room_id",
+          "in": "query",
+          "required": false,
+          "description": "ID des Raumes"
+        },
+        {
+          "name": "question",
+          "in": "query",
+          "required": false,
+          "description": "Text zum Minigame"
+        },
+        {
+          "name": "anwers",
+          "in": "body",
+          "required": false,
+          "description": "Antworten",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/Answer"
+            }
+          }
+        }
+      ],
+      "post": {
+        "tags": [
+          "Minigames"
+        ],
+        "summary": "Update Minigames",
+        "responses": {
+          "200": {
+            "description": "Spielinformationen wurden aktualisiert",
+            "schema": {
+              "$ref": "#/definitions/Minigame"
+            }
+          }
+        }
+      }
+    },
+    "/delete/minigames": {
+      "parameters": [
+        {
+          "name": "_id",
+          "in": "query",
+          "required": true,
+          "description": "ID des Raumes"
+        },
+        {
+          "name": "room_id",
+          "in": "query",
+          "required": false,
+          "description": "ID des Raumes"
+        },
+        {
+          "name": "question",
+          "in": "query",
+          "required": false,
+          "description": "Text zum Minigame"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Minigames"
+        ],
+        "summary": "Delete Room",
+        "responses": {
+          "200": {
+            "description": "Raum wurde gelöscht",
+            "schema": {
+              "$ref": "#/definitions/Minigame"
+            }
+          }
+        }
+      }
+    },
+    "/find/scan": {
+      "parameters": [
+        {
+          "name": "identifier",
+          "in": "query",
+          "required": true,
+          "description": "Raum-Identifier"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Scans"
+        ],
+        "summary": "Get ScanResult",
+        "responses": {
+          "200": {
+            "description": "Minigame wurde gefunden",
+            "schema": {
+              "$ref": "#/definitions/Room"
             }
           }
         }
@@ -342,8 +546,57 @@
           "type": "string",
           "uniqueItems": true
         },
+        "identifier": {
+          "type": "string",
+          "uniqueItems": true
+        },
         "description": {
           "type": "string"
+        }
+      }
+    },
+    "Minigame": {
+      "required": [
+        "answer",
+        "isCorrect"
+      ],
+      "properties": {
+        "question": {
+          "type": "string"
+        },
+        "answers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Answer"
+          }
+        }
+      }
+    },
+    "Answer": {
+      "required": [
+        "answer",
+        "isCorrect"
+      ],
+      "properties": {
+        "answer": {
+          "type": "string"
+        },
+        "isCorrect": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Scan": {
+      "required": [],
+      "properties": {
+        "room": {
+          "$ref": "#/definitions/Room"
+        },
+        "minigames": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Minigame"
+          }
         }
       }
     }

@@ -46,6 +46,6 @@ deploy_production:
   services:
     - docker:dind
   before_script:
-    - apt-get update -y && apt-get install ssh
+    - apt-get update -y && apt-get install -y ssh
   script:
     - ssh -p${DEPLOYMENT_SERVER_PORT} ${DEPLOYMENT_SERVER_USER}:${DEPLOYMENT_SERVER_PORT}@${DEPLOYMENT_SERVER_IP} "cd prod && docker stop docker-test && docker rm docker-test && docker build -t mainline . && docker run -p 80:3000 --name='docker-mainline' mainline"

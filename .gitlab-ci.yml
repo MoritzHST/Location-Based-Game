@@ -48,6 +48,6 @@ deploy_production:
   before_script:
     - apt-get update -y && apt-get install sshpass
   script:
-    - sshpass -p "${DEPLOYMENT_SERVER_PASS}" scp -P ${DEPLOYMENT_SERVER_PORT} -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o PubkeyAuthentication=no ${DEPLOYMENT_SERVER_USER}@${DEPLOYMENT_SERVER_IP}:~/
-    - sshpass -p "${DEPLOYMENT_SERVER_PASS}" scp -P ${DEPLOYMENT_SERVER_PORT} -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o PubkeyAuthentication=no ./docker-compose.autodeploy.yml ${DEPLOYMENT_SERVER_USER}@${DEPLOYMENT_SERVER_IP}:~/
+    - sshpass -p "${DEPLOYMENT_SERVER_PASS}" scp -P "${DEPLOYMENT_SERVER_PORT}" -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o PubkeyAuthentication=no ${DEPLOYMENT_SERVER_USER}@${DEPLOYMENT_SERVER_IP}:~/
+    - sshpass -p "${DEPLOYMENT_SERVER_PASS}" scp -P "${DEPLOYMENT_SERVER_PORT}" -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o PubkeyAuthentication=no ./docker-compose.autodeploy.yml ${DEPLOYMENT_SERVER_USER}@${DEPLOYMENT_SERVER_IP}:~/
     - sshpass -p $DEPLOYMENT_SERVER_PASS ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o PubkeyAuthentication=no $DEPLOYMENT_SERVER_USER@$DEPLOYMENT_SERVER_IP "echo ${$DEPLOYMENT_SERVER_PASS} | sudo -S ls && docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}; sudo docker-compose -f docker-compose.autodeploy.yml stop; sudo docker-compose -f docker-compose.autodeploy.yml rm web --force; sudo docker pull ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest; sudo docker-compose -f docker-compose.autodeploy.yml up -d"

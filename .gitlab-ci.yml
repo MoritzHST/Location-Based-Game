@@ -42,9 +42,8 @@ sonarqube-reports:
 deploy_production:
   stage: deploy
   only: 
-    - "master"
+    - master
   before_script:
-    - apt-get update -y && apt-get install -y ssh wget
+    - apt-get update -y && apt-get install -y ssh
   script:
-    - wget "http://quiz.hochschule-stralsund.de/play"
     - ssh -p${DEPLOYMENT_SERVER_PORT} ${DEPLOYMENT_SERVER_USER}:${DEPLOYMENT_SERVER_PORT}@${DEPLOYMENT_SERVER_IP} "cd prod && docker stop docker-mainline && docker rm docker-mainline && docker build -t mainline . && docker run -p 80:3000 --name='docker-mainline' mainline"

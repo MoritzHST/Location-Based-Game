@@ -46,7 +46,7 @@ deploy_production:
   before_script:
     - which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )
     - eval $(ssh-agent -s)
-    - echo "$DEPLOYMENT_SSH_KEY" #| tr -d '\r' | ssh-add - > /dev/null
+    #- echo "$DEPLOYMENT_SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - apt-get update -y && apt-get install -y ssh
   script:
     - ssh -p${DEPLOYMENT_SERVER_PORT} ${DEPLOYMENT_SERVER_USER}:${DEPLOYMENT_SERVER_PORT}@${DEPLOYMENT_SERVER_IP} "cd prod && docker stop docker-mainline && docker rm docker-mainline && docker build -t mainline . && docker run -p 80:3000 --name='docker-mainline' mainline"

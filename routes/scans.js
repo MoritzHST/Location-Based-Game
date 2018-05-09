@@ -8,14 +8,15 @@ const locationMappingCollection = require('../mongodb/collections').LOCATION_MAP
 
 /* GET */
 /* Find ScanResult(s) */
-router.get('/find/scan', function (req, res) {
+router.get('/find/scan', function(req, res) {
+    req.query = handler.getRealRequest(req.query, req.body);
+
     let identifier = req.query.identifier;
-    operations.findObject(locationMappingCollection,
-        {
-            "location.identifier": identifier
-        }, function (err, item) {
-            handler.dbResult(err, res, item, "Zu diesem Code konnten leider keine Minispiele gefunden werden. Tut uns Leid. Really, we are sorry :(");
-        });
+    operations.findObject(locationMappingCollection, {
+        "location.identifier" : identifier
+    }, function(err, item) {
+        handler.dbResult(err, res, item, "Zu diesem Code konnten leider keine Minispiele gefunden werden. Tut uns Leid. Really, we are sorry :(");
+    });
 });
 
 module.exports = router;

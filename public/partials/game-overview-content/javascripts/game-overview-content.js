@@ -17,7 +17,7 @@ function initGameOverviewContent() {
         "2og": []
     };
 
-    ajaxRequest('find/rooms', 'GET', "", setLocations);
+    ajaxRequest('find/locations', 'GET', "", setLocations);
 
     $("#outdoor, #eg, #1og, #2og").on("click", updateTables);
 }

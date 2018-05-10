@@ -1,4 +1,4 @@
-function setNodeHookFromFile(pNodeHook, pFilePath, pCallback, pCallbackObject, pPartialInitFunction) {
+function setNodeHookFromFile(pNodeHook, pFilePath, pCallback, pCallbackObject, pPartialInitFunction, pPartialInitObject) {
     return fetch(pFilePath)
         .then(function (response) {
             return response.text();
@@ -30,7 +30,7 @@ function setNodeHookFromFile(pNodeHook, pFilePath, pCallback, pCallbackObject, p
                     if (pPartialInitFunction !== undefined && elements === counter) {
                         const fn = window[pPartialInitFunction];
                         if (typeof fn === 'function') {
-                            fn();
+                            fn(pPartialInitObject);
                         }
                     }
                 });

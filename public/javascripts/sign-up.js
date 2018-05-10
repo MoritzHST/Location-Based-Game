@@ -113,8 +113,8 @@ function displayFailureMessage(callbackObj) {
  * @param failureObj
  */
 function renderFailureMessage(failureObj) {
-    setNodeHookFromFile($("#sign-up-in-failure-box-hook"), "../partials/sign-up-in-failure-box/sign-up-in-failure-box.html", function (pObj) {
-        document.getElementById("sign-up-in-failure-box-error-message").innerHTML = pObj.responseJSON.error;
+    setNodeHookFromFile($("#failure-box-hook"), "../partials/failure-box/failure-box.html", function (pObj) {
+        document.getElementById("failure-box-error-message").innerHTML = pObj.responseJSON.error;
     }, failureObj);
 }
 

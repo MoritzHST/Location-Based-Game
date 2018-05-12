@@ -1,4 +1,4 @@
-image: "debian:latest"
+image: "node:latest"
 
 cache:
   paths:
@@ -13,8 +13,6 @@ stages:
 build:
   stage: build
   script:
-    - "curl -sL https://deb.nodesource.com/setup_8.x"
-    - "apt-get install -y node"
     - "npm install"
 
 test_mocha:

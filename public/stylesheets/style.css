@@ -38,6 +38,12 @@ h2 {
     font-size: 1.7em;
 }
 
+h3 {
+    color: #e1232b;
+    width: 100%;
+    font-size: 1.5em;
+}
+
 @media (min-width: 0) {
     h2 {
         padding-top: 0;

@@ -3,9 +3,24 @@
     margin-bottom: 10px;
 }
 
+#answer-container:before, #answer-container:after {
+    position: absolute;
+}
+
+.game-answer.active {
+    background-color: #ad0000 !important;
+}
+
 .host-question-container {
     font-size: 1.8em;
     padding: 20px;
     margin-top: 20px;
     margin-bottom: 15px;
+}
+
+#answer-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
 }

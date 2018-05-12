@@ -30,7 +30,7 @@ router.post('/post/answer', function (req, res) {
             }
         }
         //Es wurde keine richtige Antwort gefunden, also muss sie falsch sein
-        res.status(422).jsonp({
+        res.status(400).jsonp({
             "error": "Die Antwort ist falsch!"
         });
     });

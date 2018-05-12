@@ -1,4 +1,4 @@
-image: "node:latest"
+image: "debian:latest"
 
 cache:
   paths:

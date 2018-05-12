@@ -50,4 +50,4 @@ deploy_production:
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
     - apt-get update -y && apt-get install -y ssh
   script:
-    - ssh -p${DEPLOYMENT_SERVER_PORT} ${DEPLOYMENT_SERVER_USER}:${DEPLOYMENT_SERVER_PASS}@${DEPLOYMENT_SERVER_IP} "cd prod && docker stop docker-mainline && docker rm docker-mainline && docker build -t mainline . && docker run -p 80:3000 --name='docker-mainline' mainline"
+    - ssh -p${DEPLOYMENT_SERVER_PORT} ${DEPLOYMENT_SERVER_USER}:${DEPLOYMENT_SERVER_PASS}@${DEPLOYMENT_SERVER_IP} "cd prod && docker stop docker-mainline && docker rm docker-mainline && docker build --no-cache -t mainline . && docker run -p 80:3000 --name='docker-mainline' mainline"

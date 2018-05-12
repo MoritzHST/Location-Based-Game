@@ -13,6 +13,7 @@ stages:
 build:
   stage: build
   script:
+    - "apt-get install -y node"
     - "npm install"
 
 test_mocha:

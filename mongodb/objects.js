@@ -9,11 +9,19 @@ RoomStates = {
     FLAWLESS: 3
 };
 
+GameStates = {
+    UNPLAYED: 0,
+    CORRECT: 1,
+    WRONG: 2,
+};
+
 module.exports = {
 
     Type: Game,
 
     RoomStates: RoomStates,
+
+    GameStates: GameStates,
 
     /**
      * Event-Objekt bestehend aus Eventnamen und Gültigkeitsdatum. Ein Event gilt immer nur für einen Tag
@@ -104,17 +112,14 @@ module.exports = {
      * Antworten auf SimpleQuiz fragen
      * @param pAnswer Antwort als String
      * @param pIsCorrect Boolean der definiert, ob diese Antwort eine korrekte Antwort auf die Frage ist
-     * @param pImagePath Pfad zur zugefügten BildDatei für die Antwort
      * @constructor
      */
-    Answer: function (pAnswer, pIsCorrect, pImagePath) {
+    Answer: function (pAnswer, pIsCorrect) {
         logging.Info("initializing new Answer");
         logging.Parameter("pAnswer", pAnswer);
         logging.Parameter("pIsCorrect", pIsCorrect);
-        logging.Parameter("pImagePath", pImagePath);
         this.isCorrect = pIsCorrect;
         this.answer = pAnswer;
-        this.imagePath = pImagePath;
         logging.Info("initializing Answer done");
     },
 

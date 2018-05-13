@@ -10,8 +10,12 @@ var exampleQuiz = new objects.SimpleQuiz("Was ist eine Banane?", [
     new objects.Answer("Nichts", false),
     new objects.Answer("Alles", false)
 ], 100);
+var exampleQuiz2 = new objects.SimpleQuiz("Was ist ein Hund?", [
+    new objects.Answer("Säugetier", true),
+    new objects.Answer("Fisch", false)
+], 100);
 
-module.exports = exampleQuiz;
+module.exports = [exampleQuiz, exampleQuiz2];
 
 /**
  * 

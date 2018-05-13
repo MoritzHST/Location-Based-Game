@@ -9,9 +9,18 @@ Game = {
     MULTIPLE_CHOICE: "multiple_choice"
 };
 
+RoomStates = {
+    VISITED: 0,
+    STARTED: 1,
+    COMPLETED: 2,
+    FLAWLESS: 3
+};
+
 module.exports = {
 
     Type: Game,
+
+    RoomStates: RoomStates,
 
     /**
      * Event-Objekt bestehend aus Eventnamen und Gültigkeitsdatum. Ein Event gilt immer nur für einen Tag
@@ -118,19 +127,21 @@ module.exports = {
 
     /**
      * Visit-Objekt, das den Besuch und Erfolg eines Nutzers nach dem Spielen eines Spiels an einer Location darstellt
-     * @param pLocation Location an der der Nutzer gespielt hat
-     * @param pGame Spiel das bei diesem Objekt gespielt wurde
+     * @param pLocationMapping LocationMapping-Object der Ausstellung, an der der Nutzer gespielt hat
+     * @param pGames Spiele die bei diesem Objekt gespielt wurde
      * @param pIsSuccessful Boolean ob das Spiel erfolgreich abgeschlossen(Richtige Antwort) wurde
+     * @param pRoomState Status der Abfertigung
      * @constructor
      */
-    Visit: function (pLocation, pGame, pIsSuccessful) {
+    Visit: function (pLocationMapping, pGames, pIsSuccessful, pRoomState) {
         logging.Info("initializing new Visit");
-        logging.Parameter("pLocation", pLocation);
-        logging.Parameter("pGame", pGame);
+        logging.Parameter("pLocationMapping", pLocationMapping);
+        logging.Parameter("pGame", pGames);
         logging.Parameter("pIsSuccessful", pIsSuccessful);
-        this.location = pLocation;
-        this.game = pGame;
+        this.location = pLocationMapping.location;
+        this.games = pGames;
         this.success = pIsSuccessful;
+        this.state = pRoomState ? pRoomState : RoomStates.VISITED;
         logging.Info("initializing Visit done");
     },
 

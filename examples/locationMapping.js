@@ -8,7 +8,8 @@ const exampleLocation = require('./location');
 const exampleExposition = require('./exposition');
 const exampleQuiz = require('./quiz');
 
-var exampleLocationMapping = new objects.LocationMapping(exampleLocation, exampleExposition, [exampleQuiz]);
+
+var exampleLocationMapping = new objects.LocationMapping(exampleLocation, exampleExposition, exampleQuiz);
 
 module.exports = exampleLocationMapping;
 /**

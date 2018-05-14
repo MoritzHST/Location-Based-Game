@@ -1,0 +1,27 @@
+<script src="partials/exposition-info/javascripts/exposition-info.js"></script>
+<link rel="stylesheet" href="partials/exposition-info/stylesheets/exposition-info.css">
+<div id="exposition-info-switch">
+    <!-- Navigationsreiter für Info bzw. Mission -->
+    <ul class="navbar host-color switch-container">
+        <li class="exposition-info-tabelement"><a href="#mission">Mission</a></li>
+        <li class="exposition-info-tabelement"><a href="#info">Info</a></li>
+    </ul>
+    <!-- Panels für Info bzw. Mission -->
+    <div id="info" class="panel panel-default">
+        <div class="panel-body">
+            <h2>Info</h2>
+            <div id="labor-name"></div>
+        </div>
+    </div>
+    <div id="mission" class="panel panel-default">
+        <div class="panel-body">
+            <h2>Missionen</h2>
+            <!-- Wrapper für die Current-Game-Kreise -->
+            <div id="current-game-display-wrapper" class="row"></div>
+            <div id="mission-hook"></div>
+            <!-- Button zum abschicken der Antwort -->
+            <a id="exposition-submit-game-answer"
+               class="btn btn-sm btn-primary btn-block host-button host-function-button">Abschicken</a>
+        </div>
+    </div>
+</div>

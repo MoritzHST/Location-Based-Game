@@ -28,18 +28,16 @@ router.get('/find/users', function(req, res) {
  * @returns Den hinzugefügten Benutzer (oder eine Fehlermeldung)
  */
 router.post('/insert/users', function(req, res) {
-    const username = req.query.name;
+    req.query = JSON.parse(JSON.stringify(req.body));
 
-    operations.findObject(userCollection, {
-        "name" : username.trim()
-    }, function(err, item) {
+    operations.findObject(userCollection, req.query, function (err, item) {
         if (item !== null) {
             res.status(422).jsonp({
                 "error" : "Nutzername ist bereits vergeben"
             });
             return;
         }
-        const validity = handler.getUsernameValidity(username);
+        const validity = handler.getUsernameValidity(req.query.name);
         if (!validity.isValid) {
             res.status(422).jsonp(validity.err);
             return;

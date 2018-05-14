@@ -41,8 +41,6 @@ function init() {
     // Register-Button Funktion registrieren
     $("#btn-sign-up").click(function() {
         const textfieldName = $("#textfield-name-sign-up");
-        // const name = textfieldName.val() === "" || textfieldName.val() ===
-        // undefined ? "" : "name=" + textfieldName.val();
         $.post("insert/users", {
             "name" : textfieldName.val()
         }).done(redirectOnSuccess).fail(displayFailureMessage);

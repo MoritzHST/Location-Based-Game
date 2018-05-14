@@ -32,10 +32,18 @@ app.use(cookieSession({
     httpOnly: false
 }));
 
-// This allows you to set req.session.maxAge to let certain sessions
-// have a different value than the default.
+/**
+ * Diese Route erlaubt den Benutzer eine andere Cookie Dauer als die Standarddauer zu haben.
+ * Aktualisiert den Benutzer Cookie minütlich.
+ * @param req Angeforderte Daten
+ * @param res Derzeitige Antwort
+ * @param next Nächste zutreffende Route
+ */
 app.use(function (req, res, next) {
-    req.sessionOptions.maxAge = req.session.maxAge || req.sessionOptions.maxAge;
+    if (req.sessionOptions.maxAge !== req.session.maxAge) {
+        req.sessionOptions.maxAge = req.session.maxAge;
+        req.session.nowInMinutes = Math.floor(Date.now() / 60e3);
+    }
     next();
 });
 

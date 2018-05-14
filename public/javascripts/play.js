@@ -14,15 +14,15 @@ function init() {
     setSlideInMenu();
 
     setHooks();
-    //Nav-Menü "Spielübersicht"
-    $("#game-play-overview").on("click", function () {
+    // Nav-Menü "Spielübersicht"
+    $("#game-play-overview").on("click", function() {
         setNodeHookFromFile($("#content-hook"), "../partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent");
     });
-    //Nav-Menü "Logout"
-    $("#game-logout").on("click", function () {
+    // Nav-Menü "Logout"
+    $("#game-logout").on("click", function() {
         setNodeHookFromFile($("#warning-hook"), "../partials/play-warning-box/play-warning-box.html", setLogoutHint);
     });
-    //Nav-Menü "Raumplan"
+    // Nav-Menü "Raumplan"
     $("#game-room-map").on("click", function() {
         setNodeHookFromFile($("#content-hook"), "../partials/room-map/room-map.html", undefined, undefined, "initRoomMap");
     });

@@ -3,8 +3,7 @@ const operations = require('../mongodb/operations');
 const logging = require('../mongodb/logging');
 const collections = require('../mongodb/collections');
 
-let exampleLocation = new objects.Location("103a", "http://qr.service.fh-stralsund.de/h4r314");
-exampleLocation._id = "zzzzzzzzzzzz";
+var exampleLocation = new objects.Location("103a", "http://qr.service.fh-stralsund.de/h4r314");
 
 module.exports = exampleLocation;
 

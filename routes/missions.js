@@ -3,6 +3,7 @@ const handler = require('../mongodb/handler');
 const router = require('express').Router();
 
 const locationMappingCollection = require('../mongodb/collections').LOCATION_MAPPING;
+const userCollection = require('../mongodb/collections').USERS;
 
 const errorMessage = "Fehler beim auslesen der Missionsübersicht";
 
@@ -14,20 +15,25 @@ router.get('/find/missions', function (req, res) {
     operations.findObject(locationMappingCollection,
         {}, function (err, item) {
 
-            if (item == null) {
-                res.status(422).jsonp({
-                    "error": errorMessage
+            operations.findObject(userCollection,
+                req.session.user, function (err, user) {
+
+                    if (item == null) {
+                        res.status(422).jsonp({
+                            "error": errorMessage
+                        });
+                    } else {
+                        if (Array.isArray(item)) {
+                            item.forEach(function (mission) {
+                                mission.games = undefined;
+                            });
+                        } else {
+                            item.games = undefined;
+                        }
+                        handler.dbResult(err, res, item, errorMessage);
+                    }
                 });
-            } else {
-                if (Array.isArray(item)) {
-                    item.forEach(function (mission) {
-                        mission.games = undefined;
-                    });
-                } else {
-                    item.games = undefined;
-                }
-                handler.dbResult(err, res, item, errorMessage);
-            }
+
         });
 });
 

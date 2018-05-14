@@ -15,13 +15,11 @@ const gameHelper = require('../helper/scan');
 router.get('/find/scan', function (req, res) {
     let identifier = req.query.identifier;
 
-
     operations.findObject(locationMappingCollection,
         {
             "location.identifier": identifier
         }, function (err, item) {
             if (item !== null && item !== undefined) {
-
                 item.games = gameHelper.prepareGames(item.games);
 
                 operations.findObject(userCollection, req.session.user, function (userErr, userItem) {
@@ -40,13 +38,12 @@ router.get('/find/scan', function (req, res) {
                                 userItem, function () {
                                 });
                         }
-                        handler.dbResult(err, res, item, "Zu diesem Code konnten leider keine Minispiele gefunden werden. Tut uns Leid. Really, we are sorry :(");
                     } else {
                         //behandle error
-                        handler.dbResult(err, res, item, "Zu diesem Code konnten leider keine Minispiele gefunden werden. Tut uns Leid. Really, we are sorry :(");
                     }
                 });
             }
+            handler.dbResult(err, res, item, "Zu diesem Code konnten leider keine Minispiele gefunden werden. Tut uns Leid. Really, we are sorry :(");
         });
 });
 

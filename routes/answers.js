@@ -8,8 +8,8 @@ const gameCollection = require('../mongodb/collections').GAMES;
 /* Post */
 /* Post Answer for an Game */
 router.post('/post/answer', function (req, res) {
-    let gameId = req.query.gameId;
-    let answer = req.query.answer;
+    let gameId = req.query.gameId === undefined ? req.body.gameId : req.query.gameId;
+    let answer = req.query.answer === undefined ? req.body.answer : req.query.answer;
     operations.findObject(gameCollection, {_id: gameId}, function (err, item) {
         //Ungültge Game-ID escapen
         if (err || item === null) {

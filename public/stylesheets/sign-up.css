@@ -11,10 +11,6 @@
     margin: 0;
 }
 
-.text-container {
-    padding: 15px;
-}
-
 a {
     color: #EEE !important;
     text-align: center;
@@ -56,6 +52,3 @@ li.ui-state-active > a {
 li:hover, a:hover {
     border-radius: 4px;
 }
-
-
-

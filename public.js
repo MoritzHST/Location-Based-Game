@@ -64,7 +64,7 @@ router.get('/sign-out', function(req, res) {
  * @returns Die nächste anzusteuernde Route
  */
 router.use('*', function(req, res, next) {
-    if (handler.stringStartsWith([ "javascripts", "stylesheets", "partials" ], req.originalUrl)) {
+    if (handler.stringStartsWith(["javascripts", "stylesheets", "partials", "agb", "privacy", "impressum"], req.originalUrl)) {
         next();
     } else {
         if (!req.originalUrl.startsWith('/sign-up') && (!req.session || !req.session.user)) {

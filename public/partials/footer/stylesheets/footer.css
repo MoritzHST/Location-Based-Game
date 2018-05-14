@@ -6,7 +6,7 @@
     display: inline-flex;
 }
 
-.host-agb {
+.host-privacy {
     box-sizing: border-box;
     padding-right: 5px;
     text-align: right;
@@ -19,4 +19,12 @@
     padding-left: 5px;
     text-align: left;
     width: 50%;
+}
+
+.host-privacy > a {
+    color: inherit;
+}
+
+.host-privacy > a:hover {
+    color: inherit;
 }

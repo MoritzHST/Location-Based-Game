@@ -27,10 +27,22 @@ function initScanner() {
  * @param content Inhalt des QR-Codes
  */
 function onCodeScanned(content) {
+    //Scanner stoppen
+    scanner.stop();
+
     ajaxRequest("find/scan", "GET", {"identifier": content}, function (obj) {
-        console.log(obj);
+        //Bei Erfolg
+        setNodeHookFromFile($("#content-hook"), "partials/exposition-info/exposition-info.html", undefined, undefined, "initExpositionInfo", obj);
     }, function (obj) {
-        console.log(obj);
+        //Bei Misserfolg
+        setNodeHookFromFile($("#failure-hook"), "partials/failure-box/failure-box.html", function (errMsgObj) {
+            $("#failure-box-error-message").html(errMsgObj.responseJSON.error);
+            //Nach Konstanter Sekunden-Anzahl wieder ausblenden
+            setTimeout(function () {
+                clearNodeHook("failure-hook");
+            }, notificationFadeOut);
+        }, obj);
+        setNodeHookFromFile($("#content-hook"), "partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent")
     });
 }
 

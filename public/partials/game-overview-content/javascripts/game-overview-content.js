@@ -5,9 +5,7 @@ function initGameOverviewContent() {
     //On-Click event für QR-Code Button
     $("#btn-scan-qr").on("click", function () {
         setNodeHookFromFile($("#content-hook"), "../partials/qr-scanner/qr-scanner.html", function () {
-            $(document).ready(function () {
-                initScanner();
-            });
+            $("#content-hook").ready(initScanner);
         });
     });
     user.locations = {
@@ -17,7 +15,7 @@ function initGameOverviewContent() {
         "2og": []
     };
 
-    ajaxRequest('find/rooms', 'GET', "", setLocations);
+    ajaxRequest('find/locations', 'GET', "", setLocations);
 
     $("#outdoor, #eg, #1og, #2og").on("click", updateTables);
 }

@@ -1,17 +1,27 @@
 const logging = require('./logging');
 const operations = require('./operations');
+require('../public/javascripts/shared/game-types.js');
 
-/**
- * Enum, das die möglichen Minispiel-Typen abbildet.
- */
-Game = {
-    SINGLE_CHOICE: "single_choice",
-    MULTIPLE_CHOICE: "multiple_choice"
+RoomStates = {
+    VISITED: 0,
+    STARTED: 1,
+    COMPLETED: 2,
+    FLAWLESS: 3
+};
+
+GameStates = {
+    UNPLAYED: 0,
+    CORRECT: 1,
+    WRONG: 2,
 };
 
 module.exports = {
 
     Type: Game,
+
+    RoomStates: RoomStates,
+
+    GameStates: GameStates,
 
     /**
      * Event-Objekt bestehend aus Eventnamen und Gültigkeitsdatum. Ein Event gilt immer nur für einen Tag
@@ -20,8 +30,12 @@ module.exports = {
      * @constructor
      */
     Event: function (pEventName, pDate) {
+        logging.Info("initializing new Event");
+        logging.Parameter("pEventName", pEventName);
+        logging.Parameter("pDate", pDate);
         this.name = pEventName;
         this.date = pDate;
+        logging.Info("initializing Event done");
     },
 
     /**
@@ -44,9 +58,12 @@ module.exports = {
      * @param pIdentifier Identifier anhand dessen ein Scan zu diesem Raum führt
      */
     Location: function (pRoomnumber, pIdentifier) {
+        logging.Info("initializing new Location");
+        logging.Parameter("pRoomnumber", pRoomnumber);
+        logging.Parameter("pIdentifier", pIdentifier);
         this.roomnumber = pRoomnumber;
         this.identifier = pIdentifier;
-        logging.Info("initialized Location");
+        logging.Info("initializing Location done");
     },
 
     /**
@@ -58,9 +75,14 @@ module.exports = {
      * @constructor
      */
     Exposition: function (pName, pDescription, pImagePath) {
+        logging.Info("initializing new Exposition");
+        logging.Parameter("pName", pName);
+        logging.Parameter("pDescription", pDescription);
+        logging.Parameter("pImagePath", pImagePath);
         this.name = pName;
         this.description = pDescription;
         this.image = pImagePath;
+        logging.Info("initializing Exposition done")
     },
 
     /**
@@ -76,36 +98,49 @@ module.exports = {
      */
     SimpleQuiz: function (pQuestion, pAnswers, pPoints) {
         logging.Info("initializing new SimpleQuiz");
+        logging.Parameter("pQuestion", pQuestion);
+        logging.Parameter("pAnswers", pAnswers);
+        logging.Parameter("pPoints", pPoints);
         this.type = Game.SINGLE_CHOICE;
         this.question = pQuestion;
         this.answers = pAnswers;
         this.points = pPoints;
+        logging.Info("initializing SimpleQuiz done");
     },
 
     /**
      * Antworten auf SimpleQuiz fragen
      * @param pAnswer Antwort als String
      * @param pIsCorrect Boolean der definiert, ob diese Antwort eine korrekte Antwort auf die Frage ist
-     * @param pImagePath Pfad zur zugefügten BildDatei für die Antwort
      * @constructor
      */
-    Answer: function (pAnswer, pIsCorrect, pImagePath) {
+    Answer: function (pAnswer, pIsCorrect) {
+        logging.Info("initializing new Answer");
+        logging.Parameter("pAnswer", pAnswer);
+        logging.Parameter("pIsCorrect", pIsCorrect);
         this.isCorrect = pIsCorrect;
         this.answer = pAnswer;
-        this.imagePath = pImagePath;
+        logging.Info("initializing Answer done");
     },
 
     /**
      * Visit-Objekt, das den Besuch und Erfolg eines Nutzers nach dem Spielen eines Spiels an einer Location darstellt
-     * @param pLocation Location an der der Nutzer gespielt hat
-     * @param pGame Spiel das bei diesem Objekt gespielt wurde
+     * @param pLocationMapping LocationMapping-Object der Ausstellung, an der der Nutzer gespielt hat
+     * @param pGames Spiele die bei diesem Objekt gespielt wurde
      * @param pIsSuccessful Boolean ob das Spiel erfolgreich abgeschlossen(Richtige Antwort) wurde
+     * @param pRoomState Status der Abfertigung
      * @constructor
      */
-    Visit: function (pLocation, pGame, pIsSuccessful) {
-        this.location = pLocation;
-        this.game = pGame;
+    Visit: function (pLocationMapping, pGames, pIsSuccessful, pRoomState) {
+        logging.Info("initializing new Visit");
+        logging.Parameter("pLocationMapping", pLocationMapping);
+        logging.Parameter("pGame", pGames);
+        logging.Parameter("pIsSuccessful", pIsSuccessful);
+        this.location = pLocationMapping.location;
+        this.games = pGames;
         this.success = pIsSuccessful;
+        this.state = pRoomState ? pRoomState : RoomStates.VISITED;
+        logging.Info("initializing Visit done");
     },
 
     /**
@@ -116,9 +151,14 @@ module.exports = {
      * @constructor
      */
     LocationMapping: function (pLocation, pExposition, pGames) {
+        logging.Info("initializing new LocationMapping");
+        logging.Parameter("pLocation", pLocation);
+        logging.Parameter("pExposition", pExposition);
+        logging.Parameter("pGames", pGames);
         this.location = pLocation;
         this.exposition = pExposition;
         this.games = pGames;
+        logging.Info("initializing LocationMapping done");
     },
 
     /**

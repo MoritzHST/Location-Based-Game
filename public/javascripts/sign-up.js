@@ -3,31 +3,31 @@ window.onload = init;
 /**
  * Switch-Case für Session-Events, welche von Node gefeuert werden können
  **/
-$(document).ready(function() {
+$(document).ready(function () {
     switch (getURLParameter("reason")) {
-    case "login":
-        renderFailureMessage({
-            responseJSON : {
-                "error" : "Du wurdest ausgeloggt, weil sich jemand anderes mit deinen Daten angemeldet hat."
-            }
-        });
-        break;
-    case "error":
-        renderFailureMessage({
-            responseJSON : {
-                "error" : "Es trat ein Fehler beim Verbinden mit dem Server auf, wodurch du ausgeloggt wurdest."
-            }
-        });
-        break;
-    case "close":
-        renderFailureMessage({
-            responseJSON : {
-                "error" : "Deine Sitzung wurde vom Server aus beendet."
-            }
-        });
-        break;
-    default:
-        break;
+        case "login":
+            renderFailureMessage({
+                responseJSON: {
+                    "error": "Du wurdest ausgeloggt, weil sich jemand anderes mit deinen Daten angemeldet hat."
+                }
+            });
+            break;
+        case "error":
+            renderFailureMessage({
+                responseJSON: {
+                    "error": "Es trat ein Fehler beim Verbinden mit dem Server auf, wodurch du ausgeloggt wurdest."
+                }
+            });
+            break;
+        case "close":
+            renderFailureMessage({
+                responseJSON: {
+                    "error": "Deine Sitzung wurde vom Server aus beendet."
+                }
+            });
+            break;
+        default:
+            break;
     }
 });
 
@@ -35,42 +35,44 @@ function init() {
     setHooks();
 
     // Register-Button Funktion registrieren
-    $("#btn-sign-up").click(function() {
+    $("#btn-sign-up").click(function () {
         const textfieldName = $("#textfield-name-sign-up");
-        const name = textfieldName.val() === "" || textfieldName.val() === undefined ? "" : "name=" + textfieldName.val();
-        ajaxRequest("insert/users?", "POST", name, redirectOnSuccess, displayFailureMessage);
+        //const name = textfieldName.val() === "" || textfieldName.val() === undefined ? "" : "name=" + textfieldName.val();
+        $.post("insert/users", {"name": textfieldName.val()})
+            .done(redirectOnSuccess)
+            .fail(displayFailureMessage);
         $(this).addClass('disabled');
     });
 
     // Tabs setzen
-    $(function() {
+    $(function () {
         $("#signup_signin_switch").tabs();
     });
 
-    $("#textfield-name-sign-up").on("input", function() {
+    $("#textfield-name-sign-up").on("input", function () {
         enableSignUpButtonIfSingUpValid();
     });
 
-    $("#checkAGB").on("click", function() {
+    $("#checkAGB").on("click", function () {
         enableSignUpButtonIfSingUpValid();
     });
 
     enableSignUpButtonIfSingUpValid();
 
-    $("#btn-sign-in").on("click", function() {
+    $("#btn-sign-in").on("click", function () {
         const userName = $("#textfield-name-sign-in").val();
         const token = $("#textfield-token-sign-in").val();
         $.post("login", {
-            "name" : userName,
-            "token" : token
-        }).done(function() {
+            "name": userName,
+            "token": token
+        }).done(function () {
             window.location = "play";
-        }).fail(function(obj) {
+        }).fail(function (obj) {
             renderFailureMessage(obj);
         });
     });
 
-    $("#textfield-name-sign-in, #textfield-token-sign-in").on("input", function() {
+    $("#textfield-name-sign-in, #textfield-token-sign-in").on("input", function () {
         enableSignInButtonIfSignInValid();
     });
 
@@ -90,7 +92,7 @@ function setHooks() {
  * Callback, welches bei erfolgreichem AJAX-Registrierungs-Aufruf ausgeführt werden soll
  */
 function redirectOnSuccess(user) {
-    $.post("login", user.value).done(function() {
+    $.post("login", user.value).done(function () {
         window.location = "play";
     });
 }
@@ -111,8 +113,8 @@ function displayFailureMessage(callbackObj) {
  * @param failureObj
  */
 function renderFailureMessage(failureObj) {
-    setNodeHookFromFile(document.getElementById("sign-up-in-failure-box-hook"), "../partials/sign-up-in-failure-box/sign-up-in-failure-box.html", function(pObj) {
-        document.getElementById("sign-up-in-failure-box-error-message").innerHTML = pObj.responseJSON.error;
+    setNodeHookFromFile($("#failure-box-hook"), "../partials/failure-box/failure-box.html", function (pObj) {
+        document.getElementById("failure-box-error-message").innerHTML = pObj.responseJSON.error;
     }, failureObj);
 }
 

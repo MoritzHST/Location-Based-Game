@@ -76,13 +76,13 @@ function hideWarning() {
     if (!loginHintTimer) {
         loginHintTimer = setTimeout(function() {
             $("#warning-hook").html("");
-        }, 10000);
+        }, notificationFadeOut);
     }
 }
 
 function setLogoutHint() {
-    let timeleft = 10;
-    // Main-Box ausblenden
+    let timeleft = notificationFadeOut / 1000;
+    //Main-Box ausblenden
     clearNodeHook("content-hook");
     // Warnung einblenden mit Usernamen und Token
     $("#warning-box-message").html("Name: " + user.name + "<br/> Token: " + user.token);

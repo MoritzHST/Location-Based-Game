@@ -38,7 +38,7 @@ function initExpositionInfo(obj) {
                         }, notificationFadeOut);
                     }, obj);
 
-                    if (obj.status !== 400) {
+                    if (obj.status === 400) {
                         nextGame();
                     }
                 });

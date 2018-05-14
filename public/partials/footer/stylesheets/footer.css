@@ -21,10 +21,10 @@
     width: 50%;
 }
 
-.host-privacy > a {
-    color: inherit;
-}
-
-.host-privacy > a:hover {
-    color: inherit;
+.host-privacy > a, .host-privacy > a:hover, .host-impressum > a, .host-impressum > a:hover {
+    color: inherit !important;
+    text-decoration: none !important;
+    font-size: inherit;
+    letter-spacing: inherit;
+    font-weight: inherit;
 }

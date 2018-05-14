@@ -38,6 +38,11 @@ html, body {
     font-size: 1.1em;
 }
 
+.info-textbox-container {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
 h2 {
     color: #e1232b;
     width: 100%;

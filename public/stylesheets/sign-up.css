@@ -1,4 +1,3 @@
-
 .fill-screen {
     min-height: 100vh;
 }
@@ -9,10 +8,6 @@
 
 .no-margin {
     margin: 0;
-}
-
-.text-container {
-    padding: 15px;
 }
 
 a {
@@ -57,5 +52,28 @@ li:hover, a:hover {
     border-radius: 4px;
 }
 
+.privacy-link-in-formular, .privacy-link-in-formular:hover {
+    text-decoration: underline;
+    color: #e1232b !important;
+    background-color: rgba(0, 0, 0, 0) !important;
+    font-weight: 700;
+    letter-spacing: 0 !important;
+    line-height: 16.8px;
+    font-size: 1em;
+}
 
+@media (min-width: 0) {
+    .text-container > p {
+        display: none;
+    }
 
+    .text-container > p:first-of-type {
+        display: block !important;
+    }
+}
+
+@media (min-width: 992px) {
+    .text-container > p {
+        display: block;
+    }
+}

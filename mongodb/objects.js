@@ -2,26 +2,9 @@ const logging = require('./logging');
 const operations = require('./operations');
 require('../public/javascripts/shared/game-types.js');
 
-RoomStates = {
-    VISITED: 0,
-    STARTED: 1,
-    COMPLETED: 2,
-    FLAWLESS: 3
-};
-
-GameStates = {
-    UNPLAYED: 0,
-    CORRECT: 1,
-    WRONG: 2,
-};
-
 module.exports = {
 
     Type: Game,
-
-    RoomStates: RoomStates,
-
-    GameStates: GameStates,
 
     /**
      * Event-Objekt bestehend aus Eventnamen und Gültigkeitsdatum. Ein Event gilt immer nur für einen Tag
@@ -112,34 +95,35 @@ module.exports = {
      * Antworten auf SimpleQuiz fragen
      * @param pAnswer Antwort als String
      * @param pIsCorrect Boolean der definiert, ob diese Antwort eine korrekte Antwort auf die Frage ist
+     * @param pImagePath Pfad zur zugefügten BildDatei für die Antwort
      * @constructor
      */
-    Answer: function (pAnswer, pIsCorrect) {
+    Answer: function (pAnswer, pIsCorrect, pImagePath) {
         logging.Info("initializing new Answer");
         logging.Parameter("pAnswer", pAnswer);
         logging.Parameter("pIsCorrect", pIsCorrect);
+        logging.Parameter("pImagePath", pImagePath);
         this.isCorrect = pIsCorrect;
         this.answer = pAnswer;
+        this.imagePath = pImagePath;
         logging.Info("initializing Answer done");
     },
 
     /**
      * Visit-Objekt, das den Besuch und Erfolg eines Nutzers nach dem Spielen eines Spiels an einer Location darstellt
-     * @param pLocationMapping LocationMapping-Object der Ausstellung, an der der Nutzer gespielt hat
-     * @param pGames Spiele die bei diesem Objekt gespielt wurde
+     * @param pLocation Location an der der Nutzer gespielt hat
+     * @param pGame Spiel das bei diesem Objekt gespielt wurde
      * @param pIsSuccessful Boolean ob das Spiel erfolgreich abgeschlossen(Richtige Antwort) wurde
-     * @param pRoomState Status der Abfertigung
      * @constructor
      */
-    Visit: function (pLocationMapping, pGames, pIsSuccessful, pRoomState) {
+    Visit: function (pLocation, pGame, pIsSuccessful) {
         logging.Info("initializing new Visit");
-        logging.Parameter("pLocationMapping", pLocationMapping);
-        logging.Parameter("pGame", pGames);
+        logging.Parameter("pLocation", pLocation);
+        logging.Parameter("pGame", pGame);
         logging.Parameter("pIsSuccessful", pIsSuccessful);
-        this.location = pLocationMapping.location;
-        this.games = pGames;
+        this.location = pLocation;
+        this.game = pGame;
         this.success = pIsSuccessful;
-        this.state = pRoomState ? pRoomState : RoomStates.VISITED;
         logging.Info("initializing Visit done");
     },
 

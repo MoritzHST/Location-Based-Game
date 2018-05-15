@@ -2,17 +2,17 @@ const logging = require('./logging');
 const operations = require('./operations');
 require('../public/javascripts/shared/game-context.js');
 
-RoomStates = {
+let RoomStates = {
     VISITED: 0,
     STARTED: 1,
     COMPLETED: 2,
     FLAWLESS: 3
 };
 
-GameStates = {
+let GameStates = {
     UNPLAYED: 0,
     CORRECT: 1,
-    WRONG: 2,
+    WRONG: 2
 };
 
 module.exports = {
@@ -83,9 +83,9 @@ module.exports = {
         logging.Parameter("pImagePaths", pImagePaths);
         this.name = pName;
         this.description = pDescription;
-        this.image = pThumbnailPath;
+        this.thumbnailPath = pThumbnailPath;
         this.imagePaths = pImagePaths;
-        logging.Info("initializing Exposition done")
+        logging.Info("initializing Exposition done");
     },
 
     /**

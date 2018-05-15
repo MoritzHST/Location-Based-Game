@@ -8,7 +8,7 @@ const fileHelper = require('../mongodb/fileHelper');
 const multer = require('multer');
 const upload = multer(
     {
-        dest: '../public/uploads/images/room',
+        dest: '../public/uploads/images/exposition',
         fileFilter: function (req, file, cb) {
             if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
                 return cb(null, false);

@@ -8,6 +8,20 @@ function initExpositionInfo(obj) {
         $("#exposition-info-switch").tabs();
     });
 
+    if (obj.context === GameState.CODE_SCANNED) {
+        initContextCodeScanned(obj);
+    }
+    else {
+        initContextCodePending(obj);
+    }
+
+}
+
+//Initialisierungsfunktion falls ein Code gescanned wurde
+function initContextCodeScanned(obj) {
+    //Code gescanned -> Button kann also ausgeblendet werden
+    $("#exposition-scan-qr").hide();
+
     setCurrentGameDisplay(obj);
 
     //Das erste nicht gespielte Spiel heraussuchen
@@ -43,6 +57,22 @@ function initExpositionInfo(obj) {
                     }
                 });
         }
+    });
+}
+
+//Initialisierngsfunktion wenn noch kein Code gescanned wurde
+function initContextCodePending(obj) {
+    //Button Abschicken ausblenden, da noch kein Quiz aktiv ist
+    $("#exposition-submit-game-answer").hide();
+
+    //Button zum scannen muss mit einer Route verknüpft werden
+    $("#exposition-scan-qr").on("click", function () {
+        setNodeHookFromFile($("#content-hook"), "../partials/qr-scanner/qr-scanner.html", function () {
+            $("#content-hook").ready(function () {
+                obj.context = GameState.SCAN_ATTEMPT_FROM_EXPOSITION_INFO;
+                initScanner(obj);
+            });
+        });
     });
 }
 

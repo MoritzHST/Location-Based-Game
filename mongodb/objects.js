@@ -1,6 +1,6 @@
 const logging = require('./logging');
 const operations = require('./operations');
-require('../public/javascripts/shared/game-types.js');
+require('../public/javascripts/shared/game-context.js');
 
 RoomStates = {
     VISITED: 0,

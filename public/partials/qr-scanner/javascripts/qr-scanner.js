@@ -32,6 +32,7 @@ function onCodeScanned(content) {
 
     ajaxRequest("find/scan", "GET", {"identifier": content}, function (obj) {
         //Bei Erfolg
+        obj.context = GameState.CODE_SCANNED;
         setNodeHookFromFile($("#content-hook"), "partials/exposition-info/exposition-info.html", undefined, undefined, "initExpositionInfo", obj);
     }, function (obj) {
         //Bei Misserfolg

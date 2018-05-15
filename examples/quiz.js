@@ -26,7 +26,7 @@ let exampleQuiz3 = new objects.SimpleQuiz("Was ist OpenGL?", [
     new objects.Answer("Programmiersprache", false),
     new objects.Answer("Grafikkartenhersteller", false)
 ], 100);
-exampleQuiz3._id = "cccccccccc";
+exampleQuiz3._id = "cccccccccccc";
 
 let exampleQuiz4 = new objects.SimpleQuiz("Welche Auflösung hat Full-HD?", [
     new objects.Answer("1920 × 1080", true),
@@ -57,12 +57,12 @@ exampleQuiz6._id = "ffffffffffff";
 
 
 module.exports = {
-    [exampleQuiz, exampleQuiz2;
-]
-}
+    exampleQuiz: [exampleQuiz, exampleQuiz2],
+    exampleQuiz2: [exampleQuiz3, exampleQuiz6],
+    exampleQuiz3: [exampleQuiz4, exampleQuiz5]
+};
 
 /**
- * 
  * @param err
  * @param result
  * @returns
@@ -77,6 +77,31 @@ operations.updateObject(collections.GAMES, exampleQuiz, null, function (err) {
 operations.updateObject(collections.GAMES, exampleQuiz2, null, function (err) {
     if (!err)
         logging.Info("SimpleQuiz2 erstellt");
+    else
+        logging.Error(err);
+});
+
+operations.updateObject(collections.GAMES, exampleQuiz3, null, function (err) {
+    if (!err)
+        logging.Info("SimpleQuiz3 erstellt");
+    else
+        logging.Error(err);
+});
+operations.updateObject(collections.GAMES, exampleQuiz4, null, function (err) {
+    if (!err)
+        logging.Info("SimpleQuiz4 erstellt");
+    else
+        logging.Error(err);
+});
+operations.updateObject(collections.GAMES, exampleQuiz5, null, function (err) {
+    if (!err)
+        logging.Info("SimpleQuiz5 erstellt");
+    else
+        logging.Error(err);
+});
+operations.updateObject(collections.GAMES, exampleQuiz6, null, function (err) {
+    if (!err)
+        logging.Info("SimpleQuiz6 erstellt");
     else
         logging.Error(err);
 });

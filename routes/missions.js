@@ -9,15 +9,15 @@ const errorMessage = "Fehler beim auslesen der Missionsübersicht";
 
 /* Global */
 
-/* GET */
-/* Find ScanResult(s) */
+/**
+ * gibt alle dem Nutzer zur Verfügung stehenden Missionen zurück
+ *
+ */
 router.get('/find/missions', function (req, res) {
     operations.findObject(locationMappingCollection,
         {}, function (err, item) {
-
             operations.findObject(userCollection,
                 req.session.user, function (err, user) {
-
                     if (item == null) {
                         res.status(422).jsonp({
                             "error": errorMessage
@@ -33,7 +33,6 @@ router.get('/find/missions', function (req, res) {
                         handler.dbResult(err, res, item, errorMessage);
                     }
                 });
-
         });
 });
 

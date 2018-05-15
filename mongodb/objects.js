@@ -2,9 +2,26 @@ const logging = require('./logging');
 const operations = require('./operations');
 require('../public/javascripts/shared/game-types.js');
 
+RoomStates = {
+    VISITED: 0,
+    STARTED: 1,
+    COMPLETED: 2,
+    FLAWLESS: 3
+};
+
+GameStates = {
+    UNPLAYED: 0,
+    CORRECT: 1,
+    WRONG: 2,
+};
+
 module.exports = {
 
     Type: Game,
+
+    RoomStates: RoomStates,
+
+    GameStates: GameStates,
 
     /**
      * Event-Objekt bestehend aus Eventnamen und Gültigkeitsdatum. Ein Event gilt immer nur für einen Tag
@@ -54,17 +71,20 @@ module.exports = {
      *
      * @param pName Name der Ausstellung
      * @param pDescription Beschreibung der Ausstellung
-     * @param pImagePath Bildpfad zum Ausstellungsbild
+     * @param pThumbnailPath Bildpfad zum Ausstellungsbild
+     * @param pImagePaths Array der Strings zu den Bildern der Ausstellung
      * @constructor
      */
-    Exposition: function (pName, pDescription, pImagePath) {
+    Exposition: function (pName, pDescription, pThumbnailPath, pImagePaths) {
         logging.Info("initializing new Exposition");
         logging.Parameter("pName", pName);
         logging.Parameter("pDescription", pDescription);
-        logging.Parameter("pImagePath", pImagePath);
+        logging.Parameter("pThumbnail", pThumbnailPath);
+        logging.Parameter("pImagePaths", pImagePaths);
         this.name = pName;
         this.description = pDescription;
-        this.image = pImagePath;
+        this.image = pThumbnailPath;
+        this.imagePaths = pImagePaths;
         logging.Info("initializing Exposition done")
     },
 
@@ -95,35 +115,34 @@ module.exports = {
      * Antworten auf SimpleQuiz fragen
      * @param pAnswer Antwort als String
      * @param pIsCorrect Boolean der definiert, ob diese Antwort eine korrekte Antwort auf die Frage ist
-     * @param pImagePath Pfad zur zugefügten BildDatei für die Antwort
      * @constructor
      */
-    Answer: function (pAnswer, pIsCorrect, pImagePath) {
+    Answer: function (pAnswer, pIsCorrect) {
         logging.Info("initializing new Answer");
         logging.Parameter("pAnswer", pAnswer);
         logging.Parameter("pIsCorrect", pIsCorrect);
-        logging.Parameter("pImagePath", pImagePath);
         this.isCorrect = pIsCorrect;
         this.answer = pAnswer;
-        this.imagePath = pImagePath;
         logging.Info("initializing Answer done");
     },
 
     /**
      * Visit-Objekt, das den Besuch und Erfolg eines Nutzers nach dem Spielen eines Spiels an einer Location darstellt
-     * @param pLocation Location an der der Nutzer gespielt hat
-     * @param pGame Spiel das bei diesem Objekt gespielt wurde
+     * @param pLocationMapping LocationMapping-Object der Ausstellung, an der der Nutzer gespielt hat
+     * @param pGames Spiele die bei diesem Objekt gespielt wurde
      * @param pIsSuccessful Boolean ob das Spiel erfolgreich abgeschlossen(Richtige Antwort) wurde
+     * @param pRoomState Status der Abfertigung
      * @constructor
      */
-    Visit: function (pLocation, pGame, pIsSuccessful) {
+    Visit: function (pLocationMapping, pGames, pIsSuccessful, pRoomState) {
         logging.Info("initializing new Visit");
-        logging.Parameter("pLocation", pLocation);
-        logging.Parameter("pGame", pGame);
+        logging.Parameter("pLocationMapping", pLocationMapping);
+        logging.Parameter("pGame", pGames);
         logging.Parameter("pIsSuccessful", pIsSuccessful);
-        this.location = pLocation;
-        this.game = pGame;
+        this.location = pLocationMapping.location;
+        this.games = pGames;
         this.success = pIsSuccessful;
+        this.state = pRoomState ? pRoomState : RoomStates.VISITED;
         logging.Info("initializing Visit done");
     },
 

@@ -71,17 +71,20 @@ module.exports = {
      *
      * @param pName Name der Ausstellung
      * @param pDescription Beschreibung der Ausstellung
-     * @param pImagePath Bildpfad zum Ausstellungsbild
+     * @param pThumbnailPath Bildpfad zum Ausstellungsbild
+     * @param pImagePaths Array der Strings zu den Bildern der Ausstellung
      * @constructor
      */
-    Exposition: function (pName, pDescription, pImagePath) {
+    Exposition: function (pName, pDescription, pThumbnailPath, pImagePaths) {
         logging.Info("initializing new Exposition");
         logging.Parameter("pName", pName);
         logging.Parameter("pDescription", pDescription);
-        logging.Parameter("pImagePath", pImagePath);
+        logging.Parameter("pThumbnail", pThumbnailPath);
+        logging.Parameter("pImagePaths", pImagePaths);
         this.name = pName;
         this.description = pDescription;
-        this.image = pImagePath;
+        this.image = pThumbnailPath;
+        this.imagePaths = pImagePaths;
         logging.Info("initializing Exposition done")
     },
 

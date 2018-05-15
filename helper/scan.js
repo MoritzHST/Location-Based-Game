@@ -13,30 +13,34 @@ Array.prototype.shuffle = function () {
     return input;
 };
 
-function containsLocation(pVisits, pId) {
+//Prüft ob in einem Array an Visit-Objekten ein Visit mit der übergebenen Id enthalten ist
+function containsLocation(pVisits, pVisitId) {
     let containsId = false;
     pVisits.forEach(function (visit) {
-        if (pId.toString() === visit.location._id.toString()) {
+        if (pVisitId.toString() === visit.location._id.toString()) {
             containsId = true;
         }
     });
     return containsId;
 }
 
-function containsGame(pGames, pId) {
+//Gibt true zurück, wenn sich ein Objekt mit der GameId in der Liste an Spielen befindet, andernfalls false
+function containsGame(pGames, pGameId) {
     let containsId = false;
     pGames.forEach(function (game) {
-        if (pId.toString() === game._id.toString()) {
+        if (pGameId.toString() === game._id.toString()) {
             containsId = true;
         }
     });
     return containsId;
 }
 
-function getVisitWithId(pVisits, pId) {
+//Gibt dasjenige Visit-Objekt aus dem Array zurück, dessen Id mit der übergebenen übereinstimmt.
+//Sollte keins existieren wird null zurück gegeben.
+function getVisitWithId(pVisits, pVisitId) {
     let returnVisit = null;
     pVisits.forEach(function (visit) {
-        if (visit.location._id.toString() === pId.toString()) {
+        if (visit.location._id.toString() === pVisitId.toString()) {
             returnVisit = visit;
         }
     });
@@ -62,6 +66,15 @@ module.exports = {
         return pGames;
     },
 
+    /**
+     * Erstellt eine Kopie des eingehenden Arrays an Games und verändert es dahingehend, dass die einzelnen Spiele
+     * eine zufällige Auswahl an Fragen und Antworten enthalten. Dabei werden SingleChoice Spielen exakt eine richtige,
+     * und maximal 3 falsche Antworten und bei MultipleChoice mindestens eine richtige und maximal 4 Antworten
+     * insgesamt zugeordnet.
+     * Games, die keine richtigen Antworten eingetragen haben, werden nicht wieder zurück ausgeliefert.
+     * @param pGames
+     * @returns {Array}
+     */
     prepareGames: function (pGames) {
         let games = [];
 

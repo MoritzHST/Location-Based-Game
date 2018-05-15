@@ -10,8 +10,15 @@ const gameHelper = require('../helper/scan');
 
 /* Global */
 
-/* GET */
-/* Find ScanResult(s) */
+/**
+ * Behandelt eine Scan-Anfrage.
+ * Dabei wird überprüft ob zu diesem Event ein Minispiel für die angefragte Location freigeschaltet wurde.
+ * Zudem wird geprüft, ob der user bereits an dieser Location war. Sollte dies nicht der Fall sien, wird ihm
+ * das dem entsprechende Visit-Objekt angehangen.
+ * Die Antwort entspricht einem leicht veränderten LocationMappingObjekt, an dem, eine der Fragestellung
+ * entsprechende Anzahl an Antworten und Fragen, sowie bei noch nicht beantworteten Fragen,
+ * den Antworten keinerlei Informationen über ihre Richtigkeit angehangen sind.
+ */
 router.get('/find/scan', function (req, res) {
     let identifier = req.query.identifier;
 
@@ -19,11 +26,11 @@ router.get('/find/scan', function (req, res) {
         {
             "location.identifier": identifier
         }, function (err, item) {
-            if (item !== null && item !== undefined) {
+            if (item) {
                 item.games = gameHelper.prepareGames(item.games);
 
                 operations.findObject(userCollection, req.session.user, function (userErr, userItem) {
-                    if (!userErr && userItem !== null && userItem !== undefined) {
+                    if (!userErr && userItem) {
                         if (gameHelper.hasAlreadyVisited(userItem, item.location)) {
                             item.games = gameHelper.addGameStates(userItem.visits, item.games, item.location._id);
                         } else {

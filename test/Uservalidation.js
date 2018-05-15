@@ -3,36 +3,36 @@ const validator = require('../validation/user').filter;
 
 describe('Uservalidation', function () {
     describe('isKind()', function () {
-        it('should not allow Usernames that contain badwords', function () {
+        it('Nutzernamen, die Badwords enthalten sollen nicht zulässig sein', function () {
             assert.equal(validator.isKind("ass"), false);
         });
-        it('should not allow null value', function () {
+        it('Nutzername darf nicht Null sein', function () {
             assert.equal(validator.isKind(null), false);
         });
-        it('should not allow undefined value', function () {
+        it('Nutzername darf nicht undefined sein', function () {
             assert.equal(validator.isKind(undefined), false);
         });
-        it('should allow Usernames that do not contain bad words', function () {
+        it('Nutzernamen, die keine Badwords enthalten sollen zulässig sein', function () {
             assert.equal(validator.isKind("myUsername"), true);
         });
     });
     describe('matchesRegex()', function () {
-        it('should not allow empty Username', function () {
+        it('leere Nutzernamen sind nicht zulässig', function () {
             assert.equal(validator.matchesRegex(""), false);
         });
-        it('should not allow Usernames longer than 20 Characters', function () {
+        it('Nutzernamen, länger als 20 Zeichen, sind nicht zulässig', function () {
             assert.equal(validator.matchesRegex("aaaaaaaaaaaaaaaaaaaaa"), false);
         });
-        it('should not allow Usernames that contain other characters than letters', function () {
+        it('Nutzernamen, die andere Zeichen, als Buchstaben enthalten, sind unzulässig', function () {
             assert.equal(validator.matchesRegex("al2"), false);
         });
-        it('should not allow undefined value', function () {
+        it('Nutzername darf nicht undefined sein', function () {
             assert.equal(validator.matchesRegex(undefined), false);
         });
-        it('should not allow null value', function () {
+        it('Nutzernam darf nicht null sein', function () {
             assert.equal(validator.matchesRegex(null), false);
         });
-        it('should allow Usernames that match the Regex', function () {
+        it('Nutzernamen die der Regex entsprechen sind zulässig', function () {
             assert.equal(validator.matchesRegex("myUsername"), true);
         });
     });

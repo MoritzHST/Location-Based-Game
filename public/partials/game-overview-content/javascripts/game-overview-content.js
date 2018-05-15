@@ -97,4 +97,8 @@ function setTableContent(dataObj) {
     mediaObj.find(".title").html(dataObj.exposition.name);
     mediaObj.find("img").attr("src", dataObj.exposition.image);
     mediaObj.find(".description").html(dataObj.exposition.description);
+    mediaObj.on("click", function () {
+        dataObj.context = GameState.CODE_PENDING;
+        setNodeHookFromFile($("#content-hook"), "partials/exposition-info/exposition-info.html", undefined, undefined, "initExpositionInfo", dataObj);
+    });
 }

@@ -9,9 +9,11 @@ const exampleExposition = require('./exposition');
 const exampleQuiz = require('./quiz');
 
 
-var exampleLocationMapping = new objects.LocationMapping(exampleLocation, exampleExposition, exampleQuiz);
+let exampleLocationMapping = new objects.LocationMapping(exampleLocation.exampleLocation, exampleExposition.exampleExposition, exampleQuiz.exampleQuiz3);
+let exampleLocationMapping2 = new objects.LocationMapping(exampleLocation.exampleLocation2, exampleExposition.exampleExposition1, exampleQuiz.exampleQuiz2);
 
 module.exports = exampleLocationMapping;
+
 /**
  *
  * @param err
@@ -21,6 +23,13 @@ module.exports = exampleLocationMapping;
 operations.updateObject(collections.LOCATION_MAPPING, exampleLocationMapping, null, function (err, result) {
     if (!err) {
         logging.Info("Mapping Location-Exposition-Minigames erstellt: " + result.value);
+    }
+    else
+        logging.Error(err);
+});
+operations.updateObject(collections.LOCATION_MAPPING, exampleLocationMapping2, null, function (err, result) {
+    if (!err) {
+        logging.Info("Mapping Location-Exposition-Minigames2 erstellt: " + result.value);
     }
     else
         logging.Error(err);

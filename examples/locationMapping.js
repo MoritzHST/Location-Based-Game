@@ -12,7 +12,10 @@ const exampleQuiz = require('./quiz');
 let exampleLocationMapping = new objects.LocationMapping(exampleLocation.exampleLocation, exampleExposition.exampleExposition, exampleQuiz.exampleQuiz3);
 let exampleLocationMapping2 = new objects.LocationMapping(exampleLocation.exampleLocation2, exampleExposition.exampleExposition1, exampleQuiz.exampleQuiz2);
 
-module.exports = exampleLocationMapping;
+module.exports = {
+    exampleLocationMapping: exampleLocationMapping,
+    exampleLocationMapping2: exampleLocationMapping2
+};
 
 /**
  *
@@ -27,6 +30,7 @@ operations.updateObject(collections.LOCATION_MAPPING, exampleLocationMapping, nu
     else
         logging.Error(err);
 });
+
 operations.updateObject(collections.LOCATION_MAPPING, exampleLocationMapping2, null, function (err, result) {
     if (!err) {
         logging.Info("Mapping Location-Exposition-Minigames2 erstellt: " + result.value);

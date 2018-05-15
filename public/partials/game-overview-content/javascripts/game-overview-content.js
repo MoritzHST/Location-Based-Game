@@ -15,7 +15,7 @@ function initGameOverviewContent() {
         "2og": []
     };
 
-    ajaxRequest('find/locations', 'GET', "", setLocations);
+    ajaxRequest('find/missions', 'GET', "", setLocations);
 
     $("#outdoor, #eg, #1og, #2og").on("click", updateTables);
 }
@@ -26,11 +26,11 @@ function initGameOverviewContent() {
  */
 function setLocations(pObj) {
     for (let i in pObj) {
-        if (!pObj[i].roomnumber) {
+        if (!pObj[i].location.roomnumber) {
             user.locations["outdoor"].push(pObj[i]);
             continue;
         }
-        if (pObj[i].roomnumber.startsWith("1")) {
+        if (pObj[i].location.roomnumber.startsWith("1")) {
             user.locations["eg"].push(pObj[i]);
         }
         if (pObj[i].roomnumber.startsWith("2")) {

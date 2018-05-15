@@ -8,7 +8,10 @@ function initExpositionInfo(obj) {
         $("#exposition-info-switch").tabs();
     });
 
-    if (obj.context === GameState.CODE_SCANNED) {
+    //Infos aus dem Objekt anzeigen
+    initViewContent(obj);
+
+    if (obj.context === GameState.CODE_SCANNED /**TODO Visiitstate verodern*/) {
         initContextCodeScanned(obj);
     }
     else {
@@ -17,6 +20,30 @@ function initExpositionInfo(obj) {
 
 }
 
+//Initialisiert HTML-Elemente
+function initViewContent(obj) {
+    //Namen setzen
+    if (obj.exposition.name) {
+        $("#exposition-name").html(obj.exposition.name);
+    }
+    else {
+        $("#exposition-name").hide();
+    }
+    //Bilder setzen
+    if (obj.exposition.imagePaths) {
+        //TODO: Images einbinden in Slider
+    }
+    else {
+        $("#exposition-images").hide();
+    }
+    //Beschreibung setzen
+    if (obj.exposition.description) {
+        $("#exposition-description").html(obj.exposition.description);
+    }
+    else {
+        $("#exposition-description").hide();
+    }
+}
 //Initialisierungsfunktion falls ein Code gescanned wurde
 function initContextCodeScanned(obj) {
     //Code gescanned -> Button kann also ausgeblendet werden

@@ -14,17 +14,33 @@ function init() {
     setSlideInMenu();
 
     setHooks();
-    //Nav-Menü "Spielübersicht"
-    $("#game-play-overview").on("click", function () {
+    // Nav-Menü "Spielübersicht"
+    $("#game-play-overview").on("click", function() {
         setNodeHookFromFile($("#content-hook"), "../partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent");
     });
-    //Nav-Menü "Logout"
-    $("#game-logout").on("click", function () {
+    // Nav-Menü "Logout"
+    $("#game-logout").on("click", function() {
         setNodeHookFromFile($("#warning-hook"), "../partials/play-warning-box/play-warning-box.html", setLogoutHint);
     });
-    //Nav-Menü "Raumplan"
+    // Nav-Menü "Raumplan"
     $("#game-room-map").on("click", function() {
         setNodeHookFromFile($("#content-hook"), "../partials/room-map/room-map.html", undefined, undefined, "initRoomMap");
+    });
+    //Nav-Menü "Datenschutz"
+    $("#game-privacy").on("click", function () {
+        setNodeHookFromFile($("#content-hook"), "../partials/privacy/privacy.html");
+    });
+    //Nav-Menü "Impressum"
+    $("#game-impressum").on("click", function () {
+        setNodeHookFromFile($("#content-hook"), "../partials/impressum/impressum.html");
+    });
+    //Nav-Menü "Haftungsausschluss"
+    $("#game-warranty").on("click", function () {
+        setNodeHookFromFile($("#content-hook"), "../partials/warranty/warranty.html");
+    });
+    //Nav-Menü "Drittanbieter-Sofware"
+    $("#game-thirdparty").on("click", function () {
+        setNodeHookFromFile($("#content-hook"), "../partials/third-party/third-party.html");
     });
 }
 
@@ -46,14 +62,14 @@ function setSlideInMenu() {
         } ]
     });
 
-    $('#play-user-information').html("Name: " + user.name + "<br/> Token: " + user.token);
+    $('#play-user-information').html("Spielername: " + user.name + "<br/> PIN: " + user.token);
 }
 
 /**
  * Füllt Hooks der HTML Datei
  */
 function setHooks() {
-    setNodeHookFromFile($("#header-hook"), "../partials/header/header.html");
+    setNodeHookFromFile($("#header-hook"), "../partials/header/header.html", undefined, undefined, "initHeader");
     setNodeHookFromFile($("#footer-hook"), "../partials/footer/footer.html");
     setNodeHookFromFile($("#content-hook"), "../partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent");
     setNodeHookFromFile($("#warning-hook"), "../partials/play-warning-box/play-warning-box.html", hideWarning);
@@ -62,6 +78,7 @@ function setHooks() {
 function getObjectFromCookie(pCookieName) {
     let cookieStrings = document.cookie.split(";");
     for ( let i in cookieStrings) {
+        cookieStrings[i] = cookieStrings[i].trim();
         if (cookieStrings[i].startsWith(pCookieName)) {
             let cookieValue = cookieStrings[i].substr(pCookieName.length + 1);
             if (cookieValue.length > 0)
@@ -71,7 +88,7 @@ function getObjectFromCookie(pCookieName) {
 }
 
 function hideWarning() {
-    $("#warning-box-message").html("Name: " + user.name + "<br/> Token: " + user.token);
+    $("#warning-box-message").html("Spielername: " + user.name + "<br/> PIN: " + user.token);
 
     if (!loginHintTimer) {
         loginHintTimer = setTimeout(function () {
@@ -85,7 +102,7 @@ function setLogoutHint() {
     //Main-Box ausblenden
     clearNodeHook("content-hook");
     //Warnung einblenden mit Usernamen und Token
-    $("#warning-box-message").html("Name: " + user.name + "<br/> Token: " + user.token);
+    $("#warning-box-message").html("Spielername: " + user.name + "<br/> PIN: " + user.token);
     //Wenn ein Loginhiweis angezeigt wird, TImer für diesen stoppen
     if (loginHintTimer) {
         clearInterval(loginHintTimer);

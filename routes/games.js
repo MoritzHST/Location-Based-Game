@@ -7,7 +7,7 @@ const gamesCollection = require('../mongodb/collections').GAMES;
 /* Global */
 
 /* GET */
-/* Find games(s) */
+/* Gibt ein oder mehrere Minigames zurück */
 router.get('/find/games', function (req, res) {
     operations.findObject(gamesCollection, (handler.checkIfValidQuery(req.query) ? req.query : null), function (err, item) {
         handler.dbResult(err, res, item, "Das Item " + JSON.stringify(req.query).replace(/\"/g, '') + " existiert nicht.");
@@ -15,7 +15,7 @@ router.get('/find/games', function (req, res) {
 });
 
 /* POST */
-/* Insert games */
+/* Fügt ein Minigame der Datenbank hinzu */
 router.post('/insert/games', function (req, res) {
     req.query["answers"] = req.body;
     if (handler.checkIfValidQuery(req.query)) {
@@ -29,7 +29,7 @@ router.post('/insert/games', function (req, res) {
     }
 });
 
-/* Update games */
+/* Aktualisiert ein Minigame mit einer bestimmten id */
 router.post('/update/games/:id', function (req, res) {
     if (req.body !== null && req.body !== undefined) {
         req.query["answers"] = req.body;
@@ -47,7 +47,7 @@ router.post('/update/games/:id', function (req, res) {
     }
 });
 
-/* Delete games(s) */
+/* Löscht ein Minigame aus der Datenbank */
 router.post('/delete/games', function (req, res) {
     if (handler.checkIfValidQuery(req.query)) {
         operations.deleteObjects(gamesCollection, req.query, function (err, item) {

@@ -6,7 +6,7 @@ const gameCollection = require('../mongodb/collections').GAMES;
 /* Global */
 
 /* Post */
-/* Post Answer for an Game */
+/* Verarbeitet eine vom Benutzer gegebene Antwort*/
 router.post('/post/answer', function (req, res) {
     let gameId = req.query.gameId === undefined ? req.body.gameId : req.query.gameId;
     let answer = req.query.answer === undefined ? req.body.answer : req.query.answer;

@@ -1,15 +1,15 @@
 const Filter = require('bad-words');
 const wordList = require('./badwords.json');
 const regex = new RegExp("^([a-zA-Z]{3,20})$");
-const filter = new badwordFilter();
+const filter = new BadwordFilter();
 
-function badwordFilter() {
+function BadwordFilter() {
     this.filter = new Filter();
 
     /**
-     * only letters are allowed for usernames
-     * the maximum length is 20 Characters
-     * the minimim length is 3 Characters
+     * ein Nutzername darf nur aus Buchstaben bestehen
+     * maximale Anzahl an Zeichen: 20
+     * minimale Anzahl an Zeichen: 3
      */
     this.isKind = function (pUsername) {
         return pUsername !== undefined && pUsername !== null && !this.filter.isProfane(pUsername);
@@ -20,8 +20,8 @@ function badwordFilter() {
     };
 
     /**
-     * Adds more badwords to the list. These badwords are read from badwords.json file
-     * Badword list by http://www.hyperhero.com/de/insults.htm (10.04.2018)
+     * Fügt der Liste weitere Wörter hinzu. Diese Wörter entstammen der Datei badwords.json
+     * Die Liste wurde aus http://www.hyperhero.com/de/insults.htm (10.04.2018) entnommen
      */
     this.filter.addWords(wordList["words"]);
 }

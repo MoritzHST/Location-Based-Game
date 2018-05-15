@@ -187,7 +187,7 @@ module.exports = {
                     });    			
     		}
     	})
-    }
+    },
     
     /*
     joinCollection: function (pCollection, pJoin, pCallback) {
@@ -226,4 +226,11 @@ module.exports = {
             }
         });
         */
+    isReady: function (pCallback) {
+        const database = mongo.Object();
+
+        database.Client.connect(database.Url, function (error) {
+            pCallback(error);
+        });
+    }
 };

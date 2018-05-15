@@ -28,18 +28,21 @@ function initGameOverviewContent() {
  */
 function setLocations(pObj) {
     for (let i in pObj) {
-        if (!pObj[i].location.roomnumber) {
-            user.locations["outdoor"].push(pObj[i]);
-            continue;
-        }
-        if (pObj[i].location.roomnumber.startsWith("1")) {
-            user.locations["eg"].push(pObj[i]);
-        }
-        if (pObj[i].roomnumber.startsWith("2")) {
-            user.locations["1og"].push(pObj[i]);
-        }
-        if (pObj[i].roomnumber.startsWith("3")) {
-            user.locations["2og"].push(pObj[i]);
+        if (pObj.hasOwnProperty(i)) {
+            let location = pObj[i].location;
+            if (!location.roomnumber) {
+                user.locations["outdoor"].push(pObj[i]);
+                continue;
+            }
+            if (location.roomnumber.startsWith("1")) {
+                user.locations["eg"].push(pObj[i]);
+            }
+            if (location.roomnumber.startsWith("2")) {
+                user.locations["1og"].push(pObj[i]);
+            }
+            if (location.roomnumber.startsWith("3")) {
+                user.locations["2og"].push(pObj[i]);
+            }
         }
     }
 
@@ -91,7 +94,7 @@ function setLayer(pLayer) {
  */
 function setTableContent(dataObj) {
     let mediaObj = $("#" + dataObj._id + "-hook");
-    mediaObj.find(".title").html(dataObj.name);
-    mediaObj.find("img").attr("src", dataObj.image);
-    mediaObj.find(".description").html(dataObj.description);
+    mediaObj.find(".title").html(dataObj.exposition.name);
+    mediaObj.find("img").attr("src", dataObj.exposition.image);
+    mediaObj.find(".description").html(dataObj.exposition.description);
 }

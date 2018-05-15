@@ -1,7 +1,14 @@
 var scanner;
 var cameraList;
+var scannerContext;
 
-function initScanner() {
+/**
+ * initialisiert den QR-Scanner
+ * @param pContext "beschreibt die View, aus der der QR-Scanner geöffnet wurde
+ */
+function initScanner(pContextObj) {
+    scannerContext = pContextObj;
+
     scanner = new Instascan.Scanner(
         {video: document.getElementById('preview'), mirror: false}
     );
@@ -43,7 +50,14 @@ function onCodeScanned(content) {
                 clearNodeHook("failure-hook");
             }, notificationFadeOut);
         }, obj);
-        setNodeHookFromFile($("#content-hook"), "partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent")
+        //Von welcher View aufgerufen? Dahin zurückleiten!
+        if (scannerContext.context === GameState.SCAN_ATTEMPT_FROM_PLAY_OVERVIEW) {
+            setNodeHookFromFile($("#content-hook"), "partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent")
+        }
+        else {
+            scannerContext.context = GameState.CODE_PENDING;
+            setNodeHookFromFile($("#content-hook"), "partials/exposition-info/exposition-info.html", undefined, undefined, "initExpositionInfo", scannerContext);
+        }
     });
 }
 

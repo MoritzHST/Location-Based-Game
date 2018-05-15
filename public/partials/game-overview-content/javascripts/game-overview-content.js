@@ -5,7 +5,9 @@ function initGameOverviewContent() {
     //On-Click event für QR-Code Button
     $("#btn-scan-qr").on("click", function () {
         setNodeHookFromFile($("#content-hook"), "../partials/qr-scanner/qr-scanner.html", function () {
-            $("#content-hook").ready(initScanner);
+            $("#content-hook").ready(function () {
+                initScanner({context: GameState.SCAN_ATTEMPT_FROM_PLAY_OVERVIEW});
+            });
         });
     });
     user.locations = {

@@ -20,7 +20,7 @@ const upload = multer(
 /* Global */
 
 /* GET */
-/* Find Location(s) */
+/* Gibt ein oder alle Location(s) zurück */
 router.get('/find/locations', function (req, res) {
     operations.findObject(locationCollection, (handler.checkIfValidQuery(req.query) ? req.query : null), function (err, item) {
         handler.dbResult(err, res, item, "Das Item " + JSON.stringify(req.query).replace(/\"/g, '') + " existiert nicht.");
@@ -28,7 +28,7 @@ router.get('/find/locations', function (req, res) {
 });
 
 /* POST */
-/* Insert Location */
+/* Fügt eine Location der Datenbank hinzu */
 router.post('/insert/locations', upload.single('image'), function (req, res) {
 
     //hinterlege Pfad zum File, wenn File hochgeladen wurde
@@ -48,7 +48,7 @@ router.post('/insert/locations', upload.single('image'), function (req, res) {
     }
 });
 
-/* Update Location */
+/* Aktualisiert eine Location mit einer bestimmten id */
 router.post('/update/locations/:id', upload.single('image'), function (req, res) {
     //lösche File wenn ein neues hochgeladen wird
     const file = req.file;
@@ -62,7 +62,7 @@ router.post('/update/locations/:id', upload.single('image'), function (req, res)
     }
 });
 
-/* Delete Location(s) */
+/* Löscht Location(s) */
 router.post('/delete/locations', function (req, res) {
     fileHelper.deleteFile(locationCollection, req.query._id, function () {
         if (handler.checkIfValidQuery(req.query)) {

@@ -17,8 +17,8 @@ router.get('/find/missions', function (req, res) {
     operations.findObject(locationMappingCollection,
         {}, function (err, item) {
             operations.findObject(userCollection,
-                req.session.user, function (err, user) {
-                    if (item == null) {
+                req.session.user, function (userErr, user) {
+                    if (!item) {
                         res.status(422).jsonp({
                             "error": errorMessage
                         });
@@ -29,6 +29,7 @@ router.get('/find/missions', function (req, res) {
                             });
                         } else {
                             item.games = undefined;
+                            item = [item];
                         }
                         handler.dbResult(err, res, item, errorMessage);
                     }

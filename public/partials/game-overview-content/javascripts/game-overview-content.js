@@ -33,10 +33,10 @@ function setLocations(pObj) {
         if (pObj[i].location.roomnumber.startsWith("1")) {
             user.locations["eg"].push(pObj[i]);
         }
-        if (pObj[i].roomnumber.startsWith("2")) {
+        if (pObj[i].location.roomnumber.startsWith("2")) {
             user.locations["1og"].push(pObj[i]);
         }
-        if (pObj[i].roomnumber.startsWith("3")) {
+        if (pObj[i].location.roomnumber.startsWith("3")) {
             user.locations["2og"].push(pObj[i]);
         }
     }
@@ -88,6 +88,7 @@ function setLayer(pLayer) {
  * @param dataObj
  */
 function setTableContent(dataObj) {
+    console.log(dataObj);
     let mediaObj = $("#" + dataObj._id + "-hook");
     mediaObj.find(".title").html(dataObj.name);
     mediaObj.find("img").attr("src", dataObj.image);

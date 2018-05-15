@@ -3,9 +3,15 @@ const operations = require('../mongodb/operations');
 const logging = require('../mongodb/logging');
 const collections = require('../mongodb/collections');
 
-var exampleExposition = new objects.Exposition("Multimedia-Labor", "Hier werden Multimedia-Projekte durchgeführt...", undefined);
 
-module.exports = exampleExposition;
+var exampleExposition = new objects.Exposition("Multimedia-Labor", "Hier werden Multimedia-Projekte durchgeführt...", undefined);
+var exampleExposition1 = new objects.Exposition("Labor-Nr2", "Hier könnte ein Text stehen...", undefined);
+
+
+module.exports = {
+    exampleExposition: exampleExposition,
+    exampleExposition1: exampleExposition1
+};
 
 /**
  *

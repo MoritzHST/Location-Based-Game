@@ -11,7 +11,9 @@ const exampleQuiz = require('./quiz');
 
 var exampleLocationMapping = new objects.LocationMapping(exampleLocation, exampleExposition, exampleQuiz);
 
+
 module.exports = exampleLocationMapping;
+
 /**
  *
  * @param err

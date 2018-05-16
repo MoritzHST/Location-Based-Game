@@ -19,7 +19,6 @@ router.get('/find/minigames', function(req, res) {
 /* POST */
 /* Insert minigames */
 router.post('/insert/minigames', function(req, res) {
-    // req.query["answers"] = req.body;
     req.query["answers"] = handler.getRealRequest(req.query["answers"], req.body);
 
     if (handler.checkIfValidQuery(req.query)) {
@@ -36,7 +35,6 @@ router.post('/insert/minigames', function(req, res) {
 /* Update minigames */
 router.post('/update/minigames/:id', function(req, res) {
     req.query["answers"] = handler.getRealRequest(req.query["answers"], req.body);
-    // req.query["answers"] = req.body;
 
     if (handler.checkIfValidQuery(req.query)) {
         operations.updateObject(minigamesCollection, handler.idFriendlyQuery({

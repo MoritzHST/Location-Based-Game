@@ -26,20 +26,20 @@ function init() {
     $("#game-room-map").on("click", function() {
         setNodeHookFromFile($("#content-hook"), "../partials/room-map/room-map.html", undefined, undefined, "initRoomMap");
     });
-    //Nav-Menü "Datenschutz"
-    $("#game-privacy").on("click", function () {
+    // Nav-Menü "Datenschutz"
+    $("#game-privacy").on("click", function() {
         setNodeHookFromFile($("#content-hook"), "../partials/privacy/privacy.html");
     });
-    //Nav-Menü "Impressum"
-    $("#game-impressum").on("click", function () {
+    // Nav-Menü "Impressum"
+    $("#game-impressum").on("click", function() {
         setNodeHookFromFile($("#content-hook"), "../partials/impressum/impressum.html");
     });
-    //Nav-Menü "Haftungsausschluss"
-    $("#game-warranty").on("click", function () {
+    // Nav-Menü "Haftungsausschluss"
+    $("#game-warranty").on("click", function() {
         setNodeHookFromFile($("#content-hook"), "../partials/warranty/warranty.html");
     });
-    //Nav-Menü "Drittanbieter-Sofware"
-    $("#game-thirdparty").on("click", function () {
+    // Nav-Menü "Drittanbieter-Sofware"
+    $("#game-thirdparty").on("click", function() {
         setNodeHookFromFile($("#content-hook"), "../partials/third-party/third-party.html");
     });
 }
@@ -91,7 +91,7 @@ function hideWarning() {
     $("#warning-box-message").html("Spielername: " + user.name + "<br/> PIN: " + user.token);
 
     if (!loginHintTimer) {
-        loginHintTimer = setTimeout(function () {
+        loginHintTimer = setTimeout(function() {
             $("#warning-hook").html("");
         }, notificationFadeOut);
     }
@@ -99,41 +99,41 @@ function hideWarning() {
 
 function setLogoutHint() {
     let timeleft = notificationFadeOut / 1000;
-    //Main-Box ausblenden
+    // Main-Box ausblenden
     clearNodeHook("content-hook");
-    //Warnung einblenden mit Usernamen und Token
+    // Warnung einblenden mit Usernamen und Token
     $("#warning-box-message").html("Spielername: " + user.name + "<br/> PIN: " + user.token);
-    //Wenn ein Loginhiweis angezeigt wird, TImer für diesen stoppen
+    // Wenn ein Loginhiweis angezeigt wird, TImer für diesen stoppen
     if (loginHintTimer) {
         clearInterval(loginHintTimer);
     }
-    //Hinweis-Box überschreiben
+    // Hinweis-Box überschreiben
     if (!logoutHintTimer) {
-        //Timer initialisieren
+        // Timer initialisieren
         $("#warning-box-hint").html("Logout in " + timeleft);
-        //Countdown beginnen
-        logoutHintTimer = setInterval(function () {
-            //Runterzählen
+        // Countdown beginnen
+        logoutHintTimer = setInterval(function() {
+            // Runterzählen
             $("#warning-box-hint").html(("Logout in " + --timeleft));
-            //Timer soll gestoppt werden wenn die Warning Box leer ist
+            // Timer soll gestoppt werden wenn die Warning Box leer ist
             if (!$("#warning-box-message")) {
                 clearInterval(this);
                 logoutHintTimer = undefined;
             }
-            //Wenn die Zeit null ist, den Timer stoppen und Ausloggen
+            // Wenn die Zeit null ist, den Timer stoppen und Ausloggen
             if (timeleft <= 0) {
                 clearInterval(this);
                 logoutHintTimer = undefined;
-                $.get("sign-out").done(function () {
-                    clearLocalCookies();
+                $.get("sign-out").done(function() {
+                    clearLocalCookies("session");
                     window.location = "sign-up";
                 });
             }
         }, 1000);
     }
 
-    //Bei Menüinteraktion soll der Timeout gestoppt werden
-    $("#play-side-menu li a").on("click", function () {
+    // Bei Menüinteraktion soll der Timeout gestoppt werden
+    $("#play-side-menu li a").on("click", function() {
         clearInterval(logoutHintTimer);
         logoutHintTimer = undefined;
         clearNodeHook("warning-hook");

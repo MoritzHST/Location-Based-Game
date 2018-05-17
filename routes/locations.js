@@ -4,19 +4,6 @@ const router = require('express').Router();
 
 const locationCollection = require('../mongodb/collections').LOCATIONS;
 
-const fileHelper = require('../mongodb/fileHelper');
-const multer = require('multer');
-const upload = multer(
-    {
-        dest: '../public/uploads/images/exposition',
-        fileFilter: function (req, file, cb) {
-            if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-                return cb(null, false);
-            }
-            cb(null, true);
-        }
-    });
-
 /* Global */
 
 /* GET */
@@ -29,17 +16,20 @@ router.get('/find/locations', function (req, res) {
 
 /* POST */
 /* Fügt eine Location der Datenbank hinzu */
-router.post('/insert/locations', upload.single('image'), function (req, res) {
+router.post('/insert/locations', function (req, res) {
+    updateLocation(req, res);
+});
 
-    //hinterlege Pfad zum File, wenn File hochgeladen wurde
-    const file = req.file;
-    if (file !== undefined && file !== null) {
-        req.query["image"] = file.path.replace("..\\public\\", "");
-    }
+/* Aktualisiert eine Location mit einer bestimmten id */
+router.post('/update/locations/:id', function (req, res) {
+    updateLocation(req, res);
+});
 
+/* Löscht Location(s) */
+router.post('/delete/locations', function (req, res) {
     if (handler.checkIfValidQuery(req.query)) {
-        operations.updateObject(locationCollection, req.query, null, function (err, item) {
-            handler.dbResult(err, res, item, "Das Item " + JSON.stringify(req.query).replace(/\"/g, '') + " kann nicht hinzugefüt werden.");
+        operations.deleteObjects(locationCollection, req.query, function (err, item) {
+            handler.dbResult(err, res, item, "Die Items mit den Eigenschaften " + JSON.stringify(req.query).replace(/\"/g, '') + " konnten nicht gelöscht werden.");
         });
     } else {
         res.status(422).jsonp({
@@ -48,36 +38,7 @@ router.post('/insert/locations', upload.single('image'), function (req, res) {
     }
 });
 
-/* Aktualisiert eine Location mit einer bestimmten id */
-router.post('/update/locations/:id', upload.single('image'), function (req, res) {
-    //lösche File wenn ein neues hochgeladen wird
-    const file = req.file;
-    if (file !== undefined && file !== null) {
-        fileHelper.deleteFile(locationCollection, req.params.id, function () {
-            req.query["image"] = file.path.replace("..\\public\\", "");
-            updateRoom(req, res);
-        });
-    } else {
-        updateRoom(req, res);
-    }
-});
-
-/* Löscht Location(s) */
-router.post('/delete/locations', function (req, res) {
-    fileHelper.deleteFile(locationCollection, req.query._id, function () {
-        if (handler.checkIfValidQuery(req.query)) {
-            operations.deleteObjects(locationCollection, req.query, function (err, item) {
-                handler.dbResult(err, res, item, "Die Items mit den Eigenschaften " + JSON.stringify(req.query).replace(/\"/g, '') + " konnten nicht gelöscht werden.");
-            });
-        } else {
-            res.status(422).jsonp({
-                "error": "Die übergebenen Parameter sind ungültig"
-            });
-        }
-    });
-});
-
-function updateRoom(req, res) {
+function updateLocation(req, res) {
     if (handler.checkIfValidQuery(req.query)) {
         operations.updateObject(locationCollection, handler.idFriendlyQuery({
             _id: req.params.id

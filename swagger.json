@@ -417,6 +417,132 @@
         }
       }
     },
+    "/find/expositions": {
+      "parameters": [
+        {
+          "name": "_id",
+          "in": "query",
+          "required": false,
+          "description": "ID der Ausstellung"
+        },
+        {
+          "name": "name",
+          "in": "query",
+          "required": false,
+          "description": "Name der Ausstellung"
+        },
+        {
+          "name": "description",
+          "in": "query",
+          "required": false,
+          "description": "Beschreibung der Ausstellung"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Expositions"
+        ],
+        "summary": "Get Exposition",
+        "responses": {
+          "200": {
+            "description": "Exposition wurde gefunden",
+            "schema": {
+              "$ref": "#/definitions/Exposition"
+            }
+          }
+        }
+      }
+    },
+    "/insert/expositions": {
+      "parameters": [
+        {
+          "name": "name",
+          "in": "query",
+          "required": false,
+          "description": "Name der Ausstellung"
+        },
+        {
+          "name": "description",
+          "in": "query",
+          "required": false,
+          "description": "Beschreibung der Ausstellung"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Expositions"
+        ],
+        "summary": "Insert Game",
+        "responses": {
+          "200": {
+            "description": "Ausstellung wurde hinzugefügt",
+            "schema": {
+              "$ref": "#/definitions/Exposition"
+            }
+          }
+        }
+      }
+    },
+    "/update/expositions/{_id}": {
+      "parameters": [
+        {
+          "name": "_id",
+          "in": "query",
+          "required": true,
+          "description": "ID der Ausstellung"
+        },
+        {
+          "name": "name",
+          "in": "query",
+          "required": false,
+          "description": "Name der Ausstellung"
+        },
+        {
+          "name": "description",
+          "in": "query",
+          "required": false,
+          "description": "Beschreibung der Ausstellung"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Expositions"
+        ],
+        "summary": "Update Games",
+        "responses": {
+          "200": {
+            "description": "Ausstellungsinformationen wurden aktualisiert",
+            "schema": {
+              "$ref": "#/definitions/Expositions"
+            }
+          }
+        }
+      }
+    },
+    "/delete/expositions": {
+      "parameters": [
+        {
+          "name": "_id",
+          "in": "query",
+          "required": true,
+          "description": "ID des Spieles"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Expositions"
+        ],
+        "summary": "Delete Game",
+        "responses": {
+          "200": {
+            "description": "Expositions wurde gelöscht",
+            "schema": {
+              "$ref": "#/definitions/Expositions"
+            }
+          }
+        }
+      }
+    },
     "/find/scan": {
       "parameters": [
         {
@@ -436,6 +562,23 @@
             "description": "Scan war erfolgreich",
             "schema": {
               "$ref": "#/definitions/Scan"
+            }
+          }
+        }
+      }
+    },
+    "/find/missions": {
+      "parameters": [],
+      "get": {
+        "tags": [
+          "Missions"
+        ],
+        "summary": "Get Missions",
+        "responses": {
+          "200": {
+            "description": "Missionen gefunden",
+            "schema": {
+              "$ref": "#/definitions/Mission"
             }
           }
         }
@@ -485,6 +628,12 @@
         },
         "token": {
           "type": "integer"
+        },
+        "visits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Visit"
+          }
         }
       }
     },
@@ -538,6 +687,46 @@
         }
       }
     },
+    "Exposition": {
+      "required": [],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "thumbnailPath": {
+          "type": "string"
+        },
+        "imagePaths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Visit": {
+      "required": [],
+      "properties": {
+        "location": {
+          "$ref": "#/definitions/Location"
+        },
+        "games": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Game"
+          }
+        },
+        "isSuccessful": {
+          "type": "boolean"
+        },
+        "roomstate": {
+          "type": "int"
+        }
+      }
+    },
     "Scan": {
       "required": [],
       "properties": {
@@ -549,6 +738,17 @@
           "items": {
             "$ref": "#/definitions/Game"
           }
+        }
+      }
+    },
+    "Mission": {
+      "required": [],
+      "properties": {
+        "location": {
+          "$ref": "#/definitions/Location"
+        },
+        "exposition": {
+          "$ref": "#/definitions/Exposition"
         }
       }
     }

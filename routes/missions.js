@@ -23,13 +23,19 @@ router.get('/find/missions', function (req, res) {
                             "error": errorMessage
                         });
                     } else {
-                        if (Array.isArray(item)) {
+                        if (!Array.isArray(item)) {
+                            item = new Array(item);
+                        }
+
+                        //Die einzelnen Labore flaggen
+                        console.log(user);
+                        for (let i in user.visits) {
                             item.forEach(function (mission) {
                                 mission.games = undefined;
+                                if (user.visits.hasOwnProperty(i) && user.visits[i].location._id === mission.location._id) {
+                                    mission.state = user.visits[i].state;
+                                }
                             });
-                        } else {
-                            item.games = undefined;
-                            item = [item];
                         }
                         handler.dbResult(err, res, item, errorMessage);
                     }

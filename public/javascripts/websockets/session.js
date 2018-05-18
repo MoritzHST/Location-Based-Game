@@ -16,7 +16,7 @@ $(document).ready(function() {
     ws.onmessage = function(evt) {
         if (evt.data === sessioncookie.user._id) {
             $.get("sign-out").done(function() {
-                clearLocalCookies();
+                clearLocalCookies("session");
                 window.location = "sign-up?reason=login";
             });
         }
@@ -25,7 +25,7 @@ $(document).ready(function() {
 
     ws.onerror = function() {
         $.get("sign-out").always(function() {
-            clearLocalCookies();
+            clearLocalCookies("session");
             window.location = "sign-up?reason=error";
         });
     };

@@ -32,8 +32,7 @@ $(document).ready(function() {
 });
 
 function init() {
-    if (document.cookie) {
-        clearLocalCookies();
+    if (document.cookie && clearLocalCookies("session")) {
         window.location = "sign-up";
     }
     setHooks();
@@ -116,7 +115,7 @@ function displayFailureMessage(callbackObj) {
  * @param failureObj
  */
 function renderFailureMessage(failureObj) {
-    setNodeHookFromFile($("#failure-box-hook"), "../partials/failure-box/failure-box.html", function (pObj) {
+    setNodeHookFromFile($("#failure-box-hook"), "../partials/failure-box/failure-box.html", function(pObj) {
         document.getElementById("failure-box-error-message").innerHTML = pObj.responseJSON.error;
     }, failureObj);
 }

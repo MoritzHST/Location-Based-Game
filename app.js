@@ -6,10 +6,28 @@ var bodyParser = require('body-parser');
 var logger = require('morgan');
 var randomstring = require("randomstring");
 var cookieSession = require('cookie-session');
+var auth = require("http-auth");
 
 var app = express();
 var swaggerUi = require('swagger-ui-express');
 var swaggerDocument = require('./swagger.json');
+
+/**
+ * Fügt eine Passwortabfrage beim Serveraufruf hinzu
+ * http://www.dotnetcurry.com/nodejs/1237/digest-authentication-nodejs-application
+ * https://www.sitepoint.com/http-authentication-in-node-js/
+ * https://github.com/http-auth/http-auth
+ */
+
+if (process.env.env === "development") {
+    var digest = auth.digest({
+        realm: "Test Area",
+        file: "../.htpasswd",
+        msg401: "Du bist nicht berechtigt diese Seite aufzurufen."
+    });
+
+    app.use(auth.connect(digest));
+}
 
 /**
  * Konfiguriert Views (Path) zur Benutzung
@@ -21,9 +39,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 /**
- * Definiert Benutzer Session-Cookie. Standard Max-Alter ist 24h
- * 24 * 60 * 60 * 1000,
- * maxAge: new Date().setHours(24,0,0,0) - new Date(),
+ * Definiert Benutzer Session-Cookie.
  */
 app.use(cookieSession({
     name: 'session',

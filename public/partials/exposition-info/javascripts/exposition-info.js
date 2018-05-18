@@ -11,7 +11,7 @@ function initExpositionInfo(obj) {
     //Infos aus dem Objekt anzeigen
     initViewContent(obj);
 
-    if (obj.context === GameState.CODE_SCANNED /**TODO Visiitstate verodern*/) {
+    if (obj.context === GameViewContext.CODE_SCANNED /**TODO Visiitstate verodern*/) {
         initContextCodeScanned(obj);
     }
     else {
@@ -66,8 +66,8 @@ function initContextCodeScanned(obj) {
     $("#exposition-submit-game-answer").on("click", function () {
         if (answerObj) {
             $.post("post/answer", answerObj)
-                .done(function (obj) {
-                    setNodeHookFromFile($("#success-hook"), "partials/play-success-box/play-success-box.html", function (errMsgObj) {
+                .done(function () {
+                    setNodeHookFromFile($("#success-hook"), "partials/play-success-box/play-success-box.html", function () {
                         $("#success-box-title").html("Die Antwort war richtig!");
                         //Nach Konstanter Sekunden-Anzahl wieder ausblenden
                         clearInterval(errorTimer);
@@ -104,7 +104,7 @@ function initContextCodePending(obj) {
     $("#exposition-scan-qr").on("click", function () {
         setNodeHookFromFile($("#content-hook"), "../partials/qr-scanner/qr-scanner.html", function () {
             $("#content-hook").ready(function () {
-                obj.context = GameState.SCAN_ATTEMPT_FROM_EXPOSITION_INFO;
+                obj.context = GameViewContext.SCAN_ATTEMPT_FROM_EXPOSITION_INFO;
                 initScanner(obj);
             });
         });

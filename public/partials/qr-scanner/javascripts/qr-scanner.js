@@ -4,7 +4,7 @@ var scannerContext;
 
 /**
  * initialisiert den QR-Scanner
- * @param pContext "beschreibt die View, aus der der QR-Scanner geöffnet wurde
+ * @param pContextObj "beschreibt die View, aus der der QR-Scanner geöffnet wurde
  */
 function initScanner(pContextObj) {
     scannerContext = pContextObj;
@@ -39,7 +39,7 @@ function onCodeScanned(content) {
 
     ajaxRequest("find/scan", "GET", {"identifier": content}, function (obj) {
         //Bei Erfolg
-        obj.context = GameState.CODE_SCANNED;
+        obj.context = GameViewContext.CODE_SCANNED;
         setNodeHookFromFile($("#content-hook"), "partials/exposition-info/exposition-info.html", undefined, undefined, "initExpositionInfo", obj);
     }, function (obj) {
         //Bei Misserfolg
@@ -51,11 +51,11 @@ function onCodeScanned(content) {
             }, notificationFadeOut);
         }, obj);
         //Von welcher View aufgerufen? Dahin zurückleiten!
-        if (scannerContext.context === GameState.SCAN_ATTEMPT_FROM_PLAY_OVERVIEW) {
+        if (scannerContext.context === GameViewContext.SCAN_ATTEMPT_FROM_PLAY_OVERVIEW) {
             setNodeHookFromFile($("#content-hook"), "partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent")
         }
         else {
-            scannerContext.context = GameState.CODE_PENDING;
+            scannerContext.context = GameViewContext.CODE_PENDING;
             setNodeHookFromFile($("#content-hook"), "partials/exposition-info/exposition-info.html", undefined, undefined, "initExpositionInfo", scannerContext);
         }
     });

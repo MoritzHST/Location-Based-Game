@@ -6,7 +6,7 @@ function initGameOverviewContent() {
     $("#btn-scan-qr").on("click", function () {
         setNodeHookFromFile($("#content-hook"), "../partials/qr-scanner/qr-scanner.html", function () {
             $("#content-hook").ready(function () {
-                initScanner({context: GameState.SCAN_ATTEMPT_FROM_PLAY_OVERVIEW});
+                initScanner({context: GameViewContext.SCAN_ATTEMPT_FROM_PLAY_OVERVIEW});
             });
         });
     });
@@ -27,6 +27,7 @@ function initGameOverviewContent() {
  * @param pObj
  */
 function setLocations(pObj) {
+    console.log(pObj);
     for (let i in pObj) {
         if (pObj.hasOwnProperty(i)) {
             let location = pObj[i].location;
@@ -94,11 +95,12 @@ function setLayer(pLayer) {
  */
 function setTableContent(dataObj) {
     let mediaObj = $("#" + dataObj._id + "-hook");
-    mediaObj.find(".title").html(dataObj.exposition.name);
+    mediaObj.find(".overview-table-cell-location-info-name").html(dataObj.exposition.name);
     mediaObj.find("img").attr("src", dataObj.exposition.image);
     mediaObj.find(".description").html(dataObj.exposition.description);
+    mediaObj.find(".overview-table-cell-location-state").addClass("overview-room-state-context-" + dataObj.state);
     mediaObj.on("click", function () {
-        dataObj.context = GameState.CODE_PENDING;
+        dataObj.context = GameViewContext.CODE_PENDING;
         setNodeHookFromFile($("#content-hook"), "partials/exposition-info/exposition-info.html", undefined, undefined, "initExpositionInfo", dataObj);
     });
 }

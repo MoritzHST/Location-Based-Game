@@ -25,11 +25,15 @@ var mongo = require(mongoPath + 'initialize');
 
 var examplePath = '../examples/';
 
+/*
 require(examplePath + 'user');
 require(examplePath + 'location');
 require(examplePath + 'quiz');
 require(examplePath + 'exposition');
 require(examplePath + 'locationMapping');
+*/
+
+require('../data/mongo_data');
 
 
 /**

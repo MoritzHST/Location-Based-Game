@@ -60,10 +60,10 @@ router.post('/update/locations/:id', upload.single('image'), function(req, res) 
     if (file !== undefined && file !== null) {
         fileHelper.deleteFile(locationCollection, req.params.id, function() {
             req.query["image"] = file.path.replace("..\\public\\", "");
-            updateRoom(req, res);
+            updateLocation(req, res);
         });
     } else {
-        updateRoom(req, res);
+        updateLocation(req, res);
     }
 });
 
@@ -84,7 +84,7 @@ router.post('/delete/locations', function(req, res) {
     });
 });
 
-function updateRoom(req, res) {
+function updateLocation(req, res) {
     req.query = handler.getRealRequest(req.query, req.body);
 
     if (handler.checkIfValidQuery(req.query)) {

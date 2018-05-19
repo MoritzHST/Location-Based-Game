@@ -1,6 +1,8 @@
 const operations = require('../mongodb/operations');
 const router = require('express').Router();
 const gameCollection = require('../mongodb/collections').GAMES;
+const handler = require('../mongodb/handler');
+
 /* Global */
 
 /* Post */

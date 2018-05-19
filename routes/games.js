@@ -11,7 +11,7 @@ const gamesCollection = require('../mongodb/collections').GAMES;
 router.get('/find/games', function(req, res) {
     req.query = handler.getRealRequest(req.query, req.body);
 
-    operations.findObject(minigamesCollection, (handler.checkIfValidQuery(req.query) ? req.query : null), function(err, item) {
+    operations.findObject(gamesCollection, (handler.checkIfValidQuery(req.query) ? req.query : null), function (err, item) {
         handler.dbResult(err, res, item, "Das Item " + JSON.stringify(req.query).replace(/\"/g, '') + " existiert nicht.");
     });
 });

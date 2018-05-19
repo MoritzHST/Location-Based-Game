@@ -65,6 +65,8 @@ function initContextCodeScanned(obj) {
     //Abschicken Button registrieren
     $("#exposition-submit-game-answer").on("click", function () {
         if (answerObj) {
+            //Location id setzen,  um Auswertung zu vereinfachen
+            answerObj.locationId = obj.location._id;
             $.post("post/answer", answerObj)
                 .done(function () {
                     setNodeHookFromFile($("#success-hook"), "partials/play-success-box/play-success-box.html", function () {

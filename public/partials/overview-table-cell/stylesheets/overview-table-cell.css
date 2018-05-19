@@ -7,6 +7,10 @@
     border-radius: 0 4px 4px 0;
 }
 
+.overview-table-cell-container:nth-last-of-type(1) {
+    margin-top: 15px;
+}
+
 .overview-table-cell-location-state {
 }
 

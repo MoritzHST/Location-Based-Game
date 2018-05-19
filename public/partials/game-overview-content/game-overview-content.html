@@ -18,14 +18,32 @@
 <h2>Missionsübersicht</h2>
 
 <!-- Checkboxen für Filter -->
+<!-- >
 <div class="checkbox-wrapper">
-    <label class="checkbox-inline"><input id="eg" type="checkbox" value="">EG</label>
-    <label class="checkbox-inline"><input id="1og" type="checkbox" value="">1OG</label>
-    <label class="checkbox-inline"><input id="2og" type="checkbox" value="">2OG</label>
-    <label class="checkbox-inline"><input id="outdoor" type="checkbox" value="">Draußen</label>
-</div>
+    <label class="checkbox-inline"><input id="eg" type="checkbox" value="1" checked>EG</label>
+    <label class="checkbox-inline"><input id="1og" type="checkbox" value="2" checked>1OG</label>
+    <label class="checkbox-inline"><input id="2og" type="checkbox" value="3" checked>2OG</label>
+    <label class="checkbox-inline"><input id="outdoor" type="checkbox" value="0" checked>Draußen</label>
+</div> -->
 <!-- Buttongroup für Laborübersicht -->
+
+
+
 <div class="button-group-wrapper row">
+    <div id="play_filter" class="btn-group btn-group-toggle" data-toggle="buttons" role="group" aria-label="Filter">
+        <label class="btn btn-secondary host-button-group-button active">
+            <input type="checkbox" name="options" autocomplete="off" checked
+                   class="btn btn-secondary host-button-group-button" value="1">EG</label>
+        <label class="btn btn-secondary host-button-group-button active">
+            <input type="checkbox" name="options" autocomplete="off" checked
+                   class="btn btn-secondary host-button-group-button" value="2">1OG</label>
+        <label class="btn btn-secondary host-button-group-button active">
+            <input type="checkbox" name="options" autocomplete="off" checked
+                   class="btn btn-secondary host-button-group-button" value="3">2OG</label>
+        <label class="btn btn-secondary host-button-group-button active">
+            <input type="checkbox" name="options" autocomplete="off" checked
+                   class="btn btn-secondary host-button-group-button active" value="0">Draußen</label>                   
+    </div>
     <div id="play_rooms" class="btn-group btn-group-toggle" data-toggle="buttons" role="group" aria-label="Filter">
         <label class="btn btn-secondary host-button-group-button active">
             <input type="radio" name="options" id="play_all_rooms" autocomplete="off" checked

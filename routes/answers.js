@@ -4,20 +4,18 @@ const router = require('express').Router();
 
 const userCollection = require('../mongodb/collections').USERS;
 const gameCollection = require('../mongodb/collections').GAMES;
+const handler = require('../mongodb/handler');
 
 /* Global */
 
 /* Post */
 /* Verarbeitet eine vom Benutzer gegebene Antwort*/
 router.post('/post/answer', function (req, res) {
-    let gameId = req.query.gameId === undefined ? req.body.gameId : req.query.gameId;
-    let answer = req.query.answer === undefined ? req.body.answer : req.query.answer;
-    let location = req.query.answer === undefined ? req.body.locationId : req.query.locationId;
-    operations.findObject(gameCollection, {_id: gameId}, function (err, item) {
+    req.query = handler.getRealRequest(req.query, req.body);operations.findObject(gameCollection, {_id: gameId}, function (err, item) {
         //Ungültge Game-ID escapen
         if (err || item === null) {
             res.status(422).jsonp({
-                "error": "Es wurde kein Spiel mit der ID gefunden!"
+                "error" : "Es wurde kein Spiel mit der ID gefunden!"
             });
             return;
         }
@@ -31,7 +29,7 @@ router.post('/post/answer', function (req, res) {
 
         //Es wurde keine richtige Antwort gefunden, also muss sie falsch sein
         res.status(400).jsonp({
-            "error": "Die Antwort ist falsch!"
+            "error" : "Die Antwort ist falsch!"
         });
     });
     //Antwort persistieren

@@ -27,6 +27,10 @@ module.exports = {
 
         return testQuery;
     },
+    getRealRequest : function(pQuery, pBody) {
+        var bodyParse = JSON.parse(JSON.stringify(pBody));
+        return Object.keys(bodyParse).length > 0 ? bodyParse : pQuery;
+    },
     checkIfValidQuery : function(pQuery) {
         return !pQuery.hasOwnProperty(undefined) && Object.keys(pQuery).length > 0;
     },

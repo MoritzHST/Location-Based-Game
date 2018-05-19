@@ -22,7 +22,7 @@ var swaggerDocument = require('./swagger.json');
 if (process.env.env === "development") {
     var digest = auth.digest({
         realm: "Test Area",
-        file: "../.htpasswd",
+        file: "../htpasswd",
         msg401: "Du bist nicht berechtigt diese Seite aufzurufen."
     });
 
@@ -92,14 +92,15 @@ app.use(function (req, res, next) {
 });
 
 /* Admin */
+if (process.env.env === "production") {
+    var admin = auth.digest({
+        realm: "Admin Area",
+        file: "../htpasswd",
+        msg401: "Du bist nicht berechtigt diese Seite aufzurufen."
+    });
 
-var admin = auth.digest({
-    realm: "Admin Area",
-    file: "../.htpasswd",
-    msg401: "Du bist nicht berechtigt diese Seite aufzurufen."
-});
-
-app.use(auth.connect(admin));
+    app.use(auth.connect(admin));
+}
 
 /**
  * Benutzt Routen für Swagger Tests (für Admin)

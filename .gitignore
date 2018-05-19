@@ -3,6 +3,7 @@
 mongod.conf
 node_modules
 public/uploads/*
+admin/logs/*
 
 # do not ignore these files
 !.gitlab-ci.yml

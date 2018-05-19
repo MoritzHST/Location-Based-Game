@@ -76,7 +76,6 @@ function addRandomGUID(pObject) {
     }
 
     pObject._id = getRandomId();
-    logging.Info("_id: " + pObject._id);
     return pObject;
 }
 
@@ -89,7 +88,7 @@ function insertIntoDatabase() {
                         object = addRandomGUID(object);
                         operations.updateObject(collection, object, null, function (err, result) {
                             if (!err)
-                                logging.Info(collections + " erstellt: " + result.value._id);
+                                logging.Info(collection + " erstellt: " + result.value._id);
                             else
                                 logging.Error(err);
                         });

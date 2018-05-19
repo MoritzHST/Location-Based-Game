@@ -7,4 +7,3 @@ admin/logs/*
 
 # do not ignore these files
 !.gitlab-ci.yml
-!.htpasswd

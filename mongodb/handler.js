@@ -1,4 +1,4 @@
-const logging = require('./logging');
+const logging = require('../helper/logging');
 const ObjectID = require('mongodb').ObjectID;
 const validator = require('../validation/user').filter;
 

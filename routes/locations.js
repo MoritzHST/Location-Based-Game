@@ -6,20 +6,21 @@ const locationCollection = require('../mongodb/collections').LOCATIONS;
 
 const fileHelper = require('../mongodb/fileHelper');
 const multer = require('multer');
-const upload = multer({
-    dest : '../public/uploads/images/room',
-    fileFilter : function(req, file, cb) {
-        if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-            return cb(null, false);
+const upload = multer(
+    {
+        dest: '../public/uploads/images/exposition',
+        fileFilter: function (req, file, cb) {
+            if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+                return cb(null, false);
+            }
+            cb(null, true);
         }
-        cb(null, true);
-    }
-});
+    });
 
 /* Global */
 
 /* GET */
-/* Find Location(s) */
+/* Gibt ein oder alle Location(s) zurück */
 router.get('/find/locations', function(req, res) {
     req.query = handler.getRealRequest(req.query, req.body);
 
@@ -29,7 +30,7 @@ router.get('/find/locations', function(req, res) {
 });
 
 /* POST */
-/* Insert Location */
+/* Fügt eine Location der Datenbank hinz */
 router.post('/insert/locations', upload.single('image'), function(req, res) {
     req.query = handler.getRealRequest(req.query, req.body);
 
@@ -50,7 +51,7 @@ router.post('/insert/locations', upload.single('image'), function(req, res) {
     }
 });
 
-/* Update Location */
+/* Aktualisiert eine Location mit einer bestimmten id*/
 router.post('/update/locations/:id', upload.single('image'), function(req, res) {
     req.query = handler.getRealRequest(req.query, req.body);
 
@@ -66,7 +67,7 @@ router.post('/update/locations/:id', upload.single('image'), function(req, res) 
     }
 });
 
-/* Delete Location(s) */
+/* Löscht Location(s) */
 router.post('/delete/locations', function(req, res) {
     req.query = handler.getRealRequest(req.query, req.body);
 

@@ -9,7 +9,6 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "host": "localhost:3000",
   "basePath": "/",
   "schemes": [
     "http"
@@ -433,10 +432,37 @@
         "summary": "Get ScanResult",
         "responses": {
           "200": {
-            "description": "Scan war erfolgreic",
+            "description": "Scan war erfolgreich",
             "schema": {
               "$ref": "#/definitions/Scan"
             }
+          }
+        }
+      }
+    },
+    "/post/answer": {
+      "parameters": [
+        {
+          "name": "gameId",
+          "in": "query",
+          "required": true,
+          "description": "ID des Spiels"
+        },
+        {
+          "name": "answer",
+          "in": "query",
+          "required": true,
+          "description": "Antwort zu dem Spiel"
+        }
+      ],
+      "post": {
+        "tags": [
+          "GameAnswer"
+        ],
+        "summary": "Post Answer for an Quiz",
+        "responses": {
+          "200": {
+            "description": "Die Antwort ist richtig"
           }
         }
       }

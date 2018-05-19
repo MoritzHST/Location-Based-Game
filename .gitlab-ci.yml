@@ -8,6 +8,7 @@ stages:
   - build
   - test
   - analysis
+  - deploy
 
 build:
   stage: build
@@ -17,7 +18,7 @@ build:
 test_mocha:
   stage: test
   script:
-    - "npm install -g mocha"
+    - "npm install mocha"
     - "npm test"
 
 sonarqube:
@@ -37,3 +38,29 @@ sonarqube-reports:
     SONAR_ANALYSIS_MODE: publish
   script:
   - gitlab-sonar-scanner -X
+
+deploy_production:
+  stage: deploy
+  only: 
+    - live
+  before_script:
+    - mkdir -p ~/.ssh
+    - echo -e "$DEPLOYMENT_SSH_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - apt-get update -y && apt-get install -y ssh
+  script:
+    - ssh -v -p${DEPLOYMENT_SERVER_PORT} ${DEPLOYMENT_SERVER_USER}@${DEPLOYMENT_SERVER_IP} "docker stop docker-mainline || true && docker rm docker-mainline || true && docker build --build-arg BRANCH=live --no-cache -t mainline . && docker run -e ENVIRONMENT=production -d -p 8000:3000 --name='docker-mainline' mainline"
+    
+deploy_test:
+  stage: deploy
+  only: 
+    - master
+  before_script:
+    - mkdir -p ~/.ssh
+    - echo -e "$DEPLOYMENT_SSH_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - apt-get update -y && apt-get install -y ssh
+  script:
+    - ssh -v -p${DEPLOYMENT_SERVER_PORT} ${DEPLOYMENT_SERVER_USER}@${DEPLOYMENT_SERVER_IP} "docker stop docker-test || true && docker rm docker-test || true && docker build --build-arg BRANCH=master --no-cache -t test . && docker run -e ENVIRONMENT=development -d -p 8001:3000 --name='docker-test' test"

@@ -30,12 +30,31 @@ html, body {
     border: #e1232b 1px solid !important;
 }
 
+.text-container {
+    padding: 15px;
+}
+
+.text-container > p {
+    font-size: 1.1em;
+}
+
+.info-textbox-container {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
 h2 {
     color: #e1232b;
     width: 100%;
     border-bottom: #e1232b solid 1px;
     margin-bottom: 20px;
     font-size: 1.7em;
+}
+
+h3 {
+    color: #e1232b;
+    width: 100%;
+    font-size: 1.5em;
 }
 
 @media (min-width: 0) {

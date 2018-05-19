@@ -1,0 +1,66 @@
+.exposition-info-tabelement {
+    display: inline-flex;
+    width: 50%;
+    text-align: center;
+}
+
+.switch-container {
+    display: flex;
+    padding: 0 !important;
+}
+
+a:hover, a:focus, a:active {
+    text-decoration: none;
+}
+
+li.ui-state-active > a {
+    background-color: #ad0000 !important;
+    color: #EEE !important;
+    border: #BBB !important;
+    border-radius: 4px;
+}
+
+li:hover, a:hover {
+    border-radius: 4px;
+}
+
+.exposition-info-tabelement > li, .exposition-info-tabelement > a {
+    width: 100%;
+}
+
+.exposition-info-tabelement > a {
+    color: #EEE !important;
+    text-align: center;
+    padding-top: 10px;
+    letter-spacing: .1em;
+    font-weight: bold;
+}
+
+.current-game-display-frame, .current-game-display-frame:hover {
+    border-radius: 50px;
+    height: 15px;
+    width: 15px;
+    background-color: #F8F8F8;
+    border: 1px solid #e1232b;
+    margin: 0 2px 0 2px;
+    display: inline-block;
+}
+
+.current-game-display-frame.game-completed {
+    background-color: #e1232b;
+    border: 1px solid #ad0000;
+}
+
+.current-game-display-frame.active {
+    height: 20px;
+    width: 20px;
+    border: 2px solid #e1232b;
+}
+
+#current-game-display-wrapper {
+    text-align: center;
+}
+
+#exposition-submit-game-answer {
+    margin-top: 15px;
+}

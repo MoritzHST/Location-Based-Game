@@ -12,9 +12,12 @@
  * Module dependencies.
  */
 
+var logging = require('../helper/logging');
+logging.deleteLogFiles();
+logging.Info("Starte Applikation (" + process.env.env + ")");
+
 var mongoPath = '../mongodb/';
 var mongo = require(mongoPath + 'initialize');
-//var database = require(mongoPath + 'testdb');
 
 /**
  * Object examples

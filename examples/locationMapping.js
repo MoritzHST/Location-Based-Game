@@ -1,6 +1,6 @@
 const objects = require('../mongodb/objects');
 const operations = require('../mongodb/operations');
-const logging = require('../mongodb/logging');
+const logging = require('../helper/logging');
 
 const collections = require('../mongodb/collections');
 
@@ -8,19 +8,30 @@ const exampleLocation = require('./location');
 const exampleExposition = require('./exposition');
 const exampleQuiz = require('./quiz');
 
-var exampleLocationMapping = new objects.LocationMapping(exampleLocation, exampleExposition, [exampleQuiz]);
+let exampleLocationMapping = new objects.LocationMapping(exampleLocation.exampleLocation, exampleExposition.exampleExposition, exampleQuiz.exampleQuiz3);
+let exampleLocationMapping2 = new objects.LocationMapping(exampleLocation.exampleLocation2, exampleExposition.exampleExposition1, exampleQuiz.exampleQuiz2);
 
-module.exports = exampleLocationMapping;
+module.exports = {
+    exampleLocationMapping : exampleLocationMapping,
+    exampleLocationMapping2 : exampleLocationMapping2
+};
+
 /**
  *
  * @param err
  * @param res
  * @returns
  */
-operations.updateObject(collections.LOCATION_MAPPING, exampleLocationMapping, null, function (err, result) {
+operations.updateObject(collections.LOCATION_MAPPING, exampleLocationMapping, null, function(err, result) {
     if (!err) {
         logging.Info("Mapping Location-Exposition-Minigames erstellt: " + result.value);
-    }
-    else
+    } else
+        logging.Error(err);
+});
+
+operations.updateObject(collections.LOCATION_MAPPING, exampleLocationMapping2, null, function(err, result) {
+    if (!err) {
+        logging.Info("Mapping Location-Exposition-Minigames2 erstellt: " + result.value);
+    } else
         logging.Error(err);
 });

@@ -3,7 +3,7 @@
  */
 
 const assert = require('assert');
-const logging = require('./logging');
+const logging = require('../helper/logging');
 const mongo = require('./mongo');
 const handler = require('./handler');
 
@@ -187,43 +187,29 @@ module.exports = {
                     });    			
     		}
     	})
-    }
+    },
     
     /*
-    joinCollection: function (pCollection, pJoin, pCallback) {
-        const database = mongo.Object();
-        database.Client.connect(database.Url, function (err, result) {
-            if (err) {
-                pCallback(err, null);
-            } else {
-                result.db(database.Database).collection(pCollection).aggregate(handler.idFriendlyQuery(pJoin)).toArray(function (error, res) {
-                        if (error) {
-                            pCallback(error, null);
-                        }
-                        result.close();
-                        pCallback(null, res);
-                    });
-            }
-        });
-  	*/  
+     * joinCollection: function (pCollection, pJoin, pCallback) { const database =
+     * mongo.Object(); database.Client.connect(database.Url, function (err,
+     * result) { if (err) { pCallback(err, null); } else {
+     * result.db(database.Database).collection(pCollection).aggregate(handler.idFriendlyQuery(pJoin)).toArray(function
+     * (error, res) { if (error) { pCallback(error, null); } result.close();
+     * pCallback(null, res); }); } });
+     */  
     /*
-    joinCollection: function (pCollection, pLookup, pCallback) {
+     * joinCollection: function (pCollection, pLookup, pCallback) { const
+     * database = mongo.Object(); database.Client.connect(database.Url, function
+     * (err, result) { if (err) { pCallback(err, null); } else {
+     * result.db(database.Database) .collection(pCollection) .aggregate(pLookup)
+     * .toArray(function (err, res) { if (err) { pCallback(error, null); }
+     * result.close(); pCallback(null, res); }); } });
+     */
+    isReady: function (pCallback) {
         const database = mongo.Object();
-        database.Client.connect(database.Url, function (err, result) {
-            if (err) {
-                pCallback(err, null);
-            } else {
-                result.db(database.Database)
-                    .collection(pCollection)
-                    .aggregate(pLookup)
-                    .toArray(function (err, res) {
-                        if (err) {
-                            pCallback(error, null);
-                        }
-                        result.close();
-                        pCallback(null, res);
-                    });
-            }
+
+        database.Client.connect(database.Url, function (error) {
+            pCallback(error);
         });
-        */
+    }
 };

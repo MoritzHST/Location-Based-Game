@@ -29,12 +29,13 @@ router.use('/sign-up', function(req, res, next) {
  */
 router.post('/login', function(req, res) {
     req.query = JSON.parse(JSON.stringify(req.body));
-    if (req.query.name && req.query.token) {
+    if (req.query.name && req.query.token && req.session) {
         operations.findObject("users", req.query, function(err, user) {
             if (err || !user) {
-                res.status(422).jsonp({"error": "Die übergebenen Daten sind nicht gültig."});
+                res.redirect('/sign-out');
             } else {
                 req.session.user = user;
+                req.session.maxAge = new Date().setHours(24,0,0,0) - new Date();
                 res.status(200).jsonp(user);
             }
         });
@@ -56,22 +57,17 @@ router.get('/sign-out', function(req, res) {
 });
 
 /**
- * Default Route. Behandelt alle /GET anfragen, die nicht durch andere Routen abgedeckt wird.
- * Erlaubt js, stylesheets, partials; alles weitere wird zur Login Seite weitergeleitet.
+ * Testet, eingehende play Anfragen, ob Zugriff auf diese Seite erlaubt ist. Dies ist nur dann der Fall, Wenn eine Benutzer Session existiert
  * @param req Request mit JSON-Query, welche Informationen über die aktuelle Session enthält.
  * @param res Result Status, welcher unter anderem den return-Code enthält
  * @param next die nächste anzusteuernde Route
  * @returns Die nächste anzusteuernde Route
  */
-router.use('*', function(req, res, next) {
-    if (handler.stringStartsWith([ "javascripts", "stylesheets", "partials" ], req.originalUrl)) {
-        next();
+router.use('/play', function(req, res, next) {
+    if (!req.session || !req.session.user) {
+        res.status(302).redirect('/sign-up');
     } else {
-        if (!req.originalUrl.startsWith('/sign-up') && (!req.session || !req.session.user)) {
-            res.status(302).redirect('/sign-up');
-        } else {
-            next();
-        }
+        next();
     }
 });
 

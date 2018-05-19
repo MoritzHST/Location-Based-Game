@@ -1,17 +1,27 @@
-const logging = require('./logging');
+const logging = require('../helper/logging');
 const operations = require('./operations');
+require('../public/javascripts/shared/game-context.js');
 
-/**
- * Enum, das die möglichen Minispiel-Typen abbildet.
- */
-Game = {
-    SINGLE_CHOICE: "single_choice",
-    MULTIPLE_CHOICE: "multiple_choice"
+let RoomStates = {
+    VISITED : 0,
+    STARTED : 1,
+    COMPLETED : 2,
+    FLAWLESS : 3
+};
+
+let GameStates = {
+    UNPLAYED : 0,
+    CORRECT : 1,
+    WRONG : 2
 };
 
 module.exports = {
 
-    Type: Game,
+    Type : Game,
+
+    RoomStates : RoomStates,
+
+    GameStates : GameStates,
 
     /**
      * Event-Objekt bestehend aus Eventnamen und Gültigkeitsdatum. Ein Event gilt immer nur für einen Tag
@@ -19,7 +29,7 @@ module.exports = {
      * @param pDate Datum an dem dieses Event stattfindet
      * @constructor
      */
-    Event: function (pEventName, pDate) {
+    Event : function(pEventName, pDate) {
         logging.Info("initializing new Event");
         logging.Parameter("pEventName", pEventName);
         logging.Parameter("pDate", pDate);
@@ -33,7 +43,7 @@ module.exports = {
      *
      * @param pUsername Username des Users als String
      */
-    User: function (pUsername) {
+    User : function(pUsername) {
         logging.Info("initializing new User");
         logging.Parameter("pUsername", pUsername);
         this.name = pUsername;
@@ -47,7 +57,7 @@ module.exports = {
      * @param pRoomnumber Nummer des Raumes als String(undefined wenn Location sich draußen befindet)
      * @param pIdentifier Identifier anhand dessen ein Scan zu diesem Raum führt
      */
-    Location: function (pRoomnumber, pIdentifier) {
+    Location : function(pRoomnumber, pIdentifier) {
         logging.Info("initializing new Location");
         logging.Parameter("pRoomnumber", pRoomnumber);
         logging.Parameter("pIdentifier", pIdentifier);
@@ -61,18 +71,21 @@ module.exports = {
      *
      * @param pName Name der Ausstellung
      * @param pDescription Beschreibung der Ausstellung
-     * @param pImagePath Bildpfad zum Ausstellungsbild
+     * @param pThumbnailPath Bildpfad zum Ausstellungsbild
+     * @param pImagePaths Array der Strings zu den Bildern der Ausstellung
      * @constructor
      */
-    Exposition: function (pName, pDescription, pImagePath) {
+    Exposition : function(pName, pDescription, pThumbnailPath, pImagePaths) {
         logging.Info("initializing new Exposition");
         logging.Parameter("pName", pName);
         logging.Parameter("pDescription", pDescription);
-        logging.Parameter("pImagePath", pImagePath);
+        logging.Parameter("pThumbnail", pThumbnailPath);
+        logging.Parameter("pImagePaths", pImagePaths);
         this.name = pName;
         this.description = pDescription;
-        this.image = pImagePath;
-        logging.Info("initializing Exposition done")
+        this.thumbnailPath = pThumbnailPath;
+        this.imagePaths = pImagePaths;
+        logging.Info("initializing Exposition done");
     },
 
     /**
@@ -86,7 +99,7 @@ module.exports = {
      * @param pAnswers die Antworten auf die Frage
      * @param pPoints Anzahl der Punkte die es bei richtiger Beantwortung der Frage gibt
      */
-    SimpleQuiz: function (pQuestion, pAnswers, pPoints) {
+    SimpleQuiz : function(pQuestion, pAnswers, pPoints) {
         logging.Info("initializing new SimpleQuiz");
         logging.Parameter("pQuestion", pQuestion);
         logging.Parameter("pAnswers", pAnswers);
@@ -102,35 +115,34 @@ module.exports = {
      * Antworten auf SimpleQuiz fragen
      * @param pAnswer Antwort als String
      * @param pIsCorrect Boolean der definiert, ob diese Antwort eine korrekte Antwort auf die Frage ist
-     * @param pImagePath Pfad zur zugefügten BildDatei für die Antwort
      * @constructor
      */
-    Answer: function (pAnswer, pIsCorrect, pImagePath) {
+    Answer : function(pAnswer, pIsCorrect) {
         logging.Info("initializing new Answer");
         logging.Parameter("pAnswer", pAnswer);
         logging.Parameter("pIsCorrect", pIsCorrect);
-        logging.Parameter("pImagePath", pImagePath);
         this.isCorrect = pIsCorrect;
         this.answer = pAnswer;
-        this.imagePath = pImagePath;
         logging.Info("initializing Answer done");
     },
 
     /**
      * Visit-Objekt, das den Besuch und Erfolg eines Nutzers nach dem Spielen eines Spiels an einer Location darstellt
-     * @param pLocation Location an der der Nutzer gespielt hat
-     * @param pGame Spiel das bei diesem Objekt gespielt wurde
+     * @param pLocationMapping LocationMapping-Object der Ausstellung, an der der Nutzer gespielt hat
+     * @param pGames Spiele die bei diesem Objekt gespielt wurde
      * @param pIsSuccessful Boolean ob das Spiel erfolgreich abgeschlossen(Richtige Antwort) wurde
+     * @param pRoomState Status der Abfertigung
      * @constructor
      */
-    Visit: function (pLocation, pGame, pIsSuccessful) {
+    Visit : function(pLocationMapping, pGames, pIsSuccessful, pRoomState) {
         logging.Info("initializing new Visit");
-        logging.Parameter("pLocation", pLocation);
-        logging.Parameter("pGame", pGame);
+        logging.Parameter("pLocationMapping", pLocationMapping);
+        logging.Parameter("pGame", pGames);
         logging.Parameter("pIsSuccessful", pIsSuccessful);
-        this.location = pLocation;
-        this.game = pGame;
+        this.location = pLocationMapping.location;
+        this.games = pGames;
         this.success = pIsSuccessful;
+        this.state = pRoomState ? pRoomState : RoomStates.VISITED;
         logging.Info("initializing Visit done");
     },
 
@@ -141,7 +153,7 @@ module.exports = {
      * @param pGames Liste an Minigames die an dieser Station zu spielen sind
      * @constructor
      */
-    LocationMapping: function (pLocation, pExposition, pGames) {
+    LocationMapping : function(pLocation, pExposition, pGames) {
         logging.Info("initializing new LocationMapping");
         logging.Parameter("pLocation", pLocation);
         logging.Parameter("pExposition", pExposition);
@@ -158,7 +170,7 @@ module.exports = {
      * @param pLocationMapping Location die am Event freigeschaltet ist
      * @constructor
      */
-    EventMapping: function (pEvent, pLocationMapping) {
+    EventMapping : function(pEvent, pLocationMapping) {
         logging.Info("initializing new EventMapping");
         logging.Parameter("pEvent", pEvent);
         logging.Parameter("pLocationMapping", pLocationMapping);
@@ -167,23 +179,16 @@ module.exports = {
         logging.Info("initializing EventMapping done");
     }
 
-    /*
-    /**
-     * Beim starten der Anwendung muss es eine Art Template geben, für welches
-     * hinterlegt ist, welche Räume mit welchen Fragen aktiv sind
-     *
-     * pName -> Name des Events (Tag der offenen Tür, Girls Day...)
-     * pMinigameRoomMapping -> vom Typ MinigameRoomMapping, hinterlegt welcher Raum
-     *                         welches Minigame hat
-     * /
-    EventTemplate: function (pName, pMinigameRoomMapping) {
-        logging.Info("initializing new EventTemplate");
-        logging.Parameter("pName", pName);
-        logging.Parameter("pMinigameRoomMapping", pMinigameRoomMapping);
-        this.name = pName;
-        this.minigameRoomMappings = pMinigameRoomMapping;
-        logging.Info("initializing EventTemplate done");
-    }
-    */
+/*
+ * /** Beim starten der Anwendung muss es eine Art Template geben, für welches
+ * hinterlegt ist, welche Räume mit welchen Fragen aktiv sind pName -> Name des
+ * Events (Tag der offenen Tür, Girls Day...) pMinigameRoomMapping -> vom Typ
+ * MinigameRoomMapping, hinterlegt welcher Raum welches Minigame hat /
+ * EventTemplate: function (pName, pMinigameRoomMapping) {
+ * logging.Info("initializing new EventTemplate"); logging.Parameter("pName",
+ * pName); logging.Parameter("pMinigameRoomMapping", pMinigameRoomMapping);
+ * this.name = pName; this.minigameRoomMappings = pMinigameRoomMapping;
+ * logging.Info("initializing EventTemplate done"); }
+ */
 
 };

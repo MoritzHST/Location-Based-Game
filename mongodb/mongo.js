@@ -1,13 +1,13 @@
 const fs = require('file-system');
 const MongoClient = require('mongodb').MongoClient;
-const logging = require('./logging');
+const logging = require('../helper/logging');
 const _conf = '../mongod.conf';
 
-Conf = {
-    port:'27017',
-    bindIp: '127.0.0.1',
-    defaultDb:'LocationBasedGame',
-}
+const Conf = {
+    port : '27017',
+    bindIp : '127.0.0.1',
+    defaultDb : 'LocationBasedGame'
+};
 
 /**
  * Sucht innerhalb der _conf Datei nach angegebenen Mongo-Konfigurationen
@@ -23,21 +23,22 @@ if (!fs.existsSync(file)) {
     var delimeters = [ ',', '#' ];
     var lines = content.split('\n');
 
-    for (key in Conf) {
+    for ( var key in Conf) {
+        if (Conf.hasOwnProperty(key)) {
+            for (var line = 0; line < lines.length; line++) {
+                var keyIndex = lines[line].indexOf(key + ":");
 
-        for (var line = 0; line < lines.length; line++) {
-            var keyIndex = lines[line].indexOf(key + ":");
+                if (keyIndex >= 0 && !lines[line].trim().startsWith("#")) {
+                    var value = lines[line].trim().substring(keyIndex + key.length);
 
-            if (keyIndex >= 0 && !lines[line].trim().startsWith("#")) {
-                var value = lines[line].trim().substring(keyIndex + key.length)
-
-                for (var i = 0; i < delimeters.length; i++) {
-                    if (value.includes(delimeters[i])) {
-                        value = value.substring(0, value.indexOf(delimeters[i])).trim();
+                    for (var i = 0; i < delimeters.length; i++) {
+                        if (value.includes(delimeters[i])) {
+                            value = value.substring(0, value.indexOf(delimeters[i])).trim();
+                        }
                     }
-                }
 
-                Conf[key] = value;
+                    Conf[key] = value;
+                }
             }
         }
     }
@@ -49,9 +50,8 @@ function MongoWrapper(database) {
     this.Database = database ? database : Conf.defaultDb;
 }
 
-
 module.exports = {
-    Object: function(database) {
+    Object : function(database) {
         return new MongoWrapper(database);
     }
 };

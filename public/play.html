@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LocationBasedGame</title>
     <link rel="shortcut icon" type="image/png" href="./images/favicon.png"/>
 
@@ -27,6 +28,8 @@
     <script src="javascripts/partial-renderer.js"></script>
     <script src="javascripts/ajax-call.js"></script>
     <script src='javascripts/jquery.mmenu.min.js'></script>
+    <script src="javascripts/shared/game-context.js"></script>
+    <script src="javascripts/config.js"></script>
 </head>
 <body>
 <div class="page">
@@ -48,14 +51,19 @@
 
             <li class="Divider host-divider">Hinweise</li>
             <li><a href="#">Spielanleitung</a></li>
-            <li><a href="#">AGBs</a></li>
+            <li><a id="game-privacy" href="#">Datenschutz</a></li>
+            <li><a id="game-impressum" href="#">Impressum</a></li>
+            <li><a id="game-warranty" href="#">Haftungsausschluss</a></li>
+            <li><a id="game-thirdparty" href="#">Drittanbieter-Software</a></li>
             <li class="Divider host-divider" id="play-user-information"></li>
         </ul>
     </nav>
     <div class="container">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
+                <div id="failure-hook"></div>
                 <div id="warning-hook"></div>
+                <div id="success-hook"></div>
                 <!-- Content Box -->
                 <div id="content-hook"></div>
             </div>

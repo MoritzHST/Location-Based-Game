@@ -39,15 +39,6 @@ router.post('/login', function(req, res) {
                 res.status(200).jsonp(user);
             }
         });
-
-        /*
-         * operations.findObject("users", req.query, function(err, user) { if
-         * (err || !user) { res.redirect('/sign-out'); } else { req.session.user =
-         * user; res.append('Set-Cookie', 'name=session; expires=' + new
-         * Date().setHours(24,0,0,0) - new Date()).status(200).jsonp(user); }
-         * });
-         */
-
     } else {
         res.status(422).jsonp({ "error": "Die übergebenen Daten sind nicht gültig." });
     }
@@ -66,28 +57,17 @@ router.get('/sign-out', function(req, res) {
 });
 
 /**
- * Default Route. Behandelt alle /GET anfragen, die nicht durch andere Routen abgedeckt wird.
- * Erlaubt js, stylesheets, partials; alles weitere wird zur Login Seite weitergeleitet.
+ * Testet, eingehende play Anfragen, ob Zugriff auf diese Seite erlaubt ist. Dies ist nur dann der Fall, Wenn eine Benutzer Session existiert
  * @param req Request mit JSON-Query, welche Informationen über die aktuelle Session enthält.
  * @param res Result Status, welcher unter anderem den return-Code enthält
  * @param next die nächste anzusteuernde Route
  * @returns Die nächste anzusteuernde Route
  */
-router.use('*', function(req, res, next) {
-    if (handler.stringStartsWith(["javascripts", "stylesheets", "partials", "agb", "privacy", "impressum"], req.originalUrl)) {
-        next();
+router.use('/play', function(req, res, next) {
+    if (!req.session || !req.session.user) {
+        res.status(302).redirect('/sign-up');
     } else {
-        if (!req.originalUrl.startsWith('/sign-up') && (!req.session || !req.session.user)) {
-            res.status(302).redirect('/sign-up');
-        } else {
-             operations.findObject("users", req.session.user, function(err, user) {
-                 if (err || !user) {
-                     res.redirect('/sign-out');
-                 } else {
-                     next();
-                 }
-             });
-        }
+        next();
     }
 });
 

@@ -1,5 +1,5 @@
 const objects = require('../mongodb/objects');
 const operations = require('../mongodb/operations');
-const logging = require('../mongodb/logging');
+const logging = require('../helper/logging');
 
-//operations.joinCollections("rooms", "minigames", )
+// operations.joinCollections("rooms", "minigames", )

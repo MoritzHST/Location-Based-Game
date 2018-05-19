@@ -22,7 +22,7 @@ var swaggerDocument = require('./swagger.json');
 if (process.env.env === "development") {
     var digest = auth.digest({
         realm: "Test Area",
-        file: "../.htpasswd",
+        file: "../htpasswd",
         msg401: "Du bist nicht berechtigt diese Seite aufzurufen."
     });
 
@@ -64,11 +64,6 @@ app.use(function (req, res, next) {
 });
 
 /**
- * Benutzt Routen für Swagger Tests (für Admin)
- */
-app.use('/admin/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
-/**
  * Benutzt alle Routen, die in routes definiert sind
  */
 fs.readdirSync('../routes/').forEach(file => {
@@ -80,28 +75,46 @@ fs.readdirSync('../routes/').forEach(file => {
  */
 app.use('/', require('./public'));
 
+/* Fehler */
+
 /**
  * Fängt 404 Fehler ab und leitet zur Login Seite weiter
  * @param req Angeforderte Daten
  * @param res Derzeitige Antwort
  * @returns Weiterleitung zur Login Seite
  */
- app.use(function (req, res) {
-     res.status(302).redirect('/sign-up');
- });
+app.use(function (req, res, next) {
+     if (req.originalUrl.startsWith('/admin')) {
+         next();
+     } else {
+         res.status(302).redirect('/sign-up');
+     }
+});
 
-// Fehler Behandlung
- app.use(function (err, req, res) {
-     // Gibt Fehlermeldung nur in einer Entwicklungsumgebung aus
-     res.locals.message = err.message;
-     res.locals.error = req.app.get('env') === 'development' ? err : {};
+/* Admin */
 
-     // Gibt im Fehlerfall eine entsprechende Seite aus
-     // Diese ist noch NICHT konfiguriert!
-     res.status(err.status || 500);
-     res.render('error');
- });
+var admin = auth.digest({
+    realm: "Admin Area",
+    file: "../htpasswd",
+    msg401: "Du bist nicht berechtigt diese Seite aufzurufen."
+});
 
+app.use(auth.connect(admin));
 
+/**
+ * Benutzt Routen für Swagger Tests (für Admin)
+ */
+app.use('/admin/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+/**
+ * Route für Admin Zugriff
+ */
+app.use('/admin', express.static(path.join(__dirname, 'admin'), {
+    extensions: ['html', 'htm']
+}));
+
+app.use(function (req, res) {
+    res.status(302).redirect('/admin/start');
+});
 
 module.exports = app;

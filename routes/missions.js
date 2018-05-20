@@ -17,7 +17,7 @@ router.get('/find/missions', function (req, res) {
     operations.findObject(locationMappingCollection,
         null, function (err, item) {
             operations.findObject(userCollection,
-                req.session.user, function (userErr, user) {
+                {_id: req.session.user._id}, function (userErr, user) {
                     if (!item) {
                         res.status(422).jsonp({
                             "error": errorMessage
@@ -26,7 +26,6 @@ router.get('/find/missions', function (req, res) {
                         if (!Array.isArray(item)) {
                             item = new Array(item);
                         }
-
                         //Die einzelnen Labore flaggen
                         for (let i in user.visits) {
                             item.forEach(function (mission) {
@@ -36,7 +35,6 @@ router.get('/find/missions', function (req, res) {
                                 }
                             });
                         }
-                        console.log(item);
                         handler.dbResult(err, res, item, errorMessage);
                     }
                 });

@@ -47,7 +47,6 @@ function initGameOverviewContent() {
  * @param pObj Raumliste
  */
 function setLocations(pObj) {
-    console.log(pObj);
     for (let i in pObj) {
         if (pObj.hasOwnProperty(i)) {
             let location = pObj[i].location;

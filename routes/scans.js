@@ -31,7 +31,7 @@ router.get('/find/scan', function (req, res) {
             if (item) {
                 item.games = gameHelper.prepareGames(item.games);
 
-                operations.findObject(userCollection, req.session.user, function (userErr, userItem) {
+                operations.findObject(userCollection, {_id: req.session.user._id}, function (userErr, userItem) {
                     if (!userErr && userItem) {
                         if (gameHelper.hasAlreadyVisited(userItem, item.location)) {
                             item.games = gameHelper.addGameStates(userItem.visits, item.games, item.location._id);
@@ -41,9 +41,9 @@ router.get('/find/scan', function (req, res) {
                             }
                             userItem.visits.push(new objects.Visit(item, [], false, objects.RoomStates.VISITED));
                             operations.updateObject(userCollection,
-                                handler.idFriendlyQuery({
+                                {
                                     _id: userItem._id
-                                }),
+                                },
                                 userItem, function () {
                                 });
                         }

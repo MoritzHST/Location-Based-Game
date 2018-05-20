@@ -33,18 +33,37 @@ function insertIntoDatabase() {
                 operations.findObject(collection, object, function (err, item) {
                     //Ist das Objekt nicht vorhanden, wird es hinzugefügt
                     if (!item || err) {
-                        object = addRandomGUID(object);
-                        operations.updateObject(collection, object, null, function (err, result) {
-                            if (!err)
-                                logging.Info(collection + " erstellt: " + result.value._id);
-                            else
-                                logging.Error(err);
-                        });
+                        insertIntoCollection(collection, object);
                     }
                 });
             }
         );
     }
+}
+
+/**
+ * Generiert für ein übergebenes Objekt eine GUID und prüft ob diese in der gegebenen Collection bereits verwendet wird.
+ * Wenn ja, wird die Funktion erneut aufgerufen und eine neue GUID generiert, wenn nicht wird das Objekt eingefügt
+ * @param pCollection
+ * @param pObject
+ */
+function insertIntoCollection(pCollection, pObject) {
+    pObject = addRandomGUID(pObject);
+    //Prüfe ob Objekt mit der id bereits in der Collection vorhanden ist
+    operations.findObject(pCollection, {_id: pObject._id}, function (findError, findItem) {
+        //Wenn nicht, füge neues Objekt ein
+        if (findError || !findItem) {
+            operations.updateObject(pCollection, pObject, null, function (err, result) {
+                if (!err)
+                    logging.Info(pCollection + " erstellt: " + result.value._id);
+                else
+                    logging.Error(err);
+            });
+        } else {
+            //Neuer Einfügeversuch
+            insertIntoCollection(pCollection, pObject);
+        }
+    });
 }
 
 //Funktionsaufruf für das File

@@ -3,6 +3,7 @@ var gameObj;
 var errorTimer;
 
 function initExpositionInfo(obj) {
+    console.log(obj);
     // Tabs setzen
     $(function () {
         $("#exposition-info-switch").tabs();
@@ -44,6 +45,7 @@ function initViewContent(obj) {
         $("#exposition-description").hide();
     }
 }
+
 //Initialisierungsfunktion falls ein Code gescanned wurde
 function initContextCodeScanned(obj) {
     //Code gescanned -> Button kann also ausgeblendet werden
@@ -53,12 +55,10 @@ function initContextCodeScanned(obj) {
 
     //Das erste nicht gespielte Spiel heraussuchen
     for (let i in gameObj.games) {
-        if (gameObj.games.hasOwnProperty(i)) {
-            if (gameObj.games[i] /**TODO: Verifen ob Spiel abgeschlosssen wurde **/) {
-                setCurrentGame(gameObj.games[i]);
-                gameObj.currentGameNumber = i;
-                break;
-            }
+        if (gameObj.games.hasOwnProperty(i) && gameObj.games[i].state.state === GameStates.UNPLAYED) {
+            setCurrentGame(gameObj.games[i]);
+            gameObj.currentGameNumber = i;
+            break;
         }
     }
 
@@ -123,7 +123,7 @@ function setCurrentGameDisplay(obj) {
     for (let i in gameObj.games) {
         if (gameObj.games.hasOwnProperty(i)) {
             let gameDisplayContainerClass = "current-game-display-frame";
-            if (/**TODO: Flag wenn Spiel bereits abgeschlossen wurde verifen**/ false) {
+            if (gameObj.games[i].state.state !== GameStates.UNPLAYED) {
                 gameDisplayContainerClass += " game-completed";
             }
             //Neue Container für die Anzeige generieren
@@ -142,10 +142,7 @@ function setCurrentGameDisplay(obj) {
 function setCurrentGame(game) {
     //Das Aktuelle Active Flag entfernen
     $(".current-game-display-frame").removeClass("active");
-
-    if (true/**TODO: Flag wenn Spiel bereits abgeschlossen wurde verifen**/) {
-        $("#game-display-" + game.gameNumber).addClass("active");
-    }
+    $("#game-display-" + game.gameNumber).addClass("active");
     //Spiel anzeigen
     renderGameByType(game);
 }
@@ -155,6 +152,11 @@ function renderGameByType(obj) {
         case Game.SINGLE_CHOICE:
             setNodeHookFromFile($("#mission-hook"), "partials/simple-text-quiz/simple-text-quiz.html", undefined, undefined, "initSimpleTextQuiz", obj);
             break;
+        case Game.MULTIPLE_CHOICE:
+            //TODO
+            break;
+        default:
+        //Nix zu tun
     }
 }
 
@@ -164,12 +166,10 @@ function nextGame() {
 
     //Durchloopen um das nächste zu finden und zu setzen
     for (let i in gameObj.games) {
-        if (gameObj.games.hasOwnProperty(i)) {
-            if (parseInt(gameObj.games[i].gameNumber) === parseInt(gameObj.currentGameNumber) + 1) {
-                setCurrentGame(gameObj.games[i]);
-                gameObj.currentGameNumber++;
-                break;
-            }
+        if (gameObj.games.hasOwnProperty(i) && parseInt(gameObj.games[i].gameNumber) === parseInt(gameObj.currentGameNumber) + 1) {
+            setCurrentGame(gameObj.games[i]);
+            gameObj.currentGameNumber++;
+            break;
         }
     }
 

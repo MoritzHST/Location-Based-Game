@@ -32,10 +32,8 @@ router.get('/find/scan', function (req, res) {
                 item.games = gameHelper.prepareGames(item.games);
 
                 operations.findObject(userCollection, {_id: req.session.user._id}, function (userErr, userItem) {
-                    if (!userErr && userItem) {
-                        if (gameHelper.hasAlreadyVisited(userItem, item.location)) {
-                            item.games = gameHelper.addGameStates(userItem.visits, item.games, item.location._id);
-                        } else {
+                        item.games = gameHelper.addGameStates(userItem.visits, item.games, item.location._id);
+                        if (!gameHelper.hasAlreadyVisited(userItem, item.location)) {
                             if (userItem.visits === undefined) {
                                 userItem.visits = [];
                             }
@@ -47,12 +45,10 @@ router.get('/find/scan', function (req, res) {
                                 userItem, function () {
                                 });
                         }
-                    } else {
-                        //behandle error
+                        handler.dbResult(err, res, item, "Zu diesem Code konnten leider keine Minispiele gefunden werden. Tut uns Leid. Really, we are sorry :(");
                     }
-                });
+                );
             }
-            handler.dbResult(err, res, item, "Zu diesem Code konnten leider keine Minispiele gefunden werden. Tut uns Leid. Really, we are sorry :(");
         });
 });
 

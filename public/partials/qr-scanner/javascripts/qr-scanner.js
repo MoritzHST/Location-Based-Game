@@ -26,7 +26,7 @@ function initScanner(pContextObj) {
 
     document.getElementById("nextCam").onclick = function () {
         cameraList.startNextCam();
-    }
+    };
 }
 
 /**
@@ -52,7 +52,7 @@ function onCodeScanned(content) {
         }, obj);
         //Von welcher View aufgerufen? Dahin zurückleiten!
         if (scannerContext.context === GameViewContext.SCAN_ATTEMPT_FROM_PLAY_OVERVIEW) {
-            setNodeHookFromFile($("#content-hook"), "partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent")
+            setNodeHookFromFile($("#content-hook"), "partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent");
         }
         else {
             scannerContext.context = GameViewContext.CODE_PENDING;
@@ -74,17 +74,12 @@ function CameraList(cameras) {
      * Startet die nächste mögliche Kamera
      */
     this.startNextCam = function () {
-        var stoppingCam = this.cameras[this.currentCam];
-        //scanner.stop(stoppingCam);
-        console.log("stopped: " + stoppingCam.id);
-
         if (this.currentCam + 1 < this.cameras.length) {
             this.currentCam++;
         } else {
             this.currentCam = 0;
         }
-        var startingCam = this.cameras[this.currentCam];
+        let startingCam = this.cameras[this.currentCam];
         scanner.start(startingCam);
-        console.log("starting: " + startingCam.id);
     };
 }

@@ -38,6 +38,9 @@ function containsGame(pGames, pGameId) {
 //Gibt dasjenige Visit-Objekt aus dem Array zurück, dessen Id mit der übergebenen übereinstimmt.
 //Sollte keins existieren wird null zurück gegeben.
 function getVisitWithId(pVisits, pVisitId) {
+    if (!pVisits) {
+        return;
+    }
     let returnVisit = null;
     pVisits.forEach(function (visit) {
         if (visit.location._id.toString() === pVisitId.toString()) {
@@ -55,14 +58,11 @@ module.exports = {
 
     addGameStates: function (pVisits, pGames, pLocationId) {
         let visit = getVisitWithId(pVisits, pLocationId);
-        pGames.forEach(function (game) {
-            if (containsGame(visit.games, game._id)) {
-                //TODO setze correct oder wrong
-                game.played = objects.GameStates.CORRECT;
-            } else {
-                game.played = objects.GameStates.UNPLAYED;
+        for (let i in pGames) {
+            if (pGames.hasOwnProperty(i)) {
+                pGames[i] = calculateStateForGame(pGames[i], visit);
             }
-        });
+        }
         return pGames;
     },
 
@@ -130,5 +130,17 @@ module.exports = {
         return games;
     }
 
-
 };
+
+function calculateStateForGame(pGame, pVisit) {
+    if (pVisit) {
+        for (let i in pVisit.answers) {
+            if (pVisit.answers.hasOwnProperty(i) && pVisit.answers[i].gameId.toString() === pGame._id.toString()) {
+                pGame.state = pVisit.answers[i];
+                return pGame;
+            }
+        }
+    }
+    pGame.state = {state: objects.GameStates.UNPLAYED};
+    return pGame;
+}

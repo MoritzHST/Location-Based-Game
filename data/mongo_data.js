@@ -20,7 +20,7 @@ function insertIntoDatabase() {
         let objects = dbObjects.get(collection);
         objects.forEach(function (object) {
                 //Objekt wird eingefügt/ersetzt
-                operations.updateObject(collection, null, object, function (err, result) {
+            operations.updateObject(collection, object, object, function (err, result) {
                     if (!err) {
                         logging.Info(collection + " erstellt: " + result.value._id);
                         object._id = result.value._id;

@@ -19,8 +19,7 @@ async function insertIntoDb(collection, object) {
             operations.updateObject(collection, object, object, function (err, result) {
                 if (!err) {
                     logging.Info(collection + " erstellt: " + result.value._id);
-                    object._id = result.value._id;
-                    resolve(object);
+                    resolve(result.value);
                 }
                 else
                     logging.Error(err);
@@ -31,13 +30,14 @@ async function insertIntoDb(collection, object) {
 /**
  * Durchläuft die Datenmap und erstellt diejenigen Datensätze in der DB, die noch nicht existieren
  */
-let index = 0;
-
 function insertIntoDatabase() {
     for (let collection of dbObjects.keys()) {
         let objects = dbObjects.get(collection);
         objects.forEach(function (object) {
-            object = insertIntoDb(collection, object);
+            insertIntoDb(collection, object).then(function (resolve) {
+                object = resolve;
+                console.log(object);
+            });
         });
     }
 }

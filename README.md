@@ -1,6 +1,10 @@
 
 # LocationBasedGame
 
+## Zugriff auf Testwebseite
+The Testwebsite http://test.quiz.hochschule-stralsund.de needs authentication to enter it. The credentials are the same as for the virtual machine.
+Have a look at the wiki for further help.
+
 ## Git configuration
 
 ### Get HS-LBG-2018 Git Project via commandline / git-bash

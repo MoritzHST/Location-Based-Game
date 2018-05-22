@@ -13,3 +13,11 @@
 .checkbox-wrapper {
     margin-bottom: 10px;
 }
+
+#play_filter {
+	float:left;
+}
+
+#play_rooms {
+	float:right;
+}

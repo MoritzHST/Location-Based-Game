@@ -14,7 +14,9 @@ const userCollection = require('../mongodb/collections').USERS;
  * @returns Genau einen oder mehrere Benutzer (oder eine Fehlermeldung)
  */
 router.get('/find/users', function(req, res) {
-    operations.findObject(userCollection, (handler.checkIfValidQuery(req.query) ? req.query : null), function (err, item) {
+    req.query = handler.getRealRequest(req.query, req.body);
+
+    operations.findObject(userCollection, (handler.checkIfValidQuery(req.query) ? req.query : null), function(err, item) {
         handler.dbResult(err, res, item, "Das Item " + JSON.stringify(req.query).replace(/\"/g, '') + " existiert nicht.");
     });
 });
@@ -28,9 +30,10 @@ router.get('/find/users', function(req, res) {
  * @returns Den hinzugefügten Benutzer (oder eine Fehlermeldung)
  */
 router.post('/insert/users', function(req, res) {
-    req.query = JSON.parse(JSON.stringify(req.body));
+    // req.query = JSON.parse(JSON.stringify(req.body));
+    req.query = handler.getRealRequest(req.query, req.body);
 
-    operations.findObject(userCollection, req.query, function (err, item) {
+    operations.findObject(userCollection, req.query, function(err, item) {
         if (item !== null) {
             res.status(422).jsonp({
                 "error" : "Nutzername ist bereits vergeben"
@@ -47,7 +50,7 @@ router.post('/insert/users', function(req, res) {
         req.query.token = operations.generateToken();
 
         if (handler.checkIfValidQuery(req.query)) {
-            operations.updateObject(userCollection, req.query, null, function (err, item) {
+            operations.updateObject(userCollection, req.query, null, function(err, item) {
                 handler.dbResult(err, res, item, "Der Benutzer " + JSON.stringify(req.query).replace(/\"/g, '') + " kann nicht hinzugefüt werden.");
             });
         } else {
@@ -66,6 +69,8 @@ router.post('/insert/users', function(req, res) {
  * @returns Den aktualisierten Benutzer
  */
 router.post('/update/users/:id', function(req, res) {
+    req.query = handler.getRealRequest(req.query, req.body);
+
     if (handler.checkIfValidQuery(req.query)) {
 
         // prüfe, ob der eingegebene Name zulässig ist.
@@ -79,7 +84,7 @@ router.post('/update/users/:id', function(req, res) {
         }
 
         // prüfe, ob der eingegebene Name bereits verwendet wird.
-        operations.findObject(userCollection, req.query, function (err, item) {
+        operations.findObject(userCollection, req.query, function(err, item) {
             if (item && item._id !== req.params.id) {
                 res.status(422).jsonp("Es existiert bereits ein Benutzer mit diesem Namen.");
             } else {
@@ -107,8 +112,10 @@ router.post('/update/users/:id', function(req, res) {
  * @returns Der gelöschte Benutzer
  */
 router.post('/delete/users', function(req, res) {
+    req.query = handler.getRealRequest(req.query, req.body);
+
     if (handler.checkIfValidQuery(req.query)) {
-        operations.deleteObjects(userCollection, req.query, function (err, item) {
+        operations.deleteObjects(userCollection, req.query, function(err, item) {
             handler.dbResult(err, res, item, "Die Items mit den Eigenschaften " + JSON.stringify(req.query).replace(/\"/g, '') + " konnten nicht gelöscht werden.");
         });
     } else {

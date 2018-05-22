@@ -20,6 +20,8 @@ const gameHelper = require('../helper/scan');
  * den Antworten keinerlei Informationen über ihre Richtigkeit angehangen sind.
  */
 router.get('/find/scan', function (req, res) {
+    req.query = handler.getRealRequest(req.query, req.body);
+
     let identifier = req.query.identifier;
 
     operations.findObject(locationMappingCollection,
@@ -53,6 +55,5 @@ router.get('/find/scan', function (req, res) {
             handler.dbResult(err, res, item, "Zu diesem Code konnten leider keine Minispiele gefunden werden. Tut uns Leid. Really, we are sorry :(");
         });
 });
-
 
 module.exports = router;

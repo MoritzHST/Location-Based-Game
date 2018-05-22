@@ -67,6 +67,14 @@ function initContextCodeScanned(obj) {
         if (answerObj) {
             $.post("post/answer", answerObj)
                 .done(function (obj) {
+                    setNodeHookFromFile($("#success-hook"), "partials/play-success-box/play-success-box.html", function (errMsgObj) {
+                        $("#success-box-title").html("Die Antwort war richtig!");
+                        //Nach Konstanter Sekunden-Anzahl wieder ausblenden
+                        clearInterval(errorTimer);
+                        errorTimer = setTimeout(function () {
+                            clearNodeHook("success-hook");
+                        }, notificationFadeOut);
+                    });
                     nextGame();
                 })
                 .fail(function (obj) {

@@ -15,13 +15,28 @@ function initGameOverviewContent() {
     user.locations = {};
     // Legt für jede Checkbox innerhalb einer bestimmten Gruppe eine
     // Location-Eigenschaft fest
-    $("#play_filter > label.btn.btn-secondary.host-button-group-button > input[type='checkbox']").each(function() {
+    $("#play_filter > label.btn.btn-secondary.host-button-group-button > input[type='checkbox']").each(function () {
         user.locations[$(this).val()] = [];
     });
 
+    //Alle Räume Filter setzen
+    let allRooms = $("#play_all_rooms");
+    allRooms.val("location-state");
+    allRooms.on("click", updateTableView());
+
+    //Unerfüllte Räume Filter setzen
+    let undoneRooms = $("#play_undone_rooms");
+    undoneRooms.val("location-state-undone");
+    undoneRooms.on("click", updateTableView());
+
+    //Erfüllte RÄume Filter setzen
+    let doneRooms = $("#play_done_rooms");
+    doneRooms.val("location-state-done");
+    doneRooms.on("click", updateTableView());
+
     // Sucht nach allen Benutzer-Raum Relationen und baut damit eine Übersicht
     // zusammen
-    $.get("find/missions").done(function(pData) {
+    $.get("find/missions").done(function (pData) {
         setLocations(pData);
 
         for (let i in user.locations) {
@@ -32,13 +47,13 @@ function initGameOverviewContent() {
 
     // Wenn auf ein bestimmtes label geklickt wird, so wird gleichzeitig das
     // kind-input-element berührt
-    $("label.btn.btn-secondary.host-button-group-button").on("click", function() {
+    $("label.btn.btn-secondary.host-button-group-button").on("click", function () {
         $(this).children("input").click();
     });
 
     // Handhabt die Sichtbarkeit bei check wechsel
-    $("label.btn.btn-secondary.host-button-group-button > input[type='checkbox']").on("click", function() {
-        $("div.labor-frame.floor-" + $(this).val()).toggle($(this).checked);
+    $("label.btn.btn-secondary.host-button-group-button > input[type='checkbox']").on("click", function () {
+        updateTableView();
     });
 }
 
@@ -52,7 +67,7 @@ function setLocations(pObj) {
             let location = pObj[i].location;
             location.roomnumber = !location.roomnumber || location.roomnumber === "" ? "0" : location.roomnumber;
 
-            let currentLocation = user.locations[location.roomnumber.substring(0,1)];
+            let currentLocation = user.locations[location.roomnumber.substring(0, 1)];
 
             if (currentLocation)
                 currentLocation.push(pObj[i]);
@@ -67,17 +82,19 @@ function setLocations(pObj) {
  */
 function setLayer(pLayer) {
     var locations = user.locations[pLayer];
+    //States können undefined sein, um diese Filtern zu können daher eine Stringbehandlung
+    var stateString = !locations.state || locations.state === RoomStates.VISITED ? " location-state location-state-undone" : " location-state location-state-done";
 
     for (let i in locations) {
         if (locations.hasOwnProperty(i)) {
             $('<div/>', {
                 id: locations[i]._id + "-hook",
-                class: "labor-frame floor-" + pLayer
+                class: "labor-frame floor-" + pLayer + stateString
             }).appendTo($("#labor-frame-container"));
 
             setNodeHookFromFile($("#" + locations[i]._id + "-hook"),
-            "../partials/overview-table-cell/overview-table-cell.html", setTableContent,
-            locations[i]);
+                "../partials/overview-table-cell/overview-table-cell.html", setTableContent,
+                locations[i]);
         }
     }
 }
@@ -96,4 +113,11 @@ function setTableContent(dataObj) {
         dataObj.context = GameViewContext.CODE_PENDING;
         setNodeHookFromFile($("#content-hook"), "partials/exposition-info/exposition-info.html", undefined, undefined, "initExpositionInfo", dataObj);
     });
+}
+
+function updateTableView() {
+    let statusFilter = $("#play_rooms > .active > input[type='checkbox']");
+
+    let floorFilter = $("label.btn.btn-secondary.host-button-group-button > input[type='checkbox']");
+    $("div.labor-frame.floor-" + floorFilter.val() + "." + statusFilter.val()).toggle(floorFilter.checked);
 }

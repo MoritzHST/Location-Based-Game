@@ -34,14 +34,31 @@ module.exports = {
         },
 
         Info : function(pInfomessage) {
-            writeToLogFile("info.log", "[INFO] " + pInfomessage);
+            infoMessage(pInfomessage);
         },
 
         Error : function(pErrormessage) {
-            writeToLogFile("error.log", "[ERROR] " + pErrormessage);
+            writeToLogFile("error.log", "[ERROR] " + JSON.stringify(pErrormessage));
         },
 
         Parameter : function(pParameterName, pParameterValue) {
-            writeToLogFile("parameter.log", "[PARAMETER] " + pParameterName + " -> " + pParameterValue);
+            writeToLogFile("parameter.log", "[PARAMETER] " + JSON.stringify(pParameterName) + " -> " + JSON.stringify(pParameterValue));
+        },
+
+    Entering: function (pFunctionName) {
+        infoMessage(pFunctionName + " ENTRY");
+    },
+
+    Leaving: function (pFunctionName) {
+        infoMessage(pFunctionName + " LEAVING");
+    },
+
+    ReturnValue: function (pParameterValue) {
+        writeToLogFile("parameter.log", "[PARAMETER] RETURN " + JSON.stringify(pParameterValue));
         }
+
     };
+
+function infoMessage(pInfomessage) {
+    writeToLogFile("info.log", "[INFO] " + JSON.stringify(pInfomessage));
+}

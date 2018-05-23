@@ -34,7 +34,7 @@ router.get('/find/scan', function (req, res) {
                 operations.findObject(userCollection, {_id: req.session.user._id}, function (userErr, userItem) {
                         item.games = gameHelper.addGameStates(userItem.visits, item.games, item.location._id);
                         if (!gameHelper.hasAlreadyVisited(userItem, item.location)) {
-                            if (userItem.visits === undefined) {
+                            if (!userItem.visits) {
                                 userItem.visits = [];
                             }
                             userItem.visits.push(new objects.Visit(item, [], false, objects.RoomStates.VISITED));

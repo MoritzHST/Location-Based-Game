@@ -16,7 +16,7 @@ function singleChoiceHandler(pAnswer, pGame) {
 }
 
 function multipleChoiceHandler(pAnswer, pGame) {
-
+    return false;
 }
 
 /**

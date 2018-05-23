@@ -3,7 +3,6 @@ var gameObj;
 var errorTimer;
 
 function initExpositionInfo(obj) {
-    console.log(obj);
     // Tabs setzen
     $(function () {
         $("#exposition-info-switch").tabs();
@@ -77,6 +76,7 @@ function initContextCodeScanned(obj) {
                             clearNodeHook("success-hook");
                         }, notificationFadeOut);
                     });
+                    $("#game-display-" + gameObj.currentGameNumber).addClass("game-completed-" + GameStates.CORRECT);
                     nextGame();
                 })
                 .fail(function (obj) {
@@ -88,7 +88,7 @@ function initContextCodeScanned(obj) {
                             clearNodeHook("failure-hook");
                         }, notificationFadeOut);
                     }, obj);
-
+                    $("#game-display-" + gameObj.currentGameNumber).addClass("game-completed-" + GameStates.WRONG);
                     if (obj.status === 400) {
                         nextGame();
                     }
@@ -124,7 +124,7 @@ function setCurrentGameDisplay(obj) {
         if (gameObj.games.hasOwnProperty(i)) {
             let gameDisplayContainerClass = "current-game-display-frame";
             if (gameObj.games[i].state.state !== GameStates.UNPLAYED) {
-                gameDisplayContainerClass += " game-completed";
+                gameDisplayContainerClass += " game-completed-" + gameObj.games[i].state.state;
             }
             //Neue Container für die Anzeige generieren
             $("<a/>", {
@@ -161,21 +161,24 @@ function renderGameByType(obj) {
 }
 
 function nextGame() {
-    //Altes Spiel als fertig makieren
-    $("#game-display-" + gameObj.currentGameNumber).addClass("game-completed");
-
     //Durchloopen um das nächste zu finden und zu setzen
     for (let i in gameObj.games) {
         if (gameObj.games.hasOwnProperty(i) && parseInt(gameObj.games[i].gameNumber) === parseInt(gameObj.currentGameNumber) + 1) {
             setCurrentGame(gameObj.games[i]);
             gameObj.currentGameNumber++;
-            break;
+            return;
         }
     }
 
     //Es wurde keins gefunden
+    renderFinishedView();
+}
 
-    $("#mission-hook").html("Alle durch");
+function renderFinishedView() {
+    //Das Aktuelle Active Flag entfernen
+    $(".current-game-display-frame").removeClass("active");
+    //Button deaktivieren
+    $("#exposition-submit-game-answer").addClass("disabled");
 }
 
 //GameObject Konstruktor

@@ -14,15 +14,17 @@ function clearCollections() {
 
 async function insertIntoDb(collection, object) {
     //Objekt wird eingefügt/ersetzt
-    return await new Promise(
+    return new Promise(
         resolve => {
             operations.updateObject(collection, object, object, function (err, result) {
                 if (!err) {
                     logging.Info(collection + " erstellt: " + result.value._id);
                     resolve(result.value);
                 }
-                else
+                else {
                     logging.Error(err);
+                    resolve(err);
+                }
             });
         });
 }
@@ -30,15 +32,17 @@ async function insertIntoDb(collection, object) {
 /**
  * Durchläuft die Datenmap und erstellt diejenigen Datensätze in der DB, die noch nicht existieren
  */
-function insertIntoDatabase() {
+async function insertIntoDatabase() {
     for (let collection of dbObjects.keys()) {
         let objects = dbObjects.get(collection);
-        objects.forEach(function (object) {
-            insertIntoDb(collection, object).then(function (resolve) {
-                object = resolve;
-                console.log(object);
-            });
-        });
+        for (let object in objects) {
+            if (objects.hasOwnProperty(object)) {
+                let result = await insertIntoDb(collection, objects[object]);
+                if (result._id) {
+                    objects[object]._id = result._id;
+                }
+            }
+        }
     }
 }
 

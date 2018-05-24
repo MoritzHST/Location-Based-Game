@@ -2,18 +2,6 @@ const logging = require('../helper/logging');
 const operations = require('./operations');
 require('../public/javascripts/shared/game-context.js');
 
-let RoomStates = {
-    VISITED : 0,
-    STARTED : 1,
-    COMPLETED : 2,
-    FLAWLESS : 3
-};
-
-let GameStates = {
-    UNPLAYED : 0,
-    CORRECT : 1,
-    WRONG : 2
-};
 
 module.exports = {
 

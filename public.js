@@ -1,6 +1,7 @@
 const operations = require('./mongodb/operations');
 const handler = require('./mongodb/handler');
 const express = require('express');
+const userCollection = require('./mongodb/collections').USERS;
 const router = require('express').Router();
 const path = require('path');
 
@@ -30,7 +31,7 @@ router.use('/sign-up', function(req, res, next) {
 router.post('/login', function(req, res) {
     req.query = JSON.parse(JSON.stringify(req.body));
     if (req.query.name && req.query.token && req.session) {
-        operations.findObject("users", req.query, function(err, user) {
+        operations.findObject(userCollection, req.query, function (err, user) {
             if (err || !user) {
                 res.redirect('/sign-out');
             } else {

@@ -6,6 +6,7 @@ const _conf = '../mongod.conf';
 const Conf = {
     port : '27017',
     bindIp : '127.0.0.1',
+    connectionAttempts: 10,
     defaultDb : 'LocationBasedGame'
 };
 
@@ -53,5 +54,6 @@ function MongoWrapper(database) {
 module.exports = {
     Object : function(database) {
         return new MongoWrapper(database);
-    }
+    },
+    Conf
 };

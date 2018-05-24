@@ -17,19 +17,23 @@ router.get('/find/missions', function (req, res) {
     operations.findObject(locationMappingCollection,
         null, function (err, item) {
             operations.findObject(userCollection,
-                req.session.user, function (userErr, user) {
+                {_id: req.session.user._id}, function (userErr, user) {
                     if (!item) {
                         res.status(422).jsonp({
                             "error": errorMessage
                         });
                     } else {
-                        if (Array.isArray(item)) {
+                        if (!Array.isArray(item)) {
+                            item = new Array(item);
+                        }
+                        //Die einzelnen Labore flaggen
+                        for (let i in user.visits) {
                             item.forEach(function (mission) {
                                 mission.games = undefined;
+                                if (user.visits.hasOwnProperty(i) && user.visits[i].location._id.toString() === mission.location._id.toString()) {
+                                    mission.state = user.visits[i].state;
+                                }
                             });
-                        } else {
-                            item.games = undefined;
-                            item = [item];
                         }
                         handler.dbResult(err, res, item, errorMessage);
                     }

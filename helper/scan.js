@@ -136,11 +136,11 @@ function calculateStateForGame(pGame, pVisit) {
     if (pVisit) {
         for (let i in pVisit.answers) {
             if (pVisit.answers.hasOwnProperty(i) && pVisit.answers[i].gameId.toString() === pGame._id.toString()) {
-                pGame.state = pVisit.answers[i];
+                pGame.state = pVisit.answers[i].state;
                 return pGame;
             }
         }
     }
-    pGame.state = {state: objects.GameStates.UNPLAYED};
+    pGame.state = objects.GameStates.UNPLAYED;
     return pGame;
 }

@@ -55,6 +55,50 @@ router.post('/post/answer', function (req, res) {
     logging.Leaving("POST /post/answer");
 });
 
+/* Get */
+/* Prüft, ob der Raum abgeschlossen ist
+ * Wenn ja, wird dem User ein Objekt mit Antworten zu den Spielen ausgegeben */
+router.get('/get/answers', function (req, res) {
+    logging.Entering("GET /get/answers");
+    req.query = handler.getRealRequest(req.query, req.body);
+    logging.Parameter("request.query", req.query);
+
+    isRoomCompleted(req).then(function (pObj) {
+        res.status(200).jsonp(pObj);
+    });
+});
+
+async function isRoomCompleted(pRequest) {
+    logging.Entering("isRoomCompleted");
+    logging.Parameter("request.query", pRequest.query);
+
+    return new Promise(resolve => {
+        operations.findObject(userCollection, {
+            _id: pRequest.session.user._id,
+            "visits.location.identifier": pRequest.query.identifier
+        }, async function (userError, userItem) {
+            if (userItem) {
+                //aktuellen Visit suchen
+                let curVisit = findVisitByLocationIdentifier(userItem, pRequest.query.identifier);
+                if (curVisit.answers) {
+                    //Prüfen ob genausoviele Antworten wie Spiele zu der Location existieren, wenn ja ist er fertig
+                    await operations.findObject(locationMappingCollection, {"location._id": ObjectID(curVisit.location._id)}, function (mappingError, mappingItem) {
+                        if (mappingItem.games.length === curVisit.answers.length) {
+                            resolve(curVisit.answers);
+                        }
+                        else {
+                            resolve(false);
+                        }
+                    });
+                }
+                else {
+                    resolve(false);
+                }
+            }
+        });
+    });
+}
+
 async function canAnswerQuiz(pRequest) {
     logging.Entering("canAnswerQuiz");
     logging.Parameter("request.query", pRequest.query);
@@ -91,6 +135,7 @@ function saveAnswer(pRequest, pState) {
                 if (!userItem.visits[i].answers) {
                     userItem.visits[i].answers = [];
                 }
+                //State übernehmen
                 pRequest.query.state = pState;
                 userItem.visits[i].answers.push(pRequest.query);
             }
@@ -106,6 +151,11 @@ function saveAnswer(pRequest, pState) {
     logging.Leaving("saveAnswer");
 }
 
+/**
+ * Analysiert die Location und setzt entsprechcend ihrer Vollständigkeit ein Flag
+ * welches beschreibt, ob die Location abgeschlossen ist oder nicht
+ * @param pRequest
+ */
 function evaluateLocation(pRequest) {
     logging.Entering("evaluateLocation");
     logging.Parameter("request.query", pRequest.query);
@@ -129,6 +179,13 @@ function evaluateLocation(pRequest) {
     logging.Leaving("evaluateLocation");
 }
 
+/**
+ * Analysiert einen einzelnen Besuch und setzt entsprechend des Status flags
+ * welches beschreibt, ob der Besucht vollständig ist doer nicht
+ * @param pVisit
+ * @param pMapping
+ * @returns {*}
+ */
 function analyzeVisits(pVisit, pMapping) {
     logging.Entering("analyzeVisits");
     logging.Parameter("pVisit", pVisit);
@@ -145,6 +202,13 @@ function analyzeVisits(pVisit, pMapping) {
     }
 }
 
+/**
+ * Prüft die einzelnen Antworten zu einem Visit
+ * Der Visit ist FLAWLESS, wenn alle Antworten richtig waren
+ * Wenn eine Falsch ist, ist der Visist Completed
+ * @param pVisit
+ * @returns {number}
+ */
 function analyzeAnswers(pVisit) {
     logging.Entering("analyzeAnswers");
     logging.Parameter("pVisit", pVisit);
@@ -162,6 +226,28 @@ function analyzeAnswers(pVisit) {
     logging.ReturnValue(objects.RoomStates.FLAWLESS);
     logging.Leaving("analyzeAnswers");
     return objects.RoomStates.FLAWLESS;
+}
+
+/**
+ * Hilfsfunktion, die ein Visistobjekt innerhalb vom Nutzer Anhand von pIdentifier (Location.Identifier)
+ * selektiert
+ * @param pUserObj
+ * @param pIdentifier
+ * @returns Visit-Objekt
+ */
+function findVisitByLocationIdentifier(pUserObj, pIdentifier) {
+    logging.Entering("findVisitByLocationIdentifier");
+    logging.Parameter("pUserObj", pUserObj);
+    logging.Parameter("pIdentifier", pIdentifier);
+
+    for (let i in pUserObj.visits) {
+        if (pUserObj.visits.hasOwnProperty(i) && pUserObj.visits[i].location.identifier === pIdentifier) {
+            logging.ReturnValue(pUserObj.visits[i]);
+            logging.Leaving("findVisitByLocationIdentifier");
+            return pUserObj.visits[i];
+        }
+    }
+    logging.Leaving("findVisitByLocationIdentifier");
 }
 
 module.exports = router;

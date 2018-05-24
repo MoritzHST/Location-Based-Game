@@ -28,32 +28,31 @@
 <!-- Buttongroup für Laborübersicht -->
 
 
-
 <div class="button-group-wrapper row">
     <div id="play_filter" class="btn-group btn-group-toggle" data-toggle="buttons" role="group" aria-label="Filter">
-        <label class="btn btn-secondary host-button-group-button active">
+        <label class="btn btn-secondary host-button-group-button active host-floor">
             <input type="checkbox" name="options" autocomplete="off" checked
                    class="btn btn-secondary host-button-group-button" value="1">EG</label>
-        <label class="btn btn-secondary host-button-group-button active">
+        <label class="btn btn-secondary host-button-group-button active host-floor">
             <input type="checkbox" name="options" autocomplete="off" checked
                    class="btn btn-secondary host-button-group-button" value="2">1OG</label>
-        <label class="btn btn-secondary host-button-group-button active">
+        <label class="btn btn-secondary host-button-group-button active host-floor">
             <input type="checkbox" name="options" autocomplete="off" checked
                    class="btn btn-secondary host-button-group-button" value="3">2OG</label>
-        <label class="btn btn-secondary host-button-group-button active">
+        <label class="btn btn-secondary host-button-group-button active host-floor">
             <input type="checkbox" name="options" autocomplete="off" checked
-                   class="btn btn-secondary host-button-group-button active" value="0">Draußen</label>                   
+                   class="btn btn-secondary host-button-group-button active" value="0">Draußen</label>
     </div>
-    <div id="play_rooms" class="btn-group btn-group-toggle" data-toggle="buttons" role="group" aria-label="Filter">
-        <label class="btn btn-secondary host-button-group-button active">
-            <input type="radio" name="options" id="play_all_rooms" autocomplete="off" checked
-                   class="btn btn-secondary host-button-group-button">Alle</label>
-        <label class="btn btn-secondary host-button-group-button">
-            <input type="radio" name="options" id="play_undone_rooms" autocomplete="off"
-                   class="btn btn-secondary host-button-group-button">Ungelöst</label>
-        <label class="btn btn-secondary host-button-group-button">
-            <input type="radio" name="options" id="play_done_rooms" autocomplete="off"
-                   class="btn btn-secondary host-button-group-button">Gelöst</label>
+    <div id="play_rooms" class="btn-group btn-group-toggle" role="group" aria-label="Filter">
+        <label id="play_all_rooms" class="btn btn-secondary host-button-group-button active host-state-filter"
+               value="location-state">
+            Alle</label>
+        <label id="play_undone_rooms" class="btn btn-secondary host-button-group-button host-state-filter"
+               value="location-state-undone">
+            Ungelöst</label>
+        <label id="play_done_rooms" class="btn btn-secondary host-button-group-button host-state-filter"
+               value="location-state-done">
+            Gelöst</label>
     </div>
 </div>
 

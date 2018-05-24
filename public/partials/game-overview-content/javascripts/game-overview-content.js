@@ -1,7 +1,4 @@
 function initGameOverviewContent() {
-    // Preselect Button Alle (Button Navbar)
-    $("#play_all_rooms").focus();
-
     // On-Click event für QR-Code Button
     $("#btn-scan-qr").on("click", function () {
         setNodeHookFromFile($("#content-hook"), "../partials/qr-scanner/qr-scanner.html", function () {
@@ -19,21 +16,6 @@ function initGameOverviewContent() {
         user.locations[$(this).val()] = [];
     });
 
-    //Alle Räume Filter setzen
-    let allRooms = $("#play_all_rooms");
-    allRooms.val("location-state");
-    allRooms.on("click", updateTableView());
-
-    //Unerfüllte Räume Filter setzen
-    let undoneRooms = $("#play_undone_rooms");
-    undoneRooms.val("location-state-undone");
-    undoneRooms.on("click", updateTableView());
-
-    //Erfüllte RÄume Filter setzen
-    let doneRooms = $("#play_done_rooms");
-    doneRooms.val("location-state-done");
-    doneRooms.on("click", updateTableView());
-
     // Sucht nach allen Benutzer-Raum Relationen und baut damit eine Übersicht
     // zusammen
     $.get("find/missions").done(function (pData) {
@@ -45,6 +27,18 @@ function initGameOverviewContent() {
         }
     });
 
+    //Es darf nur ein Statusfilter aktiv sein
+    $("label.host-state-filter").on("click", function () {
+        $("label.host-state-filter").removeClass("active");
+        $(this).addClass("active");
+        updateTableView();
+    });
+
+    //Values der einzelnen Labels setzen
+    $("#play_all_rooms").val("location-state");
+    $("#play_undone_rooms").val("location-state-undone");
+    $("#play_done_rooms").val("location-state-done");
+
     // Wenn auf ein bestimmtes label geklickt wird, so wird gleichzeitig das
     // kind-input-element berührt
     $("label.btn.btn-secondary.host-button-group-button").on("click", function () {
@@ -52,7 +46,7 @@ function initGameOverviewContent() {
     });
 
     // Handhabt die Sichtbarkeit bei check wechsel
-    $("label.btn.btn-secondary.host-button-group-button > input[type='checkbox']").on("click", function () {
+    $("label.btn.btn-secondary.host-button-group-button.host-floor > input[type='checkbox']").on("click", function () {
         updateTableView();
     });
 }
@@ -82,11 +76,13 @@ function setLocations(pObj) {
  */
 function setLayer(pLayer) {
     var locations = user.locations[pLayer];
-    //States können undefined sein, um diese Filtern zu können daher eine Stringbehandlung
-    var stateString = !locations.state || locations.state === RoomStates.VISITED ? " location-state location-state-undone" : " location-state location-state-done";
+
 
     for (let i in locations) {
         if (locations.hasOwnProperty(i)) {
+            //States können undefined sein, um diese Filtern zu können daher eine Stringbehandlung
+            var stateString = !locations[i].state || locations[i].state === RoomStates.VISITED ? " location-state location-state-undone" : " location-state location-state-done";
+
             $('<div/>', {
                 id: locations[i]._id + "-hook",
                 class: "labor-frame floor-" + pLayer + stateString
@@ -116,8 +112,12 @@ function setTableContent(dataObj) {
 }
 
 function updateTableView() {
-    let statusFilter = $("#play_rooms > .active > input[type='checkbox']");
+    let statusFilter = $("#play_rooms > label.active");
+    let floorFilter = $("label.btn.btn-secondary.host-button-group-button.host-floor > input:checked");
 
-    let floorFilter = $("label.btn.btn-secondary.host-button-group-button > input[type='checkbox']");
-    $("div.labor-frame.floor-" + floorFilter.val() + "." + statusFilter.val()).toggle(floorFilter.checked);
+    $("div.labor-frame").hide();
+    $(floorFilter).each(function (i, curFloorFilter) {
+        console.log("div.labor-frame.floor-" + $(curFloorFilter).val() + "." + $(statusFilter).val());
+        $("div.labor-frame.floor-" + $(curFloorFilter).val() + "." + $(statusFilter).val()).show();
+    });
 }

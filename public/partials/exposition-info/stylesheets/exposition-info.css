@@ -69,3 +69,8 @@ li:hover, a:hover {
 #exposition-submit-game-answer {
     margin-top: 15px;
 }
+
+.current-game-display-frame.active-history {
+    height: 20px;
+    width: 20px;
+}

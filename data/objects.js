@@ -61,6 +61,13 @@ dbObjects.set(
     ]
 );
 
+dbObjects.set(
+    collections.EVENTS,
+    [
+        new objects.Event("TestEvent", String(new Date().toJSON().slice(0, 10)))
+    ]
+);
+
 
 /**
  * Hilfsfunktion, die ein Game anhand seiner Id sucht.

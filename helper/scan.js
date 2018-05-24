@@ -50,6 +50,25 @@ function getVisitWithId(pVisits, pVisitId) {
     return returnVisit;
 }
 
+/**
+ * Gibt das Eingangsobjekt, zusammen mit der jeweiligen Status-Flag zurück
+ * @param pGame
+ * @param pVisit
+ * @returns {*}
+ */
+function calculateStateForGame(pGame, pVisit) {
+    if (pVisit) {
+        for (let i in pVisit.answers) {
+            if (pVisit.answers.hasOwnProperty(i) && pVisit.answers[i].gameId.toString() === pGame._id.toString()) {
+                pGame.state = pVisit.answers[i].state;
+                return pGame;
+            }
+        }
+    }
+    pGame.state = objects.GameStates.UNPLAYED;
+    return pGame;
+}
+
 module.exports = {
 
     hasAlreadyVisited: function (pUser, pLocation) {
@@ -131,16 +150,3 @@ module.exports = {
     }
 
 };
-
-function calculateStateForGame(pGame, pVisit) {
-    if (pVisit) {
-        for (let i in pVisit.answers) {
-            if (pVisit.answers.hasOwnProperty(i) && pVisit.answers[i].gameId.toString() === pGame._id.toString()) {
-                pGame.state = pVisit.answers[i].state;
-                return pGame;
-            }
-        }
-    }
-    pGame.state = objects.GameStates.UNPLAYED;
-    return pGame;
-}

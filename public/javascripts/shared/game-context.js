@@ -28,7 +28,7 @@ GameStates = {
 };
 /**
  * Enum welches die einzelnen Locationstatus abbildet
- * @type {{VISITED: number, STARTED: number, COMPLETED: number, FLAWLESS: number}}
+ * @type {{VISITED: number, COMPLETED: number, FLAWLESS: number}}
  */
 RoomStates = {
     VISITED: 0,

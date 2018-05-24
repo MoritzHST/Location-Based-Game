@@ -17,7 +17,7 @@ module.exports = {
      * Generiert ein Sessiontoken
      */
     generateToken: function () {
-        var returnObj = String(Math.floor(Math.random() * 10000)).padStart(4, "0");
+        let returnObj = String(Math.floor(Math.random() * 10000)).padStart(4, "0");
         logging.Info("Token " + returnObj + " generated");
         return returnObj;
     },
@@ -33,7 +33,7 @@ module.exports = {
      */
     findObject: function (pCollection, pObject, pCallback) {
         return new Promise(resolve => {
-            var database = mongo.Object();
+            let database = mongo.Object();
             database.Client.connect(database.Url, function (error, result) {
                 if (error) {
                     pCallback(error, null);
@@ -63,13 +63,13 @@ module.exports = {
      */
     updateObject: function (pCollection, pObject, pQuery, pCallback) {
         return new Promise(resolve => {
-            var database = mongo.Object();
+            let database = mongo.Object();
             database.Client.connect(database.Url, function (error, result) {
                 if (error) {
                     pCallback(error, null);
                     resolve(null);
                 } else {
-                    var friendlyObject = handler.idFriendlyQuery(pObject);
+                    let friendlyObject = handler.idFriendlyQuery(pObject);
                     result.db(database.Database).collection(pCollection).findAndModify(friendlyObject, [['_id', 'asc']], {'$set': (pQuery ? pQuery : friendlyObject)}, {
                         new: true,
                         upsert: true
@@ -89,7 +89,7 @@ module.exports = {
      */
     deleteObjects: function (pCollection, pObjects, pCallback) {
         return new Promise(resolve => {
-            var database = mongo.Object();
+            let database = mongo.Object();
             database.Client.connect(database.Url, function (error, result) {
                 if (error) {
                     pCallback(error, null);
@@ -115,7 +115,7 @@ module.exports = {
      */
     createCollection: function (pCollection, pCallback) {
         return new Promise(resolve => {
-            var database = mongo.Object();
+            let database = mongo.Object();
             database.Client.connect(database.Url, function (error, result) {
                 if (error) {
                     pCallback(error, null);
@@ -138,7 +138,7 @@ module.exports = {
      */
     getCollection: function (pCollection, pCallback) {
         return new Promise(resolve => {
-            var database = mongo.Object();
+            let database = mongo.Object();
             if (pCollection) {
                 database.Client.connect(database.Url, function (error, result) {
                     if (error) {
@@ -174,12 +174,12 @@ module.exports = {
      * der zu löschenden Datenbank pCallback -->
      */
     dropCollection: function (pCollection, pCallback) {
-        var database = mongo.Object();
+        let database = mongo.Object();
         database.Client.connect(database.Url, function (error, result) {
             if (error) {
                 pCallback(error, null);
             } else {
-                result.db(database.Database).servercollection(pCollection).drop(function (err, db) {
+                result.db(database.Database).collection(pCollection).drop(function (err, db) {
                     result.close();
                     pCallback(err, db);
                 });
@@ -187,48 +187,6 @@ module.exports = {
         });
     },
 
-    joinCollections: function (pCollection, pFrom, pLocalField, pForeignField, pAs) {
-        const database = mongo.Object();
-        const joinQuery = {
-            $lookup: {
-                "from": pFrom,
-                "localField": pLocalField,
-                "foreignField": pForeignField,
-                "as": pAs
-            }
-        };
-
-        database.Client.connect(database.Url, function (err, result) {
-            if (err) {
-                pCallback(err, null);
-            } else {
-                result.db(database.Database).collection(pCollection).aggregate(handler.idFriendlyQuery(joinQuery)).toArray(function (error, res) {
-                    if (error) {
-                        pCallback(error, null);
-                    }
-                    result.close();
-                    pCallback(null, res);
-                });
-            }
-        });
-    },
-
-    /*
-     * joinCollection: function (pCollection, pJoin, pCallback) { const database =
-     * mongo.Object(); database.Client.connect(database.Url, function (err,
-     * result) { if (err) { pCallback(err, null); } else {
-     * result.db(database.Database).collection(pCollection).aggregate(handler.idFriendlyQuery(pJoin)).toArray(function
-     * (error, res) { if (error) { pCallback(error, null); } result.close();
-     * pCallback(null, res); }); } });
-     */
-    /*
-     * joinCollection: function (pCollection, pLookup, pCallback) { const
-     * database = mongo.Object(); database.Client.connect(database.Url, function
-     * (err, result) { if (err) { pCallback(err, null); } else {
-     * result.db(database.Database) .collection(pCollection) .aggregate(pLookup)
-     * .toArray(function (err, res) { if (err) { pCallback(error, null); }
-     * result.close(); pCallback(null, res); }); } });
-     */
     isReady: function (pCallback) {
         return new Promise(resolve => {
             const database = mongo.Object();

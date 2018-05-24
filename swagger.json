@@ -542,7 +542,7 @@
         }
       }
     },
-    "/find/scan": {
+    "/find/scan/{identifier}": {
       "parameters": [
         {
           "name": "identifier",

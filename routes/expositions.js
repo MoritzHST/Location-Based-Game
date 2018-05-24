@@ -20,7 +20,7 @@ const upload = multer(
 /* Global */
 
 /* GET */
-/* Gibt ein oder alle Location(s) zurück */
+/* Gibt eine oder alle Ausstellungen zurück */
 router.get('/find/expositions', function (req, res) {
     operations.findObject(expositionCollection, (handler.checkIfValidQuery(req.query) ? req.query : null), function (err, item) {
         handler.dbResult(err, res, item, "Das Item " + JSON.stringify(req.query).replace(/\"/g, '') + " existiert nicht.");
@@ -28,7 +28,7 @@ router.get('/find/expositions', function (req, res) {
 });
 
 /* POST */
-/* Fügt eine Location der Datenbank hinzu */
+/* Fügt eine Ausstellung der Datenbank hinzu */
 router.post('/insert/expositions', upload.fields([{
     name: 'thumbnailPath',
     maxCount: 1
@@ -61,7 +61,7 @@ router.post('/insert/expositions', upload.fields([{
     }
 });
 
-/* Aktualisiert eine Location mit einer bestimmten id */
+/* Aktualisiert eine Ausstellung mit einer bestimmten id */
 router.post('/update/expositions/:id', upload.single('image'), function (req, res) {
     //lösche File wenn ein neues hochgeladen wird
     const file = req.file;
@@ -75,7 +75,7 @@ router.post('/update/expositions/:id', upload.single('image'), function (req, re
     }
 });
 
-/* Löscht Location(s) */
+/* Löscht eine Ausstellung */
 router.post('/delete/expositions', function (req, res) {
     fileHelper.deleteFile(expositionCollection, req.query._id, function () {
         if (handler.checkIfValidQuery(req.query)) {

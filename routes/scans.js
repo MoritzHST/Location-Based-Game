@@ -26,7 +26,7 @@ router.get('/find/scan/:identifier', function (req, res) {
 
     let identifier = req.query.identifier;
 
-    if (!handler.checkIfValidQuery(req) || !identifier) {
+    if (!handler.checkIfValidQuery(req.query) || !identifier) {
         res.status(422).jsonp({
             "error": invalidRequest
         });

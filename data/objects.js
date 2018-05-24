@@ -42,6 +42,14 @@ dbObjects.set(
         new objects.SimpleQuiz("Was versteht man unter VR?", [new objects.Answer("Virtuelle Realität", true), new objects.Answer("Virtual Reality", true), new objects.Answer("Vereinsregister", false), new objects.Answer("Virenreiniger", false), new objects.Answer("Vip Room", false)], 100)
     ]
 );
+//Events
+dbObjects.set(
+    collections.EVENTS,
+    [
+        new objects.Event("Campus Tag 2018", String(new Date().toJSON().slice(0, 10)))
+    ]
+);
+
 //LocationMapping
 dbObjects.set(
     collections.LOCATION_MAPPING,
@@ -61,13 +69,13 @@ dbObjects.set(
     ]
 );
 
+//EventMapping
 dbObjects.set(
-    collections.EVENTS,
+    collections.EVENT_MAPPING,
     [
-        new objects.Event("TestEvent", String(new Date().toJSON().slice(0, 10)))
+        new objects.EventMapping(dbObjects.get(collections.EVENTS)[0], dbObjects.get(collections.LOCATION_MAPPING)[0])
     ]
 );
-
 
 /**
  * Hilfsfunktion, die ein Game anhand seiner Id sucht.

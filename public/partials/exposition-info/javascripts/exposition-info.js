@@ -1,8 +1,11 @@
 var answerObj;
 var gameObj;
 var errorTimer;
+var locationIdentifier;
 
 function initExpositionInfo(obj) {
+    //LocationIdentifier setzen
+    locationIdentifier = obj.location.identifier;
     // Tabs setzen
     $(function () {
         $("#exposition-info-switch").tabs();
@@ -11,7 +14,7 @@ function initExpositionInfo(obj) {
     //Infos aus dem Objekt anzeigen
     initViewContent(obj);
 
-    if (obj.context === GameState.CODE_SCANNED /**TODO Visiitstate verodern*/) {
+    if (obj.context === GameViewContext.CODE_SCANNED) {
         initContextCodeScanned(obj);
     }
     else {
@@ -44,6 +47,7 @@ function initViewContent(obj) {
         $("#exposition-description").hide();
     }
 }
+
 //Initialisierungsfunktion falls ein Code gescanned wurde
 function initContextCodeScanned(obj) {
     //Code gescanned -> Button kann also ausgeblendet werden
@@ -53,21 +57,21 @@ function initContextCodeScanned(obj) {
 
     //Das erste nicht gespielte Spiel heraussuchen
     for (let i in gameObj.games) {
-        if (gameObj.games.hasOwnProperty(i)) {
-            if (gameObj.games[i] /**TODO: Verifen ob Spiel abgeschlosssen wurde **/) {
-                setCurrentGame(gameObj.games[i]);
-                gameObj.currentGameNumber = i;
-                break;
-            }
+        if (gameObj.games.hasOwnProperty(i) && gameObj.games[i].state === GameStates.UNPLAYED) {
+            setCurrentGame(gameObj.games[i]);
+            gameObj.currentGameNumber = i;
+            break;
         }
     }
 
     //Abschicken Button registrieren
     $("#exposition-submit-game-answer").on("click", function () {
         if (answerObj) {
+            //Location id setzen,  um Auswertung zu vereinfachen
+            answerObj.locationId = obj.location._id;
             $.post("post/answer", answerObj)
-                .done(function (obj) {
-                    setNodeHookFromFile($("#success-hook"), "partials/play-success-box/play-success-box.html", function (errMsgObj) {
+                .done(function () {
+                    setNodeHookFromFile($("#success-hook"), "partials/play-success-box/play-success-box.html", function () {
                         $("#success-box-title").html("Die Antwort war richtig!");
                         //Nach Konstanter Sekunden-Anzahl wieder ausblenden
                         clearInterval(errorTimer);
@@ -75,6 +79,7 @@ function initContextCodeScanned(obj) {
                             clearNodeHook("success-hook");
                         }, notificationFadeOut);
                     });
+                    $("#game-display-" + gameObj.currentGameNumber).addClass("game-completed game-completed-" + GameStates.CORRECT);
                     nextGame();
                 })
                 .fail(function (obj) {
@@ -86,7 +91,7 @@ function initContextCodeScanned(obj) {
                             clearNodeHook("failure-hook");
                         }, notificationFadeOut);
                     }, obj);
-
+                    $("#game-display-" + gameObj.currentGameNumber).addClass("game-completed-" + GameStates.WRONG);
                     if (obj.status === 400) {
                         nextGame();
                     }
@@ -100,15 +105,23 @@ function initContextCodePending(obj) {
     //Button Abschicken ausblenden, da noch kein Quiz aktiv ist
     $("#exposition-submit-game-answer").hide();
 
-    //Button zum scannen muss mit einer Route verknüpft werden
-    $("#exposition-scan-qr").on("click", function () {
-        setNodeHookFromFile($("#content-hook"), "../partials/qr-scanner/qr-scanner.html", function () {
-            $("#content-hook").ready(function () {
-                obj.context = GameState.SCAN_ATTEMPT_FROM_EXPOSITION_INFO;
-                initScanner(obj);
+    //Abfragen, ob Antworten angezeigt werden können
+    $.get('get/answers', {identifier: obj.location.identifier})
+        .done(function (callbackObj) {
+            initGameFinishedView(callbackObj);
+        })
+        .fail(function () {
+            //Der Raum ist noch nicht fertig also muss der Scan button reagieren
+            //Button zum scannen muss mit einer Route verknüpft werden
+            $("#exposition-scan-qr").on("click", function () {
+                setNodeHookFromFile($("#content-hook"), "../partials/qr-scanner/qr-scanner.html", function () {
+                    $("#content-hook").ready(function () {
+                        obj.context = GameViewContext.SCAN_ATTEMPT_FROM_EXPOSITION_INFO;
+                        initScanner(obj);
+                    });
+                });
             });
         });
-    });
 }
 
 //Verarbeitet die Daten, um die Kreise für die Übersicht über das akutelle Spiel zu initialisieren
@@ -117,17 +130,21 @@ function setCurrentGameDisplay(obj) {
     //Spielobjekt initialiseren
     gameObj = new GameObject();
     gameObj.games = obj.games;
+    //Wrapper clearen
+    $("#current-game-display-wrapper").html("");
 
     for (let i in gameObj.games) {
         if (gameObj.games.hasOwnProperty(i)) {
             let gameDisplayContainerClass = "current-game-display-frame";
-            if (/**TODO: Flag wenn Spiel bereits abgeschlossen wurde verifen**/ false) {
-                gameDisplayContainerClass += " game-completed";
+            if (gameObj.games[i].state !== GameStates.UNPLAYED) {
+                gameDisplayContainerClass += " game-completed-" + gameObj.games[i].state + " game-completed";
             }
             //Neue Container für die Anzeige generieren
             $("<a/>", {
                 id: "game-display-" + i,
-                class: gameDisplayContainerClass
+                class: gameDisplayContainerClass,
+                value: i,
+                href: "#"
             }).appendTo($("#current-game-display-wrapper"));
 
             //Clientseite GameNummer zuweisen, um Spiele refernzieren zu können
@@ -140,10 +157,7 @@ function setCurrentGameDisplay(obj) {
 function setCurrentGame(game) {
     //Das Aktuelle Active Flag entfernen
     $(".current-game-display-frame").removeClass("active");
-
-    if (true/**TODO: Flag wenn Spiel bereits abgeschlossen wurde verifen**/) {
-        $("#game-display-" + game.gameNumber).addClass("active");
-    }
+    $("#game-display-" + game.gameNumber).addClass("active");
     //Spiel anzeigen
     renderGameByType(game);
 }
@@ -153,27 +167,70 @@ function renderGameByType(obj) {
         case Game.SINGLE_CHOICE:
             setNodeHookFromFile($("#mission-hook"), "partials/simple-text-quiz/simple-text-quiz.html", undefined, undefined, "initSimpleTextQuiz", obj);
             break;
+        case Game.MULTIPLE_CHOICE:
+            //TODO
+            break;
+        default:
+        //Nix zu tun
     }
 }
 
 function nextGame() {
-    //Altes Spiel als fertig makieren
-    $("#game-display-" + gameObj.currentGameNumber).addClass("game-completed");
-
     //Durchloopen um das nächste zu finden und zu setzen
     for (let i in gameObj.games) {
-        if (gameObj.games.hasOwnProperty(i)) {
-            if (parseInt(gameObj.games[i].gameNumber) === parseInt(gameObj.currentGameNumber) + 1) {
-                setCurrentGame(gameObj.games[i]);
-                gameObj.currentGameNumber++;
-                break;
-            }
+        if (gameObj.games.hasOwnProperty(i) && parseInt(gameObj.games[i].gameNumber) === parseInt(gameObj.currentGameNumber) + 1) {
+            setCurrentGame(gameObj.games[i]);
+            gameObj.currentGameNumber++;
+            return;
         }
     }
 
     //Es wurde keins gefunden
+    renderFinishedView();
+}
 
-    $("#mission-hook").html("Alle durch");
+function renderFinishedView() {
+    //Das Aktuelle Active Flag entfernen
+    $(".current-game-display-frame").removeClass("active");
+    //Button deaktivieren
+    $("#exposition-submit-game-answer").addClass("disabled");
+
+    //Antworten sind da, also einmal die von Node ausgewerteten ANntworten abfragen
+    $.get('get/answers', {identifier: locationIdentifier})
+        .done(function (callbackObj) {
+            initGameFinishedView(callbackObj);
+        });
+}
+
+function initGameFinishedView(obj) {
+    //Neues GameObject zusammenbauen, das rein zur Anzeige dient
+    gameObj = new GameObject();
+    for (let i in obj) {
+        if (obj.hasOwnProperty(i)) {
+            let tmpObj = {};
+
+            tmpObj.state = obj[i].state;
+            tmpObj.question = obj[i].question;
+            tmpObj.givenAnswer = obj[i].answer;
+            tmpObj.type = obj[i].type;
+
+            gameObj.games.push(tmpObj);
+        }
+    }
+    setCurrentGameDisplay(gameObj);
+    //der Button zum Scannen eines QR-Codes wird nicht benötigt, da der Raum abgeschlossen ist
+    $("#exposition-scan-qr").hide();
+
+    //Spiel beendet -> Infotext
+    setNodeHookFromFile($("#mission-hook"), 'partials/game-finished-view/game-finished-view.html');
+
+    $(".current-game-display-frame").on("click", function () {
+        if ($(this).hasClass("game-completed")) {
+            $(".current-game-display-frame").removeClass("active-history");
+            renderGameByType(gameObj.games[$(this).attr('value')]);
+            $(this).addClass("active-history");
+        }
+    });
 }
 
 //GameObject Konstruktor

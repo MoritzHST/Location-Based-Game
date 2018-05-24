@@ -1,21 +1,38 @@
-.padding-10 {
-    padding: 10px 5px 10px 5px;
-}
-
-.media-border {
+.overview-table-cell-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr 8fr;
+    min-height: 80px;
+    width: 100%;
+    border: 1px solid #BBBBBB;
     border-radius: 0 4px 4px 0;
-    border: 1px #BBBBBB solid;
 }
 
-.media {
-    min-height: 75px;
-    margin-top: 10px !important;
+.overview-table-cell-container:nth-last-of-type(1) {
+    margin-top: 15px;
 }
 
-.media-left {
-    width: 25% !important;
+.overview-table-cell-location-state {
 }
 
-.media-left img {
-    max-width: 100%;
+.overview-table-cell-location-image-wrapper {
+    overflow: hidden;
+    background-image: url("../../../uploads/images/room/5c279a1aa14994e66ee8ea46d1fcc07b");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.overview-table-cell-location-info {
+    margin-left: 15px;
+}
+
+.overview-room-state-context-0 {
+    background-color: #f7ab38;
+}
+
+.overview-room-state-context-1 {
+    background-color: #0055dd;
+}
+
+.overview-room-state-context-2 {
+    background-color: #4F8A10;
 }

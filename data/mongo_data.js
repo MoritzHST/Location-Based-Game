@@ -2,17 +2,37 @@ const operations = require('../mongodb/operations');
 const logging = require('../helper/logging');
 const dbObjects = require('./objects');
 
-function clearCollections() {
-    for (let collection of dbObjects.keys()) {
-        operations.createCollection(collection, function (err, db) {
-            if (!err) {
-                logging.Info("Collection gelöscht: " + db);
-            }
-        });
-    }
+async function clearCollections() {
+    return new Promise(async resolve => {
+        for (let collection of dbObjects.keys()) {
+            await clearCollection(collection);
+        }
+        resolve();
+    });
 }
 
-async function insertIntoDb(collection, object) {
+function clearCollection(pCollection) {
+    return new Promise(resolve => {
+        operations.dropCollection(pCollection, function (err, db) {
+            if (!err) {
+                logging.Info("Collection gelöscht: " + pCollection);
+                operations.createCollection(pCollection, function (err, db) {
+                    if (!err) {
+                        logging.Info("Collection erstellt: " + db.s.name);
+                        resolve(true);
+                    } else {
+                        resolve(false);
+                    }
+                });
+            } else {
+                resolve(false);
+            }
+        });
+    });
+}
+
+
+function insertIntoDb(collection, object) {
     //Objekt wird eingefügt/ersetzt
     return new Promise(
         resolve => {
@@ -46,9 +66,13 @@ async function insertIntoDatabase() {
     }
 }
 
-if (process.env.env === "development") {
+async function handleDebugObjects() {
     //Lösche die Collections
-    clearCollections();
+    await clearCollections();
     //Funktionsaufruf für das File
-    insertIntoDatabase();
+    await insertIntoDatabase();
+}
+
+if (process.env.env === "development") {
+    handleDebugObjects();
 }

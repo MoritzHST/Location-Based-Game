@@ -60,6 +60,13 @@ dbObjects.set(
         )
     ]
 );
+//Events
+dbObjects.set(
+    collections.EVENTS,
+    [
+        new objects.Event("TestEvent", String(new Date().toJSON().slice(0, 10)))
+    ]
+);
 
 
 /**

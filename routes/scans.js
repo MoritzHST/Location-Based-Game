@@ -10,6 +10,8 @@ const objects = require('../mongodb/objects');
 const gameHelper = require('../helper/scan');
 const eventHelper = require('../helper/event');
 
+const invalidRequest = "Die Anfrage ist ungültig";
+
 /* Global */
 
 /**
@@ -33,6 +35,13 @@ router.get('/find/scan', function (req, res) {
     req.query = handler.getRealRequest(req.query, req.body);
 
     let identifier = req.query.identifier;
+
+    if (!handler.checkIfValidQuery(req.query) || !identifier) {
+        res.status(422).jsonp({
+            "error": invalidRequest
+        });
+        return;
+    }
 
     operations.findObject(locationMappingCollection,
         {

@@ -117,7 +117,6 @@ function updateTableView() {
 
     $("div.labor-frame").hide();
     $(floorFilter).each(function (i, curFloorFilter) {
-        console.log("div.labor-frame.floor-" + $(curFloorFilter).val() + "." + $(statusFilter).val());
         $("div.labor-frame.floor-" + $(curFloorFilter).val() + "." + $(statusFilter).val()).show();
     });
 }

@@ -4,6 +4,7 @@ const router = require('express').Router();
 const logging = require('../helper/logging');
 
 const locationMappingCollection = require('../mongodb/collections').LOCATION_MAPPING;
+const eventsCollection = require('../mongodb/collections').EVENTS;
 const userCollection = require('../mongodb/collections').USERS;
 const objects = require('../mongodb/objects');
 
@@ -24,12 +25,13 @@ const invalidRequest = "Die Anfrage ist ungültig";
  * den Antworten keinerlei Informationen über ihre Richtigkeit angehangen sind.
  */
 router.get('/find/scan', function (req, res) {
-    if (!eventHelper.isEventActive()) {
+    let currentEvent = eventHelper.getCurrentEvent();
+    if (!currentEvent) {
         res.status(422).jsonp({
             "error": eventHelper.noEventMessage
         });
         logging.Error("Aktuell findet kein Event statt");
-        return
+        return;
     }
 
     req.query = handler.getRealRequest(req.query, req.body);
@@ -43,9 +45,10 @@ router.get('/find/scan', function (req, res) {
         return;
     }
 
-    operations.findObject(locationMappingCollection,
+    operations.findObject(eventsCollection,
         {
-            "location.identifier": identifier
+            "_id": currentEvent._id,
+            "locationMappings": {$elemMatch: {"location.identifier": identifier}}
         }, function (err, item) {
             //Es wurde ein Objekt gefunden -> also Zaubern
             if (item) {

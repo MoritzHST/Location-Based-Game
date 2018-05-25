@@ -20,7 +20,8 @@ router.post('/post/answer', function (req, res) {
     req.query = handler.getRealRequest(req.query, req.body);
     logging.Parameter("request.query", req.query);
 
-    if (!eventHelper.isEventActive()) {
+    let currentEvent = eventHelper.getCurrentEvent();
+    if (!currentEvent) {
         res.status(422).jsonp({
             "error": eventHelper.noEventMessage
         });
@@ -28,7 +29,7 @@ router.post('/post/answer', function (req, res) {
         return;
     }
 
-    canAnswerQuiz(req)
+    canAnswerQuiz(req,)
         .then(function (pObj) {
             if (!pObj) {
                 res.status(423).jsonp({
@@ -77,7 +78,7 @@ router.get('/get/answers', function (req, res) {
     });
 });
 
-async function isRoomCompleted(pRequest) {
+async function isRoomCompleted(pRequest, pEvent) {
     logging.Entering("isRoomCompleted");
     logging.Parameter("request.query", pRequest.query);
 

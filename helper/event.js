@@ -3,14 +3,13 @@ const eventsCollection = require('../mongodb/collections').EVENTS;
 
 const noEventMessage = "Tut uns leid. Aktuell findet kein Event statt";
 
-function isEventActive() {
+function getCurrentEvent() {
     return new Promise(resolve => {
             operations.findObject(eventsCollection, {"date": new Date().toJSON().slice(0, 10)}, function (err, item) {
                 if (item) {
-                    resolve(true);
-                    console.log(item);
+                    resolve(item);
                 } else {
-                    resolve(false);
+                    resolve(undefined);
                 }
             });
         }
@@ -18,8 +17,8 @@ function isEventActive() {
 }
 
 module.exports = {
-    isEventActive: async function () {
-        return await isEventActive();
+    getCurrentEvent: async function () {
+        return await getCurrentEvent();
     },
 
     noEventMessage: noEventMessage

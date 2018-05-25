@@ -30,7 +30,6 @@ router.get('/find/users', function(req, res) {
  * @returns Den hinzugefügten Benutzer (oder eine Fehlermeldung)
  */
 router.post('/insert/users', function(req, res) {
-    // req.query = JSON.parse(JSON.stringify(req.body));
     req.query = handler.getRealRequest(req.query, req.body);
 
     operations.findObject(userCollection, req.query, function(err, item) {

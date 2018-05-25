@@ -25,6 +25,15 @@ router.get('/find/scan', function (req, res) {
     req.query = handler.getRealRequest(req.query, req.body);
 
     let identifier = req.query.identifier;
+    let userId;
+    try {
+        userId = req.session.user._id;
+    } catch (e) {
+        res.status(422).jsonp({
+            error: "Du musst eingeloggt sein um diese Funktion zu nutzen"
+        });
+        return;
+    }
 
     if (!handler.checkIfValidQuery(req.query) || !identifier) {
         res.status(422).jsonp({
@@ -32,7 +41,6 @@ router.get('/find/scan', function (req, res) {
         });
         return;
     }
-
     operations.findObject(locationMappingCollection,
         {
             "location.identifier": identifier
@@ -40,7 +48,7 @@ router.get('/find/scan', function (req, res) {
             //Es wurde ein Objekt gefunden -> also Zaubern
             if (item) {
                 item.games = gameHelper.prepareGames(item.games);
-                operations.findObject(userCollection, {_id: req.session.user._id}, function (userErr, userItem) {
+                operations.findObject(userCollection, {_id: userId}, function (userErr, userItem) {
                         item.games = gameHelper.addGameStates(userItem.visits, item.games, item.location._id);
                         if (!gameHelper.hasAlreadyVisited(userItem, item.location)) {
                             //Visits müssen initialisiert werden, wenn es sie noch nicht gibt

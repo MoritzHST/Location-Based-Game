@@ -14,10 +14,19 @@ const errorMessage = "Fehler beim auslesen der Missionsübersicht";
  *
  */
 router.get('/find/missions', function (req, res) {
+    let userId;
+    try {
+        userId = req.session.user._id;
+    } catch (e) {
+        res.status(422).jsonp({
+            error: "Du musst eingeloggt sein um diese Funktion zu nutzen"
+        });
+        return;
+    }
     operations.findObject(locationMappingCollection,
         null, function (err, item) {
             operations.findObject(userCollection,
-                {_id: req.session.user._id}, function (userErr, user) {
+                {_id: userId}, function (userErr, user) {
                     if (!item) {
                         res.status(422).jsonp({
                             "error": errorMessage

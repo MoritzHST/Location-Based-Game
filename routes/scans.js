@@ -1,12 +1,14 @@
 const operations = require('../mongodb/operations');
 const handler = require('../mongodb/handler');
 const router = require('express').Router();
+const logging = require('../helper/logging');
 
 const locationMappingCollection = require('../mongodb/collections').LOCATION_MAPPING;
 const userCollection = require('../mongodb/collections').USERS;
 const objects = require('../mongodb/objects');
 
 const gameHelper = require('../helper/scan');
+const eventHelper = require('../helper/event');
 
 const invalidRequest = "Die Anfrage ist ungültig";
 
@@ -22,6 +24,14 @@ const invalidRequest = "Die Anfrage ist ungültig";
  * den Antworten keinerlei Informationen über ihre Richtigkeit angehangen sind.
  */
 router.get('/find/scan', function (req, res) {
+    if (!eventHelper.isEventActive()) {
+        res.status(422).jsonp({
+            "error": eventHelper.noEventMessage
+        });
+        logging.Error("Aktuell findet kein Event statt");
+        return
+    }
+
     req.query = handler.getRealRequest(req.query, req.body);
 
     let identifier = req.query.identifier;

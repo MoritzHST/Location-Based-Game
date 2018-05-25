@@ -9,6 +9,7 @@ const userCollection = require('../mongodb/collections').USERS;
 const gameCollection = require('../mongodb/collections').GAMES;
 const locationMappingCollection = require('../mongodb/collections').LOCATION_MAPPING;
 const handler = require('../mongodb/handler');
+const eventHelper = require('../helper/event');
 
 /* Global */
 
@@ -18,6 +19,14 @@ router.post('/post/answer', function (req, res) {
     logging.Entering("POST /post/answer");
     req.query = handler.getRealRequest(req.query, req.body);
     logging.Parameter("request.query", req.query);
+
+    if (!eventHelper.isEventActive()) {
+        res.status(422).jsonp({
+            "error": eventHelper.noEventMessage
+        });
+        logging.Error("Aktuell findet kein Event statt");
+        return;
+    }
 
     canAnswerQuiz(req)
         .then(function (pObj) {

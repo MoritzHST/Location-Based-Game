@@ -15,12 +15,12 @@ const eventHelper = require('../helper/event');
 
 /* Post */
 /* Verarbeitet eine vom Benutzer gegebene Antwort*/
-router.post('/post/answer', function (req, res) {
+router.post('/post/answer', async function (req, res) {
     logging.Entering("POST /post/answer");
     req.query = handler.getRealRequest(req.query, req.body);
     logging.Parameter("request.query", req.query);
 
-    let currentEvent = eventHelper.getCurrentEvent();
+    let currentEvent = await eventHelper.getCurrentEvent();
     if (!currentEvent) {
         res.status(422).jsonp({
             "error": eventHelper.noEventMessage
@@ -92,14 +92,26 @@ async function isRoomCompleted(pRequest, pEvent) {
                 let curVisit = findVisitByLocationIdentifier(userItem, pRequest.query.identifier);
                 if (curVisit.answers) {
                     //Prüfen ob genausoviele Antworten wie Spiele zu der Location existieren, wenn ja ist er fertig
-                    await operations.findObject(locationMappingCollection, {"location._id": ObjectID(curVisit.location._id)}, function (mappingError, mappingItem) {
-                        if (mappingItem.games.length === curVisit.answers.length) {
-                            resolve(curVisit.answers);
+                    await operations.findObject(locationMappingCollection,
+                        {
+                            "_id": pEvent._id,
+                            "locationMappings": {"$elemMatch": {"location._id": ObjectID(curVisit.location._id)}},
+                            function (mappingError, eventItem) {
+                                let mappingItem;
+                                eventItem.locationMappings.forEach(function (mapping) {
+                                    if (mapping.location._id === curVisit.location._id) {
+                                        mappingItem = mapping;
+                                    }
+                                });
+                                if (mappingItem && mappingItem.games.length === curVisit.answers.length) {
+                                    resolve(curVisit.answers);
+                                }
+                                else {
+                                    resolve(false);
+                                }
+                            }
                         }
-                        else {
-                            resolve(false);
-                        }
-                    });
+                    );
                 }
                 else {
                     resolve(false);

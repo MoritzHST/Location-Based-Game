@@ -24,8 +24,8 @@ const invalidRequest = "Die Anfrage ist ungültig";
  * entsprechende Anzahl an Antworten und Fragen, sowie bei noch nicht beantworteten Fragen,
  * den Antworten keinerlei Informationen über ihre Richtigkeit angehangen sind.
  */
-router.get('/find/scan', function (req, res) {
-    let currentEvent = eventHelper.getCurrentEvent();
+router.get('/find/scan', async function (req, res) {
+    let currentEvent = await eventHelper.getCurrentEvent();
     if (!currentEvent) {
         res.status(422).jsonp({
             "error": eventHelper.noEventMessage
@@ -48,10 +48,22 @@ router.get('/find/scan', function (req, res) {
     operations.findObject(eventsCollection,
         {
             "_id": currentEvent._id,
-            "locationMappings": {$elemMatch: {"location.identifier": identifier}}
-        }, function (err, item) {
+            "locationMappings": {"$elemMatch": {"location.identifier": identifier}}
+        }, function (err, event) {
             //Es wurde ein Objekt gefunden -> also Zaubern
-            if (item) {
+            if (event) {
+                let item;
+                event.locationMappings.forEach(function (mapping) {
+                    if (mapping.location.identifier === identifier) {
+                        item = mapping;
+                    }
+                });
+                if (!item) {
+                    res.status(422).jsonp({
+                        error: "Hier ist heute leider nichts zu finden. Tut uns Leid. Really, we are sorry :("
+                    });
+                    return;
+                }
                 item.games = gameHelper.prepareGames(item.games);
                 operations.findObject(userCollection, {_id: req.session.user._id}, function (userErr, userItem) {
                         item.games = gameHelper.addGameStates(userItem.visits, item.games, item.location._id);

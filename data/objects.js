@@ -13,12 +13,10 @@ dbObjects.set(collections.USERS, [ new objects.User("Harald") ]);
 dbObjects.set(collections.LOCATIONS, [ new objects.Location("103a", "http://qr.service.fh-stralsund.de/h4r314"), new objects.Location("323", "http://qr.service.fh-stralsund.de/h4r323") ]);
 // Expositions
 dbObjects.set(collections.EXPOSITIONS, [
-        new objects.Exposition("Multimedia-Labor", "Hier werden Multimedia-Projekte durchgeführt...", undefined, [ "https://dairygood.org/~/media/shared/content/2016/american.jpg?la=en&hash=1685F3618F75800B4DCBC59BE336C98F2CC4A44D",
-                "https://dairygood.org/~/media/shared/content/2016/asiago.jpg?h=400&w=400&la=en&hash=BA75313FB12941C8509AD9948EF48AA89397DE3B", "https://dairygood.org/~/media/shared/content/2016/blue.jpg?la=en&hash=6195C67A1A12C959639329AE4CAFAB7ABC08A4C7" ]),
-        new objects.Exposition("Labor-Nr2", "Hier könnte ein Text stehen...", undefined, [ "https://dairygood.org/~/media/shared/content/2016/bocconcini.jpg?la=en&hash=16A28E76097E8F3B864B04BF13115EDE13FCA53C",
-                "https://dairygood.org/~/media/shared/content/2016/brie.jpg?la=en&hash=9ACD4902A5DE5F35C834EEE2254B64F85D3F2E29", "https://dairygood.org/~/media/shared/content/2016/burrata.jpg?la=en&hash=65310608CF3B9D4BE1FB0455BE119962A06CB55A",
-                "https://dairygood.org/~/media/shared/content/2016/camembert.jpg?la=en&hash=8F02607CEFF81F7F1B719D7B8B8AB7DD590D2C79", "https://dairygood.org/~/media/shared/content/2016/cheddar.jpg?la=en&hash=8B87A668AE0C5A77F92A036270F120B71BC29177",
-                "https://dairygood.org/~/media/shared/content/2016/cheesecurds.jpg?la=en&hash=1B3661FC29BEA82C716B0E530C294932B9C2EABA" ]) ]);
+    new objects.Exposition("Multimedia-Labor", "Hier werden Multimedia-Projekte durchgeführt...", undefined, ["https://www.hochschule-stralsund.de/fileadmin/hs-stralsund/_processed_/0/5/csm_Header_Softwareentwicklung_0d7a471182.jpg",
+        "https://www.hochschule-stralsund.de/fileadmin/hs-stralsund/_processed_/6/5/csm_Header_IT-Sicherheit_a349f746b3.jpg"]),
+    new objects.Exposition("Labor-Nr2", "Hier könnte ein Text stehen...", undefined, ["https://www.hochschule-stralsund.de/fileadmin/hs-stralsund/_processed_/0/5/csm_Header_Softwareentwicklung_0d7a471182.jpg",
+        "https://www.hochschule-stralsund.de/fileadmin/hs-stralsund/_processed_/6/5/csm_Header_IT-Sicherheit_a349f746b3.jpg"])]);
 // Games
 dbObjects.set(collections.GAMES, [ new objects.SimpleQuiz("Was ist eine Banane?", [ new objects.Answer("Obst", true), new objects.Answer("Gemüse", false), new objects.Answer("42", false), new objects.Answer("Nichts", false), new objects.Answer("Alles", false) ], 100),
         new objects.SimpleQuiz("Was ist ein Hund?", [ new objects.Answer("Säugetier", true), new objects.Answer("Fisch", false) ], 100),

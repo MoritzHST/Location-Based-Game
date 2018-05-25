@@ -2,7 +2,6 @@ function initSimpleTextQuiz(obj) {
     //Die Frage kann immer gesetzt werden
     $("#question-container").html(obj.question);
     //Wurde das Spiel schon gespielt?
-    console.log(obj);
     if (!obj.state || obj.state === GameStates.UNPLAYED) {
         initPlayableQuiz(obj);
     }

@@ -71,10 +71,26 @@ li:hover, a:hover {
 }
 
 div.item.panel > img {
-	margin: auto;
+    margin: auto;
 }
 
 .current-game-display-frame.active-history {
     height: 20px;
     width: 20px;
+}
+
+div.carousel-inner {
+    height: 250px;
+}
+
+div.carousel.slide {
+    margin: 15px 0 25px 0;
+}
+
+#exposition-slider-image-wrapper > .panel.item, #exposition-slider-image-wrapper > .panel.item > img {
+    height: 100%;
+}
+
+a.carousel-control {
+    border-radius: 0;
 }

@@ -13,6 +13,7 @@
  */
 
 var logging = require('../helper/logging');
+logging.initLogging();
 logging.deleteLogFiles();
 logging.Info("Starte Applikation (" + process.env.env + ")");
 

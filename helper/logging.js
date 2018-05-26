@@ -27,6 +27,13 @@ function deleteLogFiles() {
 }
 
 module.exports = {
+    initLogging: function () {
+        //Es muss das logging-Verzeichnis existieren, sonst fliegen Fehler!
+        if (!fs.existsSync(logFilePath)) {
+            fs.mkdirSync(logFilePath);
+        }
+    },
+
         deleteLogFiles : function() {
             fs.readdirSync(logFilePath + '/').forEach(file => {
                 fs.unlinkSync(logFilePath + '/' + file);

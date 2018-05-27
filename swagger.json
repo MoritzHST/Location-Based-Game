@@ -286,6 +286,25 @@
           "in": "query",
           "required": false,
           "description": "ID des Games"
+        },
+        {
+          "name": "question",
+          "in": "query",
+          "required": false,
+          "description": "Text zum Game"
+        },
+        {
+          "name": "type",
+          "in": "query",
+          "required": false,
+          "description": "Typ des Spiels",
+          "schema": {
+            "type": "string",
+            "enum": [
+              "single_choice",
+              "multiple_choice"
+            ]
+          }
         }
       ],
       "get": {
@@ -306,21 +325,34 @@
     "/insert/games": {
       "parameters": [
         {
+          "name": "question",
+          "in": "query",
+          "required": true,
+          "description": "Text zum Game"
+        },
+        {
           "name": "type",
           "in": "query",
           "required": true,
-          "description": "Typ des Spiels"
+          "description": "Typ des Spiels",
+          "schema": {
+            "type": "string",
+            "enum": [
+              "single_choice",
+              "multiple_choice"
+            ]
+          }
         },
         {
           "name": "points",
           "in": "query",
           "required": true,
-          "description": "Anzahl Punkte für die richtige Beantwortung"
+          "description": "Punkte für das Game"
         },
         {
           "name": "anwers",
           "in": "body",
-          "required": false,
+          "required": true,
           "description": "Antworten",
           "schema": {
             "type": "array",
@@ -363,7 +395,20 @@
           "name": "type",
           "in": "query",
           "required": false,
-          "description": "Typ des Spiels"
+          "description": "Typ des Spiels",
+          "schema": {
+            "type": "string",
+            "enum": [
+              "single_choice",
+              "multiple_choice"
+            ]
+          }
+        },
+        {
+          "name": "points",
+          "in": "query",
+          "required": false,
+          "description": "Punkte für das Game"
         },
         {
           "name": "anwers",
@@ -798,8 +843,10 @@
     },
     "Game": {
       "required": [
+        "answers",
         "question",
-        "answers"
+        "type",
+        "points"
       ],
       "properties": {
         "question": {
@@ -810,6 +857,16 @@
           "items": {
             "$ref": "#/definitions/Answer"
           }
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "single_choice",
+            "multiple_choice"
+          ]
+        },
+        "points": {
+          "type": "integer"
         }
       }
     },

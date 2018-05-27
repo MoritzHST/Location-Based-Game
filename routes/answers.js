@@ -21,6 +21,15 @@ router.post('/post/answer', async function (req, res) {
     req.query = handler.getRealRequest(req.query, req.body);
     logging.Parameter("request.query", req.query);
 
+    try {
+        req.session.user._id;
+    } catch (e) {
+        res.status(422).jsonp({
+            error: "Du musst eingeloggt sein um diese Funktion zu nutzen"
+        });
+        return;
+    }
+
     let currentEvent = await eventHelper.getCurrentEvent();
     if (!currentEvent) {
         res.status(422).jsonp({

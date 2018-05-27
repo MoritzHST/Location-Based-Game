@@ -59,13 +59,6 @@ dbObjects.set(
     ]
 );
 //Events
-dbObjects.set(
-    collections.EVENTS,
-    [
-        new objects.Event("TestEvent", String(new Date().toJSON().slice(0, 10)))
-    ]
-);
-//Events
 dbObjects.set(collections.EVENTS, [ new objects.Event("Campus Tag 2018", String(new Date().toJSON().slice(0, 10)), [
             dbObjects.get(collections.LOCATION_MAPPING)[0],
             dbObjects.get(collections.LOCATION_MAPPING)[1]

@@ -8,6 +8,7 @@ const logging = require('../helper/logging');
 const userCollection = require('../mongodb/collections').USERS;
 const gameCollection = require('../mongodb/collections').GAMES;
 const locationMappingCollection = require('../mongodb/collections').LOCATION_MAPPING;
+const eventsCollection = require('../mongodb/collections').EVENTS;
 const handler = require('../mongodb/handler');
 const eventHelper = require('../helper/event');
 
@@ -15,21 +16,12 @@ const eventHelper = require('../helper/event');
 
 /* Post */
 /* Verarbeitet eine vom Benutzer gegebene Antwort*/
-router.post('/post/answer', async function (req, res) {
+router.post('/post/answer', function (req, res) {
     logging.Entering("POST /post/answer");
     req.query = handler.getRealRequest(req.query, req.body);
     logging.Parameter("request.query", req.query);
 
-    let currentEvent = await eventHelper.getCurrentEvent();
-    if (!currentEvent) {
-        res.status(422).jsonp({
-            "error": eventHelper.noEventMessage
-        });
-        logging.Error("Aktuell findet kein Event statt");
-        return;
-    }
-
-    canAnswerQuiz(req,)
+    canAnswerQuiz(req)
         .then(function (pObj) {
             if (!pObj) {
                 res.status(423).jsonp({
@@ -68,12 +60,21 @@ router.post('/post/answer', async function (req, res) {
 /* Get */
 /* Prüft, ob der Raum abgeschlossen ist
  * Wenn ja, wird dem User ein Objekt mit Antworten zu den Spielen ausgegeben */
-router.get('/get/answers', function (req, res) {
+router.get('/get/answers', async function (req, res) {
     logging.Entering("GET /get/answers");
     req.query = handler.getRealRequest(req.query, req.body);
     logging.Parameter("request.query", req.query);
 
-    isRoomCompleted(req).then(function (pObj) {
+    let currentEvent = await eventHelper.getCurrentEvent();
+    if (!currentEvent) {
+        res.status(422).jsonp({
+            "error": eventHelper.noEventMessage
+        });
+        logging.Error("Aktuell findet kein Event statt");
+        return;
+    }
+
+    isRoomCompleted(req, currentEvent).then(function (pObj) {
         res.status(200).jsonp(pObj);
     });
 });
@@ -92,26 +93,27 @@ async function isRoomCompleted(pRequest, pEvent) {
                 let curVisit = findVisitByLocationIdentifier(userItem, pRequest.query.identifier);
                 if (curVisit.answers) {
                     //Prüfen ob genausoviele Antworten wie Spiele zu der Location existieren, wenn ja ist er fertig
-                    await operations.findObject(locationMappingCollection,
+                    await operations.findObject(eventsCollection,
                         {
                             "_id": pEvent._id,
-                            "locationMappings": {"$elemMatch": {"location._id": ObjectID(curVisit.location._id)}},
-                            function (mappingError, eventItem) {
-                                let mappingItem;
-                                eventItem.locationMappings.forEach(function (mapping) {
-                                    if (mapping.location._id === curVisit.location._id) {
-                                        mappingItem = mapping;
-                                    }
-                                });
-                                if (mappingItem && mappingItem.games.length === curVisit.answers.length) {
-                                    resolve(curVisit.answers);
-                                }
-                                else {
-                                    resolve(false);
-                                }
+                            "locationMappings": {"$elemMatch": {"location._id": ObjectID(curVisit.location._id)}}
+                        }, function (mappingError, event) {
+                            if (!event) {
+                                resolve(false);
                             }
-                        }
-                    );
+                            let mappingItem = null;
+                            event.locationMappings.forEach(function (locationMapping) {
+                                if (locationMapping._id === ObjectID(curVisit.locationId)) {
+                                    mappingItem = locationMapping;
+                                }
+                            });
+                            if (mappingItem && mappingItem.games.length === curVisit.answers.length) {
+                                resolve(curVisit.answers);
+                            }
+                            else {
+                                resolve(false);
+                            }
+                        });
                 }
                 else {
                     resolve(false);

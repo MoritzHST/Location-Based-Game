@@ -1,6 +1,7 @@
 const operations = require('../mongodb/operations');
 const handler = require('../mongodb/handler');
 const router = require('express').Router();
+const logging = require('../helper/logging');
 
 const locationCollection = require('../mongodb/collections').LOCATIONS;
 
@@ -22,17 +23,27 @@ const upload = multer(
 /* GET */
 /* Gibt ein oder alle Location(s) zurück */
 router.get('/find/locations', function(req, res) {
+    logging.Entering("GET /find/locations");
+
     req.query = handler.getRealRequest(req.query, req.body);
+
+    logging.Parameter("request.query", req.query);
 
     operations.findObject(locationCollection, (handler.checkIfValidQuery(req.query) ? req.query : null), function(err, item) {
         handler.dbResult(err, res, item, "Das Item " + JSON.stringify(req.query).replace(/\"/g, '') + " existiert nicht.");
     });
+
+    logging.Leaving("GET /find/locations");
 });
 
 /* POST */
 /* Fügt eine Location der Datenbank hinz */
 router.post('/insert/locations', upload.single('image'), function(req, res) {
+    logging.Entering("POST /insert/locations");
+
     req.query = handler.getRealRequest(req.query, req.body);
+
+    logging.Parameter("request.query", req.query);
 
     // hinterlege Pfad zum File, wenn File hochgeladen wurde
     const file = req.file;
@@ -49,11 +60,17 @@ router.post('/insert/locations', upload.single('image'), function(req, res) {
             "error" : "Die übergebenen Parameter sind ungültig"
         });
     }
+
+    logging.Leaving("POST /insert/locations");
 });
 
 /* Aktualisiert eine Location mit einer bestimmten id*/
 router.post('/update/locations/:id', upload.single('image'), function(req, res) {
+    logging.Entering("POST /update/locations/:id");
+
     req.query = handler.getRealRequest(req.query, req.body);
+
+    logging.Parameter("request.query", req.query);
 
     // lösche File wenn ein neues hochgeladen wird
     const file = req.file;
@@ -65,11 +82,17 @@ router.post('/update/locations/:id', upload.single('image'), function(req, res) 
     } else {
         updateLocation(req, res);
     }
+
+    logging.Leaving("POST /update/locations/:id");
 });
 
 /* Löscht Location(s) */
 router.post('/delete/locations', function(req, res) {
+    logging.Entering("POST /delete/locations");
+
     req.query = handler.getRealRequest(req.query, req.body);
+
+    logging.Parameter("request.query", req.query);
 
     fileHelper.deleteFile(locationCollection, req.query._id, function() {
         if (handler.checkIfValidQuery(req.query)) {
@@ -82,10 +105,16 @@ router.post('/delete/locations', function(req, res) {
             });
         }
     });
+
+    logging.Leaving("POST /delete/locations");
 });
 
 function updateLocation(req, res) {
+    logging.Entering("updateLocation");
+
     req.query = handler.getRealRequest(req.query, req.body);
+
+    logging.Parameter("request.query", req.query);
 
     if (handler.checkIfValidQuery(req.query)) {
         operations.updateObject(locationCollection, handler.idFriendlyQuery({
@@ -98,6 +127,8 @@ function updateLocation(req, res) {
             "error" : "Die übergebenen Parameter sind ungültig"
         });
     }
+
+    logging.Leaving("updateLocation");
 }
 
 module.exports = router;

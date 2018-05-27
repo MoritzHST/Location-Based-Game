@@ -15,14 +15,17 @@ module.exports = {
      * Event-Objekt bestehend aus Eventnamen und Gültigkeitsdatum. Ein Event gilt immer nur für einen Tag
      * @param pEventName Name des Events
      * @param pDate Datum an dem dieses Event stattfindet
+     * @param pLocationMappings LocationMappings die an diesem Event freigeschaltet sind
      * @constructor
      */
-    Event : function(pEventName, pDate) {
+    Event: function (pEventName, pDate, pLocationMappings) {
         logging.Info("initializing new Event");
         logging.Parameter("pEventName", pEventName);
         logging.Parameter("pDate", pDate);
+        logging.Parameter("pLocationMappings", pLocationMappings);
         this.name = pEventName;
         this.date = pDate;
+        this.locationMappings = pLocationMappings;
         logging.Info("initializing Event done");
     },
 

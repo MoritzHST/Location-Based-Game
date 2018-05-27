@@ -1,6 +1,7 @@
 const operations = require('../mongodb/operations');
 const handler = require('../mongodb/handler');
 const router = require('express').Router();
+const logging = require('../helper/logging');
 
 const locationMappingCollection = require('../mongodb/collections').LOCATION_MAPPING;
 const userCollection = require('../mongodb/collections').USERS;
@@ -14,6 +15,7 @@ const errorMessage = "Fehler beim auslesen der Missionsübersicht";
  *
  */
 router.get('/find/missions', function (req, res) {
+	logging.Entering("POST /find/missions");
     operations.findObject(locationMappingCollection,
         null, function (err, item) {
             operations.findObject(userCollection,
@@ -39,6 +41,7 @@ router.get('/find/missions', function (req, res) {
                     }
                 });
         });
+    logging.Leaving("POST /find/missions");
 });
 
 module.exports = router;

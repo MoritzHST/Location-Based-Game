@@ -14,6 +14,7 @@ const errorMessage = "Fehler beim auslesen der Missionsübersicht";
  *
  */
 router.get('/find/missions', function (req, res) {
+	logging.Entering("POST /find/missions");
     operations.findObject(locationMappingCollection,
         null, function (err, item) {
             operations.findObject(userCollection,
@@ -39,6 +40,7 @@ router.get('/find/missions', function (req, res) {
                     }
                 });
         });
+    logging.Leaving("POST /find/missions");
 });
 
 module.exports = router;

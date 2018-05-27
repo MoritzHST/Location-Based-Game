@@ -1,7 +1,9 @@
 const objects = require('../mongodb/objects');
+const logging = require('../helper/logging');
 
 //Shuffle Funktion für Arrays
 Array.prototype.shuffle = function () {
+	logging.Entering("shuffle");
     let input = this;
     for (let i = input.length - 1; i >= 0; i--) {
         let randomIndex = Math.floor(Math.random() * (i + 1));
@@ -10,35 +12,48 @@ Array.prototype.shuffle = function () {
         input[randomIndex] = input[i];
         input[i] = itemAtIndex;
     }
+    logging.Leaving("shuffle");
     return input;
 };
 
 //Prüft ob in einem Array an Visit-Objekten ein Visit mit der übergebenen Id enthalten ist
 function containsLocation(pVisits, pVisitId) {
+	logging.Entering("containsLocation");
+	logging.Parameter("pVisits", pVisits);
+	logging.Parameter("pVisitId", pVisitId);
     let containsId = false;
     pVisits.forEach(function (visit) {
         if (pVisitId.toString() === visit.location._id.toString()) {
             containsId = true;
         }
     });
+	logging.Leaving("containsLocation");
     return containsId;
 }
 
 //Gibt true zurück, wenn sich ein Objekt mit der GameId in der Liste an Spielen befindet, andernfalls false
 function containsGame(pGames, pGameId) {
+	logging.Entering("containsGame");
+	logging.Parameter("pGames", pGames);
+	logging.Parameter("pGameId", pGameId);
     let containsId = false;
     pGames.forEach(function (game) {
         if (pGameId.toString() === game._id.toString()) {
             containsId = true;
         }
     });
+    logging.Leaving("containsGame");
     return containsId;
 }
 
 //Gibt dasjenige Visit-Objekt aus dem Array zurück, dessen Id mit der übergebenen übereinstimmt.
 //Sollte keins existieren wird null zurück gegeben.
 function getVisitWithId(pVisits, pVisitId) {
+	logging.Entering("getVisitWithId");
+	logging.Parameter("pVisits", pVisits);
+	logging.Parameter("pVisitId", pVisitId);
     if (!pVisits) {
+    	logging.Leaving("getVisitWithId");
         return;
     }
     let returnVisit = null;
@@ -47,6 +62,7 @@ function getVisitWithId(pVisits, pVisitId) {
             returnVisit = visit;
         }
     });
+    logging.Leaving("getVisitWithId");
     return returnVisit;
 }
 
@@ -57,32 +73,46 @@ function getVisitWithId(pVisits, pVisitId) {
  * @returns {*}
  */
 function calculateStateForGame(pGame, pVisit) {
+	logging.Entering("calculateStateForGame");
+	logging.Parameter("pGame", pGame);
+	logging.Parameter("pVisit", pVisit);
     if (pVisit) {
         for (let i in pVisit.answers) {
             if (pVisit.answers.hasOwnProperty(i) && pVisit.answers[i].gameId.toString() === pGame._id.toString()) {
                 pGame.state = pVisit.answers[i].state;
+                logging.ReturnValue(pGame);
+                logging.Leaving("calculateStateForGame");
                 return pGame;
             }
         }
     }
     pGame.state = objects.GameStates.UNPLAYED;
+    logging.ReturnValue(pGame);
+    logging.Leaving("calculateStateForGame");
     return pGame;
 }
 
 module.exports = {
 
-    hasAlreadyVisited: function (pUser, pLocation) {
-        return pUser.visits !== undefined && containsLocation(pUser.visits, pLocation._id);
+    hasAlreadyVisited: function (pUser, pLocation) {    	
+    	logging.Entering("hasAlreadyVisited");    	
+    	logging.Parameter("pUser", pUser);
+    	logging.Parameter("pLocation", pLocation);
+    	logging.Leaving("hasAlreadyVisited");
+        return logging.ReturnValue(retuenValue = pUser.visits !== undefined && containsLocation(pUser.visits, pLocation._id));
     },
 
     addGameStates: function (pVisits, pGames, pLocationId) {
+    	logging.Entering("addGameStates");
+    	logging.Parameter("pVisits", pVisits);
         let visit = getVisitWithId(pVisits, pLocationId);
         for (let i in pGames) {
             if (pGames.hasOwnProperty(i)) {
                 pGames[i] = calculateStateForGame(pGames[i], visit);
             }
         }
-        return pGames;
+        logging.Leaving("addGameStates");
+        return logging.ReturnValue(pGames);
     },
 
     /**
@@ -95,6 +125,8 @@ module.exports = {
      * @returns {Array}
      */
     prepareGames: function (pGames) {
+    	logging.Entering("prepareGames");
+    	logging.Parameter("pGames", pGames);
         let games = [];
 
         pGames.forEach(function (game) {
@@ -145,8 +177,8 @@ module.exports = {
             }
 
         });
-
-        return games;
+        logging.Leaving("addGameStates");
+        return logging.ReturnValue(games);
     }
 
 };

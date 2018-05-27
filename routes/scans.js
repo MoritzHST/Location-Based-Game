@@ -25,6 +25,7 @@ const invalidRequest = "Die Anfrage ist ungültig";
 router.get('/find/scan', function (req, res) {
     logging.Entering("GET /find/scan");
     req.query = handler.getRealRequest(req.query, req.body);
+    logging.Parameter("request.query", req.query);
 
     let identifier = req.query.identifier;
 

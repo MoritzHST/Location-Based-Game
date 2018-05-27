@@ -16,10 +16,19 @@ const eventHelper = require('../helper/event');
 
 /* Post */
 /* Verarbeitet eine vom Benutzer gegebene Antwort*/
-router.post('/post/answer', function (req, res) {
+router.post('/post/answer', async function (req, res) {
     logging.Entering("POST /post/answer");
     req.query = handler.getRealRequest(req.query, req.body);
     logging.Parameter("request.query", req.query);
+
+    let currentEvent = await eventHelper.getCurrentEvent();
+    if (!currentEvent) {
+        res.status(422).jsonp({
+            "error": eventHelper.noEventMessage
+        });
+        logging.Error("Aktuell findet kein Event statt");
+        return;
+    }
 
     canAnswerQuiz(req)
         .then(function (pObj) {
@@ -43,7 +52,7 @@ router.post('/post/answer', function (req, res) {
                     res.status(200).jsonp({
                         "msg": "Die Antwort ist richtig"
                     });
-                    saveAnswer(req, objects.GameStates.CORRECT);
+                    saveAnswer(req, objects.GameStates.CORRECT, currentEvent);
                     return;
                 }
 
@@ -51,7 +60,7 @@ router.post('/post/answer', function (req, res) {
                 res.status(400).jsonp({
                     "error": "Die Antwort ist falsch!"
                 });
-                saveAnswer(req, objects.GameStates.WRONG);
+                saveAnswer(req, objects.GameStates.WRONG, currentEvent);
             });
         });
     logging.Leaving("POST /post/answer");
@@ -87,33 +96,19 @@ async function isRoomCompleted(pRequest, pEvent) {
         operations.findObject(userCollection, {
             _id: pRequest.session.user._id,
             "visits.location.identifier": pRequest.query.identifier
-        }, async function (userError, userItem) {
+        }, function (userError, userItem) {
             if (userItem) {
                 //aktuellen Visit suchen
                 let curVisit = findVisitByLocationIdentifier(userItem, pRequest.query.identifier);
                 if (curVisit.answers) {
                     //Prüfen ob genausoviele Antworten wie Spiele zu der Location existieren, wenn ja ist er fertig
-                    await operations.findObject(eventsCollection,
-                        {
-                            "_id": pEvent._id,
-                            "locationMappings": {"$elemMatch": {"location._id": ObjectID(curVisit.location._id)}}
-                        }, function (mappingError, event) {
-                            if (!event) {
-                                resolve(false);
-                            }
-                            let mappingItem = null;
-                            event.locationMappings.forEach(function (locationMapping) {
-                                if (locationMapping._id === ObjectID(curVisit.locationId)) {
-                                    mappingItem = locationMapping;
-                                }
-                            });
-                            if (mappingItem && mappingItem.games.length === curVisit.answers.length) {
-                                resolve(curVisit.answers);
-                            }
-                            else {
-                                resolve(false);
-                            }
-                        });
+                    let mappingItem = answerChecker.findLocationById(pEvent, curVisit.location._id);
+                    if (mappingItem && mappingItem.games.length === curVisit.answers.length) {
+                        resolve(curVisit.answers);
+                    }
+                    else {
+                        resolve(false);
+                    }
                 }
                 else {
                     resolve(false);
@@ -148,7 +143,7 @@ async function canAnswerQuiz(pRequest) {
     return !gameObj && locationObj;
 }
 
-function saveAnswer(pRequest, pState) {
+function saveAnswer(pRequest, pState, pEvent) {
     logging.Entering("saveAnswer");
     logging.Parameter("request.query", pRequest.query);
     logging.Parameter("pState", pState);
@@ -169,7 +164,7 @@ function saveAnswer(pRequest, pState) {
                 _id: userItem._id
             },
             userItem, function () {
-                evaluateLocation(pRequest);
+                evaluateLocation(pRequest, pEvent);
             });
     });
     logging.Leaving("saveAnswer");
@@ -180,26 +175,25 @@ function saveAnswer(pRequest, pState) {
  * welches beschreibt, ob die Location abgeschlossen ist oder nicht
  * @param pRequest
  */
-function evaluateLocation(pRequest) {
+function evaluateLocation(pRequest, pEvent) {
     logging.Entering("evaluateLocation");
     logging.Parameter("request.query", pRequest.query);
-    operations.findObject(locationMappingCollection, {"location._id": ObjectID(pRequest.query.locationId)}, function (mappingError, mappingItem) {
-            operations.findObject(userCollection, {"_id": pRequest.session.user._id}, function (userError, userItem) {
-                for (let i in userItem.visits) {
-                    //Den Besuch selektieren, der den gleichen Ort referenziert wie das Mapping
-                    if (userItem.visits.hasOwnProperty(i) && userItem.visits[i].location._id.toString() === mappingItem.location._id.toString()) {
-                        //Status des Raumes aktualisieren
-                        userItem.visits[i].state = analyzeVisits(userItem.visits[i], mappingItem);
-                    }
-                }
-                operations.updateObject(userCollection, {
-                        _id: userItem._id
-                    },
-                    userItem, function () {
-                    });
-            });
+
+    let mappingItem = answerChecker.findLocationById(pEvent, pRequest.query.locationId);
+    operations.findObject(userCollection, {"_id": pRequest.session.user._id}, function (userError, userItem) {
+        for (let i in userItem.visits) {
+            //Den Besuch selektieren, der den gleichen Ort referenziert wie das Mapping
+            if (userItem.visits.hasOwnProperty(i) && userItem.visits[i].location._id.toString() === mappingItem.location._id.toString()) {
+                //Status des Raumes aktualisieren
+                userItem.visits[i].state = analyzeVisits(userItem.visits[i], mappingItem);
+            }
         }
-    );
+        operations.updateObject(userCollection, {
+                _id: userItem._id
+            },
+            userItem, function () {
+            });
+    });
     logging.Leaving("evaluateLocation");
 }
 

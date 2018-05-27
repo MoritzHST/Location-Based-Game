@@ -1,5 +1,5 @@
 const objects = require("../mongodb/objects");
-
+const ObjectID = require('mongodb').ObjectID;
 
 /**
  * Handled das Singlechoice-Quiz
@@ -19,6 +19,16 @@ function multipleChoiceHandler(pAnswer, pGame) {
     return false;
 }
 
+function findLocationById(pEvent, pId) {
+    let mappingItem = null;
+    pEvent.locationMappings.forEach(function (locationMapping) {
+        if (locationMapping.location._id.toString() === ObjectID(pId).toString()) {
+            mappingItem = locationMapping;
+        }
+    });
+    return mappingItem;
+}
+
 /**
  * Prüft, ob das Antwortobjekt korrekt für das Spiel ist
  * @type {{checkAnswer: boolean}}
@@ -33,5 +43,6 @@ module.exports = {
             default:
                 return false;
         }
-    }
+    },
+    findLocationById
 };

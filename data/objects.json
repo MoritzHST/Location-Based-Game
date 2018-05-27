@@ -1,0 +1,522 @@
+{
+  "events": [
+    {
+      "name": "TestEvent",
+      "date": "2018-05-27",
+      "locationMappings": [
+        {
+          "location": {
+            "roomnumber": "110",
+            "identifier": "http://qr.service.fh-stralsund.de/h4r110"
+          },
+          "exposition": {
+            "name": "Automatisierungstechnik",
+            "description": "<p>Die Nachbildung eines Forschungsbetriebes dient zur Einführung der Studierenden in die komplexe Welt der Automatisierungstechnik. Schwerpunkte bilden hierbei der Entwurf, die Umsetzung und die Untersuchung des Verhaltens von Automatisierungssystemen.</p><p>Weiteres Thema ist die Kommunikationstechnik im industriellen Umfeld. Hierzu werden Grundlagen und Spezialwissen im Labor praxisnah vermittelt.</p>"
+          },
+          "games": []
+        },
+        {
+          "location": {
+            "roomnumber": "112",
+            "identifier": "http://qr.service.fh-stralsund.de/h4r112"
+          },
+          "exposition": {
+            "name": "Regelungstechnik",
+            "description": "<p>Die Zweckbestimmung des Labors ist die Umsetzung der Lehrinhalte im Fach Steuerungstechnik sowie weiterführende Untersuchungen und Lehrveranstaltungen auf dem Gebiet der Automatisierungstechnik.</p><u>Versuchsaufbauten:</u><ul><li>SPS-Steuerung eines Drei-Achsen-Modells</li><li>Simulationstafel \"Stern-Dreieck-Anlasser\" mit SPS-Steuerung</li><li>Soft- und Hardwaremodelle verschiedener Systeme mit SPS-Steuerung</li><li>Experimentierplätze mit SPS Simatic S7-300</li></ul>"
+          },
+          "games": []
+        },
+        {
+          "location": {
+            "roomnumber": "113",
+            "identifier": "http://qr.service.fh-stralsund.de/h4r113"
+          },
+          "exposition": {
+            "name": "Steuerungstechnik",
+            "description": "<p>Die Zweckbestimmung des Labors ist die Umsetzung der Lehrinhalte im Fach Steuerungstechnik sowie weiterführende Untersuchungen und Lehrveranstaltungen auf dem Gebiet der Automatisierungstechnik.</p><u>Versuchsaufbauten:</u><ul><li>SPS-Steuerung eines Drei-Achsen-Modells</li><li>Simulationstafel \"Stern-Dreieck-Anlasser\" mit SPS-Steuerung</li><li>Soft- und Hardwaremodelle verschiedener Systeme mit SPS-Steuerung</li><li>Experimentierplätze mit SPS Simatic S7-300</li></ul>"
+          },
+          "games": []
+        },
+        {
+          "location": {
+            "roomnumber": "114",
+            "identifier": "http://qr.service.fh-stralsund.de/h4r114"
+          },
+          "exposition": {
+            "name": "Hochspannungstechnik",
+            "description": "<p>Im Labor Hochspannungstechnik erhalten die Studenten des Studiengangs Elektrotechnik eine Einführung in die Arbeit mit Hochspannungsanlagen und führen hochspannungstechnische Untersuchungen anhand von Gleich- und Wechselspannungen, Entladungserscheinungen im inhomogenen Feld, Erzeugung von Blitzstoß- und Schaltstoßspannungen, Prüfung von Isolatoren mit Stoßspannungen durch.</p><p><u>Das Leistungsangebot:</u><br>Das Labor Hochspannungstechnik bietet Vertragspartnern und externen Nutzern Schulungen von Fachpersonal für Hochspannungsanlagen an. Im Rahmen freier Kapazitäten können Energieversorgungsunternehmen das Labor für Qualitätsprüfungen an energietechnischen Erzeugnissen nutzen.</p><p><u>Die Ausstattung:</u><br>Das Labor Elektrische Energieversorgung ist mit hochwertiger Technik ausgerüstet, so dass das Labor neben der praktischen Ausbildung auch für die Bearbeitung von Diplomarbeitsthemen und die Durchführung von Forschungsvorhaben genutzt werden kann.</p>"
+          },
+          "games": [
+            {
+              "question": "Was wird durch R symbolisiert?",
+              "type": "single_choice",
+              "points": 100,
+              "answers": [
+                {
+                  "answer": "Widerstand",
+                  "isCorrect": true
+                },
+                {
+                  "answer": "Spannung",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Stromstärke",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Leistung",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Arbeit",
+                  "isCorrect": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "location": {
+            "roomnumber": "115",
+            "identifier": "http://qr.service.fh-stralsund.de/h4r115"
+          },
+          "exposition": {
+            "name": "Energieversorgung",
+            "description": "<p>Das Labor Elektrische Energieversorgung gewährleistet die praxisnahe Durchführung von Versuchsreihen für die Fächer Elektrische Energieversorgung, Anlagentechnik sowie Maschinen- und Netzschutz.</p><p>Weiterhin werden im Rahmen der Labortätigkeit die Themengebiete Planung von BHKW-Anlagen und Schutzmaßnahmen nach DIN VDE 0100 behandelt.</p><p><u>Die Ausstattung:</u><br>Das Labor Elektrische Energieversorgung ist mit hochwertiger Technik ausgerüstet, so dass das Labor neben der praktischen Ausbildung auch für die Bearbeitung von Diplomarbeitsthemen und die Durchführung von Forschungsvorhaben genutzt werden kann.</p><p><u>Das Leistungsangebot:</u><br>Das Serviceangebot des Labors für Elektrische Energieversorgung richtet sich an Energieversorgungsunternehmen und an Forschungseinrichtungen zur Kooperation. Für Stadtwerke werden Seminare zur beruflichen Weiterbildung des Fachpersonals durchgeführt. Im Auftrag von Unternehmen erarbeitet das Labor Studien, Marktanalysen, Standortstudien und Softwareentwicklungen für die Praxis.</p>"
+          },
+          "games": []
+        },
+        {
+          "location": {
+            "roomnumber": "116",
+            "identifier": "http://qr.service.fh-stralsund.de/h4r116"
+          },
+          "exposition": {
+            "name": "E-Antriebstechnik / Leistungselektronik",
+            "description": "<p><u>Leistungselektronik - Worum geht es?</u><br>Es geht um die Umwandlung elektrischer Energie mittels so genannter Leistungshalbleiter. Dabei kann die Leistungselektronik (immer nur kombiniert mit passiven Filtern!) elektrische Größen im Frequenz und Amplitude variieren.</p>"
+          },
+          "games": []
+        },
+        {
+          "location": {
+            "roomnumber": "117",
+            "identifier": "http://qr.service.fh-stralsund.de/h4r117"
+          },
+          "exposition": {
+            "name": "Elektrische Maschinen",
+            "description": "<p>Es gibt ruhende Elektrische Maschinen (Transformator) sowie auch rohtierende Elektrische Maschinen. Letztere können abhängig vom Betriebsbereich als Motor oder auch Generator verwendet werden. Jedoch erst kombiniert mit der Leistungselektronik entsteht ein elektrischer Antrieb, mit dem eine Drehzahl oder auch eine Lage bzw. ein Winkel generiert werden kann.</p>"
+          },
+          "games": []
+        },
+        {
+          "location": {
+            "roomnumber": "224",
+            "identifier": "http://qr.service.fh-stralsund.de/h4r224"
+          },
+          "exposition": {
+            "name": "Computergrafik / Bildverarbeitung",
+            "description": "<p>Im Labor Computergrafik werden algorithmische Grundkenntnisse der grafischen Datenverarbeitung und der Bildverarbeitung vertieft und der Umgang mit Entwicklungsumgebungen für grafische Anwendungen erlernt, wie z.B. OpenGL und OpenInventor.</p><p><b>Aufgaben 3D-Computergrafik</b><br><u>Geometrische Modellierung</u><br>Modellerstellung und -speicherung (Polygonnetz, parametrisierte Kurven und Flächen, Triangulierung)<br><br><u>Geometrische transformation</u><br>Modell-, Ansichts-, Projektions- und Viewport-Transformation (Translation, Skalierung, Rotation, Scherung, homogene Koordinaten, Weltkoordinaten- und Kamerakoordinatensystem) <br><br><u>Rendering</u><br>Visibilitätsalgorythmen (Backface-Culling, Z-Buffer, Painter), Shading (Flat, Phong, Gouraud), Beleuchtungsrechnung, globale Beleuchtungsverfahren (Raytracing, Radiosity), Texture-Mapping</p>"
+          },
+          "games": [
+            {
+              "question": "Was ist OpenGL?",
+              "type": "single_choice",
+              "points": 100,
+              "answers": [
+                {
+                  "answer": "Grafikstandard",
+                  "isCorrect": true
+                },
+                {
+                  "answer": "Grafik API",
+                  "isCorrect": true
+                },
+                {
+                  "answer": "Treiber",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Programmiersprache",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Grafikkartenhersteller",
+                  "isCorrect": false
+                }
+              ]
+            },
+            {
+              "question": "Wie heisst das Computer-Bauteil, auf dem graphische Operationen ausgeführt werden?",
+              "type": "single_choice",
+              "points": 100,
+              "answers": [
+                {
+                  "answer": "Grafikkarte",
+                  "isCorrect": true
+                },
+                {
+                  "answer": "GPU",
+                  "isCorrect": true
+                },
+                {
+                  "answer": "Monitor",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Joystick",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "MPU",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "CPU",
+                  "isCorrect": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "location": {
+            "roomnumber": "225a",
+            "identifier": "http://qr.service.fh-stralsund.de/h4r225a"
+          },
+          "exposition": {
+            "name": "Med. Bildverarbeitung / Visualisierung",
+            "description": "<p>Im Labor für Medizinische Bildgebung und Visualisierung lernen die Studierenden, komplexe graphische Anwendungssysteme und Interaktionsschittstellen zu konzipieren und zu entwickeln. Das Labor verfügt über ein VR-System, dass aus einer Stereo-Rückprojektionswand inklusive zwei Beamern und einem Trackingsystem besteht. Hier können zum Beispiel neuronale Faserbahnen aus Daten der Magnetresonanztomografie dreidimensional dargestellt werden. Der Nutzer kann die dargestellte Szene interaktiv manipulieren und so zum Beispiel auswählen, welche Faserbahnen visualisiert werden sollen.</p>"
+          },
+          "games": [
+            {
+              "question": "Mit welchem Verfahren der medizinischen Bildgebung wurden die gezeigten Bilder aufgenommen?",
+              "type": "single_choice",
+              "points": 100,
+              "answers": [
+                {
+                  "answer": "MRT",
+                  "isCorrect": true
+                },
+                {
+                  "answer": "Magnetresonanztomografie",
+                  "isCorrect": true
+                },
+                {
+                  "answer": "Computertomografie",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "CT",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Röntgen",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Ultraschall",
+                  "isCorrect": false
+                }
+              ]
+            },
+            {
+              "question": "Was versteht man unter VR?",
+              "type": "single_choice",
+              "points": 100,
+              "answers": [
+                {
+                  "answer": "Virtuelle Realität",
+                  "isCorrect": true
+                },
+                {
+                  "answer": "Virtual Reality",
+                  "isCorrect": true
+                },
+                {
+                  "answer": "Vereinsregister",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Virenreiniger",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Vip Room",
+                  "isCorrect": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "location": {
+            "roomnumber": "231",
+            "identifier": "http://qr.service.fh-stralsund.de/h4r225a"
+          },
+          "exposition": {
+            "name": "Mikroprozessortechnik",
+            "description": "MUSS NOCH GESCHRIEBEN WERDEN"
+          },
+          "games": [
+            {
+              "question": "Was ist ein Oszilloskop?",
+              "type": "single_choice",
+              "points": 100,
+              "answers": [
+                {
+                  "answer": "elektronisches Messgerät",
+                  "isCorrect": true
+                },
+                {
+                  "answer": "Fernrohr",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Ventilator",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Landkarte von Osz",
+                  "isCorrect": false
+                }
+              ]
+            },
+            {
+              "question": "Was ist ein RAM?",
+              "type": "single_choice",
+              "points": 100,
+              "answers": [
+                {
+                  "answer": "Schreib/Lesespeicher",
+                  "isCorrect": true
+                },
+                {
+                  "answer": "phys. Einheit",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Sternenbild",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "spez. Elektr. Maschine",
+                  "isCorrect": false
+                }
+              ]
+            },
+            {
+              "question": "Was bedeutet USB?",
+              "type": "single_choice",
+              "points": 100,
+              "answers": [
+                {
+                  "answer": "universelle serielle Schnittstelle",
+                  "isCorrect": true
+                },
+                {
+                  "answer": "Rechneranschluß",
+                  "isCorrect": true
+                },
+                {
+                  "answer": "Universelle Strombegrenzung",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Kabel zwischen 2 elektrischen Geräten",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "mathematischer Begriff",
+                  "isCorrect": false
+                }
+              ]
+            },
+            {
+              "question": "Was kennzeichnet ein digitales Signal?",
+              "type": "single_choice",
+              "points": 100,
+              "answers": [
+                {
+                  "answer": "nur Wert von 0 oder 1",
+                  "isCorrect": true
+                },
+                {
+                  "answer": "kann jeden Wert annehmen",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Signal zwischen nur 2 Teilnehmern",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Begriff in der Astronomie",
+                  "isCorrect": false
+                }
+              ]
+            },
+            {
+              "question": "Was bedeutet Hexadezimal?",
+              "type": "single_choice",
+              "points": 100,
+              "answers": [
+                {
+                  "answer": "Zahlenbasis 16",
+                  "isCorrect": true
+                },
+                {
+                  "answer": "Ziffern von 0-f",
+                  "isCorrect": true
+                },
+                {
+                  "answer": "Zahlenbasis 10",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Zahlenbasis 8",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Zahlenbasis 2",
+                  "isCorrect": false
+                }
+              ]
+            },
+            {
+              "question": "Was heißt ALU?",
+              "type": "single_choice",
+              "points": 100,
+              "answers": [
+                {
+                  "answer": "Arithmetik-Logik-Einheit",
+                  "isCorrect": true
+                },
+                {
+                  "answer": "allgemeine Längen-Konstante",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "aktuelle Lösungs-Unbekannte",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Begriff in der Astronomie",
+                  "isCorrect": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "location": {
+            "roomnumber": "320",
+            "identifier": "http://qr.service.fh-stralsund.de/h4r320"
+          },
+          "exposition": {
+            "name": "Ambient Assisted Living",
+            "description": "<p>Im Labor für Ambient Assisted Living (AAL) lernen die Studierenden Konzepte, technische Lösungen, Anwendungen und Standards des medizinischen Tele-Monitorings und des Ambient Assisted Living kennen. Sie bewerten und konzipieren hier Anwendungen des Health-Tele-Monitorings und des AAL. Das Labor verfügt über eine Vielzahl von Geräten aus der ambulanten Pflege, dem Smarthome- und dem Tele-Monitoring-Bereich.</p>"
+          },
+          "games": [
+            {
+              "question": "Welcher Vitalparameter kann mit den im Labor vorhandenen Geräten nicht gemessen werden?",
+              "type": "single_choice",
+              "points": 100,
+              "answers": [
+                {
+                  "answer": "Hirnströme",
+                  "isCorrect": true
+                },
+                {
+                  "answer": "Blutdruck",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Körpertemperatur",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Blutzucker",
+                  "isCorrect": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "location": {
+            "roomnumber": "323",
+            "identifier": "http://qr.service.fh-stralsund.de/h4r323"
+          },
+          "exposition": {
+            "name": "Audio- / Video-Studio",
+            "description": "<p>Im Audio- / Video-Studio erfolgt eine Praxisgerechte Ausbildung auf dem Gebiet der digitalen Audio- und Video-Signalverarbeitung. </p>Studierende arbeiten an Projekten zur Entwicklung von Multimedia-CD-ROMs und –DVDs, an der Produktion von Audio- und Videofiles, Internetseiten und anderen multimedialen Applikationen. </p><p>Das Audio- / Video-Studio bietet als Serviceleistung die Beratung zu Problemen der Entwicklung von multimedialen Präsentationen, speziell zu Fragen der Verwendung von Autorensystemen und Videoschnittsystemen, zu Problemen des Einsatzes von Videokonferenzsystemen und zu allgemeinen Problemen der multimedialen Kommunikation und Vernetzung.</p>"
+          },
+          "games": [
+            {
+              "question": "Welche Auflösung hat Full-HD?",
+              "type": "single_choice",
+              "points": 100,
+              "answers": [
+                {
+                  "answer": "1920 × 1080",
+                  "isCorrect": true
+                },
+                {
+                  "answer": "800 x 600",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "1024 x 768",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "1280 x 720",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "1280 x 800",
+                  "isCorrect": false
+                }
+              ]
+            },
+            {
+              "question": "Wo wurde die MP3 erfunden?",
+              "type": "single_choice",
+              "points": 100,
+              "answers": [
+                {
+                  "answer": "Deutschland",
+                  "isCorrect": true
+                },
+                {
+                  "answer": "Holland",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Österreich",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Schweiz",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Russland",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "USA",
+                  "isCorrect": false
+                },
+                {
+                  "answer": "Amerika",
+                  "isCorrect": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 const operations = require('../mongodb/operations');
 const handler = require('../mongodb/handler');
 const router = require('express').Router();
+const logging = require('../helper/logging');
 
 const expositionCollection = require('../mongodb/collections').EXPOSITIONS;
 
@@ -22,9 +23,12 @@ const upload = multer(
 /* GET */
 /* Gibt eine oder alle Ausstellungen zurück */
 router.get('/find/expositions', function (req, res) {
+    logging.Entering("GET /find/expositions");
+    logging.Parameter("request.query", req.query);
     operations.findObject(expositionCollection, (handler.checkIfValidQuery(req.query) ? req.query : null), function (err, item) {
         handler.dbResult(err, res, item, "Das Item " + JSON.stringify(req.query).replace(/\"/g, '') + " existiert nicht.");
     });
+    logging.Leaving("GET /find/expositions");
 });
 
 /* POST */
@@ -33,7 +37,8 @@ router.post('/insert/expositions', upload.fields([{
     name: 'thumbnailPath',
     maxCount: 1
 }, {name: 'imagePaths'}]), function (req, res) {
-
+    logging.Entering("POST /insert/expositions");
+    logging.Parameter("request.query", req.query);
     //hinterlege Pfad zum File, wenn File hochgeladen wurde
     const file = req.file;
     if (file) {
@@ -59,10 +64,13 @@ router.post('/insert/expositions', upload.fields([{
             "error": "Die übergebenen Parameter sind ungültig"
         });
     }
+    logging.Leaving("GET /insert/expositions");
 });
 
 /* Aktualisiert eine Ausstellung mit einer bestimmten id */
 router.post('/update/expositions/:id', upload.single('image'), function (req, res) {
+    logging.Entering("POST /update/expositions/:id");
+    logging.Parameter("request.query", req.query);
     //lösche File wenn ein neues hochgeladen wird
     const file = req.file;
     if (file) {
@@ -73,10 +81,14 @@ router.post('/update/expositions/:id', upload.single('image'), function (req, re
     } else {
         updateRoom(req, res);
     }
+    logging.Leaving("POST /update/expositions/:id");
 });
 
 /* Löscht eine Ausstellung */
 router.post('/delete/expositions', function (req, res) {
+    logging.Entering("POST /delete/expositions");
+    logging.Parameter("request.query", req.query);
+
     fileHelper.deleteFile(expositionCollection, req.query._id, function () {
         if (handler.checkIfValidQuery(req.query)) {
             operations.deleteObjects(expositionCollection, req.query, function (err, item) {
@@ -88,9 +100,13 @@ router.post('/delete/expositions', function (req, res) {
             });
         }
     });
+    logging.Leaving("POST /delete/expositions");
 });
 
 function updateRoom(req, res) {
+    logging.Entering("updateRoom");
+    logging.Parameter("request.query", req.query);
+
     if (handler.checkIfValidQuery(req.query)) {
         operations.updateObject(expositionCollection, handler.idFriendlyQuery({
             _id: req.params.id
@@ -102,6 +118,7 @@ function updateRoom(req, res) {
             "error": "Die übergebenen Parameter sind ungültig"
         });
     }
+    logging.Leaving("updateRoom");
 }
 
 

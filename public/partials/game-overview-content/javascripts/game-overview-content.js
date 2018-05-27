@@ -103,7 +103,7 @@ function setTableContent(dataObj) {
     let mediaObj = $("#" + dataObj._id + "-hook");
     mediaObj.find(".overview-table-cell-location-info-name").html(dataObj.exposition.name);
     mediaObj.find("img").attr("src", dataObj.exposition.image);
-    mediaObj.find(".overview-table-cell-location-info-description").html(dataObj.exposition.description);
+    mediaObj.find(".overview-table-cell-location-info-description").html(getDescriptionString(dataObj.exposition.description));
     mediaObj.find(".overview-table-cell-location-state").addClass("overview-room-state-context-" + dataObj.state);
     mediaObj.on("click", function () {
         dataObj.context = GameViewContext.CODE_PENDING;
@@ -117,7 +117,16 @@ function updateTableView() {
 
     $("div.labor-frame").hide();
     $(floorFilter).each(function (i, curFloorFilter) {
-        console.log("div.labor-frame.floor-" + $(curFloorFilter).val() + "." + $(statusFilter).val());
         $("div.labor-frame.floor-" + $(curFloorFilter).val() + "." + $(statusFilter).val()).show();
     });
+}
+
+function getDescriptionString(pObj) {
+    let descriptionString = pObj.slice(0, 50);
+    if (descriptionString.indexOf("<") === -1 && descriptionString.indexOf(">") === -1) {
+        return descriptionString + "...";
+    }
+    else {
+        return getDescriptionString(pObj.slice(descriptionString.indexOf(">") + 1, pObj.length - 1));
+    }
 }

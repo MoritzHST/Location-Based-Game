@@ -1,6 +1,6 @@
 /*********************************************************************************/
 /** Logging **/
-/*********************************************************************************/
+/** ****************************************************************************** */
 
 var fs = require('file-system');
 const logFilePath = "../admin/logs";
@@ -27,23 +27,30 @@ function deleteLogFiles() {
 }
 
 module.exports = {
-        deleteLogFiles : function() {
-            fs.readdirSync(logFilePath + '/').forEach(file => {
-                fs.unlinkSync(logFilePath + '/' + file);
-            });
-        },
+    initLogging: function () {
+        // Es muss das logging-Verzeichnis existieren, sonst fliegen Fehler!
+        if (!fs.existsSync(logFilePath)) {
+            fs.mkdirSync(logFilePath);
+        }
+    },
 
-        Info : function(pInfomessage) {
-            infoMessage(pInfomessage);
-        },
+    deleteLogFiles : function() {
+        fs.readdirSync(logFilePath + '/').forEach(file => {
+            fs.unlinkSync(logFilePath + '/' + file);
+        });
+    },
 
-        Error : function(pErrormessage) {
-            writeToLogFile("error.log", "[ERROR] " + JSON.stringify(pErrormessage));
-        },
+    Info : function(pInfomessage) {
+        infoMessage(pInfomessage);
+    },
 
-        Parameter : function(pParameterName, pParameterValue) {
-            writeToLogFile("parameter.log", "[PARAMETER] " + JSON.stringify(pParameterName) + " -> " + JSON.stringify(pParameterValue));
-        },
+    Error : function(pErrormessage) {
+        writeToLogFile("error.log", "[" + timeStamp() + "]" + "[ERROR] " + JSON.stringify(pErrormessage));
+    },
+
+    Parameter : function(pParameterName, pParameterValue) {
+        writeToLogFile("parameter.log", "[" + timeStamp() + "]" + "[PARAMETER] " + JSON.stringify(pParameterName) + " -> " + JSON.stringify(pParameterValue));
+    },
 
     Entering: function (pFunctionName) {
         infoMessage(pFunctionName + " ENTRY");
@@ -54,11 +61,18 @@ module.exports = {
     },
 
     ReturnValue: function (pParameterValue) {
-        writeToLogFile("parameter.log", "[PARAMETER] RETURN " + JSON.stringify(pParameterValue));
-        }
-
-    };
+    	writeToLogFile("parameter.log", "[" + timeStamp() + "]" + "[PARAMETER] RETURN " + JSON.stringify(pParameterValue));
+    	return pParameterValue;
+    }
+    
+};
 
 function infoMessage(pInfomessage) {
-    writeToLogFile("info.log", "[INFO] " + JSON.stringify(pInfomessage));
+    writeToLogFile("info.log", "[" + timeStamp() + "]" + "[INFO] " + JSON.stringify(pInfomessage));
+}
+
+function timeStamp() {
+    let curTimeStamp = new Date();
+    return curTimeStamp.getDate() + "." + (curTimeStamp.getMonth() + 1) + "." + (curTimeStamp.getFullYear() + " - " + curTimeStamp.getHours() + ":" + curTimeStamp.getMinutes())
+        + ":" + curTimeStamp.getSeconds() + "." + curTimeStamp.getMilliseconds();
 }

@@ -6,6 +6,25 @@ const router = require('express').Router();
 const path = require('path');
 
 /**
+ * Event-Route zur startseite. Sollte es am heutigen Tag ein Event geben, erfolgt eine Weiterleitung zur sign-up Seite
+ * @param req Request mit JSON-Query, welche Informationen über die aktuelle Session enthält.
+ * @param res Result Status, welcher unter anderem den return-Code enthält
+ * @param next die nächste anzusteuernde Route
+ * @returns Die nächste zu benutzende Route
+ */
+router.use('/no-event', function(req, res, next) {
+    operations.findObject("events", { "date": new Date().toJSON().slice(0, 10) }, function(err, item) {
+        if (item) {
+            res.redirect('/sign-up');
+        } else if (err) {
+            res.status(422).jsonp({ "error": "Die übergebenen Daten sind nicht gültig." });
+        } else {
+            next();
+        }
+    });
+});
+
+/**
  * Login-Route zur Anmeldeseite. Prüft, ob der Benutzer bereits eingeloggt ist
  * und leitet diesen in solch einen Fall zur Übersichtseite.
  * @param req Request mit JSON-Query, welche Informationen über die aktuelle Session enthält.
@@ -14,11 +33,17 @@ const path = require('path');
  * @returns Die nächste zu benutzende Route
  */
 router.use('/sign-up', function(req, res, next) {
-     if (req.session && req.session.user) {
-         res.redirect('/play');
-     } else {
-         next();
-     }
+    operations.findObject("events", { "date": String(new Date().toJSON().slice(0, 10)) }, function(err, item) {
+        if (!item) {
+            res.redirect('/no-event');
+        } else if (err) {
+            res.status(422).jsonp({ "error": "Die übergebenen Daten sind nicht gültig." });
+        } else if (req.session && req.session.user) {
+            res.redirect('play');
+        } else {
+            next();
+        }
+    });
 });
 
 /**
@@ -36,6 +61,7 @@ router.post('/login', function(req, res) {
                 res.redirect('/sign-out');
             } else {
                 req.session.user = user;
+                req.session.login = new Date() / 1;
                 req.session.maxAge = new Date().setHours(24,0,0,0) - new Date();
                 res.status(200).jsonp(user);
             }

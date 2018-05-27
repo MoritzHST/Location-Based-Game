@@ -1,6 +1,7 @@
 const operations = require('../mongodb/operations');
 const handler = require('../mongodb/handler');
 const router = require('express').Router();
+const logging = require('../helper/logging');
 
 const userCollection = require('../mongodb/collections').USERS;
 
@@ -14,11 +15,14 @@ const userCollection = require('../mongodb/collections').USERS;
  * @returns Genau einen oder mehrere Benutzer (oder eine Fehlermeldung)
  */
 router.get('/find/users', function(req, res) {
+    logging.Entering("GET /find/users");
     req.query = handler.getRealRequest(req.query, req.body);
+    logging.Parameter("request.query", req.query);
 
     operations.findObject(userCollection, (handler.checkIfValidQuery(req.query) ? req.query : null), function(err, item) {
         handler.dbResult(err, res, item, "Das Item " + JSON.stringify(req.query).replace(/\"/g, '') + " existiert nicht.");
     });
+    logging.Leaving("GET /find/users");
 });
 
 /* POST */
@@ -30,7 +34,9 @@ router.get('/find/users', function(req, res) {
  * @returns Den hinzugefügten Benutzer (oder eine Fehlermeldung)
  */
 router.post('/insert/users', function(req, res) {
+    logging.Entering("POST /insert/users");
     req.query = handler.getRealRequest(req.query, req.body);
+    logging.Parameter("request.query", req.query);
 
     operations.findObject(userCollection, req.query, function(err, item) {
         if (item !== null) {
@@ -58,6 +64,7 @@ router.post('/insert/users', function(req, res) {
             });
         }
     });
+    logging.Leaving("POST /insert/users");
 });
 
 /**
@@ -68,7 +75,9 @@ router.post('/insert/users', function(req, res) {
  * @returns Den aktualisierten Benutzer
  */
 router.post('/update/users/:id', function(req, res) {
+    logging.Entering("POST /update/users/:id");
     req.query = handler.getRealRequest(req.query, req.body);
+    logging.Parameter("request.query", req.query);
 
     if (handler.checkIfValidQuery(req.query)) {
 
@@ -102,6 +111,7 @@ router.post('/update/users/:id', function(req, res) {
             "error" : "Die übergebenen Parameter sind ungültig"
         });
     }
+    logging.Leaving("POST /update/users/:id");
 });
 
 /**
@@ -111,7 +121,9 @@ router.post('/update/users/:id', function(req, res) {
  * @returns Der gelöschte Benutzer
  */
 router.post('/delete/users', function(req, res) {
+    logging.Entering("POST /delete/users");
     req.query = handler.getRealRequest(req.query, req.body);
+    logging.Parameter("request.query", req.query);
 
     if (handler.checkIfValidQuery(req.query)) {
         operations.deleteObjects(userCollection, req.query, function(err, item) {
@@ -122,6 +134,7 @@ router.post('/delete/users', function(req, res) {
             "error" : "Die übergebenen Parameter sind ungültig"
         });
     }
+    logging.Leaving("POST /delete/users");
 });
 
 module.exports = router;

@@ -8,16 +8,27 @@ const logging = require('../helper/logging');
 const userCollection = require('../mongodb/collections').USERS;
 const gameCollection = require('../mongodb/collections').GAMES;
 const locationMappingCollection = require('../mongodb/collections').LOCATION_MAPPING;
+const eventsCollection = require('../mongodb/collections').EVENTS;
 const handler = require('../mongodb/handler');
+const eventHelper = require('../helper/event');
 
 /* Global */
 
 /* Post */
 /* Verarbeitet eine vom Benutzer gegebene Antwort*/
-router.post('/post/answer', function (req, res) {
+router.post('/post/answer', async function (req, res) {
     logging.Entering("POST /post/answer");
     req.query = handler.getRealRequest(req.query, req.body);
     logging.Parameter("request.query", req.query);
+
+    let currentEvent = await eventHelper.getCurrentEvent();
+    if (!currentEvent) {
+        res.status(422).jsonp({
+            "error": eventHelper.noEventMessage
+        });
+        logging.Error("Aktuell findet kein Event statt");
+        return;
+    }
 
     canAnswerQuiz(req)
         .then(function (pObj) {
@@ -41,7 +52,7 @@ router.post('/post/answer', function (req, res) {
                     res.status(200).jsonp({
                         "msg": "Die Antwort ist richtig"
                     });
-                    saveAnswer(req, objects.GameStates.CORRECT);
+                    saveAnswer(req, objects.GameStates.CORRECT, currentEvent);
                     return;
                 }
 
@@ -49,7 +60,7 @@ router.post('/post/answer', function (req, res) {
                 res.status(400).jsonp({
                     "error": "Die Antwort ist falsch!"
                 });
-                saveAnswer(req, objects.GameStates.WRONG);
+                saveAnswer(req, objects.GameStates.WRONG, currentEvent);
             });
         });
     logging.Leaving("POST /post/answer");
@@ -58,12 +69,21 @@ router.post('/post/answer', function (req, res) {
 /* Get */
 /* Prüft, ob der Raum abgeschlossen ist
  * Wenn ja, wird dem User ein Objekt mit Antworten zu den Spielen ausgegeben */
-router.get('/get/answers', function (req, res) {
+router.get('/get/answers', async function (req, res) {
     logging.Entering("GET /get/answers");
     req.query = handler.getRealRequest(req.query, req.body);
     logging.Parameter("request.query", req.query);
 
-    isRoomCompleted(req).then(function (pObj) {
+    let currentEvent = await eventHelper.getCurrentEvent();
+    if (!currentEvent) {
+        res.status(422).jsonp({
+            "error": eventHelper.noEventMessage
+        });
+        logging.Error("Aktuell findet kein Event statt");
+        return;
+    }
+
+    isRoomCompleted(req, currentEvent).then(function (pObj) {
         if (pObj) {
             res.status(200).jsonp(pObj);
         }
@@ -76,7 +96,7 @@ router.get('/get/answers', function (req, res) {
     logging.Leaving("GET /get/answers");
 });
 
-async function isRoomCompleted(pRequest) {
+async function isRoomCompleted(pRequest, pEvent) {
     logging.Entering("isRoomCompleted");
     logging.Parameter("request.query", pRequest.query);
 
@@ -84,20 +104,19 @@ async function isRoomCompleted(pRequest) {
         operations.findObject(userCollection, {
             _id: pRequest.session.user._id,
             "visits.location.identifier": pRequest.query.identifier
-        }, async function (userError, userItem) {
+        }, function (userError, userItem) {
             if (userItem) {
                 //aktuellen Visit suchen
                 let curVisit = findVisitByLocationIdentifier(userItem, pRequest.query.identifier);
                 if (curVisit.answers) {
                     //Prüfen ob genausoviele Antworten wie Spiele zu der Location existieren, wenn ja ist er fertig
-                    await operations.findObject(locationMappingCollection, {"location._id": ObjectID(curVisit.location._id)}, function (mappingError, mappingItem) {
-                        if (mappingItem.games.length === curVisit.answers.length) {
-                            resolve(curVisit.answers);
-                        }
-                        else {
-                            resolve(false);
-                        }
-                    });
+                    let mappingItem = answerChecker.findLocationById(pEvent, curVisit.location._id);
+                    if (mappingItem && mappingItem.games.length === curVisit.answers.length) {
+                        resolve(curVisit.answers);
+                    }
+                    else {
+                        resolve(false);
+                    }
                 }
                 else {
                     resolve(false);
@@ -135,7 +154,7 @@ async function canAnswerQuiz(pRequest) {
     return !gameObj && locationObj;
 }
 
-function saveAnswer(pRequest, pState) {
+function saveAnswer(pRequest, pState, pEvent) {
     logging.Entering("saveAnswer");
     logging.Parameter("request.query", pRequest.query);
     logging.Parameter("pState", pState);
@@ -156,7 +175,7 @@ function saveAnswer(pRequest, pState) {
                 _id: userItem._id
             },
             userItem, function () {
-                evaluateLocation(pRequest);
+                evaluateLocation(pRequest, pEvent);
             });
     });
     logging.Leaving("saveAnswer");
@@ -167,26 +186,25 @@ function saveAnswer(pRequest, pState) {
  * welches beschreibt, ob die Location abgeschlossen ist oder nicht
  * @param pRequest
  */
-function evaluateLocation(pRequest) {
+function evaluateLocation(pRequest, pEvent) {
     logging.Entering("evaluateLocation");
     logging.Parameter("request.query", pRequest.query);
-    operations.findObject(locationMappingCollection, {"location._id": ObjectID(pRequest.query.locationId)}, function (mappingError, mappingItem) {
-            operations.findObject(userCollection, {"_id": pRequest.session.user._id}, function (userError, userItem) {
-                for (let i in userItem.visits) {
-                    //Den Besuch selektieren, der den gleichen Ort referenziert wie das Mapping
-                    if (userItem.visits.hasOwnProperty(i) && userItem.visits[i].location._id.toString() === mappingItem.location._id.toString()) {
-                        //Status des Raumes aktualisieren
-                        userItem.visits[i].state = analyzeVisits(userItem.visits[i], mappingItem);
-                    }
-                }
-                operations.updateObject(userCollection, {
-                        _id: userItem._id
-                    },
-                    userItem, function () {
-                    });
-            });
+
+    let mappingItem = answerChecker.findLocationById(pEvent, pRequest.query.locationId);
+    operations.findObject(userCollection, {"_id": pRequest.session.user._id}, function (userError, userItem) {
+        for (let i in userItem.visits) {
+            //Den Besuch selektieren, der den gleichen Ort referenziert wie das Mapping
+            if (userItem.visits.hasOwnProperty(i) && userItem.visits[i].location._id.toString() === mappingItem.location._id.toString()) {
+                //Status des Raumes aktualisieren
+                userItem.visits[i].state = analyzeVisits(userItem.visits[i], mappingItem);
+            }
         }
-    );
+        operations.updateObject(userCollection, {
+                _id: userItem._id
+            },
+            userItem, function () {
+            });
+    });
     logging.Leaving("evaluateLocation");
 }
 

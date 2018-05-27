@@ -11,7 +11,8 @@
   },
   "basePath": "/",
   "schemes": [
-    "http"
+    "http",
+    "https"
   ],
   "consumes": [
     "application/json"
@@ -609,6 +610,144 @@
           }
         }
       }
+    },
+    "/find/events": {
+      "parameters": [
+        {
+          "name": "_id",
+          "in": "query",
+          "required": false,
+          "description": "ID des Events"
+        },
+        {
+          "name": "name",
+          "in": "query",
+          "required": false,
+          "description": "Name des Events"
+        },
+        {
+          "name": "date",
+          "in": "query",
+          "required": false,
+          "description": "Datum des Event"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Get Event",
+        "responses": {
+          "200": {
+            "description": "Event(s) wurde(n) gefunden",
+            "schema": {
+              "$ref": "#/definitions/Event"
+            }
+          }
+        }
+      }
+    },
+    "/insert/events": {
+      "parameters": [
+        {
+          "name": "name",
+          "in": "query",
+          "required": true,
+          "description": "Name des Events"
+        },
+        {
+          "name": "date",
+          "in": "query",
+          "required": true,
+          "description": "Datum des Event"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Insert Event",
+        "responses": {
+          "200": {
+            "description": "Event wurde hinzugefügt",
+            "schema": {
+              "$ref": "#/definitions/Event"
+            }
+          }
+        }
+      }
+    },
+    "/update/events/{_id}": {
+      "parameters": [
+        {
+          "name": "_id",
+          "in": "query",
+          "required": true,
+          "description": "ID des Events"
+        },
+        {
+          "name": "name",
+          "in": "query",
+          "required": false,
+          "description": "Name des Events"
+        },
+        {
+          "name": "date",
+          "in": "query",
+          "required": false,
+          "description": "Datum des Event"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Update Event",
+        "responses": {
+          "200": {
+            "description": "Eventinformation wurden aktualisiert",
+            "schema": {
+              "$ref": "#/definitions/Event"
+            }
+          }
+        }
+      }
+    },
+    "/delete/events": {
+      "parameters": [
+        {
+          "name": "_id",
+          "in": "query",
+          "required": true,
+          "description": "ID des Events"
+        },
+        {
+          "name": "name",
+          "in": "query",
+          "required": false,
+          "description": "Name des Events"
+        },
+        {
+          "name": "date",
+          "in": "query",
+          "required": false,
+          "description": "Datum des Event"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Delete Event",
+        "responses": {
+          "200": {
+            "description": "Event wurde gelöscht",
+            "schema": {
+              "$ref": "#/definitions/Event"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -638,7 +777,9 @@
     },
     "Location": {
       "required": [
-        "_id"
+        "_id",
+        "roomnumber",
+        "identifier"
       ],
       "properties": {
         "_id": {
@@ -657,8 +798,8 @@
     },
     "Game": {
       "required": [
-        "answer",
-        "isCorrect"
+        "question",
+        "answers"
       ],
       "properties": {
         "question": {
@@ -727,7 +868,10 @@
       }
     },
     "Scan": {
-      "required": [],
+      "required": [
+        "room",
+        "games"
+      ],
       "properties": {
         "room": {
           "$ref": "#/definitions/Location"
@@ -748,6 +892,21 @@
         },
         "exposition": {
           "$ref": "#/definitions/Exposition"
+        }
+      }
+    },
+    "Event": {
+      "required": [
+        "name",
+        "date"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
         }
       }
     }

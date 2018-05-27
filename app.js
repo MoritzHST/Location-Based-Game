@@ -5,6 +5,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
 var randomstring = require("randomstring");
+var cookieParser = require('cookie-parser');
 var cookieSession = require('cookie-session');
 var auth = require("http-auth");
 
@@ -37,6 +38,8 @@ app.set('view engine', 'html');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+
+app.use(cookieParser());
 
 /**
  * Definiert Benutzer Session-Cookie.

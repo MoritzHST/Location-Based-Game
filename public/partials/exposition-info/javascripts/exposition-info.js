@@ -4,6 +4,12 @@ var errorTimer;
 var locationIdentifier;
 
 function initExpositionInfo(obj) {
+    console.log(obj);
+    //Variablen Clearen
+    gameObj = undefined;
+    answerObj = undefined;
+    locationIdentifier = undefined;
+    errorTimer = undefined;
     // LocationIdentifier setzen
     locationIdentifier = obj.location.identifier;
     // Tabs setzen
@@ -118,24 +124,24 @@ function initContextCodePending(obj) {
     // Button Abschicken ausblenden, da noch kein Quiz aktiv ist
     $("#exposition-submit-game-answer").hide();
 
+    // Wenn der Raum noch nicht fertig ist muss der Scan button
+    // reagieren
+    // Button zum scannen muss mit einer Route verknüpft werden
+    $("#exposition-scan-qr").on("click", function () {
+        setNodeHookFromFile($("#content-hook"), "../partials/qr-scanner/qr-scanner.html", function () {
+            $("#content-hook").ready(function () {
+                obj.context = GameViewContext.SCAN_ATTEMPT_FROM_EXPOSITION_INFO;
+                initScanner(obj);
+            });
+        });
+    });
     // Abfragen, ob Antworten angezeigt werden können
     $.get('get/answers', {identifier: obj.location.identifier})
         .done(function (callbackObj) {
-            initGameFinishedView(callbackObj);
+            if (callbackObj) {
+                initGameFinishedView(callbackObj);
+            }
         })
-        .fail(function () {
-            // Der Raum ist noch nicht fertig also muss der Scan button
-            // reagieren
-            // Button zum scannen muss mit einer Route verknüpft werden
-            $("#exposition-scan-qr").on("click", function () {
-                setNodeHookFromFile($("#content-hook"), "../partials/qr-scanner/qr-scanner.html", function () {
-                    $("#content-hook").ready(function () {
-                        obj.context = GameViewContext.SCAN_ATTEMPT_FROM_EXPOSITION_INFO;
-                        initScanner(obj);
-                    });
-                });
-            });
-        });
 }
 
 // Verarbeitet die Daten, um die Kreise für die Übersicht über das akutelle
@@ -214,7 +220,9 @@ function renderFinishedView() {
     // abfragen
     $.get('get/answers', {identifier: locationIdentifier})
         .done(function (callbackObj) {
-            initGameFinishedView(callbackObj);
+            if (callbackObj) {
+                initGameFinishedView(callbackObj);
+            }
         });
 }
 

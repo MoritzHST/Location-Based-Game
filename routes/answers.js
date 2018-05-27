@@ -84,8 +84,16 @@ router.get('/get/answers', async function (req, res) {
     }
 
     isRoomCompleted(req, currentEvent).then(function (pObj) {
-        res.status(200).jsonp(pObj);
+        if (pObj) {
+            res.status(200).jsonp(pObj);
+        }
+        else {
+            res.status(422).jsonp({
+                "error": "Der Raum wurde noch nicht besucht"
+            });
+        }
     });
+    logging.Leaving("GET /get/answers");
 });
 
 async function isRoomCompleted(pRequest, pEvent) {
@@ -113,6 +121,9 @@ async function isRoomCompleted(pRequest, pEvent) {
                 else {
                     resolve(false);
                 }
+            }
+            else {
+                resolve(false);
             }
         });
     });

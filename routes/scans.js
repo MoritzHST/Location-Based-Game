@@ -24,7 +24,7 @@ const invalidRequest = "Die Anfrage ist ungültig";
  * entsprechende Anzahl an Antworten und Fragen, sowie bei noch nicht beantworteten Fragen,
  * den Antworten keinerlei Informationen über ihre Richtigkeit angehangen sind.
  */
-router.get('/find/scan', function (req, res) {
+router.get('/find/scan', async function (req, res) {
     logging.Entering("GET /find/scan");
     let currentEvent = await eventHelper.getCurrentEvent();
     if (!currentEvent) {

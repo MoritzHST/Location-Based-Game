@@ -4,7 +4,6 @@ var errorTimer;
 var locationIdentifier;
 
 function initExpositionInfo(obj) {
-    console.log(obj);
     //Variablen Clearen
     gameObj = undefined;
     answerObj = undefined;

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Test-Datenbank - LocationBasedGame</title>
+    <link rel="shortcut icon" type="image/png" href="./images/favicon.png"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="stylesheets/logs.css">
+
+	<script src="javascripts/jquery.min.js"></script>
+	<script src="javascripts/testdb.js"></script>
+</head>
+<body>
+	<table>
+		<tr>
+			<td><input type="button" value="Testdatenbank hinzuf&uuml;gen" onclick="workWithDatabase('insert', 'example')" /></td>
+			<td><input type="button" value="Testdatenbank entfernen" onclick="workWithDatabase('delete', 'example')" /></td>
+		</tr>
+		<tr>
+			<td id="result" colspan="2"></td>
+		</tr>	
+	</table>
+</body>
+</html>

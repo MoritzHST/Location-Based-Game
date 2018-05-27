@@ -1,5 +1,5 @@
 const objects = require("../mongodb/objects");
-const logging = require("logging");
+const logging = require("./logging");
 
 /**
  * Handled das Singlechoice-Quiz

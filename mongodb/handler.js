@@ -64,7 +64,6 @@ module.exports = {
     dbResult: function (pErr, pRes, pResult, pResultType) {
         logging.Entering("dbResult");
         logging.Parameter("pErr", pErr);
-        logging.Parameter("pRes", pRes);
         logging.Parameter("pResult", pResult);
         logging.Parameter("pResultType", pResultType);
 

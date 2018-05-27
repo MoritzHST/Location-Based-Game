@@ -1,6 +1,7 @@
 const operations = require('../mongodb/operations');
 const handler = require('../mongodb/handler');
 const router = require('express').Router();
+const logging = require('../helper/logging');
 
 const userCollection = require('../mongodb/collections').USERS;
 

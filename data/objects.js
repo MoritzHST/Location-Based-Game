@@ -252,6 +252,6 @@ module.exports = {
                 ])
             ]
         );
-
+        return dbObjects;
     }
 };

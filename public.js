@@ -36,6 +36,7 @@ router.post('/login', function(req, res) {
                 res.redirect('/sign-out');
             } else {
                 req.session.user = user;
+                req.session.login = new Date() / 1;
                 req.session.maxAge = new Date().setHours(24,0,0,0) - new Date();
                 res.status(200).jsonp(user);
             }

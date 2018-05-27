@@ -1,6 +1,7 @@
 const operations = require('../mongodb/operations');
 const handler = require('../mongodb/handler');
 const router = require('express').Router();
+const logging = require('../helper/logging');
 
 const locationMappingCollection = require('../mongodb/collections').LOCATION_MAPPING;
 const userCollection = require('../mongodb/collections').USERS;
@@ -22,7 +23,9 @@ const invalidRequest = "Die Anfrage ist ungültig";
  * den Antworten keinerlei Informationen über ihre Richtigkeit angehangen sind.
  */
 router.get('/find/scan', function (req, res) {
+    logging.Entering("GET /find/scan");
     req.query = handler.getRealRequest(req.query, req.body);
+    logging.Parameter("request.query", req.query);
 
     let identifier = req.query.identifier;
 
@@ -68,6 +71,7 @@ router.get('/find/scan', function (req, res) {
                 });
             }
         });
+    logging.Leaving("GET /find/scan")
 });
 
 module.exports = router;

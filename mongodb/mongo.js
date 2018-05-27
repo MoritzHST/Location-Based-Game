@@ -17,6 +17,7 @@ const Conf = {
 
 const file = require('path').resolve(__dirname, _conf);
 
+logging.Info("Lese " + _conf + " ein...");
 if (!fs.existsSync(file)) {
     logging.Error(_conf + " ist nicht lesbar oder existiert nicht");
 } else {
@@ -38,6 +39,7 @@ if (!fs.existsSync(file)) {
                         }
                     }
 
+                    logging.Info(Conf[key] + "=" + value);
                     Conf[key] = value;
                 }
             }
@@ -46,6 +48,7 @@ if (!fs.existsSync(file)) {
 }
 
 function MongoWrapper(database) {
+	logging.Info("Initializing new MongoWrapper");
     this.Client = MongoClient;
     this.Url = 'mongodb://' + Conf.bindIp + ':' + Conf.port;
     this.Database = database ? database : Conf.defaultDb;

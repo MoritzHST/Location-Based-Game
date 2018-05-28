@@ -5,6 +5,7 @@ const logging = require('../helper/logging');
 
 const locationMappingCollection = require('../mongodb/collections').LOCATION_MAPPING;
 const userCollection = require('../mongodb/collections').USERS;
+const eventHelper = require('../helper/event');
 
 const errorMessage = "Fehler beim auslesen der Missionsübersicht";
 
@@ -14,8 +15,18 @@ const errorMessage = "Fehler beim auslesen der Missionsübersicht";
  * gibt alle dem Nutzer zur Verfügung stehenden Missionen zurück
  *
  */
-router.get('/find/missions', function (req, res) {
-	logging.Entering("POST /find/missions");
+router.get('/find/missions', async function (req, res) {
+    logging.Entering("POST /find/missions");
+
+    let currentEvent = await eventHelper.getCurrentEvent();
+    if (!currentEvent) {
+        res.status(422).jsonp({
+            "error": eventHelper.noEventMessage
+        });
+        logging.Error("Aktuell findet kein Event statt");
+        return;
+    }
+
     let userId;
     try {
         userId = req.session.user._id;
@@ -25,31 +36,28 @@ router.get('/find/missions', function (req, res) {
         });
         return;
     }
-    operations.findObject(locationMappingCollection,
-        null, function (err, item) {
-            operations.findObject(userCollection,
-                {_id: userId}, function (userErr, user) {
-                    if (!item) {
-                        res.status(422).jsonp({
-                            "error": errorMessage
-                        });
-                    } else {
-                        if (!Array.isArray(item)) {
-                            item = new Array(item);
-                        }
-                        //Die einzelnen Labore flaggen
-                        for (let i in user.visits) {
-                            item.forEach(function (mission) {
-                                mission.games = undefined;
-                                if (user.visits.hasOwnProperty(i) && user.visits[i].location._id.toString() === mission.location._id.toString()) {
-                                    mission.state = user.visits[i].state;
-                                }
-                            });
-                        }
-                        handler.dbResult(err, res, item, errorMessage);
-                    }
-                });
+    let item = currentEvent.locationMappings;
+    if (!item) {
+        res.status(422).jsonp({
+            "error": errorMessage
         });
+    } else {
+        if (!Array.isArray(item)) {
+            item = new Array(item);
+        }
+        //Die einzelnen Labore flaggen
+        for (let i in user.visits) {
+            item.forEach(function (mission) {
+                mission.games = undefined;
+                if (user.visits.hasOwnProperty(i) && user.visits[i].location._id.toString() === mission.location._id.toString()) {
+                    mission.state = user.visits[i].state;
+                }
+            });
+        }
+        handler.dbResult(err, res, item, errorMessage);
+    }
+
+
     logging.Leaving("POST /find/missions");
 });
 

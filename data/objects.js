@@ -248,7 +248,11 @@ module.exports = {
             [
                 new objects.Event("Campus Tag 2018", String(new Date().toJSON().slice(0, 10)), [
                     dbObjects.get(collections.LOCATION_MAPPING)[0],
-                    dbObjects.get(collections.LOCATION_MAPPING)[1]
+                    dbObjects.get(collections.LOCATION_MAPPING)[1],
+                    dbObjects.get(collections.LOCATION_MAPPING)[2],
+                    dbObjects.get(collections.LOCATION_MAPPING)[3],
+                    dbObjects.get(collections.LOCATION_MAPPING)[4],
+                    dbObjects.get(collections.LOCATION_MAPPING)[5]
                 ])
             ]
         );

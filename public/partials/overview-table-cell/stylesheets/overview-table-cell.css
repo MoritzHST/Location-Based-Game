@@ -16,9 +16,8 @@
 
 .overview-table-cell-location-image-wrapper {
     overflow: hidden;
-    background-image: url("../../../uploads/images/room/5c279a1aa14994e66ee8ea46d1fcc07b");
+    background: url("../images/default.png") no-repeat;
     background-size: cover;
-    background-repeat: no-repeat;
 }
 
 .overview-table-cell-location-info {
@@ -26,13 +25,13 @@
 }
 
 .overview-room-state-context-0 {
-    background-color: #f7ab38;
+    background-color: #ffff7f;
 }
 
 .overview-room-state-context-1 {
-    background-color: #0055dd;
+    background-color: #ffc864;
 }
 
 .overview-room-state-context-2 {
-    background-color: #4F8A10;
+    background-color: #64ff64;
 }

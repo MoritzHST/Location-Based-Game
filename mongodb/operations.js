@@ -17,9 +17,11 @@ module.exports = {
      * Generiert ein Sessiontoken
      */
     generateToken: function () {
+    	logging.Entering("generateToken");
         let returnObj = String(Math.floor(Math.random() * 10000)).padStart(4, "0");
         logging.Info("Token " + returnObj + " generated");
-        return returnObj;
+        logging.Leaving("generateToken");
+        return logging.ReturnValue(returnObj);
     },
 
     /***************************************************************************
@@ -32,6 +34,9 @@ module.exports = {
      * pCollection --> pObject --> pCallback -->
      */
     findObject: function (pCollection, pObject, pCallback) {
+    	logging.Entering("findObject");
+    	logging.Parameter("pCollection", pCollection);
+    	logging.Parameter("pObject", pObject);
         return new Promise(resolve => {
             let database = mongo.Object();
             database.Client.connect(database.Url, function (error, result) {
@@ -55,6 +60,7 @@ module.exports = {
                     }
                 }
             });
+            logging.Leaving("generateToken");
         });
     },
 
@@ -62,6 +68,10 @@ module.exports = {
      * --- pCollection --> pObject -->
      */
     updateObject: function (pCollection, pObject, pQuery, pCallback) {
+    	logging.Entering("updateObject");
+    	logging.Parameter("pCollection", pCollection);
+    	logging.Parameter("pObject", pObject);
+    	logging.Parameter("pQuery", pQuery);
         return new Promise(resolve => {
             let database = mongo.Object();
             database.Client.connect(database.Url, function (error, result) {
@@ -80,7 +90,8 @@ module.exports = {
                     });
                 }
             });
-        });
+            logging.Leaving("updateObject");
+        });    	
     },
 
     /**
@@ -88,6 +99,9 @@ module.exports = {
      * erfolgreich false, wenn löschen nicht erfolgreich
      */
     deleteObjects: function (pCollection, pObjects, pCallback) {
+    	logging.Entering("deleteObjects");
+    	logging.Parameter("pCollection", pCollection);
+    	logging.Parameter("pObjects", pObjects);
         return new Promise(resolve => {
             let database = mongo.Object();
             database.Client.connect(database.Url, function (error, result) {
@@ -102,6 +116,7 @@ module.exports = {
                     });
                 }
             });
+            logging.Leaving("deleteObjects");
         });
     },
 
@@ -114,6 +129,8 @@ module.exports = {
      * Name der neuen Datenbank-Collection
      */
     createCollection: function (pCollection, pCallback) {
+    	logging.Entering("createCollection");
+    	logging.Parameter("pCollection", pCollection);
         return new Promise(resolve => {
             let database = mongo.Object();
             database.Client.connect(database.Url, function (error, result) {
@@ -128,6 +145,7 @@ module.exports = {
                     });
                 }
             });
+            logging.Leaving("createCollection");
         });
     },
 
@@ -137,6 +155,8 @@ module.exports = {
      * Collections zurückgegeben. pCollection --> pCallback -->
      */
     getCollection: function (pCollection, pCallback) {
+    	logging.Entering("getCollection");
+    	logging.Parameter("pCollection", pCollection);
         return new Promise(resolve => {
             let database = mongo.Object();
             if (pCollection) {
@@ -166,6 +186,7 @@ module.exports = {
                     }
                 });
             }
+            logging.Leaving("getCollection");
         });
     },
 
@@ -174,6 +195,8 @@ module.exports = {
      * der zu löschenden Datenbank pCallback -->
      */
     dropCollection: function (pCollection, pCallback) {
+    	logging.Entering("dropCollection");
+    	logging.Parameter("pCollection", pCollection);    	
         let database = mongo.Object();
         database.Client.connect(database.Url, function (error, result) {
             if (error) {
@@ -185,9 +208,11 @@ module.exports = {
                 });
             }
         });
+        logging.Leaving("dropCollection");
     },
 
     isReady: function (pCallback) {
+    	logging.Entering("isReady");
         return new Promise(resolve => {
             const database = mongo.Object();
 
@@ -196,6 +221,7 @@ module.exports = {
                     pCallback(error);
                 resolve(!error);
             });
+            logging.Leaving("isReady");
         });
     }
 };

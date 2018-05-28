@@ -7,6 +7,11 @@ var scannerContext;
  * @param pContextObj "beschreibt die View, aus der der QR-Scanner geöffnet wurde
  */
 function initScanner(pContextObj) {
+    //Variablen Clearen
+    scanner = undefined;
+    cameraList = undefined;
+    scannerContext = undefined;
+
     scannerContext = pContextObj;
 
     scanner = new Instascan.Scanner(

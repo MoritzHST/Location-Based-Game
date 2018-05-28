@@ -37,26 +37,28 @@ router.get('/find/missions', async function (req, res) {
         return;
     }
     let item = currentEvent.locationMappings;
-    if (!item) {
-        res.status(422).jsonp({
-            "error": errorMessage
-        });
-    } else {
-        if (!Array.isArray(item)) {
-            item = new Array(item);
-        }
-        //Die einzelnen Labore flaggen
-        for (let i in user.visits) {
-            item.forEach(function (mission) {
-                mission.games = undefined;
-                if (user.visits.hasOwnProperty(i) && user.visits[i].location._id.toString() === mission.location._id.toString()) {
-                    mission.state = user.visits[i].state;
+    operations.findObject(userCollection,
+        {_id: userId}, function (userErr, user) {
+            if (!item || !user) {
+                res.status(422).jsonp({
+                    "error": errorMessage
+                });
+            } else {
+                if (!Array.isArray(item)) {
+                    item = new Array(item);
                 }
-            });
-        }
-        handler.dbResult(err, res, item, errorMessage);
-    }
-
+                //Die einzelnen Labore flaggen
+                for (let i in user.visits) {
+                    item.forEach(function (mission) {
+                        mission.games = undefined;
+                        if (user.visits.hasOwnProperty(i) && user.visits[i].location._id.toString() === mission.location._id.toString()) {
+                            mission.state = user.visits[i].state;
+                        }
+                    });
+                }
+                handler.dbResult(userErr, res, item, errorMessage);
+            }
+        });
 
     logging.Leaving("POST /find/missions");
 });

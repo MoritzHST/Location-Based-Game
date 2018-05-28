@@ -27,9 +27,10 @@ router.get('/find/missions', function (req, res) {
     }
     operations.findObject(locationMappingCollection,
         null, function (err, item) {
-            operations.findObject(userCollection,
-                {_id: userId}, function (userErr, user) {
-                    if (!item) {
+            if (item) {
+                operations.findObject(userCollection, {_id: userId}, function (userErr, user) {
+                    if (!user) {
+                        /* Benutzer nicht gefunden */
                         res.status(422).jsonp({
                             "error": errorMessage
                         });
@@ -49,6 +50,12 @@ router.get('/find/missions', function (req, res) {
                         handler.dbResult(err, res, item, errorMessage);
                     }
                 });
+            } else {
+                /* LocationMapping nicht gefunden */
+                res.status(422).jsonp({
+                    "error": errorMessage
+                });
+            }
         });
     logging.Leaving("POST /find/missions");
 });

@@ -86,7 +86,7 @@ module.exports = {
             [
                 //R114
                 new objects.SimpleQuiz("Was wird durch R symbolisiert?",
-                    [new objects.Answer("Wiederstand", true),
+                    [new objects.Answer("Widerstand", true),
                         new objects.Answer("Spannung", false),
                         new objects.Answer("Stromstärke", false),
                         new objects.Answer("Leistung", false),

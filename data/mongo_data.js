@@ -112,7 +112,7 @@ if (process.env.env === "development") {
 
 module.exports = {
     insertData: async function (objectsFileName, pCallback) {
-        await insertIntoDatabase(objectsFileName);
+        await insertIntoDatabase2();
         pCallback();
     },
     deleteData: async function (objectsFileName, pCallback) {

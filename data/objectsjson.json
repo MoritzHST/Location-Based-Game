@@ -2,7 +2,7 @@
   "events": [
     {
       "name": "TestEvent",
-      "date": "2018-05-27",
+      "date": "2018-05-29",
       "locationMappings": [
         {
           "location": {

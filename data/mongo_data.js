@@ -94,7 +94,7 @@ async function insertIntoDatabase2() {
                 locationMappingResult.exposition._id = locationMappingResult._id;
             }
         });
-        let eventResult = await insertIntoDb(collections.EVENTS, event);
+        await insertIntoDb(collections.EVENTS, event);
     });
 }
 

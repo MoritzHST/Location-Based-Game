@@ -6,39 +6,6 @@
       "locationMappings": [
         {
           "location": {
-            "roomnumber": "110",
-            "identifier": "http://qr.service.fh-stralsund.de/h4r110"
-          },
-          "exposition": {
-            "name": "Automatisierungstechnik",
-            "description": "<p>Die Nachbildung eines Forschungsbetriebes dient zur Einführung der Studierenden in die komplexe Welt der Automatisierungstechnik. Schwerpunkte bilden hierbei der Entwurf, die Umsetzung und die Untersuchung des Verhaltens von Automatisierungssystemen.</p><p>Weiteres Thema ist die Kommunikationstechnik im industriellen Umfeld. Hierzu werden Grundlagen und Spezialwissen im Labor praxisnah vermittelt.</p>"
-          },
-          "games": []
-        },
-        {
-          "location": {
-            "roomnumber": "112",
-            "identifier": "http://qr.service.fh-stralsund.de/h4r112"
-          },
-          "exposition": {
-            "name": "Regelungstechnik",
-            "description": "<p>Die Zweckbestimmung des Labors ist die Umsetzung der Lehrinhalte im Fach Steuerungstechnik sowie weiterführende Untersuchungen und Lehrveranstaltungen auf dem Gebiet der Automatisierungstechnik.</p><u>Versuchsaufbauten:</u><ul><li>SPS-Steuerung eines Drei-Achsen-Modells</li><li>Simulationstafel \"Stern-Dreieck-Anlasser\" mit SPS-Steuerung</li><li>Soft- und Hardwaremodelle verschiedener Systeme mit SPS-Steuerung</li><li>Experimentierplätze mit SPS Simatic S7-300</li></ul>"
-          },
-          "games": []
-        },
-        {
-          "location": {
-            "roomnumber": "113",
-            "identifier": "http://qr.service.fh-stralsund.de/h4r113"
-          },
-          "exposition": {
-            "name": "Steuerungstechnik",
-            "description": "<p>Die Zweckbestimmung des Labors ist die Umsetzung der Lehrinhalte im Fach Steuerungstechnik sowie weiterführende Untersuchungen und Lehrveranstaltungen auf dem Gebiet der Automatisierungstechnik.</p><u>Versuchsaufbauten:</u><ul><li>SPS-Steuerung eines Drei-Achsen-Modells</li><li>Simulationstafel \"Stern-Dreieck-Anlasser\" mit SPS-Steuerung</li><li>Soft- und Hardwaremodelle verschiedener Systeme mit SPS-Steuerung</li><li>Experimentierplätze mit SPS Simatic S7-300</li></ul>"
-          },
-          "games": []
-        },
-        {
-          "location": {
             "roomnumber": "114",
             "identifier": "http://qr.service.fh-stralsund.de/h4r114"
           },
@@ -75,39 +42,6 @@
               ]
             }
           ]
-        },
-        {
-          "location": {
-            "roomnumber": "115",
-            "identifier": "http://qr.service.fh-stralsund.de/h4r115"
-          },
-          "exposition": {
-            "name": "Energieversorgung",
-            "description": "<p>Das Labor Elektrische Energieversorgung gewährleistet die praxisnahe Durchführung von Versuchsreihen für die Fächer Elektrische Energieversorgung, Anlagentechnik sowie Maschinen- und Netzschutz.</p><p>Weiterhin werden im Rahmen der Labortätigkeit die Themengebiete Planung von BHKW-Anlagen und Schutzmaßnahmen nach DIN VDE 0100 behandelt.</p><p><u>Die Ausstattung:</u><br>Das Labor Elektrische Energieversorgung ist mit hochwertiger Technik ausgerüstet, so dass das Labor neben der praktischen Ausbildung auch für die Bearbeitung von Diplomarbeitsthemen und die Durchführung von Forschungsvorhaben genutzt werden kann.</p><p><u>Das Leistungsangebot:</u><br>Das Serviceangebot des Labors für Elektrische Energieversorgung richtet sich an Energieversorgungsunternehmen und an Forschungseinrichtungen zur Kooperation. Für Stadtwerke werden Seminare zur beruflichen Weiterbildung des Fachpersonals durchgeführt. Im Auftrag von Unternehmen erarbeitet das Labor Studien, Marktanalysen, Standortstudien und Softwareentwicklungen für die Praxis.</p>"
-          },
-          "games": []
-        },
-        {
-          "location": {
-            "roomnumber": "116",
-            "identifier": "http://qr.service.fh-stralsund.de/h4r116"
-          },
-          "exposition": {
-            "name": "E-Antriebstechnik / Leistungselektronik",
-            "description": "<p><u>Leistungselektronik - Worum geht es?</u><br>Es geht um die Umwandlung elektrischer Energie mittels so genannter Leistungshalbleiter. Dabei kann die Leistungselektronik (immer nur kombiniert mit passiven Filtern!) elektrische Größen im Frequenz und Amplitude variieren.</p>"
-          },
-          "games": []
-        },
-        {
-          "location": {
-            "roomnumber": "117",
-            "identifier": "http://qr.service.fh-stralsund.de/h4r117"
-          },
-          "exposition": {
-            "name": "Elektrische Maschinen",
-            "description": "<p>Es gibt ruhende Elektrische Maschinen (Transformator) sowie auch rohtierende Elektrische Maschinen. Letztere können abhängig vom Betriebsbereich als Motor oder auch Generator verwendet werden. Jedoch erst kombiniert mit der Leistungselektronik entsteht ein elektrischer Antrieb, mit dem eine Drehzahl oder auch eine Lage bzw. ein Winkel generiert werden kann.</p>"
-          },
-          "games": []
         },
         {
           "location": {

@@ -56,7 +56,7 @@ function insertIntoDb(collection, object) {
  * Durchläuft die Datenmap und erstellt diejenigen Datensätze in der DB, die noch nicht existieren
  */
 async function insertIntoDatabase() {
-    eventJSON.date = String(new Date().toJSON().slice(0, 10));
+    eventJSON.date = eventJSON.date ? eventJSON.date : String(new Date().toJSON().slice(0, 10));
     for (let locationMapping of eventJSON.locationMappings) {
         for (let game of locationMapping.games) {
             let gamesResult = await insertIntoDb(collections.GAMES, game);

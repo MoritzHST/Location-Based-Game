@@ -1,6 +1,6 @@
 const operations = require('../mongodb/operations');
 const logging = require('../helper/logging');
-const eventJSON = require('./objectsjson');
+const eventJSON = require('./data');
 const collections = require('../mongodb/collections');
 
 async function clearCollections() {

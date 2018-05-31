@@ -61,7 +61,7 @@ router.post('/post/answer', async function (req, res) {
                     res.status(200).jsonp({
                         "msg": "Die Antwort ist richtig"
                     });
-                    saveAnswer(req, objects.GameStates.CORRECT, currentEvent);
+                    saveAnswer(req, objects.GameStates.CORRECT, currentEvent, item);
                     return;
                 }
 
@@ -69,7 +69,7 @@ router.post('/post/answer', async function (req, res) {
                 res.status(400).jsonp({
                     "error": "Die Antwort ist falsch!"
                 });
-                saveAnswer(req, objects.GameStates.WRONG, currentEvent);
+                saveAnswer(req, objects.GameStates.WRONG, currentEvent, item);
             });
         });
     logging.Leaving("POST /post/answer");
@@ -172,7 +172,7 @@ async function canAnswerQuiz(pRequest) {
     return !gameObj && locationObj;
 }
 
-function saveAnswer(pRequest, pState, pEvent) {
+function saveAnswer(pRequest, pState, pEvent, pGame) {
     logging.Entering("saveAnswer");
     logging.Parameter("request.query", pRequest.query);
     logging.Parameter("pState", pState);
@@ -188,7 +188,13 @@ function saveAnswer(pRequest, pState, pEvent) {
                 userItem.visits[i].answers.push(pRequest.query);
             }
         }
-
+        if (pState === objects.GameStates.CORRECT) {
+            if (!userItem.score) {
+                userItem.score = pGame.points;
+            } else {
+                userItem.score += pGame.points;
+            }
+        }
         operations.updateObject(userCollection, {
                 _id: userItem._id
             },

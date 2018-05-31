@@ -39,6 +39,8 @@ module.exports = {
         logging.Parameter("pUsername", pUsername);
         this.name = pUsername;
         this.token = operations.generateToken();
+        this.score = 0;
+        this.visits = [];
         logging.Info("initializing User done");
     },
 

@@ -1,45 +1,51 @@
-
 # LocationBasedGame
 
-## Zugriff auf Testwebseite
-The Testwebsite http://test.quiz.hochschule-stralsund.de needs authentication to enter it. The credentials are the same as for the virtual machine.
-Have a look at the wiki for further help.
+## Webseiten
+------
+### Zugriff auf Live
+Die Live-Webseite ist unter https://quiz.hochschule-stralsund.de erreichbar.
 
-## Git configuration
+### Zugriff auf Test
+Die Testwebseite ist unter http://test.quiz.hochschule-stralsund.de erreichbar. Für den Zugriff werden Benutzername und Passwort benötigt. 
+Diese sind die selben wie für den Zugriff auf die Virtuelle Maschine (Siehe Wiki).
 
-### Get HS-LBG-2018 Git Project via commandline / git-bash
-1. mkdir HS-LBG-2018 (optional: only if you haven't already a project folder)
-3. cd HS-LBG-2018 (or the name of your project folder)
-4. git init
-5. git remote add origin https://gitlab.fh-stralsund.de/HS-Location-Based-Game-2018/HS-LBG-2018.git
-6. git pull origin master
+## Git Konfiguration
+------
+### Ignoriere bestimmte Dateien / Ordner
+Da nicht alle Dateien und Ordner, die beim Programmieren entstanden sind, gepusht werden müssen, können in einer `.gitignore` Datei (im Wurzelverzeichnis der Applikation) Ausnahmen definiert werden.
 
-### Ignore specific Files/Folders
-There is no need to push everything from your local repo to gitlab. To ignore specific files and folder create a file named ".gitignore" and put into your project folder.
-Add the following line to the .gitignore file:
+```bash
+# Das Beispiel zeigt, wie alle Dateien und Ordner, die mit einem Punkt beginnen, von Git ignoriert werden.
+.*
+```
 
-` # ignore all files and folders starting with a dot
-.* `
-
-## Usage
-
-
-
-## Developing
-
-
-
-### Tools
+## Werkzeuge / Software
 
 ### Swagger
-To edit the data displayed by swagger, use the swagger.json file in the root dir. The current demo example is based on: https://github.com/GenFirst/swagger-to-existing-nodejs-project/blob/master/backend/swagger.json
-
-you can view swagger at:
+Swagger kann über folgende Seiten genutzt werden:
+```bash
+# Lokaler Aufruf wenn NodeJS läuft
 http://localhost:3000/admin/swagger
+# Aufruf über Live-Webseite
+https://quiz.hochschule-stralsund.de/admin/swagger
+# Aufruf über Testwebseite
+http://test.quiz.hochschule-stralsund.de/admin/swagger
+```
+
+Um andere Routen beim Aufruf der Swagger-Seite einzubinden, kann die `swagger.json` bearbeitet werden, die sich im Wurzelverzeichnis der Applikation befindet.
 
 ### MongoDB
-https://www.npmjs.com/package/mongodb
+Das genutzte MongoDB paket kommt von `https://www.npmjs.com/package/mongodb`.
+Standardwerte für die MongoDB können in der Datei `mongo.js` bearbeitet werden.
+Es is ebenfalls möglich im Wurzelverzeichnis eine mongod.conf mit entsprechenden Werten anzulegen.
+
+`Bitte beachten:` 
+* Aktuell werden für das tägliche Löschen von Benutzern im Dockerfile angegeben werden muss im Sinne eines Eintrages mit dem Namen der Datenbank.
+* Sollte sich der Name der defaultDb ändern oder eine andere Datenbank verwendet werden, so muss der Name im Dockerfile angepasst werden.
 
 ## Notes
-if you're using npm Version >3, use "npm install" with "--legacy-bundling" option
-npm install --legacy-bundling
+Beim Benutzen von npm (Version > 3) sollte darauf geachtet werden, dass der `legacy-bundling` Schalter übergeben wird
+
+```bash
+npm install --legacy-bundling PAKETNAME
+```

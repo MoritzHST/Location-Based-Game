@@ -72,9 +72,13 @@ function saveAnswer(pRequest, pState, pEvent, pGame) {
                 userItem.visits[i].answers.push(pRequest.query);
             }
         }
-        if (pState === objects.GameStates.CORRECT) {
-            userItem.score = userItem.score ? userItem.score + pGame.points : pGame.points;
+        if (!userItem.score) {
+            userItem.score = new objects.Score();
         }
+        if (pState === objects.GameStates.CORRECT) {
+            userItem.score.score = userItem.score ? userItem.score.score + pGame.points : pGame.points;
+        }
+        userItem.score.games += 1;
         operations.updateObject(userCollection, {
                 _id: userItem._id
             },
@@ -102,6 +106,9 @@ function evaluateLocation(pRequest, pEvent) {
             if (userItem.visits.hasOwnProperty(i) && userItem.visits[i].location._id.toString() === mappingItem.location._id.toString()) {
                 //Status des Raumes aktualisieren
                 userItem.visits[i].state = analyzeVisits(userItem.visits[i], mappingItem);
+                if (userItem.visits[i].state === objects.RoomStates.VISITED) {
+                    userItem.score.locations += 1;
+                }
             }
         }
         operations.updateObject(userCollection, {

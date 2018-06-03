@@ -29,6 +29,12 @@ module.exports = {
         logging.Info("initializing Event done");
     },
 
+    Score: function () {
+        this.score = 0;
+        this.games = 0;
+        this.locations = 0;
+    },
+
     /**
      * Erzeugt ein Userobjekt bestehend aus Usernamen und einem Sessiontoken
      *
@@ -39,7 +45,6 @@ module.exports = {
         logging.Parameter("pUsername", pUsername);
         this.name = pUsername;
         this.token = operations.generateToken();
-        this.score = 0;
         this.visits = [];
         logging.Info("initializing User done");
     },

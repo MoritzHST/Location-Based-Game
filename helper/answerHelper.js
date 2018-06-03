@@ -72,13 +72,10 @@ function saveAnswer(pRequest, pState, pEvent, pGame) {
                 userItem.visits[i].answers.push(pRequest.query);
             }
         }
-        if (!userItem.score) {
-            userItem.score = new objects.Score();
-        }
+        userItem.score.games += 1;
         if (pState === objects.GameStates.CORRECT) {
             userItem.score.score = userItem.score ? userItem.score.score + pGame.points : pGame.points;
         }
-        userItem.score.games += 1;
         operations.updateObject(userCollection, {
                 _id: userItem._id
             },

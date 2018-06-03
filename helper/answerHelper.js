@@ -22,18 +22,11 @@ async function isRoomCompleted(pRequest, pEvent) {
                     let mappingItem = answerChecker.findLocationById(pEvent, curVisit.location._id);
                     if (mappingItem && mappingItem.games.length === curVisit.answers.length) {
                         resolve(curVisit.answers);
-                    }
-                    else {
-                        resolve(false);
+                        return;
                     }
                 }
-                else {
-                    resolve(false);
-                }
             }
-            else {
-                resolve(false);
-            }
+            resolve(false);
         });
     });
 }

@@ -48,14 +48,14 @@ router.get('/find/missions', async function (req, res) {
                     item = new Array(item);
                 }
                 //Die einzelnen Labore flaggen
-                for (let i in user.visits) {
-                    item.forEach(function (mission) {
-                        mission.games = undefined;
+                item.forEach(function (mission) {
+                    mission.games = undefined;
+                    for (let i in user.visits) {
                         if (user.visits.hasOwnProperty(i) && user.visits[i].location._id.toString() === mission.location._id.toString()) {
                             mission.state = user.visits[i].state;
                         }
-                    });
-                }
+                    }
+                });
                 handler.dbResult(userErr, res, item, errorMessage);
             }
         });

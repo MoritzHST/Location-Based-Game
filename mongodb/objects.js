@@ -2,6 +2,11 @@ const logging = require('../helper/logging');
 const operations = require('./operations');
 require('../public/javascripts/shared/game-context.js');
 
+function Score() {
+    this.score = 0;
+    this.games = 0;
+    this.locations = 0;
+}
 
 module.exports = {
 
@@ -29,11 +34,7 @@ module.exports = {
         logging.Info("initializing Event done");
     },
 
-    Score: function () {
-        this.score = 0;
-        this.games = 0;
-        this.locations = 0;
-    },
+    Score,
 
     /**
      * Erzeugt ein Userobjekt bestehend aus Usernamen und einem Sessiontoken
@@ -46,6 +47,7 @@ module.exports = {
         this.name = pUsername;
         this.token = operations.generateToken();
         this.visits = [];
+        this.score = new Score();
         logging.Info("initializing User done");
     },
 

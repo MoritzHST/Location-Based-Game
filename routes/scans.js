@@ -78,10 +78,6 @@ router.get('/find/scan', async function (req, res) {
                 operations.findObject(userCollection, {_id: userId}, function (userErr, userItem) {
                         item.games = gameHelper.addGameStates(userItem.visits, item.games, item.location._id);
                         if (!gameHelper.hasAlreadyVisited(userItem, item.location)) {
-                            //Visits müssen initialisiert werden, wenn es sie noch nicht gibt
-                            if (!userItem.visits) {
-                                userItem.visits = [];
-                            }
                             //Neuen Visit einf+gen, wenn der Raum noch nicht besucht ist
                             userItem.visits.push(new objects.Visit(item, [], false, objects.RoomStates.VISITED));
                             //Visit persistieren

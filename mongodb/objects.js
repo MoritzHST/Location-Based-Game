@@ -27,7 +27,7 @@ module.exports = {
      * @param pLocationMappings Array aller LocationMappings-Objekte die an diesem Event freigeschaltet sind
      * @constructor
      */
-    Event: function (pEventName, pDate, pLocationMappings) {
+    Event : function(pEventName, pDate, pLocationMappings) {
         logging.Info("initializing new Event");
         logging.Parameter("pEventName", pEventName);
         logging.Parameter("pDate", pDate);
@@ -39,7 +39,7 @@ module.exports = {
     },
 
     /**
-     * Erzeugt ein Userobjekt bestehend aus Usernamen und einem Sessiontoken(Token wird automatisch generiert)
+     * Erzeugt ein Userobjekt bestehend aus Usernamen und einem Sessiontoken (Token wird automatisch generiert)
      *
      * @param pUsername Username des Users als String
      */
@@ -54,7 +54,7 @@ module.exports = {
     /**
      * Erzeugt ein neues Location-Objekt bestehend aus Raumnummer und Identifier
      *
-     * @param pRoomnumber Nummer des Raumes als String(undefined wenn Location sich draußen befindet)
+     * @param pRoomnumber Nummer des Raumes als String (undefined wenn Location sich draußen befindet)
      * @param pIdentifier Identifier anhand dessen ein Scan zu diesem Raum führt
      */
     Location : function(pRoomnumber, pIdentifier) {
@@ -68,7 +68,7 @@ module.exports = {
 
     /**
      * Ausstellungs-Objekt bestehend aus dem Namen der jeweiligen Ausstellung, einer Beschreibung,
-     * einem Pfad(String) zum Thumbnail und ein Array an Pfaden(String) zu zugehörigen Bildern
+     * einem Pfad (String) zum Thumbnail und ein Array an Pfaden (String) zu zugehörigen Bildern
      *
      * @param pName Name der Ausstellung als String
      * @param pDescription Beschreibung der Ausstellung als HTML formatierten String
@@ -133,7 +133,7 @@ module.exports = {
      * Visit-Objekt, das den Besuch und Erfolg eines Nutzers nach dem Spielen eines Spiels an einer Location darstellt
      * @param pLocationMapping LocationMapping-Object der Ausstellung, an der der Nutzer gespielt hat
      * @param pGames Array der Game-Objekte die bei diesem Objekt gespielt wurde
-     * @param pIsSuccessful Boolean ob das Spiel erfolgreich abgeschlossen(Richtige Antwort) wurde als Boolean
+     * @param pIsSuccessful Boolean ob das Spiel erfolgreich abgeschlossen (Richtige Antwort) wurde 
      * @param pRoomState Status der Abfertigung, dargestellt durch ein Objekt aus dem "RoomStates"-Enum
      * @constructor
      */

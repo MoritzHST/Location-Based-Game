@@ -39,7 +39,7 @@ module.exports = {
     },
 
     /**
-     * Erzeugt ein Userobjekt bestehend aus Usernamen und einem Sessiontoken
+     * Erzeugt ein Userobjekt bestehend aus Usernamen und einem Sessiontoken(Token wird automatisch generiert)
      *
      * @param pUsername Username des Users als String
      */

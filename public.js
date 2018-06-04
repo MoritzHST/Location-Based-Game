@@ -55,9 +55,12 @@ router.use('/sign-up', function (req, res, next) {
  */
 router.post('/login', function (req, res) {
     req.query = JSON.parse(JSON.stringify(req.body));
-    console.log(JSON.stringify(req.query));
+
     if (req.query.name && req.query.token && req.session) {
-        operations.findObject(userCollection, {name: req.query.name, token: req.query.token}, function (err, user) {
+        operations.findObject(userCollection, {
+            name: {$regex: req.query.name + "$", $options: "i"},
+            token: req.query.token
+        }, function (err, user) {
             if (err || !user) {
                 res.redirect('/sign-out');
             } else {

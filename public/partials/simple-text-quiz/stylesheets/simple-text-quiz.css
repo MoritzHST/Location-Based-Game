@@ -1,6 +1,8 @@
 .game-answer {
     margin-top: 10px;
     margin-bottom: 10px;
+    white-space: normal !important;
+    word-wrap: break-word;
 }
 
 #answer-container:before, #answer-container:after {

@@ -66,10 +66,6 @@ li:hover, a:hover {
     text-align: center;
 }
 
-#exposition-submit-game-answer {
-    margin-top: 15px;
-}
-
 div.item.panel > img {
     margin: auto;
 }
@@ -93,4 +89,8 @@ div.carousel.slide {
 
 a.carousel-control {
     border-radius: 0;
+}
+
+.mission-hook-padding {
+    margin-top: 10px;
 }

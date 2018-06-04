@@ -1,3 +1,4 @@
+var answerObj;
 function initSimpleTextQuiz(obj) {
     //Die Frage kann immer gesetzt werden
     $("#question-container").html(obj.question);
@@ -21,6 +22,7 @@ function initPlayableQuiz(obj) {
     answerObj = {};
     answerObj.possibleAnswers = [];
     answerObj.gameId = obj._id;
+    answerObj.locationId = obj.locationId;
 
     //Frage persistieren, um Auswertung zu erleichtern
     answerObj.question = obj.question;
@@ -33,8 +35,6 @@ function initPlayableQuiz(obj) {
                 class: "btn btn-sm btn-primary host-button host-function-button game-answer",
                 text: obj.answers[i].answer
             }).appendTo($("#answer-container"));
-            //Um die Antworten später noch einmal auswerten zu können, ist es sinnvoll diese mit abzuschicken
-            //answerObj.possibleAnswers.push(obj.answers[i]);
         }
     }
 
@@ -43,6 +43,7 @@ function initPlayableQuiz(obj) {
             $(".game-answer").removeClass("active");
             $(this).addClass("active");
             answerObj.answer = $(this).text();
+            submitAnswer(answerObj);
         });
     });
 }

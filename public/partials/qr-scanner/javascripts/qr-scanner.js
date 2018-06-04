@@ -42,28 +42,31 @@ function onCodeScanned(content) {
     //Scanner stoppen
     scanner.stop();
 
-    ajaxRequest("find/scan", "GET", {"identifier": content}, function (obj) {
-        //Bei Erfolg
-        obj.context = GameViewContext.CODE_SCANNED;
-        setNodeHookFromFile($("#content-hook"), "partials/exposition-info/exposition-info.html", undefined, undefined, "initExpositionInfo", obj);
-    }, function (obj) {
-        //Bei Misserfolg
-        setNodeHookFromFile($("#failure-hook"), "partials/failure-box/failure-box.html", function (errMsgObj) {
-            $("#failure-box-error-message").html(errMsgObj.responseJSON.error);
-            //Nach Konstanter Sekunden-Anzahl wieder ausblenden
-            setTimeout(function () {
-                clearNodeHook("failure-hook");
-            }, notificationFadeOut);
-        }, obj);
-        //Von welcher View aufgerufen? Dahin zurückleiten!
-        if (scannerContext.context === GameViewContext.SCAN_ATTEMPT_FROM_PLAY_OVERVIEW) {
-            setNodeHookFromFile($("#content-hook"), "partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent");
-        }
-        else {
-            scannerContext.context = GameViewContext.CODE_PENDING;
-            setNodeHookFromFile($("#content-hook"), "partials/exposition-info/exposition-info.html", undefined, undefined, "initExpositionInfo", scannerContext);
-        }
-    });
+    $.get("find/scan", {"identifier": content})
+        .done(function (obj) {
+            //Bei Erfolg
+            obj.context = GameViewContext.CODE_SCANNED;
+            setNodeHookFromFile($("#content-hook"), "partials/exposition-info/exposition-info.html", undefined, undefined, "initExpositionInfo", obj);
+        })
+        .fail(function (obj) {
+            //Bei Misserfolg
+            setNodeHookFromFile($("#failure-hook"), "partials/failure-box/failure-box.html", function (errMsgObj) {
+                $("#failure-box-error-message").html(errMsgObj.responseJSON.error);
+                //Nach Konstanter Sekunden-Anzahl wieder ausblenden
+                setTimeout(function () {
+                    clearNodeHook("failure-hook");
+                }, notificationFadeOut);
+            }, obj);
+            //Von welcher View aufgerufen? Dahin zurückleiten!
+            if (scannerContext.context === GameViewContext.SCAN_ATTEMPT_FROM_PLAY_OVERVIEW) {
+                setNodeHookFromFile($("#content-hook"), "partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent");
+            }
+            else {
+                scannerContext.context = GameViewContext.CODE_PENDING;
+                setNodeHookFromFile($("#content-hook"), "partials/exposition-info/exposition-info.html", undefined, undefined, "initExpositionInfo", scannerContext);
+            }
+        });
+
 }
 
 /**

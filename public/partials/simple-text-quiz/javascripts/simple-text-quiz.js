@@ -1,4 +1,4 @@
-let answerObj;
+var answerObj;
 function initSimpleTextQuiz(obj) {
     //Die Frage kann immer gesetzt werden
     $("#question-container").html(obj.question);

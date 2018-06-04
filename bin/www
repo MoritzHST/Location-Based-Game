@@ -74,7 +74,7 @@ wsServer.on('request', function(req) {
     var id = count++;
     // Store the connection method so we can loop through & contact all clients
     clients[id] = connection;
-    console.log((new Date()) + ' Connection accepted [' + id + ']');
+    logging.Info((new Date()) + ' Connection accepted [' + id + ']');
     
     connection.on('message', function(message) {
         var msgString = message.utf8Data;
@@ -88,7 +88,7 @@ wsServer.on('request', function(req) {
     //ToDo: call on logout
     connection.on('close', function(reasonCode, description) {
         delete clients[id];
-        console.log((new Date()) + 'Peer' + connection.remoteAddress + ' disconnected.');
+        logging.Info((new Date()) + 'Peer' + connection.remoteAddress + ' disconnected.');
     })
 });
 

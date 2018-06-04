@@ -1,12 +1,14 @@
 const operations = require('../mongodb/operations');
 const handler = require('../mongodb/handler');
 const router = require('express').Router();
+const logging = require('../helper/logging');
 
-const locationMappingCollection = require('../mongodb/collections').LOCATION_MAPPING;
+const eventsCollection = require('../mongodb/collections').EVENTS;
 const userCollection = require('../mongodb/collections').USERS;
 const objects = require('../mongodb/objects');
 
 const gameHelper = require('../helper/scan');
+const eventHelper = require('../helper/event');
 
 const invalidRequest = "Die Anfrage ist ungültig";
 
@@ -21,10 +23,30 @@ const invalidRequest = "Die Anfrage ist ungültig";
  * entsprechende Anzahl an Antworten und Fragen, sowie bei noch nicht beantworteten Fragen,
  * den Antworten keinerlei Informationen über ihre Richtigkeit angehangen sind.
  */
-router.get('/find/scan', function (req, res) {
+router.get('/find/scan', async function (req, res) {
+    logging.Entering("GET /find/scan");
+    let currentEvent = await eventHelper.getCurrentEvent();
+    if (!currentEvent) {
+        res.status(422).jsonp({
+            "error": eventHelper.noEventMessage
+        });
+        logging.Error("Aktuell findet kein Event statt");
+        return;
+    }
+
     req.query = handler.getRealRequest(req.query, req.body);
+    logging.Parameter("request.query", req.query);
 
     let identifier = req.query.identifier;
+    let userId;
+    try {
+        userId = req.session.user._id;
+    } catch (e) {
+        res.status(422).jsonp({
+            error: "Du musst eingeloggt sein um diese Funktion zu nutzen"
+        });
+        return;
+    }
 
     if (!handler.checkIfValidQuery(req.query) || !identifier) {
         res.status(422).jsonp({
@@ -33,14 +55,27 @@ router.get('/find/scan', function (req, res) {
         return;
     }
 
-    operations.findObject(locationMappingCollection,
+    operations.findObject(eventsCollection,
         {
-            "location.identifier": identifier
-        }, function (err, item) {
+            "_id": currentEvent._id,
+            "locationMappings": {"$elemMatch": {"location.identifier": identifier}}
+        }, function (err, event) {
             //Es wurde ein Objekt gefunden -> also Zaubern
-            if (item) {
+            if (event) {
+                let item;
+                event.locationMappings.forEach(function (mapping) {
+                    if (mapping.location.identifier === identifier) {
+                        item = mapping;
+                    }
+                });
+                if (!item) {
+                    res.status(422).jsonp({
+                        error: "Hier ist heute leider nichts zu finden. Tut uns Leid. Really, we are sorry :("
+                    });
+                    return;
+                }
                 item.games = gameHelper.prepareGames(item.games);
-                operations.findObject(userCollection, {_id: req.session.user._id}, function (userErr, userItem) {
+                operations.findObject(userCollection, {_id: userId}, function (userErr, userItem) {
                         item.games = gameHelper.addGameStates(userItem.visits, item.games, item.location._id);
                         if (!gameHelper.hasAlreadyVisited(userItem, item.location)) {
                             //Visits müssen initialisiert werden, wenn es sie noch nicht gibt
@@ -68,6 +103,7 @@ router.get('/find/scan', function (req, res) {
                 });
             }
         });
+    logging.Leaving("GET /find/scan")
 });
 
 module.exports = router;

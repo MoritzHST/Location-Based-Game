@@ -1,5 +1,6 @@
 const operations = require('../mongodb/operations');
 const handler = require('../mongodb/handler');
+const logging = require('../helper/logging');
 const router = require('express').Router();
 
 const gamesCollection = require('../mongodb/collections').GAMES;
@@ -9,17 +10,27 @@ const gamesCollection = require('../mongodb/collections').GAMES;
 /* GET */
 /* Find games(s) */
 router.get('/find/games', function(req, res) {
+    logging.Entering("GET /find/games");
+
     req.query = handler.getRealRequest(req.query, req.body);
+
+    logging.Parameter("request.query", req.query);
 
     operations.findObject(gamesCollection, (handler.checkIfValidQuery(req.query) ? req.query : null), function (err, item) {
         handler.dbResult(err, res, item, "Das Item " + JSON.stringify(req.query).replace(/\"/g, '') + " existiert nicht.");
     });
+
+    logging.Leaving("GET /find/games");
 });
 
 /* POST */
 /* Insert games */
 router.post('/insert/games', function(req, res) {
+    logging.Entering("POST /insert/games");
+
     req.query["answers"] = handler.getRealRequest(req.query["answers"], req.body);
+
+    logging.Parameter("request.query", req.query);
 
     if (handler.checkIfValidQuery(req.query)) {
         operations.updateObject(gamesCollection, req.query, null, function(err, item) {
@@ -30,11 +41,17 @@ router.post('/insert/games', function(req, res) {
             "error" : "Die übergebenen Parameter sind ungültig"
         });
     }
+
+    logging.Leaving("POST /insert/games");
 });
 
 /* Update games */
 router.post('/update/games/:id', function(req, res) {
+    logging.Entering("POST /update/games/:id");
+
     req.query["answers"] = handler.getRealRequest(req.query["answers"], req.body);
+
+    logging.Parameter("request.query", req.query);
 
     if (handler.checkIfValidQuery(req.query)) {
         operations.updateObject(gamesCollection, handler.idFriendlyQuery({
@@ -47,11 +64,17 @@ router.post('/update/games/:id', function(req, res) {
             "error" : "Die übergebenen Parameter sind ungültig"
         });
     }
+
+    logging.Leaving("POST /update/games/:id");
 });
 
 /* Delete games(s) */
 router.post('/delete/games', function(req, res) {
+    logging.Entering("POST /delete/games");
+
     req.query = handler.getRealRequest(req.query, req.body);
+
+    logging.Parameter("request.query", req.query);
 
     if (handler.checkIfValidQuery(req.query)) {
         operations.deleteObjects(gamesCollection, req.query, function(err, item) {
@@ -62,6 +85,8 @@ router.post('/delete/games', function(req, res) {
             "error" : "Die übergebenen Parameter sind ungültig"
         });
     }
+
+    logging.Leaving("POST /delete/games")
 });
 
 module.exports = router;

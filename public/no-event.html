@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Kein Event - LocationBasedGame</title>
+    <link rel="shortcut icon" type="image/png" href="./images/favicon.png"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="stylesheets/style.css">
+
+    <!-- jQuery library -->
+    <script src="javascripts/jquery.min.js"></script>
+    <script src="javascripts/jquery-ui.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="javascripts/bootstrap.min.js"></script>
+    <script src="javascripts/no-event.js"></script>
+
+    <script src="javascripts/handler.js"></script>
+    <script src="javascripts/partial-renderer.js"></script>
+    <script src="javascripts/ajax-call.js"></script>
+</head>
+
+<body>
+<div id="header-hook"></div>
+
+<div class="jumbotron row col-md-6 col-md-offset-3 info-textbox-container">
+    <h3>Willkommen beim Quiz der Hochschule Stralsund</h3>
+
+    <p>
+        Heute findet leider kein Quiz-Event statt.
+    </p>
+
+    <p id="next-event-defined">
+        Am <b id="event-date"></b> findet eine neue Quizrunde zum <b id="event-name"></b> statt.
+        Vorbeischauen und mitmachen lohnt sich!
+    </p>
+</div>
+</body>
+<div id="footer-hook"></div>
+</html>

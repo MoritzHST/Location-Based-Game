@@ -62,7 +62,7 @@ function setSlideInMenu() {
         } ]
     });
 
-    $('#play-user-information').html("Spielername: " + user.name + "<br/> PIN: " + user.token);
+    updateOutline();
 }
 
 /**
@@ -138,4 +138,14 @@ function setLogoutHint() {
         logoutHintTimer = undefined;
         clearNodeHook("warning-hook");
     });
+}
+
+function updateOutline() {
+    let htmlString = "Spielername: " + user.name + "<br/> PIN: " + user.token;
+
+    if (user.score) {
+        htmlString += "<br/> Punkte: " + user.score.score + "<br/> Räume besucht: " + user.score.locations + "<br/> Spiele gespielt: " + user.score.games;
+    }
+
+    $('#play-user-information').html(htmlString);
 }

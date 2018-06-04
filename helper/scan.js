@@ -3,7 +3,7 @@ const logging = require('../helper/logging');
 
 //Shuffle Funktion für Arrays
 Array.prototype.shuffle = function () {
-	logging.Entering("shuffle");
+    logging.Entering("shuffle");
     let input = this;
     for (let i = input.length - 1; i >= 0; i--) {
         let randomIndex = Math.floor(Math.random() * (i + 1));
@@ -18,24 +18,24 @@ Array.prototype.shuffle = function () {
 
 //Prüft ob in einem Array an Visit-Objekten ein Visit mit der übergebenen Id enthalten ist
 function containsLocation(pVisits, pVisitId) {
-	logging.Entering("containsLocation");
-	logging.Parameter("pVisits", pVisits);
-	logging.Parameter("pVisitId", pVisitId);
+    logging.Entering("containsLocation");
+    logging.Parameter("pVisits", pVisits);
+    logging.Parameter("pVisitId", pVisitId);
     let containsId = false;
     pVisits.forEach(function (visit) {
         if (pVisitId.toString() === visit.location._id.toString()) {
             containsId = true;
         }
     });
-	logging.Leaving("containsLocation");
+    logging.Leaving("containsLocation");
     return containsId;
 }
 
 //Gibt true zurück, wenn sich ein Objekt mit der GameId in der Liste an Spielen befindet, andernfalls false
 function containsGame(pGames, pGameId) {
-	logging.Entering("containsGame");
-	logging.Parameter("pGames", pGames);
-	logging.Parameter("pGameId", pGameId);
+    logging.Entering("containsGame");
+    logging.Parameter("pGames", pGames);
+    logging.Parameter("pGameId", pGameId);
     let containsId = false;
     pGames.forEach(function (game) {
         if (pGameId.toString() === game._id.toString()) {
@@ -49,11 +49,11 @@ function containsGame(pGames, pGameId) {
 //Gibt dasjenige Visit-Objekt aus dem Array zurück, dessen Id mit der übergebenen übereinstimmt.
 //Sollte keins existieren wird null zurück gegeben.
 function getVisitWithId(pVisits, pVisitId) {
-	logging.Entering("getVisitWithId");
-	logging.Parameter("pVisits", pVisits);
-	logging.Parameter("pVisitId", pVisitId);
+    logging.Entering("getVisitWithId");
+    logging.Parameter("pVisits", pVisits);
+    logging.Parameter("pVisitId", pVisitId);
     if (!pVisits) {
-    	logging.Leaving("getVisitWithId");
+        logging.Leaving("getVisitWithId");
         return;
     }
     let returnVisit = null;
@@ -73,9 +73,9 @@ function getVisitWithId(pVisits, pVisitId) {
  * @returns {*}
  */
 function calculateStateForGame(pGame, pVisit) {
-	logging.Entering("calculateStateForGame");
-	logging.Parameter("pGame", pGame);
-	logging.Parameter("pVisit", pVisit);
+    logging.Entering("calculateStateForGame");
+    logging.Parameter("pGame", pGame);
+    logging.Parameter("pVisit", pVisit);
     if (pVisit) {
         for (let i in pVisit.answers) {
             if (pVisit.answers.hasOwnProperty(i) && pVisit.answers[i].gameId.toString() === pGame._id.toString()) {
@@ -94,17 +94,17 @@ function calculateStateForGame(pGame, pVisit) {
 
 module.exports = {
 
-    hasAlreadyVisited: function (pUser, pLocation) {    	
-    	logging.Entering("hasAlreadyVisited");    	
-    	logging.Parameter("pUser", pUser);
-    	logging.Parameter("pLocation", pLocation);
-    	logging.Leaving("hasAlreadyVisited");
+    hasAlreadyVisited: function (pUser, pLocation) {
+        logging.Entering("hasAlreadyVisited");
+        logging.Parameter("pUser", pUser);
+        logging.Parameter("pLocation", pLocation);
+        logging.Leaving("hasAlreadyVisited");
         return logging.ReturnValue(retuenValue = pUser.visits !== undefined && containsLocation(pUser.visits, pLocation._id));
     },
 
     addGameStates: function (pVisits, pGames, pLocationId) {
-    	logging.Entering("addGameStates");
-    	logging.Parameter("pVisits", pVisits);
+        logging.Entering("addGameStates");
+        logging.Parameter("pVisits", pVisits);
         let visit = getVisitWithId(pVisits, pLocationId);
         for (let i in pGames) {
             if (pGames.hasOwnProperty(i)) {
@@ -125,13 +125,13 @@ module.exports = {
      * @returns {Array}
      */
     prepareGames: function (pGames) {
-    	logging.Entering("prepareGames");
-    	logging.Parameter("pGames", pGames);
+        logging.Entering("prepareGames");
+        logging.Parameter("pGames", pGames);
         let games = [];
 
         pGames.forEach(function (game) {
             //Baue Antworten für für Fragen zusammen
-            let maxCorrectAnswers;
+            let correctAnswerCount;
             let maxAnswers = 4;
 
             let correctAnswers = [];
@@ -147,13 +147,11 @@ module.exports = {
                 }
             });
 
-            if (game.type === objects.Type.SINGLE_CHOICE) {
-                maxCorrectAnswers = 1;
+            if (game.type === objects.Type.SINGLE_CHOICE.type) {
+                correctAnswerCount = 1;
             } else {
-                maxCorrectAnswers = 4;
+                correctAnswerCount = Math.floor((Math.random() * maxAnswers) + 1);
             }
-
-            let correctAnswerCount = Math.floor((Math.random() * maxCorrectAnswers) + 1);
 
             correctAnswers.shuffle().forEach(function (answer) {
                 if (outputAnswers.length < correctAnswerCount) {

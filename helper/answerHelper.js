@@ -4,6 +4,8 @@ const operations = require('../mongodb/operations');
 const answerChecker = require('../helper/answerChecker');
 const userCollection = require('../mongodb/collections').USERS;
 const ObjectID = require('mongodb').ObjectID;
+const WebSocket = require('websocket').client;
+
 
 async function isRoomCompleted(pRequest, pEvent) {
     logging.Entering("isRoomCompleted");
@@ -76,6 +78,14 @@ function saveAnswer(pRequest, pState, pEvent, pGame) {
         if (pState === objects.GameStates.CORRECT) {
             userItem.score.score = userItem.score ? userItem.score.score + pGame.points : pGame.points;
         }
+        // Score Connection aktualisieren
+        let ws = new WebSocket();
+        ws.on("connect", function (connection) {
+            connection.send(JSON.stringify({userId: userItem._id, score: userItem.score}));
+            connection.close();
+        });
+        ws.connect("ws://127.0.0.1:3000/score");
+        
         operations.updateObject(userCollection, {
                 _id: userItem._id
             },

@@ -5,17 +5,26 @@ require('../public/javascripts/shared/game-context.js');
 
 module.exports = {
 
+    /**
+     * Enum, welches die verschiedenen Game-Typen symbolisiert
+     */
     Type : Game,
 
+    /**
+     * Enum, welches die möglichen Status eines Raumes symbolisiert(bsp.: VISITED, COMPLETED, FLAWLESS)
+     */
     RoomStates : RoomStates,
 
+    /**
+     * Enum, welches die verschiedenen Abschluss-Status eines Spiels symbolisiert(bsp.: UNPLAYER, CORRECT, WRONG)
+     */
     GameStates : GameStates,
 
     /**
      * Event-Objekt bestehend aus Eventnamen und Gültigkeitsdatum. Ein Event gilt immer nur für einen Tag
-     * @param pEventName Name des Events
-     * @param pDate Datum an dem dieses Event stattfindet
-     * @param pLocationMappings LocationMappings die an diesem Event freigeschaltet sind
+     * @param pEventName Name des Events als String
+     * @param pDate Datum an dem dieses Event stattfindet als String der Form("YYYY-MM-DD")
+     * @param pLocationMappings Array aller LocationMappings-Objekte die an diesem Event freigeschaltet sind
      * @constructor
      */
     Event: function (pEventName, pDate, pLocationMappings) {
@@ -43,7 +52,7 @@ module.exports = {
     },
 
     /**
-     * Erzeugt ein neues Location-Objekt bestehend aus Raumnummer, Identifier und ggf einem Bild
+     * Erzeugt ein neues Location-Objekt bestehend aus Raumnummer und Identifier
      *
      * @param pRoomnumber Nummer des Raumes als String(undefined wenn Location sich draußen befindet)
      * @param pIdentifier Identifier anhand dessen ein Scan zu diesem Raum führt
@@ -58,11 +67,12 @@ module.exports = {
     },
 
     /**
-     * Ausstellungs-Objekt bestehend aus dem namen der jeweiligen Ausstellung und dem Pfad zum zugehörigen Bild
+     * Ausstellungs-Objekt bestehend aus dem Namen der jeweiligen Ausstellung, einer Beschreibung,
+     * einem Pfad(String) zum Thumbnail und ein Array an Pfaden(String) zu zugehörigen Bildern
      *
-     * @param pName Name der Ausstellung
-     * @param pDescription Beschreibung der Ausstellung
-     * @param pThumbnailPath Bildpfad zum Ausstellungsbild
+     * @param pName Name der Ausstellung als String
+     * @param pDescription Beschreibung der Ausstellung als HTML formatierten String
+     * @param pThumbnailPath Bildpfad zum Ausstellungsbild als String
      * @param pImagePaths Array der Strings zu den Bildern der Ausstellung
      * @constructor
      */
@@ -82,13 +92,15 @@ module.exports = {
     /**
      * Minigames sollten flexibel sein, das heißt es müssen unterschiedliche Objekte
      * für unterschiedliche Minigames existieren.
+     *
+     * Dies is das SimpleQuiz, welches vom Typ Single_Choice ist und keine Bilder als Frage-/Antwortdaten enthält
      *******************************************************************************
-     * Ein SimpleQuiz besteht aus einer Frage und einer Antwort, es ist sinnvoll auf
-     * Datenebene die Richtige von den falschen Antworten zu trennen
+     * Ein SimpleQuiz besteht aus einer Frage und einem Array an Antworten, sowie der Anzahl an Punkten, die der
+     * User bei richtiger Beantwortung erhält.
      *
      * @param pQuestion die Frage als String
-     * @param pAnswers die Antworten auf die Frage
-     * @param pPoints Anzahl der Punkte die es bei richtiger Beantwortung der Frage gibt
+     * @param pAnswers die Antworten auf die Frage als Array, bestehend aus Answer-Objekten
+     * @param pPoints Anzahl der Punkte die es bei richtiger Beantwortung der Frage gibt als Integer
      */
     SimpleQuiz : function(pQuestion, pAnswers, pPoints) {
         logging.Info("initializing new SimpleQuiz");
@@ -103,7 +115,7 @@ module.exports = {
     },
 
     /**
-     * Antworten auf SimpleQuiz fragen
+     * Antworten auf SimpleQuiz Fragen
      * @param pAnswer Antwort als String
      * @param pIsCorrect Boolean der definiert, ob diese Antwort eine korrekte Antwort auf die Frage ist
      * @constructor
@@ -120,9 +132,9 @@ module.exports = {
     /**
      * Visit-Objekt, das den Besuch und Erfolg eines Nutzers nach dem Spielen eines Spiels an einer Location darstellt
      * @param pLocationMapping LocationMapping-Object der Ausstellung, an der der Nutzer gespielt hat
-     * @param pGames Spiele die bei diesem Objekt gespielt wurde
-     * @param pIsSuccessful Boolean ob das Spiel erfolgreich abgeschlossen(Richtige Antwort) wurde
-     * @param pRoomState Status der Abfertigung
+     * @param pGames Array der Game-Objekte die bei diesem Objekt gespielt wurde
+     * @param pIsSuccessful Boolean ob das Spiel erfolgreich abgeschlossen(Richtige Antwort) wurde als Boolean
+     * @param pRoomState Status der Abfertigung, dargestellt durch ein Objekt aus dem "RoomStates"-Enum
      * @constructor
      */
     Visit : function(pLocationMapping, pGames, pIsSuccessful, pRoomState) {
@@ -138,10 +150,10 @@ module.exports = {
     },
 
     /**
-     * Mapping um Zugehörigkeit einer Ausstellung zu einer Location auszudrücken
-     * @param pLocation Location an der die Ausstellung stattfindet
-     * @param pExposition Ausstellung die an der Location stattfindet
-     * @param pGames Liste an Minigames die an dieser Station zu spielen sind
+     * Mapping um Zugehörigkeit einer Ausstellung zu einer Location und den zugehörigen Games auszudrücken
+     * @param pLocation Location-Objekt an der die Ausstellung stattfindet
+     * @param pExposition Ausstellungs-Objekt, das an der Location stattfindet
+     * @param pGames Array an Games-Objekten die an dieser Station zu spielen sind
      * @constructor
      */
     LocationMapping : function(pLocation, pExposition, pGames) {

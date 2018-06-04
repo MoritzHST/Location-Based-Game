@@ -51,6 +51,7 @@ function setSlideInMenu() {
     let cookie = getObjectFromCookie("session");
     user.name = cookie.user.name;
     user.token = cookie.user.token;
+    user.score = cookie.user.score;
 
     $("#menu").mmenu({
         navbar : {

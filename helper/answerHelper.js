@@ -85,7 +85,7 @@ function saveAnswer(pRequest, pState, pEvent, pGame) {
             connection.close();
         });
         ws.connect("ws://127.0.0.1:3000/score");
-        
+
         operations.updateObject(userCollection, {
                 _id: userItem._id
             },

@@ -2,8 +2,12 @@
  * Enum, das die möglichen Minispiel-Typen abbildet.
  */
 Game = {
-    SINGLE_CHOICE: "single_choice",
-    MULTIPLE_CHOICE: "multiple_choice"
+    SINGLE_CHOICE: {
+        type: "single_choice",
+        partial: "partials/simple-text-quiz/simple-text-quiz.html",
+        initFunction: "initSimpleTextQuiz"
+    },
+    MULTIPLE_CHOICE: {type: "multiple_choice"}
 };
 
 /**

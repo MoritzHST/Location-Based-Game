@@ -1,16 +1,14 @@
-var answerObj;
 var gameObj;
 var errorTimer;
-var locationIdentifier;
+var locationObj;
 
 function initExpositionInfo(obj) {
     //Variablen Clearen
     gameObj = undefined;
-    answerObj = undefined;
-    locationIdentifier = undefined;
+    locationObj = undefined;
     errorTimer = undefined;
     // LocationIdentifier setzen
-    locationIdentifier = obj.location.identifier;
+    locationObj = obj.location;
     // Tabs setzen
     $(function () {
         $("#exposition-info-switch").tabs();
@@ -81,48 +79,10 @@ function initContextCodeScanned(obj) {
             break;
         }
     }
-
-    // Abschicken Button registrieren
-    $("#exposition-submit-game-answer").on("click", function () {
-        if (answerObj) {
-            // Location id setzen, um Auswertung zu vereinfachen
-            answerObj.locationId = obj.location._id;
-            $.post("post/answer", answerObj)
-                .done(function () {
-                    setNodeHookFromFile($("#success-hook"), "partials/play-success-box/play-success-box.html", function () {
-                        $("#success-box-title").html("Die Antwort war richtig!");
-                        // Nach Konstanter Sekunden-Anzahl wieder ausblenden
-                        clearInterval(errorTimer);
-                        errorTimer = setTimeout(function () {
-                            clearNodeHook("success-hook");
-                        }, notificationFadeOut);
-                    });
-                    $("#game-display-" + gameObj.currentGameNumber).addClass("game-completed game-completed-" + GameStates.CORRECT);
-                    nextGame();
-                })
-                .fail(function (obj) {
-                    setNodeHookFromFile($("#failure-hook"), "partials/failure-box/failure-box.html", function (errMsgObj) {
-                        $("#failure-box-error-message").html(errMsgObj.responseJSON.error);
-                        // Nach Konstanter Sekunden-Anzahl wieder ausblenden
-                        clearInterval(errorTimer);
-                        errorTimer = setTimeout(function () {
-                            clearNodeHook("failure-hook");
-                        }, notificationFadeOut);
-                    }, obj);
-                    $("#game-display-" + gameObj.currentGameNumber).addClass("game-completed-" + GameStates.WRONG);
-                    if (obj.status === 400) {
-                        nextGame();
-                    }
-                });
-        }
-    });
 }
 
 // Initialisierngsfunktion wenn noch kein Code gescanned wurde
 function initContextCodePending(obj) {
-    // Button Abschicken ausblenden, da noch kein Quiz aktiv ist
-    $("#exposition-submit-game-answer").hide();
-
     // Wenn der Raum noch nicht fertig ist muss der Scan button
     // reagieren
     // Button zum scannen muss mit einer Route verknüpft werden
@@ -135,7 +95,7 @@ function initContextCodePending(obj) {
         });
     });
     // Abfragen, ob Antworten angezeigt werden können
-    $.get('get/answers', {identifier: obj.location.identifier})
+    $.get('get/answers', {identifier: locationObj.identifier})
         .done(function (callbackObj) {
             if (callbackObj) {
                 initGameFinishedView(callbackObj);
@@ -176,22 +136,18 @@ function setCurrentGameDisplay(obj) {
 // Das aktuelle Spiel makieren und anzeigen
 function setCurrentGame(game) {
     // Das Aktuelle Active Flag entfernen
-    $(".current-game-display-frame").removeClass("active");
+    $(".current-game-display-frame").removeClass("active active-history");
     $("#game-display-" + game.gameNumber).addClass("active");
     // Spiel anzeigen
     renderGameByType(game);
 }
 
 function renderGameByType(obj) {
-    switch (obj.type) {
-        case Game.SINGLE_CHOICE:
-            setNodeHookFromFile($("#mission-hook"), "partials/simple-text-quiz/simple-text-quiz.html", undefined, undefined, "initSimpleTextQuiz", obj);
-            break;
-        case Game.MULTIPLE_CHOICE:
-            // TODO
-            break;
-        default:
-        // Nix zu tun
+    obj.locationId = locationObj._id;
+    for (let i in Game) {
+        if (Game[i].type === obj.type) {
+            setNodeHookFromFile($("#mission-hook"), Game[i].partial, undefined, undefined, Game[i].initFunction, obj);
+        }
     }
 }
 
@@ -212,12 +168,10 @@ function nextGame() {
 function renderFinishedView() {
     // Das Aktuelle Active Flag entfernen
     $(".current-game-display-frame").removeClass("active");
-    // Button deaktivieren
-    $("#exposition-submit-game-answer").addClass("disabled");
 
     // Antworten sind da, also einmal die von Node ausgewerteten ANntworten
     // abfragen
-    $.get('get/answers', {identifier: locationIdentifier})
+    $.get('get/answers', {identifier: locationObj.identifier})
         .done(function (callbackObj) {
             if (callbackObj) {
                 initGameFinishedView(callbackObj);
@@ -255,6 +209,46 @@ function initGameFinishedView(obj) {
             $(this).addClass("active-history");
         }
     });
+}
+
+//Antworten sollen einheitlich versendet werden und ausgewertet werden, weshalb der PartialParent die Funktion implementiert
+function submitAnswer(answerObj) {
+    $.post("post/answer", answerObj)
+        .done(function () {
+            $("#game-display-" + gameObj.currentGameNumber)
+                .addClass("active-history game-completed game-completed-" + GameStates.CORRECT)
+                .removeClass("active");
+            setNodeHookFromFile($("#mission-hook"), "partials/play-success-box/play-success-box.html", function () {
+                $("#success-box-title").text("Die Antwort war richtig!");
+
+                let continueButton = $("<a/>", {
+                    class: "btn btn-sm btn-primary btn-block host-button host-function-button",
+                    text: "Weiter"
+                }).appendTo($("#mission-hook"));
+
+                continueButton.on("click", nextGame);
+            }, undefined);
+        })
+        .fail(function (obj) {
+            //Nur das nächste Spiel starten, wenn die Antwort falsch war, um interne Fehler nicht zu bestrafen
+            if (obj.status === 400) {
+                $("#game-display-" + gameObj.currentGameNumber).addClass("game-completed-" + GameStates.WRONG);
+                setNodeHookFromFile($("#mission-hook"), "partials/failure-box/failure-box.html", function () {
+                    $("#failure-box-title").text("Die Antwort war falsch!");
+                    let continueButton = $("<a/>", {
+                        class: "btn btn-sm btn-primary btn-block host-button host-function-button",
+                        text: "Weiter"
+                    }).appendTo($("#mission-hook"));
+
+                    continueButton.on("click", nextGame);
+                }, undefined);
+            }
+            else {
+                setNodeHookFromFile($("#mission-hook"), "failure-box/failure-box.html", function () {
+                    $("#failure-box-title").text("Es ist ein Fehler aufgetreten!");
+                }, undefined);
+            }
+        });
 }
 
 // GameObject Konstruktor

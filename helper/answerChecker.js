@@ -46,11 +46,11 @@ module.exports = {
         logging.Parameter("pGame", pGame);
 
         switch (pGame.type) {
-            case objects.Type.SINGLE_CHOICE:
+            case objects.Type.SINGLE_CHOICE.type:
                 logging.Info("Case SINGLE_CHOICE");
                 logging.Leaving("checkAnswer");
                 return singleChoiceHandler(pAnswer, pGame);
-            case objects.Type.MULTIPLE_CHOICE:
+            case objects.Type.MULTIPLE_CHOICE.type:
                 logging.Info("Case MULTIPLE_CHOICE");
                 logging.Leaving("checkAnswer");
                 return multipleChoiceHandler(pAnswer, pGame);

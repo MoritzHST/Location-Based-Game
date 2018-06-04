@@ -25,7 +25,7 @@ function findNextEvent() {
                 }
             }
             //Das curEvent kann durch initialisierung noch vor heute liegen -> abfangen!
-            if (new Date(curEvent.date).getTime() < today) {
+            if (!curEvent || new Date(curEvent.date).getTime() < today) {
                 $("#next-event-defined").hide();
             }
             else {

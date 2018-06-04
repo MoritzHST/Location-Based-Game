@@ -95,7 +95,7 @@ module.exports = {
         logging.Parameter("pQuestion", pQuestion);
         logging.Parameter("pAnswers", pAnswers);
         logging.Parameter("pPoints", pPoints);
-        this.type = Game.SINGLE_CHOICE;
+        this.type = Game.SINGLE_CHOICE.type;
         this.question = pQuestion;
         this.answers = pAnswers;
         this.points = pPoints;

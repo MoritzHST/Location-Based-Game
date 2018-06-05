@@ -1,0 +1,33 @@
+#container {
+	display: flex;
+	justify-content: center;
+	align-content: stretch;
+}
+
+#editor {
+	flex-grow:1;
+}
+
+#sidebar {
+	display:flex;
+	flex-direction: column;
+}
+
+table {
+	width:100%;
+	border-collapse: collapse;
+}
+
+.ajax-wait {
+	display: none;
+}
+
+th.min-column {
+	width: 1%;
+}
+
+.table-list > tr > td {
+	text-align:center;	
+}
+
+.ui-selected { background: #00CC00; color: white; }

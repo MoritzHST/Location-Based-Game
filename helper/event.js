@@ -17,18 +17,16 @@ function getCurrentEvent() {
     );
 }
 
-async function getMaxScore() {
+function getMaxScore(pEvent) {
     let maxPoints = 0;
     let maxGames = 0;
     let maxLocations = 0;
 
-    let currentEvent = await getCurrentEvent();
-
-    if (currentEvent) {
+    if (pEvent) {
         return null;
     }
 
-    currentEvent.locationMappings.forEach(function (locationMapping) {
+    pEvent.locationMappings.forEach(function (locationMapping) {
         maxLocations += 1;
         locationMapping.games.forEach(function (game) {
             maxGames += 1;
@@ -43,6 +41,19 @@ async function getMaxScore() {
     return maxScore;
 }
 
+function formatScoreObject(pEvent, pScore) {
+    let maxScore = getMaxScore(pEvent);
+
+    if (!maxScore) {
+        return pScore;
+    }
+
+    maxScore.games = pScore.games + " / " + maxScore.games;
+    maxScore.locations = pScore.locations + " / " + maxScore.locations;
+    maxScore.points = pScore.points + " / " + maxScore.points;
+    return maxScore;
+}
+
 module.exports = {
     getCurrentEvent: async function () {
         return await getCurrentEvent();
@@ -50,5 +61,5 @@ module.exports = {
 
     noEventMessage: noEventMessage,
 
-    getMaxScore
+    formatScoreObject
 };

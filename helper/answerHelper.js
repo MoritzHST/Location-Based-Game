@@ -2,6 +2,7 @@ const objects = require("../mongodb/objects");
 const logging = require("./logging");
 const operations = require('../mongodb/operations');
 const answerChecker = require('../helper/answerChecker');
+const eventHelper = require('../helper/event');
 const userCollection = require('../mongodb/collections').USERS;
 const ObjectID = require('mongodb').ObjectID;
 const WebSocket = require('websocket').client;
@@ -75,16 +76,12 @@ function saveAnswer(pRequest, pState, pEvent, pGame) {
             }
         }
         userItem.score.games += 1;
+        userItem.score.locations = userItem.visits.length;
         if (pState === objects.GameStates.CORRECT) {
             userItem.score.score = userItem.score ? userItem.score.score + pGame.points : pGame.points;
         }
         // Score Connection aktualisieren
-        let ws = new WebSocket();
-        ws.on("connect", function (connection) {
-            connection.send(JSON.stringify({userId: userItem._id, score: userItem.score}));
-            connection.close();
-        });
-        ws.connect("ws://127.0.0.1:3000/score");
+        broadcastScore(userItem, pEvent);
 
         operations.updateObject(userCollection, {
                 _id: userItem._id
@@ -113,9 +110,6 @@ function evaluateLocation(pRequest, pEvent) {
             if (userItem.visits.hasOwnProperty(i) && userItem.visits[i].location._id.toString() === mappingItem.location._id.toString()) {
                 //Status des Raumes aktualisieren
                 userItem.visits[i].state = analyzeVisits(userItem.visits[i], mappingItem);
-                if (userItem.visits[i].state === objects.RoomStates.VISITED) {
-                    userItem.score.locations += 1;
-                }
             }
         }
         operations.updateObject(userCollection, {
@@ -196,6 +190,19 @@ function findVisitByLocationIdentifier(pUserObj, pIdentifier) {
         }
     }
     logging.Leaving("findVisitByLocationIdentifier");
+}
+
+function broadcastScore(pUser, pEvent) {
+    // Score Connection aktualisieren
+    let ws = new WebSocket();
+    ws.on("connect", function (connection) {
+        connection.send(JSON.stringify({
+            userId: pUser._id,
+            score: eventHelper.formatScoreObject(pEvent, pUser.score)
+        }));
+        connection.close();
+    });
+    ws.connect("ws://127.0.0.1:3000/score");
 }
 
 module.exports = {

@@ -47,7 +47,7 @@ app.use(cookieParser());
 app.use(cookieSession({
     name: 'session',
     keys: [""],
-    signed: true,
+    signed: false,
     httpOnly: false
 }));
 

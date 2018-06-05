@@ -17,6 +17,9 @@ $(document).ready(function () {
             user.score = dto.score;
             //UpdateOutline von play.js aufrufen
             updateOutline();
+            let curSession = getObjectFromCookie("session");
+            curSession.user.score = dto.score;
+            setCookieFromObject(curSession, "session");
         }
     };
 });

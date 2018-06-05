@@ -49,9 +49,7 @@ function init() {
  */
 function setSlideInMenu() {
     let cookie = getObjectFromCookie("session");
-    user.name = cookie.user.name;
-    user.token = cookie.user.token;
-    user.score = cookie.user.score;
+    user = cookie.user;
 
     $("#menu").mmenu({
         navbar : {
@@ -80,10 +78,20 @@ function getObjectFromCookie(pCookieName) {
     let cookieStrings = document.cookie.split(";");
     for ( let i in cookieStrings) {
         cookieStrings[i] = cookieStrings[i].trim();
-        if (cookieStrings[i].startsWith(pCookieName)) {
+        if (cookieStrings[i].startsWith(pCookieName + "=")) {
             let cookieValue = cookieStrings[i].substr(pCookieName.length + 1);
             if (cookieValue.length > 0)
                 return JSON.parse(atob(cookieValue));
+        }
+    }
+}
+
+function setCookieFromObject(pObj, pCookieName) {
+    let cookieStrings = document.cookie.split(";");
+
+    for (let i in cookieStrings) {
+        if (cookieStrings[i].trim().startsWith(pCookieName + "=")) {
+            document.cookie = pCookieName + "=" + btoa(JSON.stringify(pObj));
         }
     }
 }

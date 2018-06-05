@@ -62,6 +62,12 @@ function setSlideInMenu() {
         } ]
     });
 
+    $.get("/find/events", {
+        "date" : new Date().toJSON().slice(0, 10)
+    }).then(function(result) {
+        $('.mm-navbar__title').html(result.name);
+    });
+
     $('#play-user-information').html("Spielername: " + user.name + "<br/> PIN: " + user.token);
 }
 

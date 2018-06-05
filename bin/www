@@ -85,7 +85,6 @@ wsServer.on('request', function(req) {
         }
     });
     
-    //ToDo: call on logout
     connection.on('close', function(reasonCode, description) {
         delete clients[id];
         logging.Info((new Date()) + 'Peer' + connection.remoteAddress + ' disconnected.');

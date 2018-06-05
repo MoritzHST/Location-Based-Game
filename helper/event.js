@@ -4,6 +4,11 @@ const eventsCollection = require('../mongodb/collections').EVENTS;
 
 const noEventMessage = "Tut uns leid. Aktuell findet kein Event statt";
 
+/**
+ * Asynchrone Funktion, die Ein Promise mit dem aktuell laufenden Event zurück gibt.
+ * Sollte aktuell kein Event stattfinden enthält das Promise undefined
+ * @returns {Promise<any>}
+ */
 function getCurrentEvent() {
     return new Promise(resolve => {
             operations.findObject(eventsCollection, {"date": new Date().toJSON().slice(0, 10)}, function (err, item) {
@@ -17,28 +22,34 @@ function getCurrentEvent() {
     );
 }
 
+/**
+ * Berechnet für das übergebene Event-Objekt die maximal erreichbaren Punkte/Spiele/Locations und gibt diese als ein Score Objekt zurück.
+ * Ist das Event nicht gesetzt, so wird null zurück gegeben.
+ * @param pEvent Event-Objekt, für das der Maximale Score berechnet werden soll.
+ * @returns {*}
+ */
 function getMaxScore(pEvent) {
-    let maxPoints = 0;
-    let maxGames = 0;
-    let maxLocations = 0;
-
-    if (pEvent) {
+    if (!pEvent) {
         return null;
     }
+
+    let maxScore = 0;
+    let maxGames = 0;
+    let maxLocations = 0;
 
     pEvent.locationMappings.forEach(function (locationMapping) {
         maxLocations += 1;
         locationMapping.games.forEach(function (game) {
             maxGames += 1;
-            maxPoints += game.points;
+            maxScore += game.points;
         });
     });
-    let maxScore = new objects.Score();
-    maxScore.games = maxGames;
-    maxScore.locations = maxLocations;
-    maxScore.points = maxPoints;
+    let maxScoreObject = new objects.Score();
+    maxScoreObject.games = maxGames;
+    maxScoreObject.locations = maxLocations;
+    maxScoreObject.score = maxScore;
 
-    return maxScore;
+    return maxScoreObject;
 }
 
 function formatScoreObject(pEvent, pScore) {
@@ -48,10 +59,10 @@ function formatScoreObject(pEvent, pScore) {
         return pScore;
     }
 
-    maxScore.games = pScore.games + " / " + maxScore.games;
-    maxScore.locations = pScore.locations + " / " + maxScore.locations;
-    maxScore.points = pScore.points + " / " + maxScore.points;
-    return maxScore;
+    pScore.games = pScore.games + " / " + maxScore.games;
+    pScore.locations = pScore.locations + " / " + maxScore.locations;
+    pScore.score = pScore.score + " / " + maxScore.score;
+    return pScore;
 }
 
 module.exports = {

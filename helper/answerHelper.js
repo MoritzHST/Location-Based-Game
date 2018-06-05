@@ -2,6 +2,7 @@ const objects = require("../mongodb/objects");
 const logging = require("./logging");
 const operations = require('../mongodb/operations');
 const answerChecker = require('../helper/answerChecker');
+const eventHelper = require('../helper/event');
 const userCollection = require('../mongodb/collections').USERS;
 const ObjectID = require('mongodb').ObjectID;
 const WebSocket = require('websocket').client;
@@ -81,7 +82,10 @@ function saveAnswer(pRequest, pState, pEvent, pGame) {
         // Score Connection aktualisieren
         let ws = new WebSocket();
         ws.on("connect", function (connection) {
-            connection.send(JSON.stringify({userId: userItem._id, score: userItem.score}));
+            connection.send(JSON.stringify({
+                userId: userItem._id,
+                score: eventHelper.formatScoreObject(pEvent, userItem.score)
+            }));
             connection.close();
         });
         ws.connect("ws://127.0.0.1:3000/score");

@@ -16,7 +16,7 @@ const errorMessage = "Fehler beim auslesen der Highscores";
  *
  */
 router.get('get/scorelist', async function (req, res) {
-    logging.Entering("GET /score");
+    logging.Entering("GET get/scorelist");
     operations.findObject(userCollection, null, function (err, items) {
         items.sort(function (a, b) {
             let ascore = a.score.score;
@@ -43,7 +43,7 @@ router.get('get/scorelist', async function (req, res) {
         }
         handler.dbResult(err, res, items, errorMessage);
     });
-    logging.Leaving("GET /score");
+    logging.Leaving("GET get/scorelist");
 });
 
 module.exports = router;

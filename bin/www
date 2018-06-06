@@ -68,20 +68,20 @@ var wsServer = new WebSocketServer({
 });
 
 wsServer.on('request', function(req) {
-    var connection = req.accept('echo-protocol', req.origin);
-    
+    var connection = req.accept(null, req.origin);
+    var event = req.resource;
+
     //Specific id for this client & increment count
     var id = count++;
     // Store the connection method so we can loop through & contact all clients
-    clients[id] = connection;
+    clients[id] = {event: event, connection: connection};
     logging.Info((new Date()) + ' Connection accepted [' + id + ']');
     
     connection.on('message', function(message) {
         var msgString = message.utf8Data;
-        
         for (var i in clients) {
-            if (clients[i] !== connection)
-                clients[i].sendUTF(msgString);
+            if (clients.hasOwnProperty(i) && clients[i].connection !== connection && clients[i].event === event)
+                clients[i].connection.sendUTF(msgString);
         }
     });
     

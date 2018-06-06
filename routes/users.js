@@ -1,4 +1,5 @@
 const operations = require('../mongodb/operations');
+const objects = require('../mongodb/objects');
 const handler = require('../mongodb/handler');
 const router = require('express').Router();
 const logging = require('../helper/logging');
@@ -50,13 +51,11 @@ router.post('/insert/users', function(req, res) {
             res.status(422).jsonp(validity.err);
             return;
         }
+        let user = new objects.User(req.query.name);
 
-        // generiere zufälligen User-Token
-        req.query.token = operations.generateToken();
-
-        if (handler.checkIfValidQuery(req.query)) {
-            operations.updateObject(userCollection, req.query, null, function(err, item) {
-                handler.dbResult(err, res, item, "Der Benutzer " + JSON.stringify(req.query).replace(/\"/g, '') + " kann nicht hinzugefüt werden.");
+        if (handler.checkIfValidQuery(user)) {
+            operations.updateObject(userCollection, user, null, function (err, item) {
+                handler.dbResult(err, res, item, "Der Benutzer " + JSON.stringify(user).replace(/\"/g, '') + " kann nicht hinzugefüt werden.");
             });
         } else {
             res.status(422).jsonp({

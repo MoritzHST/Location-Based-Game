@@ -446,6 +446,134 @@
           ]
         }
       ]
+    },
+    {
+      "location": {
+        "roomnumber": "136",
+        "identifier": "http://qr.service.fh-stralsund.de/h4r136"
+      },
+      "exposition": {
+        "name": "GameLab",
+        "description": "<p>„GameLab“ – Spiele zum Ausprobieren</p><br><p>Im GameLab werden verschiedene Spiele vorgestellt, die von Informatik-Studenten im Rahmen der Veranstaltung „Softwareprojektorganisation“ entwickelt wurden. Die Studenten bringen in diesem Kurs all ihre bisher erlernten Fähigkeiten aus dem Studium mit ein. In dieser Veranstaltung lernen die Studenten die in der Software-Entwicklung weit verbreitete Methode „Scrum“ kennen. Scrum ist ein Vorgehensmodell für das Management komplexer Projekte und erlaubt es in kürzester Zeit vorzeigbare Ergebnisse zu liefern.</p>"
+      },
+      "games": [
+        {
+          "question": "Studenten aus welchem Studiengang haben die hier vorgestellten Spiele entwickelt?",
+          "type": "single_choice",
+          "points": 100,
+          "answers": [
+            {
+              "answer": "Softwareentwicklung und Medieninformatik",
+              "isCorrect": true
+            },
+            {
+              "answer": "Elektrotechnik",
+              "isCorrect": false
+            },
+            {
+              "answer": "IT-Sicherheit und Mobile Systeme",
+              "isCorrect": false
+            },
+            {
+              "answer": "Medizinisches Informationsmanagement / eHealth",
+              "isCorrect": false
+            },
+            {
+              "answer": "Regenerative Energien",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "Im Rahmen welchen Moduls wurden die vorgestellten Spiele entwickelt?",
+          "type": "single_choice",
+          "points": 100,
+          "answers": [
+            {
+              "answer": "Softwareprojektorganisation",
+              "isCorrect": true
+            },
+            {
+              "answer": "Software Engineering",
+              "isCorrect": false
+            },
+            {
+              "answer": "Programmierungstechnik 2",
+              "isCorrect": false
+            },
+            {
+              "answer": "Laborpraktikum Software",
+              "isCorrect": false
+            },
+            {
+              "answer": "Web Engineering",
+              "isCorrect": false
+            },
+            {
+              "answer": "Künstliche Intelligenz",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "Welche Interaktionsmöglichkeit mit dem Computer wird bei den Spielen nicht verwendet?",
+          "type": "single_choice",
+          "points": 100,
+          "answers": [
+            {
+              "answer": "Maus und Tastatur",
+              "isCorrect": true
+            },
+            {
+              "answer": "Kinect",
+              "isCorrect": false
+            },
+            {
+              "answer": "Wii",
+              "isCorrect": false
+            },
+            {
+              "answer": "Touch Motion Controller",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "Welches Spiel kann ich hier ausprobieren?",
+          "type": "single_choice",
+          "points": 100,
+          "answers": [
+            {
+              "answer": "Pen Defend",
+              "isCorrect": true
+            },
+            {
+              "answer": "Beach Runner",
+              "isCorrect": true
+            },
+            {
+              "answer": "HOST Rafting",
+              "isCorrect": true
+            },
+            {
+              "answer": "World of Warcraft",
+              "isCorrect": false
+            },
+            {
+              "answer": "Nethack",
+              "isCorrect": false
+            },
+            {
+              "answer": "Call of Duty",
+              "isCorrect": false
+            },
+            {
+              "answer": "Angry Birds",
+              "isCorrect": false
+            }
+          ]
+        }
+      ]
     }
   ]
 }

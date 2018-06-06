@@ -1,22 +1,22 @@
 /**
- * Handles Websocket on Sessions changes
+ * Handles Websocket bei Änderungen der Session
  */
 $(document).ready(function() {
     let sessioncookie = getObjectFromCookie("session");
     let webSocketProtocol = window.location.protocol.slice(0, -1) === 'https' ? 'wss' : 'ws';
 
-    // Check if Firefox (MozWebSocket) or other Browser (WebSocket)
+    // Prüft ob Firefox (MozWebSocket) oder anderer Browser
     var Socket = "MozWebSocket" in window ? MozWebSocket : WebSocket;
-    var ws = new Socket(webSocketProtocol + '://' + window.location.host + "/session", 'echo-protocol');
+    var ws = new Socket(webSocketProtocol + '://' + window.location.host + "/session");
 
-    // Send User id on login to server
+    // User id beim Login an den Server senden
     ws.onopen = function() {
-        ws.send([ sessioncookie.user._id, sessioncookie.login ]);
+        ws.send(JSON.stringify({userId: sessioncookie.user._id, login: sessioncookie.login}));
     };
-    // If the data recieved is the same as the user._id, auto-logout
+    // Wenn sich irgendjemand mit den Nutzerdaten ausweist, abmelden
     ws.onmessage = function(evt) {
-        let arrayData = evt.data.split(',');
-        if (arrayData[0] === sessioncookie.user._id && arrayData[1] !== String(sessioncookie.login)) {
+        let dto = JSON.parse(evt.data);
+        if (dto.userId === sessioncookie.user._id && dto.login !== String(sessioncookie.login)) {
             $.get("sign-out").done(function() {
                 clearLocalCookies("session");
                 window.location = "sign-up?reason=login";
@@ -25,7 +25,7 @@ $(document).ready(function() {
 
     };
 
-    ws.onerror = function() {
+    ws.onerror = function (obj) {
         $.get("sign-out").always(function() {
             clearLocalCookies("session");
             window.location = "sign-up?reason=error";

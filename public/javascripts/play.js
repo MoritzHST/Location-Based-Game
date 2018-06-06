@@ -49,8 +49,7 @@ function init() {
  */
 function setSlideInMenu() {
     let cookie = getObjectFromCookie("session");
-    user.name = cookie.user.name;
-    user.token = cookie.user.token;
+    user = cookie.user;
 
     $("#menu").mmenu({
         navbar : {
@@ -68,7 +67,7 @@ function setSlideInMenu() {
         $('.mm-navbar__title').html(result.name);
     });
 
-    $('#play-user-information').html("Spielername: " + user.name + "<br/> PIN: " + user.token);
+    updateOutline();
 }
 
 /**
@@ -85,10 +84,20 @@ function getObjectFromCookie(pCookieName) {
     let cookieStrings = document.cookie.split(";");
     for ( let i in cookieStrings) {
         cookieStrings[i] = cookieStrings[i].trim();
-        if (cookieStrings[i].startsWith(pCookieName)) {
+        if (cookieStrings[i].startsWith(pCookieName + "=")) {
             let cookieValue = cookieStrings[i].substr(pCookieName.length + 1);
             if (cookieValue.length > 0)
                 return JSON.parse(atob(cookieValue));
+        }
+    }
+}
+
+function setCookieFromObject(pObj, pCookieName) {
+    let cookieStrings = document.cookie.split(";");
+
+    for (let i in cookieStrings) {
+        if (cookieStrings[i].trim().startsWith(pCookieName + "=")) {
+            document.cookie = pCookieName + "=" + btoa(JSON.stringify(pObj));
         }
     }
 }
@@ -144,4 +153,14 @@ function setLogoutHint() {
         logoutHintTimer = undefined;
         clearNodeHook("warning-hook");
     });
+}
+
+function updateOutline() {
+    let htmlString = "Spielername: " + user.name + "<br/> PIN: " + user.token;
+
+    if (user.score) {
+        htmlString += "<br/> Punkte: " + user.score.score + "<br/> Räume besucht: " + user.score.locations + "<br/> Spiele gespielt: " + user.score.games;
+    }
+
+    $('#play-user-information').html(htmlString);
 }

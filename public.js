@@ -62,12 +62,17 @@ router.post('/login', function (req, res) {
             token: req.query.token
         }, function (err, user) {
             if (err || !user) {
-                res.redirect('/sign-out');
+                req.session = null;
+                res.status(422).jsonp({"error": "Es wurde kein Nutzer zu den angegebenen Daten gefunden."});
             } else {
-                req.session.user = user;
-                req.session.login = new Date() / 1;
-                req.session.maxAge = new Date().setHours(24, 0, 0, 0) - new Date();
-                res.status(200).jsonp(user);
+                require('./helper/event').getCurrentEvent()
+                    .then(function (pEvent) {
+                        req.session.user = user;
+                        req.session.user.score = require('./helper/event').formatScoreObject(pEvent, user.score);
+                        req.session.login = new Date() / 1;
+                        req.session.maxAge = new Date().setHours(24, 0, 0, 0) - new Date();
+                        res.status(200).jsonp(user);
+                    });
             }
         });
     } else {

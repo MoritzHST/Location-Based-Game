@@ -3,7 +3,7 @@ const answerChecker = require('../helper/answerChecker');
 const objects = require('../mongodb/objects');
 const router = require('express').Router();
 const logging = require('../helper/logging');
-
+const atob = require("atob");
 
 const gameCollection = require('../mongodb/collections').GAMES;
 const locationMappingCollection = require('../mongodb/collections').LOCATION_MAPPING;
@@ -81,6 +81,7 @@ router.post('/post/answer', async function (req, res) {
 router.get('/get/answers', async function (req, res) {
     logging.Entering("GET /get/answers");
     req.query = handler.getRealRequest(req.query, req.body);
+    req.query.identifier = atob(req.query.identifier);
     logging.Parameter("request.query", req.query);
 
     try {

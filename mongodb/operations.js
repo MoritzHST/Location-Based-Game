@@ -17,7 +17,7 @@ module.exports = {
      * Generiert ein Sessiontoken
      */
     generateToken: function () {
-    	logging.Entering("generateToken");
+        logging.Entering("generateToken");
         let returnObj = String(Math.floor(Math.random() * 10000)).padStart(4, "0");
         logging.Info("Token " + returnObj + " generated");
         logging.Leaving("generateToken");
@@ -34,9 +34,9 @@ module.exports = {
      * pCollection --> pObject --> pCallback -->
      */
     findObject: function (pCollection, pObject, pCallback) {
-    	logging.Entering("findObject");
-    	logging.Parameter("pCollection", pCollection);
-    	logging.Parameter("pObject", pObject);
+        logging.Entering("findObject");
+        logging.Parameter("pCollection", pCollection);
+        logging.Parameter("pObject", pObject);
         return new Promise(resolve => {
             let database = mongo.Object();
             database.Client.connect(database.Url, function (error, result) {
@@ -91,7 +91,7 @@ module.exports = {
                 }
             });
             logging.Leaving("updateObject");
-        });    	
+        });
     },
 
     /**
@@ -196,7 +196,7 @@ module.exports = {
      */
     dropCollection: function (pCollection, pCallback) {
     	logging.Entering("dropCollection");
-    	logging.Parameter("pCollection", pCollection);    	
+    	logging.Parameter("pCollection", pCollection);
         let database = mongo.Object();
         database.Client.connect(database.Url, function (error, result) {
             if (error) {
@@ -215,7 +215,7 @@ module.exports = {
     	logging.Entering("isReady");
         return new Promise(resolve => {
             const database = mongo.Object();
-
+            logging.Info("Connecting to " + database.Url + "...");
             database.Client.connect(database.Url, function (error) {
                 if (pCallback)
                     pCallback(error);

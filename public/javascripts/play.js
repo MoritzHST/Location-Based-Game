@@ -51,17 +51,22 @@ function setSlideInMenu() {
     let cookie = getObjectFromCookie("session");
     user = cookie.user;
 
-    $("#menu").mmenu({
-        navbar : {
-            title : ""
-        },
-        navbars : [ {
-            position : "top",
-            content : [ "prev", "title" ]
-        } ]
-    });
 
-    updateOutline();
+    $.get("/find/events", {
+        "date" : new Date().toJSON().slice(0, 10)
+    }).then(function(result) {
+        $("#menu").mmenu({
+            navbar: {
+                title: ""
+            },
+            navbars: [{
+                position: "top",
+                content: ["prev", "title"]
+            }]
+        });
+        $(".mm-navbar__title").html(result.name);
+        updateOutline();
+    });
 }
 
 /**

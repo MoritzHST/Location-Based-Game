@@ -17,30 +17,32 @@ const Conf = {
 
 const file = require('path').resolve(__dirname, _conf);
 
-logging.Info("Lese " + _conf + " ein...");
-if (!fs.existsSync(file)) {
-    logging.Error(_conf + " ist nicht lesbar oder existiert nicht");
-} else {
-    var content = fs.readFileSync(file, 'utf8').toString();
-    var delimeters = [ ',', '#' ];
-    var lines = content.split('\n');
+if (process.env.conf !== "false") {
+    logging.Info("Lese " + _conf + " ein...");
+    if (!fs.existsSync(file)) {
+        logging.Error(_conf + " ist nicht lesbar oder existiert nicht");
+    } else {
+        var content = fs.readFileSync(file, 'utf8').toString();
+        var delimeters = [ ',', '#' ];
+        var lines = content.split('\n');
 
-    for ( var key in Conf) {
-        if (Conf.hasOwnProperty(key)) {
-            for (var line = 0; line < lines.length; line++) {
-                var keyIndex = lines[line].indexOf(key + ":");
+        for ( var key in Conf) {
+            if (Conf.hasOwnProperty(key)) {
+                for (var line = 0; line < lines.length; line++) {
+                    var keyIndex = lines[line].indexOf(key + ":");
 
-                if (keyIndex >= 0 && !lines[line].trim().startsWith("#")) {
-                    var value = lines[line].trim().substring(keyIndex + key.length);
+                    if (keyIndex >= 0 && !lines[line].trim().startsWith("#")) {
+                        var value = lines[line].trim().substring(keyIndex + key.length);
 
-                    for (var i = 0; i < delimeters.length; i++) {
-                        if (value.includes(delimeters[i])) {
-                            value = value.substring(0, value.indexOf(delimeters[i])).trim();
+                        for (var i = 0; i < delimeters.length; i++) {
+                            if (value.includes(delimeters[i])) {
+                                value = value.substring(0, value.indexOf(delimeters[i])).trim();
+                            }
                         }
-                    }
 
-                    logging.Info(Conf[key] + "=" + value);
-                    Conf[key] = value;
+                        logging.Info(Conf[key] + "=" + value);
+                        Conf[key] = value;
+                    }
                 }
             }
         }
@@ -48,7 +50,7 @@ if (!fs.existsSync(file)) {
 }
 
 function MongoWrapper(database) {
-	logging.Info("Initializing new MongoWrapper");
+    logging.Info("Initializing new MongoWrapper");
     this.Client = MongoClient;
     this.Url = 'mongodb://' + Conf.bindIp + ':' + Conf.port;
     this.Database = database ? database : Conf.defaultDb;

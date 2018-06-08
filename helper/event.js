@@ -58,11 +58,11 @@ function formatScoreObject(pEvent, pScore) {
     if (!maxScore) {
         return pScore;
     }
-
-    pScore.games = pScore.games + " / " + maxScore.games;
-    pScore.locations = pScore.locations + " / " + maxScore.locations;
-    pScore.score = pScore.score + " / " + maxScore.score;
-    return pScore;
+    let returnScore = {};
+    returnScore.games = pScore.games + " / " + maxScore.games;
+    returnScore.locations = pScore.locations + " / " + maxScore.locations;
+    returnScore.score = pScore.score + " / " + maxScore.score;
+    return returnScore;
 }
 
 module.exports = {

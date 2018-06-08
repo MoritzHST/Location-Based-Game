@@ -200,6 +200,7 @@ function broadcastScore(pUser, pEvent) {
             userId: pUser._id,
             score: eventHelper.formatScoreObject(pEvent, pUser.score)
         }));
+        console.log(pUser);
         connection.close();
     });
     ws.connect("ws://127.0.0.1:3000/score");

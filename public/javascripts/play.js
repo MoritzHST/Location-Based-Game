@@ -110,7 +110,9 @@ function hideWarning() {
 
     if (!loginHintTimer) {
         loginHintTimer = setTimeout(function() {
-            $("#warning-hook").html("");
+            $("#warning-hook").fadeOut("slow", function () {
+                $("#warning-hook").show().html("");
+            });
         }, notificationFadeOut);
     }
 }

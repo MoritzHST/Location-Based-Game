@@ -1,11 +1,10 @@
-var highScoreRefresh = setInterval(getHighscoreData, notificationFadeOut);
+var highScoreRefresh;
 var alternateColorFlag = false;
 
 function initHighscoreList() {
-    if (highScoreRefresh) {
-        clearInterval(highScoreRefresh);
-        highScoreRefresh = setTimeout(getHighscoreData, notificationFadeOut);
-    }
+    clearInterval(highScoreRefresh);
+    highScoreRefresh = setInterval(getHighscoreData, refreshHighscoreList);
+
     //dummyitem hinzufügen
     $(".highscore-grid").append($("<div/>", {
         class: "highscore-list-entry-row",

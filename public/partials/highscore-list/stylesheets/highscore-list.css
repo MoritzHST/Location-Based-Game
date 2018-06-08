@@ -1,0 +1,36 @@
+.highscore-grid {
+    display: grid;
+    grid-template-columns: 1fr 3fr 2fr 2fr 2fr;
+
+}
+
+.highscore-list-header-row {
+    padding: 5px;
+    background-color: #e1232b;
+    color: #EEE;
+    border: 1px solid #e1232b;
+    text-align: center;
+}
+
+.highscore-list-entry-row {
+    border: 1px solid #e1232b;
+    text-align: center;
+    padding: 5px;
+}
+
+.highscore-list-header-row:first-of-type {
+    border-top-left-radius: 6px;
+}
+
+.highscore-list-header-row:nth-child(5) {
+    border-top-right-radius: 6px;
+}
+
+.highscore-list-alternate-color {
+    background-color: #ffc8c8;
+}
+
+.highscore-list-highlight-user {
+    font-weight: bold;
+    font-style: italic;
+}

@@ -15,7 +15,7 @@ const errorMessage = "Fehler beim auslesen der Highscores";
  * gibt alle dem Nutzer zur Verfügung stehenden Missionen zurück
  *
  */
-router.get('get/scorelist', async function (req, res) {
+router.get('/get/scorelist', async function (req, res) {
     logging.Entering("GET get/scorelist");
     operations.findObject(userCollection, null, function (err, items) {
         items.sort(function (a, b) {

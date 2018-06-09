@@ -20,7 +20,7 @@
 }
 
 #cookie-bar > p > a {
-	text-decoration: underline !important;
+	text-decoration: underline !important; /* NOSONAR */
 	color: #e1232b !important;
 	letter-spacing: normal;
 	display: inline;

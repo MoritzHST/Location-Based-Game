@@ -10,7 +10,7 @@
 }
 
 a:hover, a:focus, a:active {
-    text-decoration: none;
+    text-decoration: none; /* NOSONAR */
 }
 
 li.ui-state-active > a {

@@ -13,17 +13,17 @@ module.exports = {
     /**
      * Enum, welches die verschiedenen Game-Typen symbolisiert
      */
-    Type : Game,
+    Type: Game,
 
     /**
      * Enum, welches die möglichen Status eines Raumes symbolisiert(bsp.: VISITED, COMPLETED, FLAWLESS)
      */
-    RoomStates : RoomStates,
+    RoomStates: RoomStates,
 
     /**
      * Enum, welches die verschiedenen Abschluss-Status eines Spiels symbolisiert(bsp.: UNPLAYER, CORRECT, WRONG)
      */
-    GameStates : GameStates,
+    GameStates: GameStates,
 
     /**
      * Event-Objekt bestehend aus Eventnamen und Gültigkeitsdatum. Ein Event gilt immer nur für einen Tag
@@ -142,7 +142,7 @@ module.exports = {
      * Visit-Objekt, das den Besuch und Erfolg eines Nutzers nach dem Spielen eines Spiels an einer Location darstellt
      * @param pLocationMapping LocationMapping-Object der Ausstellung, an der der Nutzer gespielt hat
      * @param pGames Array der Game-Objekte die bei diesem Objekt gespielt wurde
-     * @param pIsSuccessful Boolean ob das Spiel erfolgreich abgeschlossen (Richtige Antwort) wurde 
+     * @param pIsSuccessful Boolean ob das Spiel erfolgreich abgeschlossen (Richtige Antwort) wurde
      * @param pRoomState Status der Abfertigung, dargestellt durch ein Objekt aus dem "RoomStates"-Enum
      * @constructor
      */
@@ -191,16 +191,16 @@ module.exports = {
         logging.Info("initializing EventMapping done");
     }
 
-/*
- * /** Beim starten der Anwendung muss es eine Art Template geben, für welches
- * hinterlegt ist, welche Räume mit welchen Fragen aktiv sind pName -> Name des
- * Events (Tag der offenen Tür, Girls Day...) pMinigameRoomMapping -> vom Typ
- * MinigameRoomMapping, hinterlegt welcher Raum welches Minigame hat /
- * EventTemplate: function (pName, pMinigameRoomMapping) {
- * logging.Info("initializing new EventTemplate"); logging.Parameter("pName",
- * pName); logging.Parameter("pMinigameRoomMapping", pMinigameRoomMapping);
- * this.name = pName; this.minigameRoomMappings = pMinigameRoomMapping;
- * logging.Info("initializing EventTemplate done"); }
- */
+    /*
+     * /** Beim starten der Anwendung muss es eine Art Template geben, für welches
+     * hinterlegt ist, welche Räume mit welchen Fragen aktiv sind pName -> Name des
+     * Events (Tag der offenen Tür, Girls Day...) pMinigameRoomMapping -> vom Typ
+     * MinigameRoomMapping, hinterlegt welcher Raum welches Minigame hat /
+     * EventTemplate: function (pName, pMinigameRoomMapping) {
+     * logging.Info("initializing new EventTemplate"); logging.Parameter("pName",
+     * pName); logging.Parameter("pMinigameRoomMapping", pMinigameRoomMapping);
+     * this.name = pName; this.minigameRoomMappings = pMinigameRoomMapping;
+     * logging.Info("initializing EventTemplate done"); }
+     */
 
 };

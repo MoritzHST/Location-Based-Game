@@ -1,38 +1,38 @@
 .host-header {
     background-color: #FFFFFF;
-	border: none;
+    border: none;
 }
 
 .host-logo-image {
-	width: 100%;
+    width: 100%;
 }
 
 .host-logo-image-container {
-	max-width: 25%;
+    max-width: 25%;
 }
 
 #cookie-bar {
-	background: #ffdd88 !important;
-	line-height: 1.2em !important;
-	color: #e1232b !important;
-	height: auto !important;
-	margin-bottom: 25px !important;
+    background: #ffdd88 !important;
+    line-height: 1.2em !important;
+    color: #e1232b !important;
+    height: auto !important;
+    margin-bottom: 25px !important;
 }
 
 #cookie-bar > p > a {
-	text-decoration: underline !important; /* NOSONAR */
-	color: #e1232b !important;
-	letter-spacing: normal;
-	display: inline;
-	padding: 0;
-	margin: 0; /* NOSONAR */
+    text-decoration: underline !important; /* NOSONAR */
+    color: #e1232b !important;
+    letter-spacing: normal;
+    display: inline;
+    padding: 0;
+    margin: 0; /* NOSONAR */
 }
 
 a.cb-enable, a.cb-enable:hover { /* NOSONAR */
-	display: inline-block !important;
-	color: #EEEEEE !important;
-	background-color: #EEEEEE !important;
-	border: 1px solid #e1232b;
-	padding: 3px !important;
-	width: 50% !important;
+    display: inline-block !important;
+    color: #EEEEEE !important;
+    background-color: #EEEEEE !important;
+    border: 1px solid #e1232b;
+    padding: 3px !important;
+    width: 50% !important;
 }

@@ -8,7 +8,6 @@
     border-radius: 0 5px 5px 0;
 }
 
-.mm-navbar__title {
+.mm-navbar__title { /* NOSONAR */
     color: #EEEEEE !important;
-
 }

@@ -99,7 +99,7 @@ function initContextCodePending(obj) {
             if (callbackObj) {
                 initGameFinishedView(callbackObj);
             }
-        })
+        });
 }
 
 // Verarbeitet die Daten, um die Kreise für die Übersicht über das akutelle
@@ -251,6 +251,6 @@ function submitAnswer(answerObj) {
 }
 
 // GameObject Konstruktor
-function GameObject() {
+function GameObject() { // NOSONAR
     this.games = [];
 }

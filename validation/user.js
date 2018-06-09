@@ -3,7 +3,7 @@ const wordList = require('./badwords.json');
 const regex = new RegExp("^([a-zA-Z]{3,20})$");
 const filter = new BadwordFilter();
 
-function BadwordFilter() {
+function BadwordFilter() { // NOSONAR
     this.filter = new Filter();
 
     /**

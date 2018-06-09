@@ -1,6 +1,7 @@
 /**
  * Enum, das die möglichen Minispiel-Typen abbildet.
  */
+// NOSONAR
 Game = {
     SINGLE_CHOICE: {
         type: "single_choice",
@@ -15,6 +16,7 @@ Game = {
  * CODE_SCANNED -> Code wurde gescannt, Ausstellungs-Übersicht dementsprechend anpassen
  * CODE_PENDING -> Code wurde noch nicht gescannt, Ausstellungs-Übersicht dementsprechend anpassen
  */
+// NOSONAR
 GameViewContext = {
     CODE_SCANNED: "CODE_SCANNED",
     CODE_PENDING: "CODE_PENDING",
@@ -25,6 +27,7 @@ GameViewContext = {
  * Enum welches die einzelnen Quizstatus abbildet
  * @type {{UNPLAYED: number, CORRECT: number, WRONG: number}}
  */
+// NOSONAR
 GameStates = {
     UNPLAYED: 0,
     CORRECT: 1,
@@ -34,6 +37,7 @@ GameStates = {
  * Enum welches die einzelnen Locationstatus abbildet
  * @type {{VISITED: number, COMPLETED: number, FLAWLESS: number}}
  */
+// NOSONAR
 RoomStates = {
     VISITED: 0,
     COMPLETED: 1,

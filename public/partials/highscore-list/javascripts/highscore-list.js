@@ -15,6 +15,7 @@ function initHighscoreList() {
 function getHighscoreData() {
     $.get("/get/scorelist")
         .done(function (obj) {
+            obj = obj.slice(0, highscoreEntries);
             alternateColorFlag = false;
             $(".highscore-list-entry-row").fadeOut("slow", function () {
                 $(".highscore-list-entry-row").remove();
@@ -30,7 +31,7 @@ function getHighscoreData() {
 function newHighscoreListEntry(obj) {
     let alternateColor = " ";
 
-    if (user && user.name === obj.name) {
+    if (typeof user !== 'undefined' && user.name === obj.name) {
         alternateColor += " highscore-list-highlight-user "
     }
 

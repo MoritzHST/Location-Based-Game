@@ -41,7 +41,7 @@ a:hover, a:focus, a:active {
     text-decoration: none; /* NOSONAR */
 }
 
-li.ui-state-active > a {
+.ui-state-active > a {
     background-color: #ad0000 !important;
     color: #EEE !important;
     border: #BBB !important;

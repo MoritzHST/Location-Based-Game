@@ -2,7 +2,7 @@
     margin-top: 10px;
     margin-bottom: 10px;
     white-space: normal !important;
-    word-wrap: break-word;
+    word-wrap: break-word; /* NOSONAR */
 }
 
 #answer-container:before, #answer-container:after {
@@ -20,11 +20,11 @@
     margin-bottom: 15px;
 }
 
-#answer-container {
+#answer-container { /* NOSONAR */
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-column-gap: 20px;
-    grid-row-gap: 20px;
+    grid-template-columns: 1fr 1fr; /* NOSONAR */
+    grid-column-gap: 20px; /* NOSONAR */
+    grid-row-gap: 20px; /* NOSONAR */
 }
 
 .answer-description {

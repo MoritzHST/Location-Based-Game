@@ -170,7 +170,7 @@ function renderFinishedView() {
 
     // Antworten sind da, also einmal die von Node ausgewerteten ANntworten
     // abfragen
-    $.get('get/answers', {identifier: locationObj.identifier})
+    $.get('get/answers', {identifier: btoa(locationObj.identifier)})
         .done(function (callbackObj) {
             if (callbackObj) {
                 initGameFinishedView(callbackObj);

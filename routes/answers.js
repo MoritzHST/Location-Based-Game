@@ -66,7 +66,7 @@ router.post('/post/answer', async function (req, res) {
                 }
 
                 //Es wurde keine richtige Antwort gefunden, also muss sie falsch sein
-                res.status(400).jsonp({
+                res.status(422).jsonp({
                     "error": "Die Antwort ist falsch!"
                 });
                 answerHelper.saveAnswer(req, objects.GameStates.WRONG, currentEvent, item);

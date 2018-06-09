@@ -18,6 +18,10 @@ function init() {
     $("#game-play-overview").on("click", function() {
         setNodeHookFromFile($("#content-hook"), "../partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent");
     });
+    // Nav-Menü "Score-Board"
+    $("#game-play-highscore-list").on("click", function () {
+        setNodeHookFromFile($("#content-hook"), "../partials/highscore-list/highscore-list.html", undefined, undefined, "initHighscoreList");
+    });
     // Nav-Menü "Logout"
     $("#game-logout").on("click", function() {
         setNodeHookFromFile($("#warning-hook"), "../partials/play-warning-box/play-warning-box.html", setLogoutHint);
@@ -106,7 +110,9 @@ function hideWarning() {
 
     if (!loginHintTimer) {
         loginHintTimer = setTimeout(function() {
-            $("#warning-hook").html("");
+            $("#warning-hook").fadeOut("slow", function () {
+                $("#warning-hook").show().html("");
+            });
         }, notificationFadeOut);
     }
 }

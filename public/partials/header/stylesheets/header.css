@@ -25,10 +25,10 @@
 	letter-spacing: normal;
 	display: inline;
 	padding: 0;
-	margin: 0;
+	margin: 0; /* NOSONAR */
 }
 
-a.cb-enable, a.cb-enable:hover {
+a.cb-enable, a.cb-enable:hover { /* NOSONAR */
 	display: inline-block !important;
 	color: #EEEEEE !important;
 	background-color: #EEEEEE !important;

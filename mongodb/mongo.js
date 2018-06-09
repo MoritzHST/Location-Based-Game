@@ -28,7 +28,7 @@ if (process.env.conf !== "false") {
 
         for ( var key in Conf) {
             if (Conf.hasOwnProperty(key)) {
-                for (var line = 0; line < lines.length; line++) {
+                for (var line = 0; line < lines.length; line++) { // NOSONAR
                     Conf[key] = extractValue(delimeters, lines, line, key) ? extractValue(delimeters, lines, line, key) : Conf[key];
                 }
             }

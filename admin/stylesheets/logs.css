@@ -1,5 +1,5 @@
-#logs_wrapper {
-	display: flex;
+#logs-wrapper {
+    display: flex;
     flex-flow: row nowrap;
-	justify-content: space-evenly;
+    justify-content: space-evenly;
 }

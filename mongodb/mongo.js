@@ -53,7 +53,7 @@ function extractValue(pDelimeters, pLines, pLine, pKey) {
     }
 }
 
-function MongoWrapper(database) {
+function MongoWrapper(database) { // NOSONAR
     logging.Info("Initializing new MongoWrapper");
     this.Client = MongoClient;
     this.Url = 'mongodb://' + Conf.bindIp + ':' + Conf.port;
@@ -61,7 +61,7 @@ function MongoWrapper(database) {
 }
 
 module.exports = {
-    Object : function(database) {
+    Object: function (database) { // NOSONAR
         return new MongoWrapper(database);
     },
     Conf

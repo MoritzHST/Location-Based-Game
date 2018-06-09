@@ -6,7 +6,7 @@ var fs = require('file-system');
 const logFilePath = "../admin/logs";
 
 function writeToLogFile(pLogFileName, pMessage) {
-    fs.appendFile(logFilePath + "/" + pLogFileName, getCurrentDateTime() + " " + pMessage + "\n", function(err) {
+    fs.appendFile(logFilePath + "/" + pLogFileName, getCurrentDateTime() + " " + pMessage + "\n", function (err) {
         if (err) {
             return console.log(err); // NOSONAR
         }
@@ -33,37 +33,37 @@ module.exports = {
         }
     },
 
-    deleteLogFiles : function() {
+    deleteLogFiles: function () {
         fs.readdirSync(logFilePath + '/').forEach(file => {
             fs.unlinkSync(logFilePath + '/' + file);
         });
     },
 
-    Info : function(pInfomessage) {
+    Info: function (pInfomessage) { // NOSONAR
         infoMessage(pInfomessage);
     },
 
-    Error : function(pErrormessage) {
+    Error: function (pErrormessage) { // NOSONAR
         writeToLogFile("error.log", "[" + timeStamp() + "]" + "[ERROR] " + JSON.stringify(pErrormessage));
     },
 
-    Parameter : function(pParameterName, pParameterValue) {
+    Parameter: function (pParameterName, pParameterValue) { // NOSONAR
         writeToLogFile("parameter.log", "[" + timeStamp() + "]" + "[PARAMETER] " + JSON.stringify(pParameterName) + " -> " + JSON.stringify(pParameterValue));
     },
 
-    Entering: function (pFunctionName) {
+    Entering: function (pFunctionName) { // NOSONAR
         infoMessage(pFunctionName + " ENTRY");
     },
 
-    Leaving: function (pFunctionName) {
+    Leaving: function (pFunctionName) { // NOSONAR
         infoMessage(pFunctionName + " LEAVING");
     },
 
-    ReturnValue: function (pParameterValue) {
-    	writeToLogFile("parameter.log", "[" + timeStamp() + "]" + "[PARAMETER] RETURN " + JSON.stringify(pParameterValue));
-    	return pParameterValue;
+    ReturnValue: function (pParameterValue) { // NOSONAR
+        writeToLogFile("parameter.log", "[" + timeStamp() + "]" + "[PARAMETER] RETURN " + JSON.stringify(pParameterValue));
+        return pParameterValue;
     }
-    
+
 };
 
 function infoMessage(pInfomessage) {

@@ -21,7 +21,7 @@ function singleChoiceHandler(pAnswer, pGame) {
     logging.Leaving("singleChoiceHandler");
 }
 
-function multipleChoiceHandler(pAnswer, pGame) {
+function multipleChoiceHandler(pAnswer, pGame) { // NOSONAR
     return false;
 }
 

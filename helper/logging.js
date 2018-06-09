@@ -8,10 +8,9 @@ const logFilePath = "../admin/logs";
 function writeToLogFile(pLogFileName, pMessage) {
     fs.appendFile(logFilePath + "/" + pLogFileName, getCurrentDateTime() + " " + pMessage + "\n", function(err) {
         if (err) {
-            return console.log(err);
+            return console.log(err); // NOSONAR
         }
-
-        console.log(pMessage);
+        console.log(pMessage); // NOSONAR
     });
 }
 

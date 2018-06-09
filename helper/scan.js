@@ -99,7 +99,8 @@ module.exports = {
         logging.Parameter("pUser", pUser);
         logging.Parameter("pLocation", pLocation);
         logging.Leaving("hasAlreadyVisited");
-        return logging.ReturnValue(retuenValue = pUser.visits !== undefined && containsLocation(pUser.visits, pLocation._id));
+        let returnValue = pUser.visits !== undefined && containsLocation(pUser.visits, pLocation._id);
+        return logging.ReturnValue(returnValue);
     },
 
     addGameStates: function (pVisits, pGames, pLocationId) {

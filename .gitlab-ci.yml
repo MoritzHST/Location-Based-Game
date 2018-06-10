@@ -50,7 +50,7 @@ deploy_production:
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
     - apt-get update -y && apt-get install -y ssh
   script:
-    - ssh -v -p${DEPLOYMENT_SERVER_PORT} ${DEPLOYMENT_SERVER_USER}@${DEPLOYMENT_SERVER_IP} "docker stop docker-mainline || true && docker rm docker-mainline || true && docker build --build-arg BRANCH=live --no-cache -t mainline . && cd prod-service && docker-compose run -e ENVIRONMENT=production -d -p 8000:3000 --name='docker-mainline' web"
+    - ssh -v -p${DEPLOYMENT_SERVER_PORT} ${DEPLOYMENT_SERVER_USER}@${DEPLOYMENT_SERVER_IP} "docker stop docker-mainline || true && docker rm docker-mainline || true && docker build --build-arg BRANCH=live --no-cache -t mainline . && cd prod-service && docker-compose run --restart=always -e ENVIRONMENT=production -d -p 8000:3000 --name='docker-mainline' web"
     
 deploy_test:
   stage: deploy
@@ -63,4 +63,4 @@ deploy_test:
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
     - apt-get update -y && apt-get install -y ssh
   script:
-    - ssh -v -p${DEPLOYMENT_SERVER_PORT} ${DEPLOYMENT_SERVER_USER}@${DEPLOYMENT_SERVER_IP} "docker stop docker-test || true && docker rm docker-test || true && docker build --build-arg BRANCH=master --no-cache -t test . && cd test-service && docker-compose run -e ENVIRONMENT=development -d -p 8001:3000 --name='docker-test' web"
+    - ssh -v -p${DEPLOYMENT_SERVER_PORT} ${DEPLOYMENT_SERVER_USER}@${DEPLOYMENT_SERVER_IP} "docker stop docker-test || true && docker rm docker-test || true && docker build --build-arg BRANCH=master --no-cache -t test . && cd test-service && docker-compose run --restart=always -e ENVIRONMENT=development -d -p 8001:3000 --name='docker-test' web"

@@ -31,3 +31,27 @@ th.min-column {
 }
 
 .ui-selected { background: #00CC00; color: white; }
+
+.details {
+	width: 100%;
+	padding: 15px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-column-gap: 10px;
+	grid-row-gap: 10px;
+}
+
+.dropzone {
+	margin-left: 100px;
+	margin-right: 100px;
+	height: 250px;
+	border: 1px solid #c5c5c5;
+	border-radius: 5px;
+	text-align: center;
+	line-height: 250px;
+	overflow: hidden;
+}
+
+.dropzone-preview-image {
+	max-height: 100%;
+}

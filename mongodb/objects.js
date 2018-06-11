@@ -189,6 +189,20 @@ module.exports = {
         this.event = pEvent;
         this.locationMapping = pLocationMapping;
         logging.Info("initializing EventMapping done");
+    },
+    /**
+     * Bildobjekt, welches die Bilddaten und Metainformationen abstrahiert
+     * @param pName Bildname
+     * @param pData Metaname
+     * @constructor
+     */
+    Image: function (pName, pData) {
+        logging.Info("initializing new Image");
+        logging.Parameter("pName", pName);
+        logging.Parameter("pData", pData);
+        this.name = pName;
+        this.data = pData;
+        logging.Info("initializing Image done");
     }
 
 /*

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Galerie - LocationBasedGame</title>
+    <link rel="shortcut icon" type="image/png" href="./images/favicon.png"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../stylesheets/jquery-ui.min.css">
+    <link rel="stylesheet" href="../stylesheets/editor.css">
+    <link rel="stylesheet" href="objects/stylesheets/gallery.css">
+
+    <script src="../javascripts/jquery.min.js"></script>
+    <script src="../javascripts/jquery-ui.min.js"></script>
+
+    <script src="objects/javascripts/gallery.js"></script>
+
+</head>
+<body>
+<div id="image-dropzone" class="dropzone">
+    <strong id="image-dropzone-hint">Bild hier reinziehen</strong>
+    <img id="image-dropzone-preview-image" class="dropzone-preview-image" src="">
+</div>
+<div class="persisted-image-preview-wrapper">
+    <img src="" id="persisted-image-preview" class="persisted-image-preview">
+</div>
+<div id="persisted-image-collection-wrapper" class="persisted-image-collection-wrapper"></div>
+<div class="pagination"></div>
+</body>
+</html>

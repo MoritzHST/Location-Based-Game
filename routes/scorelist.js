@@ -9,6 +9,8 @@ const eventHelper = require('../helper/event');
 
 const errorMessage = "Fehler beim auslesen der Highscores";
 
+const scorelistLength = 20;
+
 /* Global */
 
 /**
@@ -27,10 +29,10 @@ router.get('/get/scorelist', async function (req, res) {
             if (ascore > bscore) {
                 return -1;
             }
-            return 0;
+            return a.name.localeCompare(b.name);
         });
         let place = 1;
-        for (let index = 0; index < items.length; index++) {
+        for (let index = 0; (index < items.length) && (index < scorelistLength); index++) {
             let item = items[index];
             item.token = undefined;
             item.visits = undefined;

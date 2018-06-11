@@ -2,10 +2,7 @@ const operations = require('../mongodb/operations');
 const handler = require('../mongodb/handler');
 const router = require('express').Router();
 const logging = require('../helper/logging');
-
-const locationMappingCollection = require('../mongodb/collections').LOCATION_MAPPING;
 const userCollection = require('../mongodb/collections').USERS;
-const eventHelper = require('../helper/event');
 
 const errorMessage = "Fehler beim auslesen der Highscores";
 
@@ -29,6 +26,16 @@ router.get('/get/scorelist', async function (req, res) {
             if (ascore > bscore) {
                 return -1;
             }
+            //beide haben den selbsen Score: sortiere User mit weniger gespielten spielen nach oben
+            let agames = a.score.games;
+            let bgames = b.score.games;
+            if (agames < bgames) {
+                return -1;
+            }
+            if (agames > bgames) {
+                return 1;
+            }
+            //gleicher score und gleich viele Spiele gespielt: sortiere nach Namen
             return a.name.localeCompare(b.name);
         });
         let place = 1;

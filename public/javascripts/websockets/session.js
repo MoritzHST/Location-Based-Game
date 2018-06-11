@@ -25,7 +25,7 @@ $(document).ready(function() {
 
     };
 
-    ws.onerror = function (obj) {
+    ws.onerror = function () {
         $.get("sign-out").always(function() {
             clearLocalCookies("session");
             window.location = "sign-up?reason=error";

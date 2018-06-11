@@ -1,6 +1,5 @@
-#logs_wrapper {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: nowrap;
-	justify-content: space-evenly;
+#logs-wrapper {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-evenly; /* NOSONAR */
 }

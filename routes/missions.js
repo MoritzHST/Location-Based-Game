@@ -45,7 +45,7 @@ router.get('/find/missions', async function (req, res) {
                 });
             } else {
                 if (!Array.isArray(item)) {
-                    item = new Array(item);
+                    item = [item];
                 }
                 //Die einzelnen Labore flaggen
                 item.forEach(function (mission) {

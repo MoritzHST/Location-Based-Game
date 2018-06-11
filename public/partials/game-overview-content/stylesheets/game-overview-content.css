@@ -1,5 +1,10 @@
 .button-group-wrapper {
+    overflow: auto;
     text-align: right;
+    display: flex;
+    flex-wrap: wrap;
+    grid-template-columns: 1fr 1fr;
+    justify-content: space-between;
 }
 
 .labor-wrapper {
@@ -14,28 +19,6 @@
     margin-bottom: 10px;
 }
 
-@media (min-width: 0) {
-    #play_filter {
-        float: left;
-        display: block;
-    }
-
-    #play_rooms {
-        margin-top: 5px;
-        float: left;
-        display: block;
-    }
-}
-
-@media (min-width: 449px) {
-    #play_filter {
-        float: left;
-        display: inline-block;
-    }
-
-    #play_rooms {
-        margin-top: 0;
-        float: right;
-        display: inline-block;
-    }
+.host-btn-group {
+    margin-top: 5px;
 }

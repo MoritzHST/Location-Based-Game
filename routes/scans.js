@@ -1,6 +1,7 @@
 const operations = require('../mongodb/operations');
 const handler = require('../mongodb/handler');
 const router = require('express').Router();
+const atob = require("atob");
 const logging = require('../helper/logging');
 
 const eventsCollection = require('../mongodb/collections').EVENTS;
@@ -55,6 +56,8 @@ router.get('/find/scan', async function (req, res) {
         return;
     }
 
+    identifier = atob(identifier);
+
     operations.findObject(eventsCollection,
         {
             "_id": currentEvent._id,
@@ -99,7 +102,7 @@ router.get('/find/scan', async function (req, res) {
                 });
             }
         });
-    logging.Leaving("GET /find/scan")
+    logging.Leaving("GET /find/scan");
 });
 
 module.exports = router;

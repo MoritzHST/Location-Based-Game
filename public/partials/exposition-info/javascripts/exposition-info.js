@@ -30,11 +30,10 @@ function initExpositionInfo(obj) {
 function initViewContent(obj) {
     // Namen setzen
     if (obj.exposition.name) {
-        $("#exposition-name").html(obj.exposition.name);
+        $("#exposition-info-info-header").html(obj.exposition.name + ": Info");
+        $("#exposition-info-mission-header").html(obj.exposition.name + ": Missionen");
     }
-    else {
-        $("#exposition-name").hide();
-    }
+
     // Bilder setzen
     if (obj.exposition.imagePaths && obj.exposition.imagePaths.length > 0) {
         let imagePaths = obj.exposition.imagePaths;
@@ -95,7 +94,7 @@ function initContextCodePending(obj) {
         });
     });
     // Abfragen, ob Antworten angezeigt werden können
-    $.get('get/answers', {identifier: locationObj.identifier})
+    $.get('get/answers', {identifier: btoa(locationObj.identifier)})
         .done(function (callbackObj) {
             if (callbackObj) {
                 initGameFinishedView(callbackObj);

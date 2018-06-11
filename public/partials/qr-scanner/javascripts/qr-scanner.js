@@ -7,7 +7,7 @@ var scannerContext;
  * @param pContextObj "beschreibt die View, aus der der QR-Scanner geöffnet wurde
  */
 function initScanner(pContextObj) {
-    //Variablen Clearen
+    // Variablen Clearen
     scanner = undefined;
     cameraList = undefined;
     scannerContext = undefined;
@@ -39,25 +39,25 @@ function initScanner(pContextObj) {
  * @param content Inhalt des QR-Codes
  */
 function onCodeScanned(content) {
-    //Scanner stoppen
+    // Scanner stoppen
     scanner.stop();
 
-    $.get("find/scan", {"identifier": content})
+    $.get("find/scan", {"identifier": btoa(content)})
         .done(function (obj) {
-            //Bei Erfolg
+            // Bei Erfolg
             obj.context = GameViewContext.CODE_SCANNED;
             setNodeHookFromFile($("#content-hook"), "partials/exposition-info/exposition-info.html", undefined, undefined, "initExpositionInfo", obj);
         })
         .fail(function (obj) {
-            //Bei Misserfolg
+            // Bei Misserfolg
             setNodeHookFromFile($("#failure-hook"), "partials/failure-box/failure-box.html", function (errMsgObj) {
                 $("#failure-box-error-message").html(errMsgObj.responseJSON.error);
-                //Nach Konstanter Sekunden-Anzahl wieder ausblenden
+                // Nach Konstanter Sekunden-Anzahl wieder ausblenden
                 setTimeout(function () {
                     clearNodeHook("failure-hook");
                 }, notificationFadeOut);
             }, obj);
-            //Von welcher View aufgerufen? Dahin zurückleiten!
+            // Von welcher View aufgerufen? Dahin zurückleiten!
             if (scannerContext.context === GameViewContext.SCAN_ATTEMPT_FROM_PLAY_OVERVIEW) {
                 setNodeHookFromFile($("#content-hook"), "partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent");
             }

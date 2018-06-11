@@ -230,7 +230,7 @@ function submitAnswer(answerObj) {
         })
         .fail(function (obj) {
             //Nur das nächste Spiel starten, wenn die Antwort falsch war, um interne Fehler nicht zu bestrafen
-            if (obj.status === 400) {
+            if (obj.status === 422) {
                 $("#game-display-" + gameObj.currentGameNumber).addClass("game-completed-" + GameStates.WRONG);
                 setNodeHookFromFile($("#mission-hook"), "partials/failure-box/failure-box.html", function () {
                     $("#failure-box-title").text("Die Antwort war falsch!");
@@ -243,7 +243,7 @@ function submitAnswer(answerObj) {
                 }, undefined);
             }
             else {
-                setNodeHookFromFile($("#mission-hook"), "failure-box/failure-box.html", function () {
+                setNodeHookFromFile($("#mission-hook"), "partials/failure-box/failure-box.html", function () {
                     $("#failure-box-title").text("Es ist ein Fehler aufgetreten!");
                 }, undefined);
             }

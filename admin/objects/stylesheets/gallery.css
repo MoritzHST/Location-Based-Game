@@ -1,5 +1,4 @@
 .persisted-image-preview-wrapper {
-    margin: 100px;
     height: 250px;
     border: 1px solid #c5c5c5;
     border-radius: 5px;
@@ -11,15 +10,40 @@
 
 .persisted-image-collection-wrapper {
     display: grid;
-    margin: 0 100px 0 100px;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-row-gap: 25px;
     grid-column-gap: 25px;
     padding: 20px;
     border: 1px solid #c5c5c5;
     border-radius: 5px;
+    margin-left: 100px;
+    margin-right: 100px;
 }
 
 .persisted-image-preview-item {
     height: 100px;
+}
+
+.new-image-container, .preview-image-container {
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-bottom: 100px;
+    grid-column-gap: 20px;
+}
+
+.create-new-image-button, .update-image-button {
+    width: 100%;
+    margin-top: 10px;
+    display: block;
+}
+
+.create-new-image-button:first-of-type, .update-image-button:first-of-type {
+    margin-top: 35px;
+}
+
+.persisted-image-preview-item-container {
+    text-align: center;
+    border: 1px solid #c5c5c5;
 }

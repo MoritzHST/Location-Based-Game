@@ -1,9 +1,46 @@
 // Imagelist
 let persistedImages;
 // maximale Anzahl and Preview Bildern
-let maximumImageAmount = 16;
+let maximumImageAmount = 12;
+// Image Objekt das ggf. gerade erstellt wird
+let newImage;
+// Aktuelles Image für die bearbeitung
+let editImage;
 
 $(document).ready(function () {
+    //Imageobjekt initialisieren
+    newImage = {};
+    $("#submit-new-image-button").on("click", function () {
+        // Namen aus dem Textfeld ans Objekt hängen
+        newImage.name = $("#image-textfield-name").val();
+        $.post("/insert/images", newImage)
+            .done(function () {
+                fetchImages();
+                $("#image-textfield-name").val("");
+            });
+    });
+
+    $("#cancel-new-image-button").on("click", function () {
+        $("#image-dropzone-preview-image").hide();
+        $("#image-dropzone-hint").show();
+        $("#image-textfield-name").val("");
+    });
+
+    $("#submit-update-image-button").on("click", function () {
+        editImage.name = $("#persisted-image-textfield-name").val();
+        $.post("/update/images/" + editImage._id, editImage)
+            .done(function () {
+                fetchImages();
+            });
+    });
+
+    $("#delete-update-image-button").on("click", function () {
+        $.post("/delete/images", {_id: editImage._id})
+            .done(function () {
+                fetchImages();
+            });
+    });
+
     fetchImages();
 
     // Image Upload
@@ -37,12 +74,8 @@ function chooseData(evt) {
     reader.onload = (function (file) {
         $("#image-dropzone-preview-image").show().attr("src", file.target.result);
         $("#image-dropzone-hint").hide();
-        $.post("/insert/images", {
-            data: btoa(file.target.result)
-        })
-            .done(function () {
-                fetchImages()
-            });
+
+        newImage.data = file.target.result;
     });
 
     reader.readAsDataURL(selectedData);
@@ -94,16 +127,33 @@ function updateWrapper(curPagination) {
                 let curImage = $("<img/>", {
                     id: persistedImages[i]._id,
                     src: persistedImages[i].data,
-                    class: "persisted-image-preview-item"
+                    class: "persisted-image-preview-item",
+                    href: "#"
+                });
+
+                let curImageContainer = $("<div/>", {
+                    class: "persisted-image-preview-item-container"
                 });
 
                 curImage.on("click", function () {
-                    $("#persisted-image-preview").attr("src", curImage.attr("src"));
+                    $.get("/find/images", {
+                        _id: $(this).attr("id")
+                    })
+                        .done(function (obj) {
+                            editImage = obj;
+                            updateCurrentImage();
+                        });
                 });
 
-                curImage.appendTo(imageWrapper);
+                curImage.appendTo(curImageContainer);
+                curImageContainer.appendTo(imageWrapper);
             }
         }
         imageWrapper.fadeIn("slow");
     });
+}
+
+function updateCurrentImage() {
+    $("#persisted-image-textfield-name").val(editImage.name);
+    $("#persisted-image-preview").attr("src", editImage.data);
 }

@@ -37,7 +37,6 @@ router.get('/find/images', function (req, res) {
 router.post('/insert/images', function (req, res) {
     logging.Entering("POST /insert/images");
     req.query = handler.getRealRequest(req.query, req.body);
-    req.query.data = atob(req.query.data);
     logging.Parameter("request.query", req.query);
 
     operations.findObject(imageCollection, req.query, function (err, item) {
@@ -73,7 +72,6 @@ router.post('/insert/images', function (req, res) {
 router.post('/update/images/:id', function (req, res) {
     logging.Entering("POST /update/images/:id");
     req.query = handler.getRealRequest(req.query, req.body);
-    req.query.data = atob(req.query.data);
     logging.Parameter("request.query", req.query);
 
     if (handler.checkIfValidQuery(req.query)) {
@@ -110,7 +108,6 @@ router.post('/update/images/:id', function (req, res) {
 router.post('/delete/images', function (req, res) {
     logging.Entering("POST /delete/images");
     req.query = handler.getRealRequest(req.query, req.body);
-    req.query.data = atob(req.query.data);
     logging.Parameter("request.query", req.query);
 
     if (handler.checkIfValidQuery(req.query)) {

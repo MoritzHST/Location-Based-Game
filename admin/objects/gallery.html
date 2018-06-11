@@ -18,12 +18,29 @@
 
 </head>
 <body>
-<div id="image-dropzone" class="dropzone">
-    <strong id="image-dropzone-hint">Bild hier reinziehen</strong>
-    <img id="image-dropzone-preview-image" class="dropzone-preview-image" src="">
+<div class="new-image-container">
+    <div id="image-dropzone" class="dropzone">
+        <strong id="image-dropzone-hint">Bild hier reinziehen</strong>
+        <img id="image-dropzone-preview-image" class="dropzone-preview-image" src="">
+    </div>
+    <div id="image-meta-information">
+        <label for="image-textfield-name"><strong id="image-label-name">Bezeichnung*</strong></label>
+        <input type="text" class="textfield" id="image-textfield-name">
+        <a href="#" id="submit-new-image-button" class="submit-button create-new-image-button">Speichern</a>
+        <a href="#" id="cancel-new-image-button" class="cancel-button create-new-image-button">Abbrechen</a>
+    </div>
 </div>
-<div class="persisted-image-preview-wrapper">
-    <img src="" id="persisted-image-preview" class="persisted-image-preview">
+<div class="preview-image-container">
+    <div class="persisted-image-preview-wrapper">
+        <img src="" id="persisted-image-preview" class="persisted-image-preview">
+    </div>
+    <div>
+        <label for="persisted-image-textfield-name"><strong
+                id="persisted-image-label-name">Bezeichnung*</strong></label>
+        <input type="text" class="textfield" id="persisted-image-textfield-name">
+        <a href="#" id="submit-update-image-button" class="submit-button update-image-button">Speichern</a>
+        <a href="#" id="delete-update-image-button" class="cancel-button update-image-button">Löschen</a>
+    </div>
 </div>
 <div id="persisted-image-collection-wrapper" class="persisted-image-collection-wrapper"></div>
 <div class="pagination"></div>

@@ -86,7 +86,7 @@ router.post('/delete/games', function(req, res) {
         });
     }
 
-    logging.Leaving("POST /delete/games")
+    logging.Leaving("POST /delete/games");
 });
 
 module.exports = router;

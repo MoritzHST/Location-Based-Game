@@ -16,7 +16,7 @@ async function clearCollections() {
 
 function clearCollection(pCollection) {
     return new Promise(resolve => {
-        operations.dropCollection(pCollection, function (err, db) {
+        operations.dropCollection(pCollection, function (err) {
             if (!err) {
                 logging.Info("Collection gelöscht: " + pCollection);
                 operations.createCollection(pCollection, function (err, db) {

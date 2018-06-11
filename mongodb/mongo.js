@@ -29,27 +29,31 @@ if (process.env.conf !== "false") {
         for ( var key in Conf) {
             if (Conf.hasOwnProperty(key)) {
                 for (var line = 0; line < lines.length; line++) {
-                    var keyIndex = lines[line].indexOf(key + ":");
-
-                    if (keyIndex >= 0 && !lines[line].trim().startsWith("#")) {
-                        var value = lines[line].trim().substring(keyIndex + key.length);
-
-                        for (var i = 0; i < delimeters.length; i++) {
-                            if (value.includes(delimeters[i])) {
-                                value = value.substring(0, value.indexOf(delimeters[i])).trim();
-                            }
-                        }
-
-                        logging.Info(Conf[key] + "=" + value);
-                        Conf[key] = value;
-                    }
+                    Conf[key] = extractValue(delimeters, lines, line, key) ? extractValue(delimeters, lines, line, key) : Conf[key];
                 }
             }
         }
     }
 }
 
-function MongoWrapper(database) {
+function extractValue(pDelimeters, pLines, pLine, pKey) {
+    var keyIndex = pLines[pLine].indexOf(pKey + ":");
+
+    if (keyIndex >= 0 && !pLines[pLine].trim().startsWith("#")) {
+        var value = pLines[pLine].trim().substring(keyIndex + pKey.length);
+
+        for (var i = 0; i < pDelimeters.length; i++) {
+            if (value.includes(pDelimeters[i])) {
+                value = value.substring(0, value.indexOf(pDelimeters[i])).trim();
+            }
+        }
+
+        logging.Info(Conf[pKey] + "=" + value);
+        return value;
+    }
+}
+
+function MongoWrapper(database) { // NOSONAR
     logging.Info("Initializing new MongoWrapper");
     this.Client = MongoClient;
     this.Url = 'mongodb://' + Conf.bindIp + ':' + Conf.port;
@@ -57,7 +61,7 @@ function MongoWrapper(database) {
 }
 
 module.exports = {
-    Object : function(database) {
+    Object: function (database) { // NOSONAR
         return new MongoWrapper(database);
     },
     Conf

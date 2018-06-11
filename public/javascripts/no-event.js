@@ -5,7 +5,7 @@ $(document).ready(function () {
     findNextEvent();
 });
 
-MonthNames = [
+let MonthNames = [
     "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"
 ];
 
@@ -18,10 +18,8 @@ function findNextEvent() {
             let curEvent = obj[0];
 
             for (let i in obj) {
-                if (obj.hasOwnProperty(i)) {
-                    if (new Date(obj[i].date).getTime() < new Date(curEvent.date).getTime() && new Date(obj[i].date).getTime() > today) {
-                        curEvent = obj[i];
-                    }
+                if (obj.hasOwnProperty(i) && new Date(obj[i].date).getTime() < new Date(curEvent.date).getTime() && new Date(obj[i].date).getTime() > today) {
+                    curEvent = obj[i];
                 }
             }
             //Das curEvent kann durch initialisierung noch vor heute liegen -> abfangen!

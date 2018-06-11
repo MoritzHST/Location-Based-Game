@@ -3,7 +3,7 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow-x: hidden;
+    overflow-x: hidden; /* NOSONAR */
 }
 
 .host-button, .host-button:hover, .host-color, form a:hover, form a:focus {
@@ -66,8 +66,8 @@ h3 {
         margin-bottom: 0;
     }
 
-    h2:first-of-type {
-        margin-top: 0 !important;
+    h2:first-of-type { /* NOSONAR */
+        margin-top: 0 !important; /* NOSONAR */
     }
 }
 
@@ -81,8 +81,8 @@ h3 {
         margin-bottom: 20px;
     }
 
-    h2:first-of-type {
-        margin-top: 25px !important;
+    h2:first-of-type { /* NOSONAR */
+        margin-top: 25px !important; /* NOSONAR */
     }
 }
 

@@ -3,6 +3,7 @@ const handler = require('../mongodb/handler');
 const router = require('express').Router();
 const logging = require('../helper/logging');
 const userCollection = require('../mongodb/collections').USERS;
+const scorelistHelper = require('../helper/scorelistHelper');
 
 const errorMessage = "Fehler beim auslesen der Highscores";
 
@@ -18,32 +19,19 @@ router.get('/get/scorelist', async function (req, res) {
     logging.Entering("GET get/scorelist");
     operations.findObject(userCollection, null, function (err, items) {
         items.sort(function (a, b) {
-            let ascore = a.score.score;
-            let bscore = b.score.score;
-            if (ascore < bscore) {
-                return 1;
-            }
-            if (ascore > bscore) {
-                return -1;
-            }
-            //beide haben den selbsen Score: sortiere User mit weniger gespielten spielen nach oben
-            let agames = a.score.games;
-            let bgames = b.score.games;
-            if (agames < bgames) {
-                return -1;
-            }
-            if (agames > bgames) {
-                return 1;
+            let compareResult = scorelistHelper.equalsInScore(a.score, b.score);
+            if (compareResult !== 0) {
+                return compareResult;
             }
             //gleicher score und gleich viele Spiele gespielt: sortiere nach Namen
-            return a.name.localeCompare(b.name);
+            return (a.name > b.name) ? 1 : -1;
         });
         let place = 1;
         for (let index = 0; (index < items.length) && (index < scorelistLength); index++) {
             let item = items[index];
             item.token = undefined;
             item.visits = undefined;
-            if (index !== 0 && item.score.score === items[index - 1].score.score) {
+            if (index !== 0 && scorelistHelper.equalsInScore(item.score, items[index - 1].score) === 0) {
                 item.place = items[index - 1].place;
             } else {
                 item.place = place;

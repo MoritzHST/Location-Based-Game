@@ -1,11 +1,11 @@
 // Imagelist
-let persistedImages;
+var persistedImages;
 // maximale Anzahl and Preview Bildern
-let maximumImageAmount = 12;
+var maximumImageAmount = 12;
 // Image Objekt das ggf. gerade erstellt wird
-let newImage;
+var newImage;
 // Aktuelles Image für die bearbeitung
-let editImage;
+var editImage;
 
 $(document).ready(function () {
     //Imageobjekt initialisieren

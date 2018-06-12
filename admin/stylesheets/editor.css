@@ -30,8 +30,26 @@ th.min-column {
     text-align: center;
 }
 
+.table-header {
+    background: #007fff;
+    font-weight: normal;
+    color: #fff !important;
+}
+
+.editor-table, .editor-table > tbody > tr > td {
+    border: 1px solid #003eff !important;
+}
+
+.table-list > tr:nth-child(even) {
+    background: #e2e2ff;
+}
+
+.table-header > th {
+    padding: 5px;
+}
+
 .ui-selected {
-    background: #00CC00;
+    background: #8989ff !important;
     color: white;
 }
 

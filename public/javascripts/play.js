@@ -19,11 +19,12 @@ function init() {
         setNodeHookFromFile($("#content-hook"), "../partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent");
     });
     // Nav-Menü "Score-Board"
-    $("#game-play-highscore-list").on("click", function () {
+    $("#game-play-highscore-list").on("click", function() {
         setNodeHookFromFile($("#content-hook"), "../partials/highscore-list/highscore-list.html", undefined, undefined, "initHighscoreList");
     });
     // Nav-Menü "Logout"
     $("#game-logout").on("click", function() {
+        setNodeHookFromFile($("#failure-hook"), "../partials/play-logout-box/play-logout-box.html");
         setNodeHookFromFile($("#warning-hook"), "../partials/play-warning-box/play-warning-box.html", setLogoutHint);
     });
     // Nav-Menü "Raumplan"
@@ -55,18 +56,17 @@ function setSlideInMenu() {
     let cookie = getObjectFromCookie("session");
     user = cookie.user;
 
-
     $.get("/find/events", {
         "date" : new Date().toJSON().slice(0, 10)
     }).then(function(result) {
         $("#menu").mmenu({
-            navbar: {
-                title: ""
+            navbar : {
+                title : ""
             },
-            navbars: [{
-                position: "top",
-                content: ["prev", "title"]
-            }]
+            navbars : [ {
+                position : "top",
+                content : [ "prev", "title" ]
+            } ]
         });
         $(".mm-navbar__title").html(result.name);
         updateOutline();
@@ -98,7 +98,7 @@ function getObjectFromCookie(pCookieName) {
 function setCookieFromObject(pObj, pCookieName) {
     let cookieStrings = document.cookie.split(";");
 
-    for (let i in cookieStrings) {
+    for ( let i in cookieStrings) {
         if (cookieStrings[i].trim().startsWith(pCookieName + "=")) {
             document.cookie = pCookieName + "=" + btoa(JSON.stringify(pObj));
         }
@@ -110,7 +110,7 @@ function hideWarning() {
 
     if (!loginHintTimer) {
         loginHintTimer = setTimeout(function() {
-            $("#warning-hook").fadeOut("slow", function () {
+            $("#warning-hook").fadeOut("slow", function() {
                 $("#warning-hook").show().html("");
             });
         }, notificationFadeOut);

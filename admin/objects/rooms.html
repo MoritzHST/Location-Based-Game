@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Rooms - LocationBasedGame</title>
+    <link rel="shortcut icon" type="image/png" href="./images/favicon.png"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../stylesheets/jquery-ui.min.css">
+    <link rel="stylesheet" href="../stylesheets/editor.css">
+
+    <script src="../javascripts/jquery.min.js"></script>
+    <script src="../javascripts/jquery-ui.min.js"></script>
+
+    <script src="objects/javascripts/rooms.js"></script>
+
+</head>
+<body>
+<table class="editor-table">
+    <thead>
+    <tr class="table-header">
+        <th class="min-column">
+            BS
+        </th>
+        <th>
+            Raumnummer
+        </th>
+        <th>
+            Link
+        </th>
+    </tr>
+    </thead>
+    <tbody id="rooms-list" class="table-list">
+    </tbody>
+</table>
+<div class="button-group">
+    <a href="#" id="new-room-button" class="create-button"></a>
+    <a href="#" id="delete-room-button" class="remove-button"></a>
+</div>
+<div class="details details-5c">
+    <div class="details-element">
+        <label for="location-roomnumber-textfield"><strong>Raumnummer*</strong></label>
+        <input class="textfield" type="text" id="location-roomnumber-textfield">
+    </div>
+
+    <div class="details-element">
+        <label for="location-identifier-textfield"><strong>Link*</strong></label>
+        <input class="textfield" type="text" id="location-identifier-textfield">
+    </div>
+</div>
+</body>
+</html>

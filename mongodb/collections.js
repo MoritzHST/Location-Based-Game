@@ -1,6 +1,7 @@
 const collectionEnum = {
     EVENTS : "events",
     EVENT_MAPPING : "event_mapping",
+    IMAGES: "images",
     LOCATIONS : "locations",
     LOCATION_MAPPING : "location_mapping",
     EXPOSITIONS : "expositions",

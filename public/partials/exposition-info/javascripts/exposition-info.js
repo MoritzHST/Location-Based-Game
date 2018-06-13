@@ -28,6 +28,7 @@ function initExpositionInfo(obj) {
 
 // Initialisiert HTML-Elemente
 function initViewContent(obj) {
+    console.log(obj);
     // Namen setzen
     if (obj.exposition.name) {
         $("#exposition-info-info-header").html(obj.exposition.name + ": Info");

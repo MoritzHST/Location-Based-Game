@@ -143,8 +143,8 @@ function updateDetails() {
     let detailsFields = $("#location-roomnumber-textfield, #location-identifier-textfield");
     detailsFields.off("input");
     detailsFields.on("input", function () {
-        if ($(selRow).find(".room-bs-cell").hasClass("delete-item") || $(selRow).find(".room-bs-cell").hasClass("new-item"))
-            $(selRow).find(".room-bs-cell").addClass("edit-item");
+        if (!($(selRow).find(".bs").hasClass("delete-item") || $(selRow).find(".bs").hasClass("new-item")))
+            $(selRow).find(".bs").addClass("edit-item");
         selectedRoom.roomnumber = $("#location-roomnumber-textfield").val();
         selectedRoom.identifier = $("#location-identifier-textfield").val();
         $(selRow).find(".room-number-cell").text(selectedRoom.roomnumber);

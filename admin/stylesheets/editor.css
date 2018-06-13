@@ -204,3 +204,31 @@ th.min-column {
     border: 1px solid #e1232b;
     background: #ffe2e2;
 }
+
+.textarea {
+    resize: none;
+    width: 100%;
+    height: 150px;
+}
+
+.control-button {
+    display: inline-block;
+    padding: 8px;
+    border: 1px solid #003eff;
+    background: #007fff;
+    margin: 0;
+    text-decoration: none;
+    color: #fff !important;
+}
+
+.control-button:first-of-type {
+    border-top-left-radius: 4px;
+}
+
+.control-button:last-of-type {
+    border-top-right-radius: 4px;
+}
+
+.dialog {
+    display: grid;
+}

@@ -38,22 +38,8 @@ router.post('/insert/expositions', upload.fields([{
     maxCount: 1
 }, {name: 'imagePaths'}]), function (req, res) {
     logging.Entering("POST /insert/expositions");
+    req.query = handler.getRealRequest(req.query, req.body);
     logging.Parameter("request.query", req.query);
-    //hinterlege Pfad zum File, wenn File hochgeladen wurde
-    const file = req.file;
-    if (file) {
-        if (file["thumbnailPath"]) {
-            req.query["thumbnailPath"] = file["thumbnailPath"].path.replace("..\\public\\", "");
-        }
-        if (file["imagePaths"]) {
-            req.query["imagePaths"] = [];
-            file["imagePaths"].forEach(function (image) {
-                let path = image.path.replace("..\\public\\", "");
-                req.query["imagePaths"].push(path);
-            });
-        }
-
-    }
 
     if (handler.checkIfValidQuery(req.query)) {
         operations.updateObject(expositionCollection, req.query, null, function (err, item) {
@@ -70,17 +56,32 @@ router.post('/insert/expositions', upload.fields([{
 /* Aktualisiert eine Ausstellung mit einer bestimmten id */
 router.post('/update/expositions/:id', upload.single('image'), function (req, res) {
     logging.Entering("POST /update/expositions/:id");
+    req.query = handler.getRealRequest(req.query, req.body);
     logging.Parameter("request.query", req.query);
-    //lösche File wenn ein neues hochgeladen wird
-    const file = req.file;
-    if (file) {
-        fileHelper.deleteFile(expositionCollection, req.params.id, function () {
-            req.query["thumbnailPath"] = file.path.replace("..\\public\\", "");
-            updateRoom(req, res);
+
+    if (handler.checkIfValidQuery(req.query)) {
+
+        // prüfe, ob der eingegebene Name bereits verwendet wird.
+        operations.findObject(expositionCollection, req.query, function (err, item) {
+            if (item && item._id !== req.params.id) {
+                res.status(422).jsonp("Es existiert bereits eine Ausstellung mit diesem Namen.");
+            } else {
+                // wenn alle tests bestanden wurden, versuche die
+                // Ausstellungsinformationen zu updaten.
+
+                operations.updateObject(expositionCollection, handler.idFriendlyQuery({
+                    _id: req.params.id
+                }), req.query, function (err, item) {
+                    handler.dbResult(err, res, item, "Die Ausstellung " + req.params.id + " konnte nicht mit " + JSON.stringify(req.query).replace(/\"/g, '') + " aktualisiert werden.");
+                });
+            }
         });
     } else {
-        updateRoom(req, res);
+        res.status(422).jsonp({
+            "error": "Die übergebenen Parameter sind ungültig"
+        });
     }
+
     logging.Leaving("POST /update/expositions/:id");
 });
 

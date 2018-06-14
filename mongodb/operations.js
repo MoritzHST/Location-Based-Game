@@ -60,7 +60,7 @@ module.exports = {
                     }
                 }
             });
-            logging.Leaving("generateToken");
+            logging.Leaving("findObject");
         });
     },
 

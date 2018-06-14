@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    $(".ui-button").prop("disabled", false);
     $.get("/find/games").done(function(result) {
         for (event in result) {
             var tableRow = $("<tr></tr>");

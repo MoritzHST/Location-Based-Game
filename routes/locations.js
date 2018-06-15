@@ -10,8 +10,8 @@ const eventCollection = require('../mongodb/collections').EVENTS;
 const fileHelper = require('../mongodb/fileHelper');
 const multer = require('multer');
 const upload = multer({
-    dest : '../public/uploads/images/exposition',
-    fileFilter : function(req, file, cb) {
+    dest: '../public/uploads/images/exposition',
+    fileFilter: function (req, file, cb) {
         if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
             return cb(null, false);
         }
@@ -123,14 +123,14 @@ function updateLocation(req, res) {
         }), req.query, function(err, item) {
             if (!err && item.value) {
                 operations.updateObject(eventCollection, {
-                    "locationMappings" : {
-                        "$elemMatch" : {
-                            "location._id" : new ObjectID(req.params.id)
+                    "locationMappings": {
+                        "$elemMatch": {
+                            "location._id": new ObjectID(req.params.id)
                         }
                     }
                 }, {
-                    "locationMappings.$.location" : item.value
-                }, function(event_err, event_item) {
+                    "locationMappings.$.location": item.value
+                }, function (event_err, event_item) {
                     handler.dbResult(event_err, res, event_item, "Das Item " + item + " konnte nicht mit " + JSON.stringify(req.query).replace(/\"/g, '') + " geupdatet werden.");
                 });
             } else {

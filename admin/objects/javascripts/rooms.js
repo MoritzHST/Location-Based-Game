@@ -31,7 +31,7 @@ $(document).ready(function () {
                     })
                         .done(function () {
 
-                        });
+                        })
                         .fail(function () {
                             failedItems.push(newList[i]);
                         }));

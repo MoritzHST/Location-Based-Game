@@ -5,6 +5,7 @@ var pseudoId = 0;
 var failedItems;
 
 $(document).ready(function () {
+    $(".ui-button").prop("disabled", false);
     let saveButton = $("#button-save");
     saveButton.off("click");
     saveButton.on("click", function () {
@@ -19,12 +20,12 @@ $(document).ready(function () {
                         roomnumber: newList[i].roomnumber,
                         identifier: newList[i].identifier
                     })
-                        .done(function () {
+                    .done(function () {
 
-                        })
-                        .fail(function () {
-                            failedItems.push(newList[i]);
-                        }));
+                    })
+                    .fail(function () {
+                        failedItems.push(newList[i]);
+                    }));
             }
             else {
                 failedItems.push(newList[i]);
@@ -38,12 +39,12 @@ $(document).ready(function () {
                         roomnumber: updList[i].roomnumber,
                         identifier: updList[i].identifier
                     })
-                        .done(function () {
+                    .done(function () {
 
-                        })
-                        .fail(function () {
-                            failedItems.push(updList[i]);
-                        }));
+                    })
+                    .fail(function () {
+                        failedItems.push(updList[i]);
+                    }));
             }
             else {
                 failedItems.push(updList[i]);
@@ -51,7 +52,7 @@ $(document).ready(function () {
 
             $.when(calls).then(function () {
                 init();
-            })
+            });
         }
     });
 
@@ -81,11 +82,11 @@ $(document).ready(function () {
         linkCell.appendTo(tableRow);
         tableRow.appendTo("#rooms-list");
 
-        //onclick registereiren
+        // onclick registereiren
         tableRow.on("click", function () {
             registerTableRow(this);
         });
-        //click triggern
+        // click triggern
         tableRow.click();
     });
 

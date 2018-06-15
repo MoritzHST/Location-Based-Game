@@ -5,12 +5,13 @@ var newMap = new Map();
 var updateMap = new Map();
 var failedItems;
 var pseudoId = 0;
-//Bilder Pro Pagination
+// Bilder Pro Pagination
 var maximumImageAmount = 8;
-//BIlder die Pro ausstellung erlaubt sind
+// BIlder die Pro ausstellung erlaubt sind
 var maximumImageItems = 5;
 
 $(document).ready(function () {
+    $(".ui-button").prop("disabled", false);
     let saveButton = $("#button-save");
     saveButton.off("click");
     saveButton.on("click", function () {
@@ -19,7 +20,7 @@ $(document).ready(function () {
         let newList = Array.from(newMap.values());
         let updList = Array.from(updateMap.values());
         for (let i in newList) {
-            if (newList.hasOwnProperty(i) /*&& isValid(newList[i])*/) {
+            if (newList.hasOwnProperty(i) /* && isValid(newList[i]) */) {
                 calls.push(
                     $.post("/insert/expositions", {
                         name: newList[i].name,
@@ -40,7 +41,7 @@ $(document).ready(function () {
         }
 
         for (let i in updList) {
-            if (updList.hasOwnProperty(i) /*&& isValid(updList[i])*/) {
+            if (updList.hasOwnProperty(i) /* && isValid(updList[i]) */) {
                 console.log(updList[i]);
                 calls.push(
                     $.post("/update/expositions/" + updList[i]._id, {
@@ -94,11 +95,11 @@ $(document).ready(function () {
         descriptionCell.appendTo(tableRow);
         tableRow.appendTo("#expositions-list");
 
-        //onclick registereiren
+        // onclick registereiren
         tableRow.on("click", function () {
             registerTableRow(this);
         });
-        //click triggern
+        // click triggern
         tableRow.click();
     });
 
@@ -296,7 +297,7 @@ function fetchImages() {
 
                 curPagination.appendTo($(".pagination"));
 
-                //erster Durchlauf? Einmal anklicken
+                // erster Durchlauf? Einmal anklicken
                 if (i === 1) {
                     curPagination.click();
                 }
@@ -307,7 +308,7 @@ function fetchImages() {
 function updateWrapper(curPagination) {
     let imageWrapper = $("#image-collection-wrapper");
     let imageMinCount = (curPagination - 1) * maximumImageAmount;
-    let imageMaxCount = (curPagination * maximumImageAmount) - 1;
+    let imageMaxCount = curPagination * maximumImageAmount - 1;
 
 
     imageWrapper.fadeOut("slow", function () {

@@ -1,22 +1,23 @@
 const operations = require('../mongodb/operations');
 const handler = require('../mongodb/handler');
+const ObjectID = require('mongodb').ObjectID;
 const router = require('express').Router();
 const logging = require('../helper/logging');
 
 const locationCollection = require('../mongodb/collections').LOCATIONS;
+const eventCollection = require('../mongodb/collections').EVENTS;
 
 const fileHelper = require('../mongodb/fileHelper');
 const multer = require('multer');
-const upload = multer(
-    {
-        dest: '../public/uploads/images/exposition',
-        fileFilter: function (req, file, cb) {
-            if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-                return cb(null, false);
-            }
-            cb(null, true);
+const upload = multer({
+    dest : '../public/uploads/images/exposition',
+    fileFilter : function(req, file, cb) {
+        if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+            return cb(null, false);
         }
-    });
+        cb(null, true);
+    }
+});
 
 /* Global */
 
@@ -64,7 +65,7 @@ router.post('/insert/locations', upload.single('image'), function(req, res) {
     logging.Leaving("POST /insert/locations");
 });
 
-/* Aktualisiert eine Location mit einer bestimmten id*/
+/* Aktualisiert eine Location mit einer bestimmten id */
 router.post('/update/locations/:id', upload.single('image'), function(req, res) {
     logging.Entering("POST /update/locations/:id");
 
@@ -120,7 +121,21 @@ function updateLocation(req, res) {
         operations.updateObject(locationCollection, handler.idFriendlyQuery({
             _id : req.params.id
         }), req.query, function(err, item) {
-            handler.dbResult(err, res, item, "Das Item " + req.params.id + " konnte nicht mit " + JSON.stringify(req.query).replace(/\"/g, '') + " geupdatet werden.");
+            if (!err && item.value) {
+                operations.updateObject(eventCollection, {
+                    "locationMappings" : {
+                        "$elemMatch" : {
+                            "location._id" : new ObjectID(req.params.id)
+                        }
+                    }
+                }, {
+                    "locationMappings.$.location" : item.value
+                }, function(event_err, event_item) {
+                    handler.dbResult(event_err, res, event_item, "Das Item " + item + " konnte nicht mit " + JSON.stringify(req.query).replace(/\"/g, '') + " geupdatet werden.");
+                });
+            } else {
+                handler.dbResult(err, res, item, "Das Item " + req.params.id + " konnte nicht mit " + JSON.stringify(req.query).replace(/\"/g, '') + " geupdatet werden.");
+            }
         });
     } else {
         res.status(422).jsonp({

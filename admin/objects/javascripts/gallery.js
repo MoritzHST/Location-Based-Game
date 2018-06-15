@@ -8,6 +8,7 @@ var newImage;
 var editImage;
 
 $(document).ready(function () {
+    $(".ui-button").prop("disabled", false);
     //Imageobjekt initialisieren
     newImage = {};
     $("#submit-new-image-button").on("click", function () {

@@ -1,6 +1,6 @@
-.overview-table-cell-container {
+.overview-table-cell-container { /* NOSONAR */
     display: grid;
-    grid-template-columns: 1fr 3fr 8fr;
+    grid-template-columns: 1fr 3fr 8fr; /* NOSONAR */
     min-height: 80px;
     width: 100%;
     border: 1px solid #BBBBBB;
@@ -9,9 +9,6 @@
 
 .overview-table-cell-container:nth-last-of-type(1) {
     margin-top: 15px;
-}
-
-.overview-table-cell-location-state {
 }
 
 .overview-table-cell-location-image-wrapper {

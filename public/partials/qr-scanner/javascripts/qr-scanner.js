@@ -74,7 +74,7 @@ function onCodeScanned(content) {
  * @param cameras List der möglichen Kameras
  * @constructor
  */
-function CameraList(cameras) {
+function CameraList(cameras) { // NOSONAR
     this.cameras = cameras;
     this.currentCam = 0;
 

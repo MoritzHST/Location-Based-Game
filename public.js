@@ -103,7 +103,16 @@ router.use('/play', function (req, res, next) {
     if (!req.session || !req.session.user) {
         res.status(302).redirect('/sign-up');
     } else {
-        next();
+        operations.findObject(userCollection, {
+            name: req.session.user.name,
+            token: req.session.user.token
+        }, function (err, user) {
+            if (err || !user) {
+                res.status(302).redirect('/sign-out');
+            } else {
+                next();
+            }
+        });
     }
 });
 

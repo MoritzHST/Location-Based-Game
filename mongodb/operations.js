@@ -60,7 +60,7 @@ module.exports = {
                     }
                 }
             });
-            logging.Leaving("generateToken");
+            logging.Leaving("findObject");
         });
     },
 
@@ -68,10 +68,10 @@ module.exports = {
      * --- pCollection --> pObject -->
      */
     updateObject: function (pCollection, pObject, pQuery, pCallback) {
-    	logging.Entering("updateObject");
-    	logging.Parameter("pCollection", pCollection);
-    	logging.Parameter("pObject", pObject);
-    	logging.Parameter("pQuery", pQuery);
+        logging.Entering("updateObject");
+        logging.Parameter("pCollection", pCollection);
+        logging.Parameter("pObject", pObject);
+        logging.Parameter("pQuery", pQuery);
         return new Promise(resolve => {
             let database = mongo.Object();
             database.Client.connect(database.Url, function (error, result) {
@@ -99,9 +99,9 @@ module.exports = {
      * erfolgreich false, wenn löschen nicht erfolgreich
      */
     deleteObjects: function (pCollection, pObjects, pCallback) {
-    	logging.Entering("deleteObjects");
-    	logging.Parameter("pCollection", pCollection);
-    	logging.Parameter("pObjects", pObjects);
+        logging.Entering("deleteObjects");
+        logging.Parameter("pCollection", pCollection);
+        logging.Parameter("pObjects", pObjects);
         return new Promise(resolve => {
             let database = mongo.Object();
             database.Client.connect(database.Url, function (error, result) {
@@ -129,8 +129,8 @@ module.exports = {
      * Name der neuen Datenbank-Collection
      */
     createCollection: function (pCollection, pCallback) {
-    	logging.Entering("createCollection");
-    	logging.Parameter("pCollection", pCollection);
+        logging.Entering("createCollection");
+        logging.Parameter("pCollection", pCollection);
         return new Promise(resolve => {
             let database = mongo.Object();
             database.Client.connect(database.Url, function (error, result) {
@@ -155,8 +155,8 @@ module.exports = {
      * Collections zurückgegeben. pCollection --> pCallback -->
      */
     getCollection: function (pCollection, pCallback) {
-    	logging.Entering("getCollection");
-    	logging.Parameter("pCollection", pCollection);
+        logging.Entering("getCollection");
+        logging.Parameter("pCollection", pCollection);
         return new Promise(resolve => {
             let database = mongo.Object();
             if (pCollection) {
@@ -195,8 +195,8 @@ module.exports = {
      * der zu löschenden Datenbank pCallback -->
      */
     dropCollection: function (pCollection, pCallback) {
-    	logging.Entering("dropCollection");
-    	logging.Parameter("pCollection", pCollection);
+        logging.Entering("dropCollection");
+        logging.Parameter("pCollection", pCollection);
         let database = mongo.Object();
         database.Client.connect(database.Url, function (error, result) {
             if (error) {
@@ -212,7 +212,7 @@ module.exports = {
     },
 
     isReady: function (pCallback) {
-    	logging.Entering("isReady");
+        logging.Entering("isReady");
         return new Promise(resolve => {
             const database = mongo.Object();
             logging.Info("Connecting to " + database.Url + "...");

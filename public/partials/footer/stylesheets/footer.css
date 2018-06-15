@@ -23,7 +23,7 @@
 
 .host-privacy > a, .host-privacy > a:hover, .host-impressum > a, .host-impressum > a:hover {
     color: inherit !important;
-    text-decoration: none !important;
+    text-decoration: none !important; /* NOSONAR */
     font-size: inherit;
     letter-spacing: inherit;
     font-weight: inherit;

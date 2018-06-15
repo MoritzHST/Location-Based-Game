@@ -7,6 +7,22 @@ const conf = require('./mongo').Conf;
 
 let isReady = false;
 let iterator = 0;
+
+function createCollectionsFromList(pCollection) {
+    for (let collection in pCollection) {
+        if (pCollection.hasOwnProperty(collection)) {
+            let name = pCollection[collection];
+            operations.createCollection(name, function (err, db) {
+                if (!err) {
+                    logging.Info(db.s.name + " erfolgreich erstellt");
+                } else {
+                    logging.Error(err);
+                }
+            });
+        }
+    }
+}
+
 // 10x versuchen mit der MongoDB zu verbinden
 // In 5 Sekunden Interalle unterteilt
 while (isReady === false && iterator < conf.connectionAttempts) {
@@ -16,16 +32,9 @@ while (isReady === false && iterator < conf.connectionAttempts) {
             if (pObj) {
                 isReady = true;
                 logging.Info("Connection successful");
-                for (var collection in collections) {
-                    var name = collections[collection];
-                    operations.createCollection(name, function (err, db) {
-                        if (!err) {
-                            logging.Info(db.s.name + " erfolgreich erstellt");
-                        } else {
-                            logging.Error(err);
-                        }
-                    });
-                }
+
+                createCollectionsFromList(collections);
+
                 return;
             }
             logging.Error("Could not connect to MongoDB, retrying in 5 seconds");

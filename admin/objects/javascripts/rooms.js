@@ -12,6 +12,7 @@ var failedItems;
 var rowId;
 
 $(document).ready(function () {
+    $(".ui-button").prop("disabled", false);
     //Save-Button neu registrieren
     let saveButton = $("#button-save");
     saveButton.off("click");
@@ -30,7 +31,7 @@ $(document).ready(function () {
                     })
                         .done(function () {
 
-                        })
+                        });
                         .fail(function () {
                             failedItems.push(newList[i]);
                         }));
@@ -42,7 +43,6 @@ $(document).ready(function () {
         //geänderte RÄume persistieren
         for (let i in updList) {
             if (updList.hasOwnProperty(i) && isValid(updList[i])) {
-                console.log("validation passed");
                 calls.push(
                     $.post("/update/locations/" + updList[i]._id, {
                         roomnumber: updList[i].roomnumber,
@@ -58,10 +58,11 @@ $(document).ready(function () {
             else {
                 failedItems.push(updList[i]);
             }
+
+            $.when(calls).done(function () {
+                init();
+            });
         }
-        $.when(calls).done(function () {
-            init();
-        });
     });
 
     $("#new-room-button").on("click", function () {

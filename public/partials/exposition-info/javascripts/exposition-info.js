@@ -200,7 +200,11 @@ function initGameFinishedView(obj) {
     $("#exposition-scan-qr").hide();
 
     // Spiel beendet -> Infotext
-    setNodeHookFromFile($("#mission-hook"), 'partials/game-finished-view/game-finished-view.html');
+    setNodeHookFromFile($("#mission-hook"), 'partials/game-finished-view/game-finished-view.html', function () {
+        $("#btn_home").on("click", function () {
+            location.href = "/";
+        });
+    });
 
     $(".current-game-display-frame").on("click", function () {
         if ($(this).hasClass("game-completed")) {

@@ -31,8 +31,12 @@ function init() {
     $("#game-room-map").on("click", function() {
         setNodeHookFromFile($("#content-hook"), "../partials/room-map/room-map.html", undefined, undefined, "initRoomMap");
     });
+    // Nav-Menü "Spielanleitung"
+    $("#game-manual").on("click", function () {
+        setNodeHookFromFile($("#content-hook"), "../partials/manual/manual.html");
+    });
     // Nav-Menü "Datenschutz"
-    $("#game-privacy").on("click", function() {
+    $("#game-privacy").on("click", function () {
         setNodeHookFromFile($("#content-hook"), "../partials/privacy/privacy.html");
     });
     // Nav-Menü "Impressum"

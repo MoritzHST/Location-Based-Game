@@ -6,6 +6,8 @@ var expositionList;
 var persistedImages;
 //Neue Ausstellungen als Map
 var newMap = new Map();
+//Ausstellungen die gelöscht werden sollen
+var delMap = new Map();
 //Bearbeitete, Persistierte Ausstellungen als Map
 var updateMap = new Map();
 //Fehlgeschlagene Items bei der Persitierung
@@ -27,6 +29,7 @@ $(document).ready(function () {
         let calls = [];
         let newList = Array.from(newMap.values());
         let updList = Array.from(updateMap.values());
+        let delList = Array.from(delMap.values());
         for (let i in newList) {
             if (newList.hasOwnProperty(i) /* && isValid(newList[i]) */) {
                 calls.push(
@@ -67,11 +70,26 @@ $(document).ready(function () {
             else {
                 failedItems.push(updList[i]);
             }
-
-            $.when.apply($, calls).done(function () {
-                init();
-            });
         }
+        for (let i in delList) {
+            if (delList.hasOwnProperty(i)) {
+                calls.push(
+                    $.post("/delete/expositions", {_id: delList[i]._id})
+                        .done(function () {
+
+                        })
+                        .fail(function () {
+                            failedItems.push(updList[i]);
+                        }));
+            }
+            else {
+                failedItems.push(updList[i]);
+            }
+        }
+
+        $.when.apply($, calls).done(function () {
+            init();
+        });
     });
 
     $("#new-exposition-button").on("click", function () {
@@ -88,6 +106,12 @@ $(document).ready(function () {
         appendRow(selectedExposition);
         //click triggern
         $("#" + (rowId - 1)).click();
+    });
+
+    $("#delete-exposition-button").on("click", function () {
+        selectedExposition.remove = true;
+        $(".ui-selected").find(".bs").addClass("delete-item");
+        delMap.set(selectedExposition._id, selectedExposition);
     });
 
     $("#select-image-dialog").dialog({
@@ -390,12 +414,25 @@ function updateImageContainer(assignedImageContainer) {
 }
 
 function storeOld() {
-    if (selectedExposition) {
-        if (selectedExposition._id.startsWith("pseudo-")) {
+    if (!selectedExposition) {
+        return;
+    }
+
+    if (selectedExposition._id.startsWith("pseudo-")) {
+        if (selectedExposition.remove) {
+            newMap.remove(selectedExposition._id);
+        }
+        else {
             newMap.set(selectedExposition._id, selectedExposition);
         }
-        else if (selectedExposition._id) {
+    }
+    else if (selectedExposition._id) {
+        if (selectedExposition.remove) {
+            updateMap.remove(selectedExposition._id);
+        }
+        else {
             updateMap.set(selectedExposition._id, selectedExposition);
         }
     }
+
 }

@@ -85,14 +85,17 @@ router.post('/update/expositions/:id', function (req, res) {
 /* Löscht eine Ausstellung */
 router.post('/delete/expositions', function (req, res) {
     logging.Entering("POST /delete/expositions");
+
+    req.query = handler.getRealRequest(req.query, req.body);
+
     logging.Parameter("request.query", req.query);
 
     if (handler.checkIfValidQuery(req.query)) {
         operations.deleteObjects(expositionCollection, req.query, function (err, item) {
             if (!err) {
-                operations.updateObjects(eventCollection, {"locationMappings.location._id": new ObjectID(req.query._id)}, {
+                operations.updateObjects(eventCollection, {"locationMappings.exposition._id": new ObjectID(req.query._id)}, {
                     $unset: {
-                        "locationMappings.$.location": ""
+                        "locationMappings.$": ""
                     }
                 }, function (event_err, event_item) {
                     handler.dbResult(event_err, res, event_item, "Das Item " + item + " konnte nicht mit " + JSON.stringify(req.query).replace(/\"/g, '') + " geupdatet werden.");

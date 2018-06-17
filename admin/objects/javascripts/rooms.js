@@ -2,6 +2,8 @@
 var selectedRoom;
 //Neue Räume als Map
 var newMap = new Map();
+//Räume die gelöscht werden sollen als Map
+var delMap = new Map();
 //Bearbeitete, persistierte Räume als Map
 var updateMap = new Map();
 //Liste der Räume (Tabelle als Objektliste)
@@ -21,6 +23,8 @@ $(document).ready(function () {
         let calls = [];
         let newList = Array.from(newMap.values());
         let updList = Array.from(updateMap.values());
+        let delList = Array.from(delMap.values());
+
         //Neue Räume persistieren
         for (let i in newList) {
             if (newList.hasOwnProperty(i) && isValid(newList[i])) {
@@ -58,11 +62,27 @@ $(document).ready(function () {
             else {
                 failedItems.push(updList[i]);
             }
-
-            $.when.apply($, calls).done(function () {
-                init();
-            });
         }
+        //Räume löschen
+        for (let i in delList) {
+            if (delList.hasOwnProperty(i)) {
+                calls.push(
+                    $.post("/delete/locations", {_id: delList[i]._id})
+                        .done(function () {
+
+                        })
+                        .fail(function () {
+                            failedItems.push(updList[i]);
+                        }));
+            }
+            else {
+                failedItems.push(updList[i]);
+            }
+        }
+
+        $.when.apply($, calls).done(function () {
+            init();
+        });
     });
 
     $("#new-room-button").on("click", function () {
@@ -78,6 +98,12 @@ $(document).ready(function () {
         appendRow(selectedRoom);
         //click triggern
         $("#" + (rowId - 1)).click();
+    });
+
+    $("#delete-room-button").on("click", function () {
+        selectedRoom.remove = true;
+        $(".ui-selected").find(".bs").addClass("delete-item");
+        delMap.set(selectedRoom._id, selectedRoom);
     });
 
     init();
@@ -113,7 +139,7 @@ function appendRow(pObj) {
     });
     rowId++;
     var bsCell = $("<td/>", {
-        class: "room-bs-cell bs" + (pObj.isNew ? "new-item" : "")
+        class: "room-bs-cell bs " + (pObj.isNew ? "new-item" : "")
     });
     var roomCell = $("<td/>", {
         text: pObj.roomnumber,
@@ -166,13 +192,25 @@ function updateDetails() {
 
 //Funktion, die änderungen am selectedRoom in einer Map nachhält
 function storeOld() {
-    if (selectedRoom) {
-        //Objekt ist neu -> hat keine Id -> hat aber isNew-Flag
-        if (selectedRoom.isNew) {
+    if (!selectedRoom) {
+        return;
+    }
+
+    //Objekt ist neu -> hat keine Id -> hat aber isNew-Flag
+    if (selectedRoom.isNew) {
+        if (selectedRoom.remove) {
+            newMap.remove(selectedRoom._id)
+        }
+        else {
             newMap.set(selectedRoom._id, selectedRoom);
         }
-        //Objekt ist persistiert -> hat also ID
-        else if (selectedRoom._id) {
+    }
+    //Objekt ist persistiert -> hat also ID
+    else if (selectedRoom._id) {
+        if (selectedRoom.remove) {
+            updateMap.remove(selectedRoom._id);
+        }
+        else {
             updateMap.set(selectedRoom._id, selectedRoom);
         }
     }

@@ -72,7 +72,17 @@ router.post('/delete/locations', function (req, res) {
 
     if (handler.checkIfValidQuery(req.query)) {
         operations.deleteObjects(locationCollection, req.query, function (err, item) {
-            handler.dbResult(err, res, item, "Die Items mit den Eigenschaften " + JSON.stringify(req.query).replace(/\"/g, '') + " konnten nicht gelöscht werden.");
+            if (!err) {
+                operations.updateObjects(eventCollection, {"locationMappings.location._id": new ObjectID(req.query._id)}, {
+                    $unset: {
+                        "locationMappings.$.location": ""
+                    }
+                }, function (event_err, event_item) {
+                    handler.dbResult(event_err, res, event_item, "Das Item " + item + " konnte nicht mit " + JSON.stringify(req.query).replace(/\"/g, '') + " geupdatet werden.");
+                });
+            } else {
+                handler.dbResult(err, res, item, "Das Item " + req.params.id + " konnte nicht mit " + JSON.stringify(req.query).replace(/\"/g, '') + " geupdatet werden.");
+            }
         });
     } else {
         res.status(422).jsonp({

@@ -59,7 +59,7 @@ $(document).ready(function () {
                 failedItems.push(updList[i]);
             }
 
-            $.when(calls).done(function () {
+            $.when.apply($, calls).done(function () {
                 init();
             });
         }

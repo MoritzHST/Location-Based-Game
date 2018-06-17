@@ -81,7 +81,22 @@ $(document).ready(function () {
         }
 
         $.when.apply($, calls).done(function () {
-            init();
+            init()
+                .then(function () {
+                    for (let i in failedItems) {
+                        if (failedItems[i].isNew) {
+                            appendRow(failedItems[i]);
+                            $("#" + (rowId - 1)).addClass("failed");
+                        }
+                        else {
+                            for (let j in roomList) {
+                                if (roomList[j]._id && roomList[j]._id.toString() === failedItems[i]._id.toString()) {
+                                    $("#" + j).addClass("failed");
+                                }
+                            }
+                        }
+                    }
+                });
         });
     });
 
@@ -110,15 +125,18 @@ $(document).ready(function () {
 });
 
 
-function init() {
-    $(".room-data-row").remove();
-    $.get("/find/locations").done(function (result) {
-        for (event in result) {
-            appendRow(result[event]);
-        }
-    }).fail(function () {
-        // Add fail logic here
-    });
+async function init() {
+    return new Promise(resolve => {
+        $(".room-data-row").remove();
+        $.get("/find/locations").done(function (result) {
+            for (event in result) {
+                appendRow(result[event]);
+            }
+            resolve(true);
+        }).fail(function () {
+            resolve(false);
+        });
+    })
 }
 
 function appendRow(pObj) {

@@ -31,7 +31,7 @@ $(document).ready(function () {
         let updList = Array.from(updateMap.values());
         let delList = Array.from(delMap.values());
         for (let i in newList) {
-            if (newList.hasOwnProperty(i) /* && isValid(newList[i]) */) {
+            if (newList.hasOwnProperty(i) && isValid(newList[i])) {
                 calls.push(
                     $.post("/insert/expositions", {
                         name: newList[i].name,
@@ -52,7 +52,7 @@ $(document).ready(function () {
         }
 
         for (let i in updList) {
-            if (updList.hasOwnProperty(i) /* && isValid(updList[i]) */) {
+            if (updList.hasOwnProperty(i) && isValid(updList[i])) {
                 calls.push(
                     $.post("/update/expositions/" + updList[i]._id, {
                         name: updList[i].name,
@@ -88,7 +88,22 @@ $(document).ready(function () {
         }
 
         $.when.apply($, calls).done(function () {
-            init();
+            init()
+                .then(function () {
+                    for (let i in failedItems) {
+                        if (failedItems[i].isNew) {
+                            appendRow(failedItems[i]);
+                            $("#" + (rowId - 1)).addClass("failed");
+                        }
+                        else {
+                            for (let j in expositionList) {
+                                if (expositionList[j]._id && expositionList[j]._id.toString() === failedItems[i]._id.toString()) {
+                                    $("#" + j).addClass("failed");
+                                }
+                            }
+                        }
+                    }
+                });
         });
     });
 
@@ -226,14 +241,19 @@ $(document).ready(function () {
 });
 
 function init() {
-    $(".exposition-data-row").remove();
-    $.get("/find/expositions").done(function (result) {
-            for (event in result) {
-                appendRow(result[event]);
+    return new Promise(resolve => {
+
+
+        $(".exposition-data-row").remove();
+        $.get("/find/expositions").done(function (result) {
+                for (event in result) {
+                    appendRow(result[event]);
+                }
+                resolve(true);
             }
-        }
-    ).fail(function () {
-        // Add fail logic here
+        ).fail(function () {
+            resolve(false);
+        });
     });
 }
 
@@ -291,6 +311,7 @@ function updateDetails() {
     let detailsFields = $("#exposition-name-textfield, #exposition-descirption-textfield");
     detailsFields.off("input");
     detailsFields.on("input", function () {
+        checkInput();
         if (!($(selRow).find(".bs").hasClass("delete-item") || $(selRow).find(".bs").hasClass("new-item")))
             $(selRow).find(".bs").addClass("edit-item");
         selectedExposition.name = $("#exposition-name-textfield").val();
@@ -435,4 +456,37 @@ function storeOld() {
         }
     }
 
+}
+
+// Input überprüfen
+function checkInput() {
+    let curName = $("#exposition-name-textfield");
+    let curDescription = $("#exposition-description-textfield");
+
+    if (!curName.val() || !curName.val().trim() === "") {
+        curName.addClass("textfield-invalid");
+    }
+    else {
+        curName.removeClass("textfield-invalid");
+    }
+
+    if (!curDescription.val() || !curDescription.val().trim() === "") {
+        curDescription.addClass("textfield-invalid");
+    }
+    else {
+        curDescription.removeClass("textfield-invalid");
+    }
+}
+
+// Bezeichnung und Beschreibung darf nicht leer sein
+function isValid(pObj) {
+    if (!pObj.name || pObj.name.trim() === "") {
+        return false;
+    }
+
+    if (!pObj.description || pObj.description.trim() === "") {
+        return false;
+    }
+
+    return true;
 }

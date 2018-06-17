@@ -208,9 +208,9 @@ th.min-column {
     width: 100%;
 }
 
-.textfield.textfield-invalid {
-    border: 1px solid #e1232b;
-    background: #ffe2e2;
+.textfield.textfield-invalid, tr.failed {
+    border: 1px solid #e1232b !important;
+    background: #ffe2e2 !important;
 }
 
 .textarea {

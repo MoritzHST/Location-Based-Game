@@ -240,3 +240,11 @@ th.min-column {
 .dialog {
     display: grid;
 }
+
+.grid-columns-2 {
+    grid-column: span 2;
+}
+
+.span {
+    width: 100%;
+}

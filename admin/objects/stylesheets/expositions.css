@@ -22,6 +22,9 @@
 
 .image-preview {
     max-height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }
 
 .image-collection-wrapper {
@@ -69,10 +72,15 @@
     border: 1px solid #c5c5c5;
     border-radius: 5px;
     height: 100px;
+    display: inline-block;
 }
 
 .assigned-image-item {
     max-height: 100%;
     max-width: 20%;
     border: 1px solid #c5c5c5;
+}
+
+.image-item {
+    display: inline-block;
 }

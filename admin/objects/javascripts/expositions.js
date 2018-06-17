@@ -1,10 +1,17 @@
+//In der Tabelle gewählte Ausstellung
 var selectedExposition;
-var expositions;
+//Liste der Ausstellungen (Tabelle als Objektliste)
+var expositionList;
+//Liste an Bildern, die bereits in der DB vorhanden sind
 var persistedImages;
+//Neue Ausstellungen als Map
 var newMap = new Map();
+//Bearbeitete, Persistierte Ausstellungen als Map
 var updateMap = new Map();
+//Fehlgeschlagene Items bei der Persitierung
 var failedItems;
-var pseudoId = 0;
+//Interne Nummerierung der einzelnen Tabellenreihen (Synchron mit roomsList-Adresse)
+var rowId;
 // Bilder Pro Pagination
 var maximumImageAmount = 8;
 // BIlder die Pro ausstellung erlaubt sind
@@ -12,6 +19,7 @@ var maximumImageItems = 5;
 
 $(document).ready(function () {
     $(".ui-button").prop("disabled", false);
+    //Save-Button neu registrieren
     let saveButton = $("#button-save");
     saveButton.off("click");
     saveButton.on("click", function () {
@@ -42,7 +50,6 @@ $(document).ready(function () {
 
         for (let i in updList) {
             if (updList.hasOwnProperty(i) /* && isValid(updList[i]) */) {
-                console.log(updList[i]);
                 calls.push(
                     $.post("/update/expositions/" + updList[i]._id, {
                         name: updList[i].name,
@@ -61,46 +68,26 @@ $(document).ready(function () {
                 failedItems.push(updList[i]);
             }
 
-            $.when(calls).then(function () {
+            $.when(calls).done(function () {
                 init();
             })
         }
     });
 
     $("#new-exposition-button").on("click", function () {
+        //Einmal das alte Objekt speichern
+        storeOld();
+        //Neu initialisieren und flaggen
         selectedExposition = {};
+        selectedExposition.isNew = true;
+        //Fake-ID geben die nicht weiter geändert wird, um es in Map ablegen zu können
+        selectedExposition._id = "pseudoId-" + rowId;
+        selectedExposition.imagePaths = [];
         updateDetails();
 
-        var tableRow = $("<tr/>", {
-            id: "pseudo-" + pseudoId,
-            class: "exposition-data-row"
-        });
-        pseudoId++;
-
-        var bsCell = $("<td/>", {
-            class: "exposition-bs-cell bs new-item",
-            text: " "
-        });
-        var nameCell = $("<td/>", {
-            class: "exposition-name-cell"
-        });
-        var descriptionCell = $("<td/>", {
-            class: "exposition-description-cell"
-        });
-        selectedExposition._id = tableRow.prop("id");
-        expositions[tableRow.prop("id")] = selectedExposition;
-
-        bsCell.appendTo(tableRow);
-        nameCell.appendTo(tableRow);
-        descriptionCell.appendTo(tableRow);
-        tableRow.appendTo("#expositions-list");
-
-        // onclick registereiren
-        tableRow.on("click", function () {
-            registerTableRow(this);
-        });
-        // click triggern
-        tableRow.click();
+        appendRow(selectedExposition);
+        //click triggern
+        $("#" + (rowId - 1)).click();
     });
 
     $("#select-image-dialog").dialog({
@@ -134,12 +121,14 @@ $(document).ready(function () {
             }
             $("#select-image-dialog").dialog("close");
             storeOld();
+            updateDetails();
         });
 
         deselectImage.on("click", function () {
             $("#image-preview").attr("src", "");
             selectedExposition.thumbnailPath = undefined;
             storeOld();
+            updateDetails();
         });
     });
 
@@ -172,6 +161,7 @@ $(document).ready(function () {
                 $("#select-image-dialog").dialog("option", "title", "Es sind maximal 5 Bilder erlaubt");
             }
             storeOld();
+            updateDetails();
         });
 
         deselectImage.on("click", function () {
@@ -184,6 +174,7 @@ $(document).ready(function () {
             imagePreview.attr("src", "");
             updateImageContainer($("#assigned-image-items"));
             storeOld();
+            updateDetails();
         });
     });
 
@@ -213,49 +204,62 @@ $(document).ready(function () {
 function init() {
     $(".exposition-data-row").remove();
     $.get("/find/expositions").done(function (result) {
-            expositions = result;
             for (event in result) {
-                var tableRow = $("<tr/>", {
-                    class: "exposition-data-row",
-                    id: event
-                });
-                var bsCell = $("<td/>", {
-                    class: "exposition-bs-cell bs"
-                });
-                var nameCell = $("<td/>", {
-                    text: result[event].name,
-                    class: "exposition-name-cell"
-                });
-                var description = result[event].description.length > 120 ? result[event].description.substring(0, 117) + "..." : result[event].description;
-                var descriptionCell = $("<td/>", {
-                    text: $("<p>" + description + "</p>").text(),
-                    class: "exposition-description-cell"
-                });
-
-                bsCell.appendTo(tableRow);
-                nameCell.appendTo(tableRow);
-                descriptionCell.appendTo(tableRow);
-                tableRow.appendTo("#expositions-list");
+                appendRow(result[event]);
             }
         }
     ).fail(function () {
         // Add fail logic here
-    }).always(function () {
-        $(".exposition-data-row").on('click', function () {
-            registerTableRow(this);
-        });
     });
 }
 
-function registerTableRow(row) {
-    $(row).addClass("ui-selected").siblings().removeClass("ui-selected");
-
-    selectedExposition = expositions[$(row).prop("id")];
-    if (!Array.isArray(selectedExposition.imagePaths)) {
-        selectedExposition.imagePaths = [];
+function appendRow(pObj) {
+    //Gibt es die RowId schon? Wenn nein neu erstellen
+    if (!rowId) {
+        rowId = 0;
     }
+    //Ist die Ausstellungsliste initialisiert? Wenn nein tu es
+    if (!(Array.isArray(expositionList))) {
+        expositionList = [];
+    }
+    //Objekt der Liste hinzufüge
+    expositionList[rowId] = pObj;
+    //Neue Table row anlegen
+    var tableRow = $("<tr/>", {
+        id: rowId,
+        class: "exposition-data-row"
+    });
+    rowId++;
 
-    updateDetails();
+    var bsCell = $("<td/>", {
+        class: "exposition-bs-cell bs " + (pObj.isNew ? "new-item" : ""),
+        text: " "
+    });
+    var nameCell = $("<td/>", {
+        class: "exposition-name-cell",
+        text: pObj.name
+    });
+    var description = pObj.description && pObj.description.length > 120 ? pObj.description.substring(0, 117) + "..." : pObj.description ? pObj.description : "";
+    var descriptionCell = $("<td/>", {
+        text: $("<p>" + description + "</p>").text(),
+        class: "exposition-description-cell"
+    });
+
+    bsCell.appendTo(tableRow);
+    nameCell.appendTo(tableRow);
+    descriptionCell.appendTo(tableRow);
+    tableRow.appendTo("#expositions-list");
+
+    // onclick registereiren
+    tableRow.on("click", function () {
+        $(this).addClass("ui-selected").siblings().removeClass("ui-selected");
+
+        selectedExposition = expositionList[$(this).prop("id")];
+        if (!Array.isArray(selectedExposition.imagePaths)) {
+            selectedExposition.imagePaths = [];
+        }
+        updateDetails();
+    });
 }
 
 function updateDetails() {
@@ -273,6 +277,27 @@ function updateDetails() {
         storeOld();
     });
     $("#exposition-thumbnail").attr("src", selectedExposition.thumbnailPath);
+    let assignedImageWrapper = $("#exposition-image-collection-wrapper");
+    let assignedImage = $("#exposition-selected-image")
+    assignedImage.attr("src", "");
+    assignedImageWrapper.children().remove();
+    if (selectedExposition.imagePaths.length > 0) {
+        $("#exposition-selected-image").attr("src", selectedExposition.imagePaths[0]);
+        for (let i in selectedExposition.imagePaths) {
+            let curImage = $("<img/>", {
+                src: selectedExposition.imagePaths[i],
+                class: "assigned-image-item image-item",
+                href: "#"
+            });
+
+            curImage.appendTo(assignedImageWrapper);
+
+            curImage.on("click", function () {
+                assignedImage.attr("src", curImage.attr("src"));
+            });
+
+        }
+    }
     $("#exposition-name-textfield").val(selectedExposition.name);
     $("#exposition-description-textfield").val(selectedExposition.description);
 }

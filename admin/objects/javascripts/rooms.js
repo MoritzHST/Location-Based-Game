@@ -77,7 +77,7 @@ $(document).ready(function () {
 
         appendRow(selectedRoom);
         //click triggern
-        $("#" + rowId).click();
+        $("#" + (rowId - 1)).click();
     });
 
     init();
@@ -113,7 +113,7 @@ function appendRow(pObj) {
     });
     rowId++;
     var bsCell = $("<td/>", {
-        class: "room-bs-cell bs"
+        class: "room-bs-cell bs" + (pObj.isNew ? "new-item" : "")
     });
     var roomCell = $("<td/>", {
         text: pObj.roomnumber,

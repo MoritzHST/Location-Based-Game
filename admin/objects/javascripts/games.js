@@ -24,18 +24,15 @@ $(document).ready(function () {
         for (let i in newList) {
             if (newList.hasOwnProperty(i) && isValid(newList[i])) {
                 calls.push(
-                    $.post("/insert/games", {
+                    ajaxRequest("/insert/games", "POST", JSON.stringify({
                         question: newList[i].question,
                         type: newList[i].type,
                         points: newList[i].points,
                         answers: newList[i].answers
-                    })
-                        .done(function () {
-
-                        })
-                        .fail(function () {
-                            failedItems.push(newList[i]);
-                        }));
+                    }), function () {
+                    }, function () {
+                        failedItems.push(newList[i])
+                    }));
             }
             else {
                 failedItems.push(newList[i]);
@@ -45,18 +42,16 @@ $(document).ready(function () {
         for (let i in updList) {
             if (updList.hasOwnProperty(i) && isValid(updList[i])) {
                 calls.push(
-                    $.post("/update/games/" + updList[i]._id, {
+                    ajaxRequest("/update/games/" + updList[i]._id, "POST", JSON.stringify({
                         question: updList[i].question,
                         type: updList[i].type,
                         points: updList[i].points,
                         answers: updList[i].answers
-                    })
-                        .done(function () {
+                    }), function () {
+                    }, function () {
+                        failedItems.push(updList[i]);
+                    }));
 
-                        })
-                        .fail(function () {
-                            failedItems.push(updList[i]);
-                        }));
             }
             else {
                 failedItems.push(updList[i]);
@@ -88,8 +83,8 @@ $(document).ready(function () {
                             $("#" + rowId).addClass("failed");
                         }
                         else {
-                            for (let j in roomList) {
-                                if (roomList[j]._id && roomList[j]._id.toString() === failedItems[i]._id.toString()) {
+                            for (let j in gameList) {
+                                if (gameList[j]._id && gameList[j]._id.toString() === failedItems[i]._id.toString()) {
                                     $("#" + j).addClass("failed");
                                 }
                             }
@@ -264,7 +259,7 @@ function updateDetails() {
     $("#answer-list .data-row").remove();
     if (selectedGame.answers.length > 0) {
         for (let i in selectedGame.answers) {
-            selectedGame.answers[i].isCorrectReadable = selectedGame.answers[i].isCorrect ? "Richtig" : "Falsch";
+            selectedGame.answers[i].isCorrectReadable = selectedGame.answers[i].isCorrect.toString() === "true" ? "Richtig" : "Falsch";
             addRow($("#answer-list"), selectedGame.answers[i], undefined, {
                 text: "isCorrectReadable",
                 classes: "game-answer-iscorrect"
@@ -286,7 +281,7 @@ function updateAnswerDetails() {
         selectedAnswer.answer = $("#game-answer-answer").val();
         selectedAnswer.isCorrect = $("#game-answer-iscorrect").prop("checked");
         $(selRow).find(".game-answer-answer").text(selectedAnswer.answer);
-        let readable = selectedAnswer.isCorrect ? "Richtig" : "Falsch";
+        let readable = selectedAnswer.isCorrect.toString() === "true" ? "Richtig" : "Falsch";
         $(selRow).find(".game-answer-iscorrect").text(readable);
 
         storeOld();

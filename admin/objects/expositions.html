@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Expositions - LocationBasedGame</title>
+    <link rel="shortcut icon" type="image/png" href="./images/favicon.png"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../stylesheets/jquery-ui.min.css">
+    <link rel="stylesheet" href="../stylesheets/editor.css">
+    <link rel="stylesheet" href="objects/stylesheets/expositions.css">
+
+    <script src="../javascripts/jquery.min.js"></script>
+    <script src="../javascripts/jquery-ui.min.js"></script>
+
+    <script src="objects/javascripts/expositions.js"></script>
+</head>
+<body>
+<div id="select-image-dialog" class="dialog">
+    <div class="preview-image-container">
+        <div class="image-preview-wrapper">
+            <img src="" id="image-preview" class="image-preview">
+        </div>
+        <div>
+            <label for="image-textfield-name"><strong
+                    id="image-label-name">Bezeichnung</strong></label>
+            <input disabled="disabled" type="text" class="textfield disabled" id="image-textfield-name">
+            <a href="#" id="select-image-button" class="submit-button">Ok</a>
+            <a href="#" id="deselect-image-button" class="cancel-button">Auswahl entfernen</a>
+        </div>
+    </div>
+    <div id="assigned-image-items" class="assigned-image-items"></div>
+    <div id="image-collection-wrapper" class="image-collection-wrapper"></div>
+    <div class="pagination"></div>
+</div>
+<table class="editor-table">
+    <thead>
+    <tr class="table-header">
+        <th class="min-column">
+            BS
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Beschreibung
+        </th>
+    </tr>
+    </thead>
+    <tbody id="expositions-list" class="table-list">
+    </tbody>
+</table>
+<div class="button-group">
+    <a href="#" id="new-exposition-button" class="create-button"></a>
+    <a href="#" id="delete-exposition-button" class="remove-button"></a>
+</div>
+<div class="details details-2c">
+    <div>
+        <div class="details-element">
+            <label for="exposition-name-textfield"><strong>Bezeichnung*</strong></label>
+            <input type="text" class="textfield" id="exposition-name-textfield">
+        </div>
+        <div class="details-element">
+            <label for="exposition-description-textfield"><strong>Beschreibung*</strong></label>
+            <div class="button-group">
+                <a href="#" id="exposition-description-header" class="control-button">Überschrift</a><a href="#"
+                                                                                                        id="exposition-description-bold"
+                                                                                                        class="control-button">Fett</a><a
+                    href="#" id="exposition-description-italic" class="control-button">Kursiv</a><a href="#"
+                                                                                                    id="exposition-description-list"
+                                                                                                    class="control-button">Liste</a><a
+                    href="#" id="exposition-description-listelement" class="control-button">Listenelement</a><a href="#"
+                                                                                                                id="exposition-description-paragraph"
+                                                                                                                class="control-button">Absatz</a>
+            </div>
+            <textarea type="text" class="textarea" id="exposition-description-textfield"></textarea>
+        </div>
+    </div>
+    <div class="details-element">
+        <label for="exposition-thumbnail-preview"><strong>Thumbnail</strong></label>
+        <a href="#">
+            <div id="exposition-thumbnail-preview" class="thumbnail-preview">
+                <img src="" class="image-preview" id="exposition-thumbnail">
+            </div>
+        </a>
+    </div>
+    <div class="details-element">
+        <label for="exposition-image-preview"><strong>Ausstellungsbild: Vorschau</strong></label>
+        <a href="#">
+            <div id="exposition-image-preview" class="thumbnail-preview">
+                <img src="" class="image-preview" id="exposition-selected-image">
+            </div>
+        </a>
+    </div>
+    <div class="details-element">
+        <label for="exposition-image-collection-wrapper"><strong>Ausstellungsbild: Zugewiesen</strong></label>
+        <div id="exposition-image-collection-wrapper" class="selected-images"></div>
+    </div>
+</div>
+</body>
+</html>

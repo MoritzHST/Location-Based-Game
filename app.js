@@ -36,8 +36,10 @@ if (process.env.env === "development") {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 app.use(logger('dev'));
+app.use(bodyParser({limit: "10mb"}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+
 
 app.use(cookieParser());
 

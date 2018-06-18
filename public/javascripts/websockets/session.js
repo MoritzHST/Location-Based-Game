@@ -11,12 +11,15 @@ $(document).ready(function() {
 
     // User id beim Login an den Server senden
     ws.onopen = function() {
-        ws.send(JSON.stringify({userId: sessioncookie.user._id, login: sessioncookie.login}));
+        ws.send(JSON.stringify({
+            userId : sessioncookie.user._id,
+            login : sessioncookie.login
+        }));
     };
     // Wenn sich irgendjemand mit den Nutzerdaten ausweist, abmelden
     ws.onmessage = function(evt) {
         let dto = JSON.parse(evt.data);
-        if (dto.userId === sessioncookie.user._id && dto.login !== String(sessioncookie.login)) {
+        if (dto.userId === sessioncookie.user._id && dto.login !== sessioncookie.login) {
             $.get("sign-out").done(function() {
                 clearLocalCookies("session");
                 window.location = "sign-up?reason=login";
@@ -25,7 +28,7 @@ $(document).ready(function() {
 
     };
 
-    ws.onerror = function () {
+    ws.onerror = function() {
         $.get("sign-out").always(function() {
             clearLocalCookies("session");
             window.location = "sign-up?reason=error";

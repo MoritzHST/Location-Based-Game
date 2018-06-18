@@ -1,10 +1,17 @@
+//In der Tabelle gewählte Ausstellung
 var selectedExposition;
-var expositions;
+//Liste der Ausstellungen (Tabelle als Objektliste)
+var expositionList;
+//Liste an Bildern, die bereits in der DB vorhanden sind
 var persistedImages;
+//Neue Ausstellungen als Map
 var newMap = new Map();
+//Ausstellungen die gelöscht werden sollen
+var delMap = new Map();
+//Bearbeitete, Persistierte Ausstellungen als Map
 var updateMap = new Map();
+//Fehlgeschlagene Items bei der Persitierung
 var failedItems;
-var pseudoId = 0;
 // Bilder Pro Pagination
 var maximumImageAmount = 8;
 // BIlder die Pro ausstellung erlaubt sind
@@ -12,6 +19,7 @@ var maximumImageItems = 5;
 
 $(document).ready(function () {
     $(".ui-button").prop("disabled", false);
+    //Save-Button neu registrieren
     let saveButton = $("#button-save");
     saveButton.off("click");
     saveButton.on("click", function () {
@@ -19,8 +27,9 @@ $(document).ready(function () {
         let calls = [];
         let newList = Array.from(newMap.values());
         let updList = Array.from(updateMap.values());
+        let delList = Array.from(delMap.values());
         for (let i in newList) {
-            if (newList.hasOwnProperty(i) /* && isValid(newList[i]) */) {
+            if (newList.hasOwnProperty(i) && isValid(newList[i])) {
                 calls.push(
                     $.post("/insert/expositions", {
                         name: newList[i].name,
@@ -41,8 +50,7 @@ $(document).ready(function () {
         }
 
         for (let i in updList) {
-            if (updList.hasOwnProperty(i) /* && isValid(updList[i]) */) {
-                console.log(updList[i]);
+            if (updList.hasOwnProperty(i) && isValid(updList[i])) {
                 calls.push(
                     $.post("/update/expositions/" + updList[i]._id, {
                         name: updList[i].name,
@@ -60,47 +68,66 @@ $(document).ready(function () {
             else {
                 failedItems.push(updList[i]);
             }
-
-            $.when(calls).then(function () {
-                init();
-            })
         }
+        for (let i in delList) {
+            if (delList.hasOwnProperty(i)) {
+                calls.push(
+                    $.post("/delete/expositions", {_id: delList[i]._id})
+                        .done(function () {
+
+                        })
+                        .fail(function () {
+                            failedItems.push(updList[i]);
+                        }));
+            }
+            else {
+                failedItems.push(updList[i]);
+            }
+        }
+
+        $.when.apply($, calls).done(function () {
+            init()
+                .then(function () {
+                    for (let i in failedItems) {
+                        if (failedItems[i].isNew) {
+                            appendRow(failedItems[i]);
+                            $("#" + (rowId)).addClass("failed");
+                        }
+                        else {
+                            for (let j in expositionList) {
+                                if (expositionList[j]._id && expositionList[j]._id.toString() === failedItems[i]._id.toString()) {
+                                    $("#" + j).addClass("failed");
+                                }
+                            }
+                        }
+                    }
+                });
+        });
     });
 
     $("#new-exposition-button").on("click", function () {
+        //Einmal das alte Objekt speichern
+        storeOld();
+        //Neu initialisieren und flaggen
         selectedExposition = {};
-        updateDetails();
+        selectedExposition.isNew = true;
+        //Fake-ID geben die nicht weiter geändert wird, um es in Map ablegen zu können
+        selectedExposition._id = "pseudoId-" + rowId;
+        selectedExposition.name = "";
+        selectedExposition.description = "";
+        selectedExposition.thumbnailPath = "";
+        selectedExposition.imagePaths = [];
 
-        var tableRow = $("<tr/>", {
-            id: "pseudo-" + pseudoId,
-            class: "exposition-data-row"
-        });
-        pseudoId++;
+        appendRow(selectedExposition);
 
-        var bsCell = $("<td/>", {
-            class: "exposition-bs-cell bs new-item",
-            text: " "
-        });
-        var nameCell = $("<td/>", {
-            class: "exposition-name-cell"
-        });
-        var descriptionCell = $("<td/>", {
-            class: "exposition-description-cell"
-        });
-        selectedExposition._id = tableRow.prop("id");
-        expositions[tableRow.prop("id")] = selectedExposition;
+        $("#" + (rowId)).addClass("ui-selected").siblings().removeClass("ui-selected");
+        switchData();
+    });
 
-        bsCell.appendTo(tableRow);
-        nameCell.appendTo(tableRow);
-        descriptionCell.appendTo(tableRow);
-        tableRow.appendTo("#expositions-list");
-
-        // onclick registereiren
-        tableRow.on("click", function () {
-            registerTableRow(this);
-        });
-        // click triggern
-        tableRow.click();
+    $("#delete-exposition-button").on("click", function () {
+        selectedExposition.remove = true;
+        $(".ui-selected").find(".bs").addClass("delete-item");
+        delMap.set(selectedExposition._id, selectedExposition);
     });
 
     $("#select-image-dialog").dialog({
@@ -134,12 +161,14 @@ $(document).ready(function () {
             }
             $("#select-image-dialog").dialog("close");
             storeOld();
+            updateDetails();
         });
 
         deselectImage.on("click", function () {
             $("#image-preview").attr("src", "");
             selectedExposition.thumbnailPath = undefined;
             storeOld();
+            updateDetails();
         });
     });
 
@@ -172,6 +201,7 @@ $(document).ready(function () {
                 $("#select-image-dialog").dialog("option", "title", "Es sind maximal 5 Bilder erlaubt");
             }
             storeOld();
+            updateDetails();
         });
 
         deselectImage.on("click", function () {
@@ -184,6 +214,7 @@ $(document).ready(function () {
             imagePreview.attr("src", "");
             updateImageContainer($("#assigned-image-items"));
             storeOld();
+            updateDetails();
         });
     });
 
@@ -211,70 +242,102 @@ $(document).ready(function () {
 });
 
 function init() {
-    $(".exposition-data-row").remove();
-    $.get("/find/expositions").done(function (result) {
-            expositions = result;
-            for (event in result) {
-                var tableRow = $("<tr/>", {
-                    class: "exposition-data-row",
-                    id: event
-                });
-                var bsCell = $("<td/>", {
-                    class: "exposition-bs-cell bs"
-                });
-                var nameCell = $("<td/>", {
-                    text: result[event].name,
-                    class: "exposition-name-cell"
-                });
-                var description = result[event].description.length > 120 ? result[event].description.substring(0, 117) + "..." : result[event].description;
-                var descriptionCell = $("<td/>", {
-                    text: $("<p>" + description + "</p>").text(),
-                    class: "exposition-description-cell"
-                });
-
-                bsCell.appendTo(tableRow);
-                nameCell.appendTo(tableRow);
-                descriptionCell.appendTo(tableRow);
-                tableRow.appendTo("#expositions-list");
+    return new Promise(resolve => {
+        $.get("/find/expositions").done(function (result) {
+            $(".data-row").remove();
+                for (event in result) {
+                    appendRow(result[event]);
+                }
+                resolve(true);
             }
-        }
-    ).fail(function () {
-        // Add fail logic here
-    }).always(function () {
-        $(".exposition-data-row").on('click', function () {
-            registerTableRow(this);
-        });
+        ).fail(function () {
+            resolve(false);
+        })
+            .always(function () {
+                $("#expositions-list").bind('mousedown', function (event) {
+                    event.metaKey = true;
+                }).selectable({
+                    filter: 'tr',
+                    selected: function (event, ui) {
+                        $(ui.selected).addClass("ui-selected").siblings().removeClass("ui-selected");
+                        switchData();
+                    },
+                    unselected: function (event, ui) {
+                    }
+                });
+            });
     });
 }
 
-function registerTableRow(row) {
-    $(row).addClass("ui-selected").siblings().removeClass("ui-selected");
-
-    selectedExposition = expositions[$(row).prop("id")];
+function switchData() {
+    selectedExposition = expositionList[$(".ui-selected").prop("id")];
     if (!Array.isArray(selectedExposition.imagePaths)) {
         selectedExposition.imagePaths = [];
     }
-
     updateDetails();
+}
+
+function appendRow(pObj) {
+    //Ist die Ausstellungsliste initialisiert? Wenn nein tu es
+    if (!(Array.isArray(expositionList))) {
+        expositionList = [];
+    }
+
+    let tableRow = addRow($("#expositions-list"), pObj, {classes: "exposition-bs-cell " + (pObj.isNew ? "new-item" : "")}, {
+            classes: "exposition-name-cell",
+            text: "name"
+        },
+        {classes: "exposition-description-cell", text: "description"});
+
+    //Objekt der Liste hinzufüge
+    expositionList[rowId] = pObj;
 }
 
 function updateDetails() {
     let selRow = $(".ui-selected");
-    let detailsFields = $("#exposition-name-textfield, #exposition-descirption-textfield");
-    detailsFields.off("input");
-    detailsFields.on("input", function () {
+    let detailsName = $("#exposition-name-textfield");
+    let detailsTextarea = $("#exposition-description-textfield");
+
+    detailsName.off("input");
+    detailsName.on("input", setInput);
+    detailsTextarea.unbind("input propertychange");
+    detailsTextarea.bind("input propertychange", setInput);
+    $("#exposition-thumbnail").attr("src", String(selectedExposition.thumbnailPath ? selectedExposition.thumbnailPath : ""));
+    let assignedImageWrapper = $("#exposition-image-collection-wrapper");
+    let assignedImage = $("#exposition-selected-image")
+    assignedImage.attr("src", "");
+    assignedImageWrapper.children().remove();
+    if (selectedExposition.imagePaths.length > 0) {
+        $("#exposition-selected-image").attr("src", selectedExposition.imagePaths[0]);
+        for (let i in selectedExposition.imagePaths) {
+            let curImage = $("<img/>", {
+                src: selectedExposition.imagePaths[i],
+                class: "assigned-image-item image-item",
+                href: "#"
+            });
+
+            curImage.appendTo(assignedImageWrapper);
+
+            curImage.on("click", function () {
+                assignedImage.attr("src", curImage.attr("src"));
+            });
+
+        }
+    }
+    detailsName.val(selectedExposition.name);
+    detailsTextarea.val(selectedExposition.description);
+
+    function setInput() {
+        checkInput();
         if (!($(selRow).find(".bs").hasClass("delete-item") || $(selRow).find(".bs").hasClass("new-item")))
             $(selRow).find(".bs").addClass("edit-item");
         selectedExposition.name = $("#exposition-name-textfield").val();
-        selectedExposition.description = $("#exposition-description-textfield").val();
+        selectedExposition.description = $("#exposition-description-textfield").prop("value");
         $(selRow).find(".exposition-name-cell").text(selectedExposition.name);
-        $(selRow).find(".exposition-description-cell").text(selectedExposition.identifier);
+        $(selRow).find(".exposition-description-cell").text(selectedExposition.description);
 
         storeOld();
-    });
-    $("#exposition-thumbnail").attr("src", selectedExposition.thumbnailPath);
-    $("#exposition-name-textfield").val(selectedExposition.name);
-    $("#exposition-description-textfield").val(selectedExposition.description);
+    }
 }
 
 function fetchImages() {
@@ -365,12 +428,58 @@ function updateImageContainer(assignedImageContainer) {
 }
 
 function storeOld() {
-    if (selectedExposition) {
-        if (selectedExposition._id.startsWith("pseudo-")) {
+    if (!selectedExposition) {
+        return;
+    }
+
+    if (selectedExposition._id.startsWith("pseudoId-")) {
+        if (selectedExposition.remove) {
+            newMap.remove(selectedExposition._id);
+        }
+        else {
             newMap.set(selectedExposition._id, selectedExposition);
         }
-        else if (selectedExposition._id) {
+    }
+    else if (selectedExposition._id) {
+        if (selectedExposition.remove) {
+            updateMap.remove(selectedExposition._id);
+        }
+        else {
             updateMap.set(selectedExposition._id, selectedExposition);
         }
     }
+
+}
+
+// Input überprüfen
+function checkInput() {
+    let curName = $("#exposition-name-textfield");
+    let curDescription = $("#exposition-description-textfield");
+
+    if (!curName.val() || !curName.val().trim() === "") {
+        curName.addClass("textfield-invalid");
+    }
+    else {
+        curName.removeClass("textfield-invalid");
+    }
+
+    if (!curDescription.val() || !curDescription.val().trim() === "") {
+        curDescription.addClass("textfield-invalid");
+    }
+    else {
+        curDescription.removeClass("textfield-invalid");
+    }
+}
+
+// Bezeichnung und Beschreibung darf nicht leer sein
+function isValid(pObj) {
+    if (!pObj.name || pObj.name.trim() === "") {
+        return false;
+    }
+
+    if (!pObj.description || pObj.description.trim() === "") {
+        return false;
+    }
+
+    return true;
 }

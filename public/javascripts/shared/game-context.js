@@ -5,9 +5,17 @@ Game = { // NOSONAR
     SINGLE_CHOICE: {
         type: "single_choice",
         partial: "partials/simple-text-quiz/simple-text-quiz.html",
-        initFunction: "initSimpleTextQuiz"
+        initFunction: "initSimpleTextQuiz",
+        name: "Single Choice"
     },
-    MULTIPLE_CHOICE: {type: "multiple_choice"}
+    MULTIPLE_CHOICE: {type: "multiple_choice"},
+    getNameByType: function (pType) {
+        for (let i in this) {
+            if (this.hasOwnProperty(i) && this[i].type === pType) {
+                return this[i].name;
+            }
+        }
+    }
 };
 
 /**

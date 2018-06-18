@@ -12,8 +12,8 @@ $(document).ready(function() {
     // User id beim Login an den Server senden
     ws.onopen = function() {
         ws.send(JSON.stringify({
-            userId : sessioncookie.user._id,
-            login : sessioncookie.login
+            userId: sessioncookie.user._id,
+            login: sessioncookie.login
         }));
     };
     // Wenn sich irgendjemand mit den Nutzerdaten ausweist, abmelden
@@ -28,7 +28,7 @@ $(document).ready(function() {
 
     };
 
-    ws.onerror = function() {
+    ws.onerror = function () {
         $.get("sign-out").always(function() {
             clearLocalCookies("session");
             window.location = "sign-up?reason=error";

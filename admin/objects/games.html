@@ -12,6 +12,7 @@
 
     <script src="../javascripts/jquery.min.js"></script>
     <script src="../javascripts/jquery-ui.min.js"></script>
+    <script src="../javascripts/shared/game-context.js"></script>
 
     <script src="objects/javascripts/games.js"></script>
 
@@ -41,10 +42,14 @@
     <a href="#" id="new-room-button" class="create-button"></a>
     <a href="#" id="delete-room-button" class="remove-button"></a>
 </div>
-<div class="details details-3c">
+<div class="details details-4c">
     <div class="details-element grid-columns-2">
         <label for="game-question-textfield"><strong>Frage*</strong></label>
         <input class="textfield" type="text" id="game-question-textfield">
+    </div>
+    <div class="details-element">
+        <label for="game-type-textfield"><strong>Art*</strong></label>
+        <select class="textfield" id="game-type-textfield"></select>
     </div>
     <div class="details-element">
         <label for="game-points-textfield"><strong>Punkte*</strong></label>

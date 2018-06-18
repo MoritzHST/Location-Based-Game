@@ -94,8 +94,8 @@ router.post('/delete/expositions', function (req, res) {
         operations.deleteObjects(expositionCollection, req.query, function (err, item) {
             if (!err) {
                 operations.updateObjects(eventCollection, {"locationMappings.exposition._id": new ObjectID(req.query._id)}, {
-                    $unset: {
-                        "locationMappings.$": ""
+                    $pull: {
+                        "locationMappings": {"exposition._id": new ObjectID(req.query._id)}
                     }
                 }, function (event_err, event_item) {
                     handler.dbResult(event_err, res, event_item, "Das Item " + item + " konnte nicht mit " + JSON.stringify(req.query).replace(/\"/g, '') + " geupdatet werden.");

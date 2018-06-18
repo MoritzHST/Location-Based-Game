@@ -4,7 +4,7 @@ $(document).ready(function() {
         for (event in result) {
             var tableRow = $("<tr></tr>");
             var bsCell = $("<td></td>");
-            var typeCell = $("<td>" + result[event].type + "</td>");
+            var typeCell = $("<td>" + Game.getNameByType(result[event].type) + "</td>");
             var pointsCell = $("<td>" + result[event].points + "</td>");
             var questionCell = $("<td>" + result[event].question + "</td>");
 

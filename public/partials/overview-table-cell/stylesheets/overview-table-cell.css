@@ -12,9 +12,11 @@
 }
 
 .overview-table-cell-location-image-wrapper {
-    overflow: hidden;
-    background: url("../images/default.png") no-repeat;
-    background-size: cover;
+    background: url("../images/default.png");
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    
 }
 
 .overview-table-cell-location-info {

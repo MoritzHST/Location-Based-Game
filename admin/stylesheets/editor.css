@@ -8,6 +8,10 @@
     flex-grow: 1;
 }
 
+.center {
+	text-align: center;	
+}
+
 #sidebar {
     display: flex;
     flex-direction: column;

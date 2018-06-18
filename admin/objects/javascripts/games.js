@@ -9,8 +9,8 @@ var selectedAnswer;
 $(document).ready(function () {
     $(".details input").prop("disabled", true);
     $("#delete-game-button , #new-answer-button , #delete-answer-button").addClass("disabled"); // NOSONAR
-    $(".ui-button").prop("disabled", false);
-    //Save-Button neu registrieren
+    $("#button-save-template.ui-button, #button-import-template.ui-button").prop("disabled", true);
+    // Save-Button neu registrieren
     let saveButton = $("#button-save");
     saveButton.off("click");
     saveButton.on("click", function () {
@@ -20,7 +20,7 @@ $(document).ready(function () {
         let updList = Array.from(updateMap.values());
         let delList = Array.from(delMap.values());
 
-        //Neue Räume persistieren
+        // Neue Räume persistieren
         for (let i in newList) {
             if (newList.hasOwnProperty(i) && isValid(newList[i])) {
                 calls.push(
@@ -41,7 +41,7 @@ $(document).ready(function () {
                 failedItems.push(newList[i]);
             }
         }
-        //geänderte RÄume persistieren
+        // geänderte RÄume persistieren
         for (let i in updList) {
             if (updList.hasOwnProperty(i) && isValid(updList[i])) {
                 calls.push(
@@ -62,7 +62,7 @@ $(document).ready(function () {
                 failedItems.push(updList[i]);
             }
         }
-        //Räume löschen
+        // Räume löschen
         for (let i in delList) {
             if (delList.hasOwnProperty(i)) {
                 calls.push(
@@ -85,7 +85,7 @@ $(document).ready(function () {
                     for (let i in failedItems) {
                         if (failedItems[i].isNew) {
                             appendRow(failedItems[i]);
-                            $("#" + (rowId)).addClass("failed");
+                            $("#" + rowId).addClass("failed");
                         }
                         else {
                             for (let j in roomList) {

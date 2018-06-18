@@ -10,7 +10,7 @@ function initSimpleTextQuiz(obj) {
         //Antwort-Hint einblenden
         $("#answer-description").css('display', 'block');
         $("#btn_home").on("click", function () {
-            location.href = "/";
+            setNodeHookFromFile($("#content-hook"), "../partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent");
         }).css('display', 'block');
         //Ursprünglichen Button erzeugen und disablen
         $("<a/>", {

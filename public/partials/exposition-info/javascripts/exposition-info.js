@@ -202,7 +202,7 @@ function initGameFinishedView(obj) {
     // Spiel beendet -> Infotext
     setNodeHookFromFile($("#mission-hook"), 'partials/game-finished-view/game-finished-view.html', function () {
         $("#btn_home").on("click", function () {
-            location.href = "/";
+            setNodeHookFromFile($("#content-hook"), "../partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent");
         });
     });
 

@@ -9,9 +9,6 @@ function initSimpleTextQuiz(obj) {
     else {
         //Antwort-Hint einblenden
         $("#answer-description").css('display', 'block');
-        $("#btn_home").on("click", function () {
-            setNodeHookFromFile($("#content-hook"), "../partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent");
-        }).css('display', 'block');
         //Ursprünglichen Button erzeugen und disablen
         $("<a/>", {
             class: "btn btn-sm btn-primary host-button host-function-button game-answer disabled",

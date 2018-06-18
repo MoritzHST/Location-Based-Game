@@ -203,7 +203,7 @@ function initGameFinishedView(obj) {
     setNodeHookFromFile($("#mission-hook"), 'partials/game-finished-view/game-finished-view.html', function () {
         $("#btn_home").on("click", function () {
             setNodeHookFromFile($("#content-hook"), "../partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent");
-        });
+        }).css('display', 'block');
     });
 
     $(".current-game-display-frame").on("click", function () {

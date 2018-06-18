@@ -10,8 +10,6 @@ var updateMap = new Map();
 var roomList;
 //Fehlgeschlagene Items bei persistierung
 var failedItems;
-//Interne Nummerierung der einzelnen Tabellenreihen (Synchron mit roomsList-Adresse)
-var rowId;
 
 $(document).ready(function () {
     $(".ui-button").prop("disabled", false);
@@ -86,7 +84,7 @@ $(document).ready(function () {
                     for (let i in failedItems) {
                         if (failedItems[i].isNew) {
                             appendRow(failedItems[i]);
-                            $("#" + (rowId - 1)).addClass("failed");
+                            $("#" + (rowId)).addClass("failed");
                         }
                         else {
                             for (let j in roomList) {
@@ -112,7 +110,7 @@ $(document).ready(function () {
 
         appendRow(selectedRoom);
         //click triggern
-        $("#" + (rowId - 1)).click();
+        $("#" + (rowId)).click();
     });
 
     $("#delete-room-button").on("click", function () {
@@ -127,7 +125,7 @@ $(document).ready(function () {
 
 async function init() {
     return new Promise(resolve => {
-        $(".room-data-row").remove();
+        $(".data-row").remove();
         $.get("/find/locations").done(function (result) {
             for (event in result) {
                 appendRow(result[event]);
@@ -140,38 +138,18 @@ async function init() {
 }
 
 function appendRow(pObj) {
-    //Gibt es die RowId schon? Wenn nein neu erstellen
-    if (!rowId) {
-        rowId = 0;
-    }
     //Ist die Raumliste initialisiert? Wenn nein tu es
     if (!(Array.isArray(roomList))) {
         roomList = [];
     }
+
+    let tableRow = addRow($("#rooms-list"), pObj, {classes: "room-bs-cell " + (pObj.isNew ? "new-item" : "")}, {
+        text: "roomnumber",
+        classes: "room-number-cell"
+    }, {text: "identifier", classes: "room-identifier-cell"});
+
     //Row-Objekt der Objektliste hinzufügen
     roomList[rowId] = pObj;
-    //Neue Table row erzeugen
-    var tableRow = $("<tr/>", {
-        id: rowId,
-        class: "room-data-row"
-    });
-    rowId++;
-    var bsCell = $("<td/>", {
-        class: "room-bs-cell bs " + (pObj.isNew ? "new-item" : "")
-    });
-    var roomCell = $("<td/>", {
-        text: pObj.roomnumber,
-        class: "room-number-cell"
-    });
-    var linkCell = $("<td/>", {
-        text: pObj.identifier,
-        class: "room-identifier-cell"
-    });
-
-    bsCell.appendTo(tableRow);
-    roomCell.appendTo(tableRow);
-    linkCell.appendTo(tableRow);
-    tableRow.appendTo("#rooms-list");
 
     //onclick registereiren
     tableRow.on("click", function () {
@@ -245,7 +223,7 @@ function checkInput() {
     let curRoomNumberInput = roomnumberTextfield.val();
     let curIdentifierInput = identifierTextfield.val();
 
-    let tableRowList = $(".room-data-row:not(.ui-selected)");
+    let tableRowList = $(".data-row:not(.ui-selected)");
 
     tableRowList.each(function (index, obj) {
         if ($(obj).find($(".room-number-cell")).text().trim() === curRoomNumberInput.trim() || curRoomNumberInput.trim() === "") {
@@ -273,7 +251,6 @@ function checkInput() {
 
 //Validiert, ob das Objekt auf Clientseite valide ist
 function isValid(dataObj) {
-    let tableRowList = $(".room-data-row");
     let isValid = true;
 
     for (let i in roomList) {

@@ -12,8 +12,6 @@ var delMap = new Map();
 var updateMap = new Map();
 //Fehlgeschlagene Items bei der Persitierung
 var failedItems;
-//Interne Nummerierung der einzelnen Tabellenreihen (Synchron mit roomsList-Adresse)
-var rowId;
 // Bilder Pro Pagination
 var maximumImageAmount = 8;
 // BIlder die Pro ausstellung erlaubt sind
@@ -93,7 +91,7 @@ $(document).ready(function () {
                     for (let i in failedItems) {
                         if (failedItems[i].isNew) {
                             appendRow(failedItems[i]);
-                            $("#" + (rowId - 1)).addClass("failed");
+                            $("#" + (rowId)).addClass("failed");
                         }
                         else {
                             for (let j in expositionList) {
@@ -120,7 +118,7 @@ $(document).ready(function () {
 
         appendRow(selectedExposition);
         //click triggern
-        $("#" + (rowId - 1)).click();
+        $("#" + (rowId)).click();
     });
 
     $("#delete-exposition-button").on("click", function () {
@@ -242,9 +240,7 @@ $(document).ready(function () {
 
 function init() {
     return new Promise(resolve => {
-
-
-        $(".exposition-data-row").remove();
+        $(".data-row").remove();
         $.get("/find/expositions").done(function (result) {
                 for (event in result) {
                     appendRow(result[event]);
@@ -258,41 +254,23 @@ function init() {
 }
 
 function appendRow(pObj) {
-    //Gibt es die RowId schon? Wenn nein neu erstellen
-    if (!rowId) {
-        rowId = 0;
-    }
+    // //Gibt es die RowId schon? Wenn nein neu erstellen
+    // if (!rowId) {
+    //     rowId = 0;
+    // }
     //Ist die Ausstellungsliste initialisiert? Wenn nein tu es
     if (!(Array.isArray(expositionList))) {
         expositionList = [];
     }
+
+    let tableRow = addRow($("#expositions-list"), pObj, {classes: "exposition-bs-cell " + (pObj.isNew ? "new-item" : "")}, {
+            classes: "exposition-name-cell",
+            text: "name"
+        },
+        {classes: "exposition-description-cell", text: "description"});
+
     //Objekt der Liste hinzufüge
     expositionList[rowId] = pObj;
-    //Neue Table row anlegen
-    var tableRow = $("<tr/>", {
-        id: rowId,
-        class: "exposition-data-row"
-    });
-    rowId++;
-
-    var bsCell = $("<td/>", {
-        class: "exposition-bs-cell bs " + (pObj.isNew ? "new-item" : ""),
-        text: " "
-    });
-    var nameCell = $("<td/>", {
-        class: "exposition-name-cell",
-        text: pObj.name
-    });
-    var description = pObj.description && pObj.description.length > 120 ? pObj.description.substring(0, 117) + "..." : pObj.description ? pObj.description : "";
-    var descriptionCell = $("<td/>", {
-        text: $("<p>" + description + "</p>").text(),
-        class: "exposition-description-cell"
-    });
-
-    bsCell.appendTo(tableRow);
-    nameCell.appendTo(tableRow);
-    descriptionCell.appendTo(tableRow);
-    tableRow.appendTo("#expositions-list");
 
     // onclick registereiren
     tableRow.on("click", function () {

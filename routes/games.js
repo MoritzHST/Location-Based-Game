@@ -16,7 +16,7 @@ router.get('/find/games', function(req, res) {
 
     logging.Parameter("request.query", req.query);
 
-    operations.findObject(gamesCollection, (handler.checkIfValidQuery(req.query) ? req.query : null), function(err, item) {
+    operations.findObject(gamesCollection, (handler.checkIfValidQuery(req.query) ? req.query : null), function (err, item) {
         handler.dbResult(err, res, item, "Das Item " + JSON.stringify(req.query).replace(/\"/g, '') + " existiert nicht.");
     });
 
@@ -59,14 +59,14 @@ router.post('/update/games/:id', function(req, res) {
         }), req.query, function(err, item) {
             if (!err && item.value) {
                 operations.updateObject(eventCollection, {
-                    "locationMappings" : {
-                        "$elemMatch" : {
-                            "games._id" : new ObjectID(req.params.id)
+                    "locationMappings": {
+                        "$elemMatch": {
+                            "games._id": new ObjectID(req.params.id)
                         }
                     }
                 }, {
-                    "locationMappings.$.games" : item.value
-                }, function(event_err, event_item) {
+                    "locationMappings.$.games": item.value
+                }, function (event_err, event_item) {
                     handler.dbResult(event_err, res, event_item, "Das Item " + item + " konnte nicht mit " + JSON.stringify(req.query).replace(/\"/g, '') + " geupdatet werden.");
                 });
             } else {

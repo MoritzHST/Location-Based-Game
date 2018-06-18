@@ -94,6 +94,33 @@ module.exports = {
         });
     },
 
+    updateObjects: function (pCollection, pSelector, pUpdate, pCallback) {
+        logging.Entering("updateObjects");
+        logging.Parameter("pCollection", pCollection);
+        logging.Parameter("pObject", pSelector);
+        logging.Parameter("pQuery", pUpdate);
+        return new Promise(resolve => {
+            let database = mongo.Object();
+            database.Client.connect(database.Url, function (error, result) {
+                if (error) {
+                    pCallback(error, null);
+                    resolve(null);
+                } else {
+                    let friendlySelector = handler.idFriendlyQuery(pSelector);
+                    let friendlyUpdate = handler.idFriendlyQuery(pUpdate);
+                    result.db(database.Database).collection(pCollection).update(friendlySelector, friendlyUpdate, {
+                        multi: true
+                    }, function (err, db) {
+                        result.close();
+                        pCallback(err, db);
+                        resolve(db);
+                    });
+                }
+            });
+            logging.Leaving("updateObjects");
+        });
+    },
+
     /**
      * Entfernt Objekt aus der Collection pCollection return true, wenn löschen
      * erfolgreich false, wenn löschen nicht erfolgreich

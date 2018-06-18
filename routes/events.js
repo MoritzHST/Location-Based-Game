@@ -81,38 +81,38 @@ router.post('/update/events/:id', function(req, res) {
     if (handler.checkIfValidQuery(req.query)) {
         if (req.query.name && req.query.date) {
             operations.findObject(eventCollection, handler.idFriendlyQuery({
-                "name" : req.query.name,
-                _id : {
-                    $not : req.params.id
+                "name": req.query.name,
+                _id: {
+                    $not: req.params.id
                 }
-            }), function(err, item) {
+            }), function (err, item) {
                 if (item) {
                     res.status(422).jsonp({
-                        "error" : "Es existiert bereits ein anderes Event mit diesem Namen!"
+                        "error": "Es existiert bereits ein anderes Event mit diesem Namen!"
                     });
                 } else if (err) {
                     res.status(422).jsonp({
-                        "error" : "Der übergebene Name ist ungültig."
+                        "error": "Der übergebene Name ist ungültig."
                     });
                 } else {
                     operations.findObject(eventCollection, handler.idFriendlyQuery({
-                        "date" : req.query.date,
-                        _id : {
-                            $not : req.params.id
+                        "date": req.query.date,
+                        _id: {
+                            $not: req.params.id
                         }
-                    }), function(err, item) {
+                    }), function (err, item) {
                         if (item) {
                             res.status(422).jsonp({
-                                "error" : "Es existiert bereits ein anderes Event mit diesem Datum!"
+                                "error": "Es existiert bereits ein anderes Event mit diesem Datum!"
                             });
                         } else if (err) {
                             res.status(422).jsonp({
-                                "error" : "Das übergebene Datum ist ungültig."
+                                "error": "Das übergebene Datum ist ungültig."
                             });
                         } else {
                             operations.updateObject(eventCollection, handler.idFriendlyQuery({
-                                _id : req.params.id
-                            }, req.query), function(err, item) {
+                                _id: req.params.id
+                            }, req.query), function (err, item) {
                                 handler.dbResult(err, res, item, "Das Event " + JSON.stringify(req.query).replace(/\"/g, '') + " kann nicht aktualisiert werden.");
                             });
                         }
@@ -121,8 +121,8 @@ router.post('/update/events/:id', function(req, res) {
             });
         } else {
             operations.updateObject(eventCollection, handler.idFriendlyQuery({
-                _id : req.params.id
-            }, req.query), function(err, item) {
+                _id: req.params.id
+            }, req.query), function (err, item) {
                 handler.dbResult(err, res, item, "Das Event " + JSON.stringify(req.query).replace(/\"/g, '') + " kann nicht aktualisiert werden.");
             });
         }

@@ -2,8 +2,11 @@ const operations = require('../mongodb/operations');
 const handler = require('../mongodb/handler');
 const logging = require('../helper/logging');
 const router = require('express').Router();
+const ObjectID = require('mongodb').ObjectID;
 
 const gamesCollection = require('../mongodb/collections').GAMES;
+const eventCollection = require('../mongodb/collections').EVENTS;
+
 
 /* Global */
 
@@ -28,7 +31,7 @@ router.get('/find/games', function(req, res) {
 router.post('/insert/games', function(req, res) {
     logging.Entering("POST /insert/games");
 
-    req.query["answers"] = handler.getRealRequest(req.query["answers"], req.body);
+    req.query = handler.getRealRequest(req.query, req.body);
 
     logging.Parameter("request.query", req.query);
 
@@ -49,7 +52,7 @@ router.post('/insert/games', function(req, res) {
 router.post('/update/games/:id', function(req, res) {
     logging.Entering("POST /update/games/:id");
 
-    req.query["answers"] = handler.getRealRequest(req.query["answers"], req.body);
+    req.query = handler.getRealRequest(req.query, req.body);
 
     logging.Parameter("request.query", req.query);
 
@@ -58,14 +61,10 @@ router.post('/update/games/:id', function(req, res) {
             _id : req.params.id
         }), req.query, function(err, item) {
             if (!err && item.value) {
-                operations.updateObject(eventCollection, {
-                    "locationMappings": {
-                        "$elemMatch": {
-                            "games._id": new ObjectID(req.params.id)
-                        }
+                operations.updateObjects(eventCollection, {"locationMappings.games._id": new ObjectID(req.params.id)}, {
+                    $set: {
+                        "locationMappings.$[].games.$": item.value
                     }
-                }, {
-                    "locationMappings.$.games": item.value
                 }, function (event_err, event_item) {
                     handler.dbResult(event_err, res, event_item, "Das Item " + item + " konnte nicht mit " + JSON.stringify(req.query).replace(/\"/g, '') + " geupdatet werden.");
                 });

@@ -38,8 +38,8 @@
     </tbody>
 </table>
 <div class="button-group">
-    <a href="#" id="new-room-button" class="create-button"></a>
-    <a href="#" id="delete-room-button" class="remove-button"></a>
+    <a href="#" id="new-game-button" class="create-button"></a>
+    <a href="#" id="delete-game-button" class="remove-button"></a>
 </div>
 <div class="details details-4c">
     <div class="details-element grid-columns-2">
@@ -53,6 +53,33 @@
     <div class="details-element">
         <label for="game-points-textfield"><strong>Punkte*</strong></label>
         <input class="textfield" type="number" id="game-points-textfield">
+    </div>
+    <div class="details-element grid-columns-3">
+        <table class="editor-table details-table">
+            <thead>
+            <tr class="table-header">
+                <th>
+                    Richtig?
+                </th>
+                <th>
+                    Antwort
+                </th>
+            </tr>
+            </thead>
+            <tbody id="answer-list" class="table-list">
+            </tbody>
+        </table>
+        <div class="button-group">
+            <a href="#" id="new-answer-button" class="create-button"></a>
+            <a href="#" id="delete-answer-button" class="remove-button"></a>
+        </div>
+    </div>
+    <div class="details-element">
+        <label for="game-answer-answer"><strong>Antwort*</strong></label>
+        <input id="game-answer-answer" class="textfield" type="text">
+        <br>
+        <label for="game-answer-iscorrect"><strong>Richtig?</strong></label>
+        <input id="game-answer-iscorrect" type="checkbox">
     </div>
 </div>
 </body>

@@ -119,6 +119,7 @@ $(document).ready(function () {
         selectedRoom.remove = true;
         $(".ui-selected").find(".bs").addClass("delete-item");
         delMap.set(selectedRoom._id, selectedRoom);
+        storeOld();
     });
 
     init();
@@ -211,7 +212,7 @@ function storeOld() {
     //Objekt ist neu -> hat keine Id -> hat aber isNew-Flag
     if (selectedRoom.isNew) {
         if (selectedRoom.remove) {
-            newMap.remove(selectedRoom._id)
+            newMap.delete(selectedRoom._id)
         }
         else {
             newMap.set(selectedRoom._id, selectedRoom);
@@ -220,7 +221,7 @@ function storeOld() {
     //Objekt ist persistiert -> hat also ID
     else if (selectedRoom._id) {
         if (selectedRoom.remove) {
-            updateMap.remove(selectedRoom._id);
+            updateMap.delete(selectedRoom._id);
         }
         else {
             updateMap.set(selectedRoom._id, selectedRoom);

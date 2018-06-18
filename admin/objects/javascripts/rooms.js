@@ -113,6 +113,9 @@ $(document).ready(function () {
     });
 
     $("#delete-room-button").on("click", function () {
+        if (!selectedRoom) {
+            return;
+        }
         selectedRoom.remove = true;
         $(".ui-selected").find(".bs").addClass("delete-item");
         delMap.set(selectedRoom._id, selectedRoom);
@@ -142,6 +145,7 @@ async function init() {
                     selectedRoom = roomList[$(".ui-selected").prop("id")];
                     updateDetails(false);
                     $("#location-identifier-textfield, #location-roomnumber-textfield").prop("disabled", false);
+                    $("#delete-room-button").removeClass("disabled");
                 },
                 unselected: function (event, ui) {
                     selectedRoom = {};
@@ -152,6 +156,7 @@ async function init() {
                   $("#location-identifier-textfield").removeClass("textfield-invalid");
                   $("#location-roomnumber-textfield").removeClass("textfield-invalid");
                   $("#location-identifier-textfield, #location-roomnumber-textfield").prop("disabled", true);
+                    $("#delete-room-button").addClass("disabled");
                 }
             });
         });

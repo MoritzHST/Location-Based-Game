@@ -113,12 +113,15 @@ $(document).ready(function () {
         selectedExposition.isNew = true;
         //Fake-ID geben die nicht weiter geändert wird, um es in Map ablegen zu können
         selectedExposition._id = "pseudoId-" + rowId;
+        selectedExposition.name = "";
+        selectedExposition.description = "";
+        selectedExposition.thumbnailPath = "";
         selectedExposition.imagePaths = [];
-        updateDetails();
 
         appendRow(selectedExposition);
-        //click triggern
-        $("#" + (rowId)).click();
+
+        $("#" + (rowId)).addClass("ui-selected").siblings().removeClass("ui-selected");
+        switchData();
     });
 
     $("#delete-exposition-button").on("click", function () {
@@ -240,8 +243,8 @@ $(document).ready(function () {
 
 function init() {
     return new Promise(resolve => {
-        $(".data-row").remove();
         $.get("/find/expositions").done(function (result) {
+            $(".data-row").remove();
                 for (event in result) {
                     appendRow(result[event]);
                 }
@@ -249,15 +252,32 @@ function init() {
             }
         ).fail(function () {
             resolve(false);
-        });
+        })
+            .always(function () {
+                $("#expositions-list").bind('mousedown', function (event) {
+                    event.metaKey = true;
+                }).selectable({
+                    filter: 'tr',
+                    selected: function (event, ui) {
+                        $(ui.selected).addClass("ui-selected").siblings().removeClass("ui-selected");
+                        switchData();
+                    },
+                    unselected: function (event, ui) {
+                    }
+                });
+            });
     });
 }
 
+function switchData() {
+    selectedExposition = expositionList[$(".ui-selected").prop("id")];
+    if (!Array.isArray(selectedExposition.imagePaths)) {
+        selectedExposition.imagePaths = [];
+    }
+    updateDetails();
+}
+
 function appendRow(pObj) {
-    // //Gibt es die RowId schon? Wenn nein neu erstellen
-    // if (!rowId) {
-    //     rowId = 0;
-    // }
     //Ist die Ausstellungsliste initialisiert? Wenn nein tu es
     if (!(Array.isArray(expositionList))) {
         expositionList = [];
@@ -271,35 +291,18 @@ function appendRow(pObj) {
 
     //Objekt der Liste hinzufüge
     expositionList[rowId] = pObj;
-
-    // onclick registereiren
-    tableRow.on("click", function () {
-        $(this).addClass("ui-selected").siblings().removeClass("ui-selected");
-
-        selectedExposition = expositionList[$(this).prop("id")];
-        if (!Array.isArray(selectedExposition.imagePaths)) {
-            selectedExposition.imagePaths = [];
-        }
-        updateDetails();
-    });
 }
 
 function updateDetails() {
     let selRow = $(".ui-selected");
-    let detailsFields = $("#exposition-name-textfield, #exposition-descirption-textfield");
-    detailsFields.off("input");
-    detailsFields.on("input", function () {
-        checkInput();
-        if (!($(selRow).find(".bs").hasClass("delete-item") || $(selRow).find(".bs").hasClass("new-item")))
-            $(selRow).find(".bs").addClass("edit-item");
-        selectedExposition.name = $("#exposition-name-textfield").val();
-        selectedExposition.description = $("#exposition-description-textfield").val();
-        $(selRow).find(".exposition-name-cell").text(selectedExposition.name);
-        $(selRow).find(".exposition-description-cell").text(selectedExposition.identifier);
+    let detailsName = $("#exposition-name-textfield");
+    let detailsTextarea = $("#exposition-description-textfield");
 
-        storeOld();
-    });
-    $("#exposition-thumbnail").attr("src", selectedExposition.thumbnailPath);
+    detailsName.off("input");
+    detailsName.on("input", setInput);
+    detailsTextarea.unbind("input propertychange");
+    detailsTextarea.bind("input propertychange", setInput);
+    $("#exposition-thumbnail").attr("src", String(selectedExposition.thumbnailPath ? selectedExposition.thumbnailPath : ""));
     let assignedImageWrapper = $("#exposition-image-collection-wrapper");
     let assignedImage = $("#exposition-selected-image")
     assignedImage.attr("src", "");
@@ -321,8 +324,20 @@ function updateDetails() {
 
         }
     }
-    $("#exposition-name-textfield").val(selectedExposition.name);
-    $("#exposition-description-textfield").val(selectedExposition.description);
+    detailsName.val(selectedExposition.name);
+    detailsTextarea.val(selectedExposition.description);
+
+    function setInput() {
+        checkInput();
+        if (!($(selRow).find(".bs").hasClass("delete-item") || $(selRow).find(".bs").hasClass("new-item")))
+            $(selRow).find(".bs").addClass("edit-item");
+        selectedExposition.name = $("#exposition-name-textfield").val();
+        selectedExposition.description = $("#exposition-description-textfield").prop("value");
+        $(selRow).find(".exposition-name-cell").text(selectedExposition.name);
+        $(selRow).find(".exposition-description-cell").text(selectedExposition.description);
+
+        storeOld();
+    }
 }
 
 function fetchImages() {
@@ -417,7 +432,7 @@ function storeOld() {
         return;
     }
 
-    if (selectedExposition._id.startsWith("pseudo-")) {
+    if (selectedExposition._id.startsWith("pseudoId-")) {
         if (selectedExposition.remove) {
             newMap.remove(selectedExposition._id);
         }

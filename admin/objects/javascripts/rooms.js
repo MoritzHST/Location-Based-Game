@@ -104,13 +104,15 @@ $(document).ready(function () {
         //Neu initialisieren und flaggen
         selectedRoom = {};
         selectedRoom.isNew = true;
+        selectedRoom.roomnumber = "";
+        selectedRoom.identifier = "";
         //Fake-ID geben die nicht weiter geändert wird, um es in Map ablegen zu können
         selectedRoom._id = "pseudoId-" + rowId;
-        updateDetails();
 
         appendRow(selectedRoom);
         //click triggern
-        $("#" + (rowId)).click();
+        $("#" + (rowId)).addClass("ui-selected").siblings().removeClass("ui-selected");
+        updateDetails();
     });
 
     $("#delete-room-button").on("click", function () {
@@ -125,17 +127,31 @@ $(document).ready(function () {
 
 async function init() {
     return new Promise(resolve => {
-        $(".data-row").remove();
         $.get("/find/locations").done(function (result) {
+            $(".data-row").remove();
             for (event in result) {
                 appendRow(result[event]);
             }
             resolve(true);
         }).fail(function () {
             resolve(false);
+        }).always(function () {
+            $("#rooms-list").bind('mousedown', function (event) {
+                event.metaKey = true;
+            }).selectable({
+                filter: 'tr',
+                selected: function (event, ui) {
+                    $(ui.selected).addClass("ui-selected").siblings().removeClass("ui-selected");
+                    selectedRoom = roomList[$(".ui-selected").prop("id")];
+                    updateDetails();
+                },
+                unselected: function (event, ui) {
+                }
+            });
         });
-    })
+    });
 }
+
 
 function appendRow(pObj) {
     //Ist die Raumliste initialisiert? Wenn nein tu es

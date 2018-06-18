@@ -55,7 +55,7 @@ router.post('/update/expositions/:id', function (req, res) {
             } else {
                 // wenn alle tests bestanden wurden, versuche die
                 // Ausstellungsinformationen zu updaten.
-
+                console.log(req.params);
                 operations.updateObject(expositionCollection, handler.idFriendlyQuery({
                     _id: req.params.id
                 }), req.query, function (err, item) {

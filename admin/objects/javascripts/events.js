@@ -28,8 +28,8 @@ $(document).ready(function() {
                     addRow($("#events-expositions-list"), selectedEvent.locationMappings[mapping].exposition, {classes: "bs"}, {text: "name"}, {text: "description"});
 
                     for (let question in selectedEvent.locationMappings[mapping].games) {
-                        selectedEvent.locationMappings[mapping].games[question].type = Game.getNameByType(selectedEvent.locationMappings[mapping].games[question].type);
-                        addRow($("#events-games-list"), selectedEvent.locationMappings[mapping].games[question], {classes: "bs"}, {text: "type"}, {text: "points"}, {text: "question"});
+                        selectedEvent.locationMappings[mapping].games[question].typeReadable = Game.getNameByType(selectedEvent.locationMappings[mapping].games[question].type);
+                        addRow($("#events-games-list"), selectedEvent.locationMappings[mapping].games[question], {classes: "bs"}, {text: "typeReadable"}, {text: "points"}, {text: "question"});
                     }
                 }
             },

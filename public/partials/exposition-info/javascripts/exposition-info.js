@@ -28,7 +28,6 @@ function initExpositionInfo(obj) {
 
 // Initialisiert HTML-Elemente
 function initViewContent(obj) {
-    console.log(obj);
     // Namen setzen
     if (obj.exposition.name) {
         $("#exposition-info-info-header").html(obj.exposition.name + ": Info");
@@ -203,7 +202,7 @@ function initGameFinishedView(obj) {
     setNodeHookFromFile($("#mission-hook"), 'partials/game-finished-view/game-finished-view.html', function () {
         $("#btn_home").on("click", function () {
             setNodeHookFromFile($("#content-hook"), "../partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent");
-        }).css('display', 'block');
+        }).show();
     });
 
     $(".current-game-display-frame").on("click", function () {

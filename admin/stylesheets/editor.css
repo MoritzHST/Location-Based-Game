@@ -122,6 +122,20 @@ th.min-column {
     width: 24px;
 }
 
+.duplicate-button {
+    display: inline-block;
+    border: 1px solid #003eff;
+    background: #007fff;
+    mask-image: url("../images/copy.svg");
+    -webkit-mask-image: url("../images/copy.svg");
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-position: center;
+    height: 24px;
+    width: 24px;
+}
+
 .remove-button {
     display: inline-block;
     border: 1px solid #003eff;

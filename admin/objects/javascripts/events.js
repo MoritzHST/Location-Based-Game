@@ -1,20 +1,23 @@
-$(document).ready(function() {
+//Neue Events als Map
+var newMap = new Map();
+
+$(document).ready(function () {
     let eventList = [];
 
     $(".ui-button").prop("disabled", true);
-    $.get("/find/events").done(function(result) {
+    $.get("/find/events").done(function (result) {
         for (let event in result) {
             addRow($("#events-list"), result[event], {classes: "bs"}, {text: "date"}, {text: "name"});
             eventList.push(result[event]);
         }
-    }).fail(function() {
+    }).fail(function () {
         // Add fail logic here
-    }).always(function() {
-        $("#events-list").bind('mousedown', function(event) {
+    }).always(function () {
+        $("#events-list").bind('mousedown', function (event) {
             event.metaKey = true;
         }).selectable({
-            filter : 'tr',
-            selected : function(event, ui) {
+            filter: 'tr',
+            selected: function (event, ui) {
                 $(ui.selected).addClass("ui-selected").siblings().removeClass("ui-selected");
 
                 $("#events-rooms-list > tr").remove();
@@ -39,5 +42,21 @@ $(document).ready(function() {
                 $("#events-games-list > tr").remove();
             }
         });
+    });
+
+    $("#duplicate-event-button").on("click", function () {
+        //Neu initialisieren und flaggen
+        let selectedEvent = eventList[$(".ui-selected").prop("id") - 1];
+        let newEvent = Object.assign({}, selectedEvent);
+        newEvent.isNew = true;
+        //Event-Datum clearen
+        newEvent.date = undefined;
+        //Fake-ID geben die nicht weiter geändert wird, um es in Map ablegen zu können
+        newEvent._id = "pseudoId-" + rowId;
+        newMap.set(newEvent._id, newEvent);
+        appendRow(newEvent);
+
+        $("#" + (rowId)).addClass("ui-selected").siblings().removeClass("ui-selected");
+        switchData();
     });
 });

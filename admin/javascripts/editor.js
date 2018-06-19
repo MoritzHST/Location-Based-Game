@@ -20,6 +20,16 @@ $(document).ready(function () {
     $("input[type='submit']").button();
 });
 
+$(document).on("click", ".table-list > tr > td > input[type='radio']", function(event) {
+    $(this).closest(".table-list").find("input[type='radio']").not($(this)).each(function() {
+        $(this).prop("checked", false);
+    });
+
+    if (event.ctrlKey) {
+        $(this).prop('checked', false);
+    }
+});
+
 // https://stackoverflow.com/questions/3140017/how-to-programmatically-select-selectables-with-jquery-ui
 function selectSelectableElement (selectableContainer, elementsToSelect)
 {
@@ -44,6 +54,77 @@ function displayObjects(isDisplayed, ...objectIds) {
         } else {
             $("#" + obj).parent("table").hide();
             $("#" + obj + " > tr").remove();
+        }
+    }
+}
+
+function fillTable(table, data) {
+    let tableHeader = table.children("thead:first");
+    let tableBody = table.children("tbody:first");
+
+    if (tableHeader && tableBody) {
+        let tableHeaderChildren = tableHeader.children("tr");
+        let tableHeaderAttributes = [];
+
+        tableHeaderChildren.children("th").each(function() {
+            let abbr = $(this).attr("abbr");
+            let classes = $(this).attr("class").split(" ");
+            tableHeaderAttributes.push({ "classes" : classes[0], "abbr" : abbr });
+        });
+
+        if (!data) {
+            let emptyResult = $("<td />", {
+                    text: "Keine Daten gefunden"
+                });
+
+            let emptyRow = $("<tr />");
+            emptyResult.attr("colspan", tableHeaderAttributes.length);
+
+            emptyResult.appendTo(emptyRow);
+            emptyRow.appendTo(tableRow);
+            return;
+        }
+
+        let queryData = $(data);
+
+        for (let cellObj of queryData) {
+            let tableRow = $("<tr />");
+            tableRow.attr("id", "tr-" + cellObj._id);
+            let cellObjQuery = $(cellObj);
+            for (let thAttributes of tableHeaderAttributes) {
+
+                let thSplitClasses = thAttributes.classes.split(".");
+                let property = cellObjQuery;
+
+                for (let counter = 0; counter < thSplitClasses.length; counter++) {
+                    if (!property) {
+                        property = "";
+                        break;
+                    }
+
+                   property = $(property).attr(thSplitClasses[counter]);
+                }
+
+                switch (thAttributes.abbr) {
+                    case "smooth":
+                        let propStrings = property.split("_");
+                        for (let i = 0; i < propStrings.length; i++) {
+                            propStrings[i] = propStrings[i].charAt(0).toUpperCase() + propStrings[i].slice(1);
+                        }
+                        property = propStrings.join(" ");
+                        break;
+                    case "number":
+                        property = property.length;
+                        break;
+                    default:
+                        break;
+                }
+
+                $("<td />", {
+                    html: property
+                }).appendTo(tableRow);
+            }
+            tableRow.appendTo(tableBody);
         }
     }
 }

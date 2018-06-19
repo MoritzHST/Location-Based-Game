@@ -8,7 +8,6 @@ function initGameOverviewContent() {
         });
     });
 
-
     user.locations = {};
     // Legt für jede Checkbox innerhalb einer bestimmten Gruppe eine
     // Location-Eigenschaft fest
@@ -69,14 +68,12 @@ function setLocations(pObj) {
     }
 }
 
-
 /**
  * Legt den Rahmen für RaumObjekte fest. (Darstellung in der Übersicht)
  * @param pLayer user location layer
  */
 function setLayer(pLayer) {
     var locations = user.locations[pLayer];
-
 
     for (let i in locations) {
         if (locations.hasOwnProperty(i)) {
@@ -102,7 +99,7 @@ function setLayer(pLayer) {
 function setTableContent(dataObj) {
     let mediaObj = $("#" + dataObj._id + "-hook");
     mediaObj.find(".overview-table-cell-location-info-name").html(dataObj.location.roomnumber + " " + dataObj.exposition.name);
-    mediaObj.find("img").attr("src", dataObj.exposition.image);
+    mediaObj.find(".overview-table-cell-location-image-wrapper").css("background", dataObj.exposition.thumbnailPath + " no-repeat");
     mediaObj.find(".overview-table-cell-location-info-description").html(getDescriptionString(dataObj.exposition.description));
     mediaObj.find(".overview-table-cell-location-state").addClass("overview-room-state-context-" + dataObj.state);
     mediaObj.on("click", function () {

@@ -12,11 +12,20 @@ var updateMap = new Map();
 var failedItems;
 
 $(document).ready(function () {
-
+    $("#button-save-template.ui-button, #button-import-template.ui-button").prop("disabled", true);
+    //Save-Button neu registrieren
+    let saveButton = $("#button-save");
+    saveButton.off("click");
+    saveButton.on("click", function () {
+        console.log("ttt")
+    });
     getNeededData(eventList);
 
     $("#delete-event-button").addClass("disabled");
+    $("#new-mapping-button").addClass("disabled");
     $("#delete-mapping-button").addClass("disabled");
+    $("#duplicate-event-button").addClass("disabled");
+
     $("input[type='checkbox'], input[type='radio']").prop("disabled", true);
     $(".ui-button").prop("disabled", false);
 
@@ -27,6 +36,8 @@ $(document).ready(function () {
         selected: function (event, ui) {
             $(ui.selected).addClass("ui-selected").siblings().removeClass("ui-selected");
             $("#delete-event-button").removeClass("disabled");
+            $("#new-mapping-button").removeClass("disabled");
+            $("#duplicate-event-button").removeClass("disabled");
 
             selectedEvent = eventList[$("#events-table-default > tbody.table-list").find(ui.selected).index()];
 
@@ -36,7 +47,9 @@ $(document).ready(function () {
         },
         unselected: function () {
             $("#events-table-mapping > tbody").empty();
+            $("#new-mapping-button").addClass("disabled");
             $("#delete-event-button").addClass("disabled");
+            $("#duplicate-event-button").addClass("disabled");
             let checkBox = $("input[type='checkbox'], input[type='radio']");
             checkBox.prop("checked", false);
             checkBox.prop("disabled", true);
@@ -50,8 +63,10 @@ $(document).ready(function () {
         selected: function (event, ui) {
             $(ui.selected).addClass("ui-selected").siblings().removeClass("ui-selected");
             $("#delete-mapping-button").removeClass("disabled");
-            $("input[type='checkbox'], input[type='radio']").prop("disabled", false);
-            $("input[type='checkbox'], input[type='radio']").prop("checked", false);
+            $("#new-mapping-button").removeClass("disabled");
+            let checkInputs = $("input[type='checkbox'], input[type='radio']");
+            checkInputs.prop("disabled", false);
+            checkInputs.prop("checked", false);
 
             let selectedMap;
             for (let i = 0; i < eventList.length; i++) {
@@ -87,7 +102,9 @@ $(document).ready(function () {
             });
         },
         unselected: function () {
-            $("#delete-mapping-button").addClass("disabled");
+            let deleteMappingButton = $("#delete-mapping-button");
+            deleteMappingButton.addClass("disabled");
+            deleteMappingButton.addClass("disabled");
             let checkBox = $("input[type='checkbox'], input[type='radio']");
             checkBox.prop("checked", false);
             checkBox.prop("disabled", true);
@@ -140,80 +157,41 @@ function getNeededData(eventList) {
     /*
      * Lädt alle Verfügbaren Räume aus der Datenbank
      */
-    $.holdReady(true);
-    $.get("/find/locations").done(function (locations) {
-        if (locations.length > 0) {
-            for (let index in locations) {
-                if (locations.hasOwnProperty(index)) {
-                    locations[index].check = $("<input />", {
-                        type: "radio",
-                        id: "check-" + locations[index]._id
-                    });
-                    fillTable($("#events-table-locations"), locations[index]);
-                }
-            }
-        } else {
-            fillTable($("#events-table-locations"), null);
-        }
-    }).fail(function () {
-        $("#events-load-failure").append($("<li />", {
-            text: "Die Location Daten konnten nicht geladen werden."
-        }));
-        $("#events-table-location").hide();
-    }).always(function () {
-        $.holdReady(false);
-    });
+    loadData("locations", "radio");
 
     /*
      * Lädt alle Verfügbaren Ausstellungen aus der Datenbank
      */
-    $.holdReady(true);
-    $.get("/find/expositions").done(function (expositions) {
-        if (expositions.length > 0) {
-            for (let index in expositions) {
-                if (expositions.hasOwnProperty(index)) {
-                    expositions[index].check = $("<input />", {
-                        type: "radio",
-                        id: "check-" + expositions[index]._id
-                    });
-                    fillTable($("#events-table-expositions"), expositions[index]);
-                }
-            }
-        } else {
-            fillTable($("#events-table-expositions"), null);
-        }
-    }).fail(function () {
-        $("#events-load-failure").append($("<li />", {
-            text: "Die Ausstellung Daten konnten nicht geladen werden."
-        }));
-        $("#events-table-expositions").hide();
-    }).always(function () {
-        $.holdReady(false);
-    });
+    loadData("expositions", "radio");
 
     /*
      * Lädt alle Verfügbaren Spiele aus der Datenbank
      */
+    loadData("games", "checkbox");
+
+}
+
+function loadData(dataName, checkType) {
     $.holdReady(true);
-    $.get("/find/games").done(function (games) {
-        if (games.length > 0) {
-            for (let index in games) {
-                if (games.hasOwnProperty(index)) {
-                    games[index].check = $("<input />", {
-                        type: "checkbox",
-                        id: "check-" + games[index]._id
+    $.get("/find/" + dataName).done(function (result) {
+        if (result.length > 0) {
+            for (let index in result) {
+                if (result.hasOwnProperty(index)) {
+                    result[index].check = $("<input />", {
+                        type: checkType,
+                        id: "check-" + result[index]._id
                     });
-                    fillTable($("#events-table-games"), games[index]);
+                    fillTable($("#events-table-" + dataName), result[index]);
                 }
             }
         } else {
-            fillTable($("#events-table-games"), null);
+            fillTable($("#events-table-" + result), null);
         }
     }).fail(function () {
         $("#events-load-failure").append($("<li />", {
-            text: "Die Games Daten konnten nicht geladen werden."
+            text: "Die " + dataName + " Daten konnten nicht geladen werden."
         }));
-        $("#events-table-games").hide();
+        $("#events-table-" + dataName).hide();
     }).always(function () {
         $.holdReady(false);
     });
@@ -226,7 +204,7 @@ function appendRow(pObj) {
     }
     let tableRow = addRow($("#events-list"), pObj, {classes: "event-bs-cell " + (pObj.isNew ? "new-item" : "")},
         {classes: "", text: "date"}
-        , {classes: "", text: "name"});
+        , {classes: "align-left", text: "name"});
     //Objekt der Liste hinzufüge
     eventList.push(pObj);
 }

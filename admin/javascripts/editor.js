@@ -95,6 +95,7 @@ function fillTable(table, data) {
 
                 let thSplitClasses = thAttributes.classes.split(".");
                 let property = cellObjQuery;
+                let clazz = "";
 
                 for (let counter = 0; counter < thSplitClasses.length; counter++) {
                     if (!property) {
@@ -117,11 +118,14 @@ function fillTable(table, data) {
                         property = property.length;
                         break;
                     default:
+                        if (thAttributes.abbr)
+                            clazz = thAttributes.abbr;
                         break;
                 }
 
                 $("<td />", {
-                    html: property
+                    html: property,
+                    class: clazz
                 }).appendTo(tableRow);
             }
             tableRow.appendTo(tableBody);

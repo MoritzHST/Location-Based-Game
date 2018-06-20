@@ -173,7 +173,7 @@ function appendRow(pObj) {
     let tableRow = addRow($("#rooms-list"), pObj, {classes: "room-bs-cell " + (pObj.isNew ? "new-item" : "")}, {
         text: "roomnumber",
         classes: "room-number-cell"
-    }, {text: "identifier", classes: "room-identifier-cell"});
+    }, {text: "identifier", classes: "room-identifier-cell align-left"});
 
     //Row-Objekt der Objektliste hinzufügen
     roomList[rowId] = pObj;

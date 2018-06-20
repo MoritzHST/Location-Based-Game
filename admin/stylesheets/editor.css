@@ -281,3 +281,9 @@ th.min-column {
 .details-table tbody {
     display: table-row-group
 }
+
+.align-left {
+    text-align: left !important;
+    padding-left: 10px;
+    padding-right: 10px;
+}

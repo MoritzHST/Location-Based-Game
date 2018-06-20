@@ -227,7 +227,7 @@ function appendRow(pObj) {
     addRow($("#games-list"), pObj, {classes: "game-bs-cell " + (pObj.isNew ? "new-item" : "")}, {
         classes: "games-type-cell",
         text: "typeReadable"
-    }, {classes: "games-points-cell", text: "points"}, {classes: "games-question-cell", text: "question"});
+    }, {classes: "games-points-cell", text: "points"}, {classes: "games-question-cell align-left", text: "question"});
     delete pObj.typeReadable;
 
     gameList[rowId] = pObj;

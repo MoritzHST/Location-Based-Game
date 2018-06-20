@@ -324,10 +324,10 @@ function appendRow(pObj) {
     }
 
     let tableRow = addRow($("#expositions-list"), pObj, {classes: "exposition-bs-cell " + (pObj.isNew ? "new-item" : "")}, {
-            classes: "exposition-name-cell",
+            classes: "exposition-name-cell align-left",
             text: "name"
         },
-        {classes: "exposition-description-cell", text: "description"});
+        {classes: "exposition-description-cell align-left", text: "description"});
 
     //Objekt der Liste hinzufüge
     expositionList[rowId] = pObj;

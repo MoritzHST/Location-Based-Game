@@ -16,6 +16,10 @@ var failedItems;
 var maximumImageAmount = 8;
 // BIlder die Pro ausstellung erlaubt sind
 var maximumImageItems = 5;
+// Input Elements
+var inputElements = $(".details input, .details textarea");
+// Input clickEventElements
+var inputClickableElements = $(".details .button-group a, .details .thumbnail-preview, #exposition-image-collection-wrapper, #delete-exposition-button");
 
 $(document).ready(function () {
     $("#button-save-template.ui-button, #button-import-template.ui-button").prop("disabled", true);
@@ -125,6 +129,9 @@ $(document).ready(function () {
     });
 
     $("#delete-exposition-button").on("click", function () {
+        if (!selectedExposition) {
+            return;
+        }
         selectedExposition.remove = true;
         $(".ui-selected").find(".bs").addClass("delete-item");
         delMap.set(selectedExposition._id, selectedExposition);
@@ -140,6 +147,9 @@ $(document).ready(function () {
     });
 
     $("#exposition-thumbnail-preview").on("click", function () {
+        if (!selectedExposition) {
+            return;
+        }
         $("#select-image-dialog").dialog("open");
         let assignedImageContainer = $("#assigned-image-items");
         assignedImageContainer.hide();
@@ -174,6 +184,9 @@ $(document).ready(function () {
     });
 
     $("#exposition-image-preview").on("click", function () {
+        if (!selectedExposition) {
+            return;
+        }
         $("#select-image-dialog").dialog("open");
         let assignedImageContainer = $("#assigned-image-items");
         assignedImageContainer.show();
@@ -221,21 +234,39 @@ $(document).ready(function () {
 
     let textAreaExpositionDescription = $("#exposition-description-textfield");
     $("#exposition-description-bold").on("click", function () {
+        if (!selectedExposition) {
+            return;
+        }
         textAreaExpositionDescription.val(textAreaExpositionDescription.val() + "<strong></strong>");
     });
     $("#exposition-description-italic").on("click", function () {
+        if (!selectedExposition) {
+            return;
+        }
         textAreaExpositionDescription.val(textAreaExpositionDescription.val() + "<i></i>");
     });
     $("#exposition-description-header").on("click", function () {
+        if (!selectedExposition) {
+            return;
+        }
         textAreaExpositionDescription.val(textAreaExpositionDescription.val() + "<h4></h4>");
     });
     $("#exposition-description-list").on("click", function () {
+        if (!selectedExposition) {
+            return;
+        }
         textAreaExpositionDescription.val(textAreaExpositionDescription.val() + "<ul></ul>");
     });
     $("#exposition-description-listelement").on("click", function () {
+        if (!selectedExposition) {
+            return;
+        }
         textAreaExpositionDescription.val(textAreaExpositionDescription.val() + "<li></li>");
     });
     $("#exposition-description-paragraph").on("click", function () {
+        if (!selectedExposition) {
+            return;
+        }
         textAreaExpositionDescription.val(textAreaExpositionDescription.val() + "<p></p>");
     });
 
@@ -261,9 +292,17 @@ function init() {
                     filter: 'tr',
                     selected: function (event, ui) {
                         $(ui.selected).addClass("ui-selected").siblings().removeClass("ui-selected");
+                        inputElements.prop("disabled", false);
+                        inputClickableElements.removeClass("disabled");
                         switchData();
                     },
-                    unselected: function (event, ui) {
+                    unselected: function () {
+                        inputElements.prop("disabled", true);
+                        inputElements.val("");
+                        inputElements.text("");
+                        inputClickableElements.find("img").attr("src", "");
+                        inputClickableElements.addClass("disabled");
+                        selectedExposition = undefined;
                     }
                 });
             });

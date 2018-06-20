@@ -8,6 +8,10 @@
     flex-grow: 1;
 }
 
+.center {
+	text-align: center;	
+}
+
 #sidebar {
     display: flex;
     flex-direction: column;
@@ -109,7 +113,7 @@ th.min-column {
 }
 
 .create-button {
-    display: inline-block;
+    display: inline-block !important;
     border: 1px solid #003eff;
     background: #007fff;
     mask-image: url("../images/create.svg");
@@ -137,7 +141,7 @@ th.min-column {
 }
 
 .remove-button {
-    display: inline-block;
+    display: inline-block !important;
     border: 1px solid #003eff;
     background: #007fff;
     mask-image: url("../images/remove.svg");
@@ -148,6 +152,11 @@ th.min-column {
     -webkit-mask-position: center;
     height: 24px;
     width: 24px;
+}
+
+.disabled {
+    cursor: default;
+    background: #666666;
 }
 
 .bs {
@@ -259,6 +268,30 @@ th.min-column {
     grid-column: span 2;
 }
 
+.grid-columns-3 {
+    grid-column: span 3;
+}
+
 .span {
     width: 100%;
+}
+
+.details-table {
+    display: table
+}
+
+.details-table thead {
+    display: table-header-group
+}
+
+.details-table tr {
+    display: table-row
+}
+
+.details-table td, .details-table th {
+    display: table-cell
+}
+
+.details-table tbody {
+    display: table-row-group
 }

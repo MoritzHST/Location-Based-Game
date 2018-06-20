@@ -18,7 +18,7 @@ var maximumImageAmount = 8;
 var maximumImageItems = 5;
 
 $(document).ready(function () {
-    $(".ui-button").prop("disabled", false);
+    $("#button-save-template.ui-button, #button-import-template.ui-button").prop("disabled", true);
     //Save-Button neu registrieren
     let saveButton = $("#button-save");
     saveButton.off("click");
@@ -128,6 +128,7 @@ $(document).ready(function () {
         selectedExposition.remove = true;
         $(".ui-selected").find(".bs").addClass("delete-item");
         delMap.set(selectedExposition._id, selectedExposition);
+        storeOld();
     });
 
     $("#select-image-dialog").dialog({
@@ -434,7 +435,7 @@ function storeOld() {
 
     if (selectedExposition._id.startsWith("pseudoId-")) {
         if (selectedExposition.remove) {
-            newMap.remove(selectedExposition._id);
+            newMap.delete(selectedExposition._id);
         }
         else {
             newMap.set(selectedExposition._id, selectedExposition);
@@ -442,7 +443,7 @@ function storeOld() {
     }
     else if (selectedExposition._id) {
         if (selectedExposition.remove) {
-            updateMap.remove(selectedExposition._id);
+            updateMap.delete(selectedExposition._id);
         }
         else {
             updateMap.set(selectedExposition._id, selectedExposition);

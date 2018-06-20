@@ -1,4 +1,3 @@
-const operations = require('../mongodb/operations');
 const handler = require('../mongodb/handler');
 const router = require('express').Router();
 const testHandling = require('../data/mongo_data');

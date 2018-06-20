@@ -73,11 +73,6 @@ async function insertIntoDatabase() {
         if (expositionResult._id) {
             locationMapping.exposition._id = expositionResult._id;
         }
-
-        let locationMappingResult = await insertIntoDb(collections.LOCATION_MAPPING, locationMapping);
-        if (locationMappingResult._id) {
-            locationMapping._id = locationMappingResult._id;
-        }
     }
     await insertIntoDb(collections.EVENTS, eventJSON);
 }

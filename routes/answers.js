@@ -6,8 +6,6 @@ const logging = require('../helper/logging');
 const atob = require("atob");
 
 const gameCollection = require('../mongodb/collections').GAMES;
-const locationMappingCollection = require('../mongodb/collections').LOCATION_MAPPING;
-const eventsCollection = require('../mongodb/collections').EVENTS;
 const handler = require('../mongodb/handler');
 const eventHelper = require('../helper/event');
 const answerHelper = require('../helper/answerHelper');

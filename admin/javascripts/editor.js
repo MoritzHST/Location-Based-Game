@@ -125,6 +125,10 @@ function fillTable(table, data) {
                 }).appendTo(tableRow);
             }
             tableRow.appendTo(tableBody);
+            if (!rowId) {
+                rowId = 0;
+            }
+            rowId++;
         }
     }
 }

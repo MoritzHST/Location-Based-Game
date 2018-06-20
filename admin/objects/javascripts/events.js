@@ -29,14 +29,17 @@ $(document).ready(function () {
             $("#delete-event-button").removeClass("disabled");
 
             selectedEvent = eventList[$("#events-table-default > tbody.table-list").find(ui.selected).index()];
-            fillTable($("#events-table-mapping"), selectedEvent.locationMappings);
-            $("#events-table-mapping").find("tbody:first").attr("id", "tbody-" + selectedEvent._id);
+
+            let eventTableMapping = $("#events-table-mapping");
+            fillTable(eventTableMapping, selectedEvent.locationMappings);
+            eventTableMapping.find("tbody:first").attr("id", "tbody-" + selectedEvent._id);
         },
         unselected: function () {
             $("#events-table-mapping > tbody").empty();
             $("#delete-event-button").addClass("disabled");
-            $("input[type='checkbox'], input[type='radio']").prop("checked", false);
-            $("input[type='checkbox'], input[type='radio']").prop("disabled", true);
+            let checkBox = $("input[type='checkbox'], input[type='radio']");
+            checkBox.prop("checked", false);
+            checkBox.prop("disabled", true);
         }
     });
 
@@ -85,8 +88,9 @@ $(document).ready(function () {
         },
         unselected: function () {
             $("#delete-mapping-button").addClass("disabled");
-            $("input[type='checkbox'], input[type='radio']").prop("checked", false);
-            $("input[type='checkbox'], input[type='radio']").prop("disabled", true);
+            let checkBox = $("input[type='checkbox'], input[type='radio']");
+            checkBox.prop("checked", false);
+            checkBox.prop("disabled", true);
         }
     });
     $("#duplicate-event-button").on("click", function () {
@@ -99,7 +103,7 @@ $(document).ready(function () {
         //Event-Datum clearen
         newEvent.date = undefined;
         //Fake-ID geben die nicht weiter geändert wird, um es in Map ablegen zu können
-        newEvent._id = "pseudoId-" + newEvent._id;
+        newEvent._id = "pseudoId-" + rowId;
         newMap.set(newEvent._id, newEvent);
         appendRow(newEvent);
 
@@ -224,5 +228,5 @@ function appendRow(pObj) {
         {classes: "", text: "date"}
         , {classes: "", text: "name"});
     //Objekt der Liste hinzufüge
-    eventList[rowId] = pObj;
+    eventList.push(pObj);
 }

@@ -97,7 +97,7 @@ $(document).ready(function () {
         let newEvent = Object.assign({}, selectedEvent);
         newEvent.isNew = true;
         //Event-Datum clearen
-        newEvent.date = "";
+        newEvent.date = undefined;
         //Fake-ID geben die nicht weiter geändert wird, um es in Map ablegen zu können
         newEvent._id = "pseudoId-" + newEvent._id;
         newMap.set(newEvent._id, newEvent);
@@ -216,15 +216,13 @@ function getNeededData(eventList) {
 }
 
 function appendRow(pObj) {
-    //Ist die Ausstellungsliste initialisiert? Wenn nein tu es
+    //Ist die Event initialisiert? Wenn nein tu es
     if (!(Array.isArray(eventList))) {
         eventList = [];
     }
-
     let tableRow = addRow($("#events-list"), pObj, {classes: "event-bs-cell " + (pObj.isNew ? "new-item" : "")},
         {classes: "", text: "date"}
         , {classes: "", text: "name"});
-
     //Objekt der Liste hinzufüge
     eventList[rowId] = pObj;
 }

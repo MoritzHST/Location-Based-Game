@@ -145,8 +145,11 @@ function addRow(tableBody, data, bs, ...params) {
         }).appendTo(tableRow);
 
     for (let val of params) {
+        if (!val.text) {
+            continue;
+        }
         $("<td/>", {
-            text: "<p>" + data[val.text] && data[val.text].length > 120 ? data[val.text].substring(0, 117) + "..." : data[val.text] ? data[val.text] : "" + "</p>",
+            text: "<p>" + ((data[val.text] && data[val.text].length > 120) ? data[val.text].substring(0, 117) + "..." : data[val.text]) ? data[val.text] : "" + "</p>",
             class: (val.classes ? val.classes : "")
         }).appendTo(tableRow);
     }

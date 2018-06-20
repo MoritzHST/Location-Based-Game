@@ -1,5 +1,17 @@
-$(document).ready(function() {
-    let eventList = [];
+//In der Tabelle gewählter Raum
+var selectedEvent;
+
+var eventList = [];
+//Neue Ausstellungen als Map
+var newMap = new Map();
+//Ausstellungen die gelöscht werden sollen
+var delMap = new Map();
+//Bearbeitete, Persistierte Ausstellungen als Map
+var updateMap = new Map();
+//Fehlgeschlagene Items bei der Persitierung
+var failedItems;
+
+$(document).ready(function () {
 
     getNeededData(eventList);
 
@@ -8,19 +20,19 @@ $(document).ready(function() {
     $("input[type='checkbox'], input[type='radio']").prop("disabled", true);
     $(".ui-button").prop("disabled", false);
 
-    $("#events-table-default > tbody.table-list").bind('mousedown', function(event) {
+    $("#events-table-default > tbody.table-list").bind('mousedown', function (event) {
         event.metaKey = true;
     }).selectable({
-        filter : 'tr',
-        selected : function(event, ui) {
+        filter: 'tr',
+        selected: function (event, ui) {
             $(ui.selected).addClass("ui-selected").siblings().removeClass("ui-selected");
             $("#delete-event-button").removeClass("disabled");
 
-            let selectedEvent = eventList[$("#events-table-default > tbody.table-list").find(ui.selected).index()];
+            selectedEvent = eventList[$("#events-table-default > tbody.table-list").find(ui.selected).index()];
             fillTable($("#events-table-mapping"), selectedEvent.locationMappings);
             $("#events-table-mapping").find("tbody:first").attr("id", "tbody-" + selectedEvent._id);
         },
-        unselected : function() {
+        unselected: function () {
             $("#events-table-mapping > tbody").empty();
             $("#delete-event-button").addClass("disabled");
             $("input[type='checkbox'], input[type='radio']").prop("checked", false);
@@ -28,11 +40,11 @@ $(document).ready(function() {
         }
     });
 
-    $("#events-table-mapping > tbody.table-list").bind('mousedown', function(event) {
+    $("#events-table-mapping > tbody.table-list").bind('mousedown', function (event) {
         event.metaKey = true;
     }).selectable({
-        filter : 'tr',
-        selected : function(event, ui) {
+        filter: 'tr',
+        selected: function (event, ui) {
             $(ui.selected).addClass("ui-selected").siblings().removeClass("ui-selected");
             $("#delete-mapping-button").removeClass("disabled");
             $("input[type='checkbox'], input[type='radio']").prop("disabled", false);
@@ -47,7 +59,7 @@ $(document).ready(function() {
             }
 
             // Vergleich mit Räume
-            $("#events-table-locations > tbody").find("tr").each(function() {
+            $("#events-table-locations > tbody").find("tr").each(function () {
                 if (String(selectedMap.location._id) === $(this).attr("id").slice(3)) {
                     $(this).find("input[type]").prop("checked", true);
                     return false;
@@ -55,7 +67,7 @@ $(document).ready(function() {
             });
 
             // Vergleich mit Ausstellungen
-            $("#events-table-expositions > tbody").find("tr").each(function() {
+            $("#events-table-expositions > tbody").find("tr").each(function () {
                 if (String(selectedMap.exposition._id) === $(this).attr("id").slice(3)) {
                     $(this).find("input[type]").prop("checked", true);
                     return false;
@@ -63,19 +75,35 @@ $(document).ready(function() {
             });
 
             // Vergleich mit Spiele
-            $("#events-table-games > tbody").find("tr").each(function() {
-                    for (let game of selectedMap.games) {
-                        if (String(game._id) === $(this).attr("id").slice(3)) {
-                            $(this).find("input[type]").prop("checked", true);
-                        }
+            $("#events-table-games > tbody").find("tr").each(function () {
+                for (let game of selectedMap.games) {
+                    if (String(game._id) === $(this).attr("id").slice(3)) {
+                        $(this).find("input[type]").prop("checked", true);
                     }
+                }
             });
         },
-        unselected : function() {
+        unselected: function () {
             $("#delete-mapping-button").addClass("disabled");
             $("input[type='checkbox'], input[type='radio']").prop("checked", false);
             $("input[type='checkbox'], input[type='radio']").prop("disabled", true);
         }
+    });
+    $("#duplicate-event-button").on("click", function () {
+        //Neu initialisieren und flaggen
+        if (!selectedEvent) {
+            return;
+        }
+        let newEvent = Object.assign({}, selectedEvent);
+        newEvent.isNew = true;
+        //Event-Datum clearen
+        newEvent.date = "";
+        //Fake-ID geben die nicht weiter geändert wird, um es in Map ablegen zu können
+        newEvent._id = "pseudoId-" + newEvent._id;
+        newMap.set(newEvent._id, newEvent);
+        appendRow(newEvent);
+
+        $("#" + (rowId)).addClass("ui-selected").siblings().removeClass("ui-selected");
     });
 });
 
@@ -84,10 +112,10 @@ $(document).ready(function() {
  */
 function getNeededData(eventList) {
     $.holdReady(true);
-    $.get("/find/events").done(function(events) {
+    $.get("/find/events").done(function (events) {
 
         if (events.length > 0) {
-            for ( let index in events) {
+            for (let index in events) {
                 if (events.hasOwnProperty(index)) {
                     fillTable($("#events-table-default"), events[index]);
                     eventList.push(events[index]);
@@ -96,12 +124,12 @@ function getNeededData(eventList) {
         } else {
             fillTable($("#events-table-default"), null);
         }
-    }).fail(function() {
+    }).fail(function () {
         $("#events-load-failure").append($("<li />", {
-            text : "Die Event Daten konnten nicht geladen werden."
+            text: "Die Event Daten konnten nicht geladen werden."
         }));
         $("#events-table-default").hide();
-    }).always(function() {
+    }).always(function () {
         $.holdReady(false);
     });
 
@@ -109,13 +137,13 @@ function getNeededData(eventList) {
      * Lädt alle Verfügbaren Räume aus der Datenbank
      */
     $.holdReady(true);
-    $.get("/find/locations").done(function(locations) {
+    $.get("/find/locations").done(function (locations) {
         if (locations.length > 0) {
-            for ( let index in locations) {
+            for (let index in locations) {
                 if (locations.hasOwnProperty(index)) {
                     locations[index].check = $("<input />", {
-                        type : "radio",
-                        id : "check-" + locations[index]._id
+                        type: "radio",
+                        id: "check-" + locations[index]._id
                     });
                     fillTable($("#events-table-locations"), locations[index]);
                 }
@@ -123,12 +151,12 @@ function getNeededData(eventList) {
         } else {
             fillTable($("#events-table-locations"), null);
         }
-    }).fail(function() {
+    }).fail(function () {
         $("#events-load-failure").append($("<li />", {
-            text : "Die Location Daten konnten nicht geladen werden."
+            text: "Die Location Daten konnten nicht geladen werden."
         }));
         $("#events-table-location").hide();
-    }).always(function() {
+    }).always(function () {
         $.holdReady(false);
     });
 
@@ -136,13 +164,13 @@ function getNeededData(eventList) {
      * Lädt alle Verfügbaren Ausstellungen aus der Datenbank
      */
     $.holdReady(true);
-    $.get("/find/expositions").done(function(expositions) {
+    $.get("/find/expositions").done(function (expositions) {
         if (expositions.length > 0) {
-            for ( let index in expositions) {
+            for (let index in expositions) {
                 if (expositions.hasOwnProperty(index)) {
                     expositions[index].check = $("<input />", {
-                        type : "radio",
-                        id : "check-" + expositions[index]._id
+                        type: "radio",
+                        id: "check-" + expositions[index]._id
                     });
                     fillTable($("#events-table-expositions"), expositions[index]);
                 }
@@ -150,12 +178,12 @@ function getNeededData(eventList) {
         } else {
             fillTable($("#events-table-expositions"), null);
         }
-    }).fail(function() {
+    }).fail(function () {
         $("#events-load-failure").append($("<li />", {
-            text : "Die Ausstellung Daten konnten nicht geladen werden."
+            text: "Die Ausstellung Daten konnten nicht geladen werden."
         }));
         $("#events-table-expositions").hide();
-    }).always(function() {
+    }).always(function () {
         $.holdReady(false);
     });
 
@@ -163,13 +191,13 @@ function getNeededData(eventList) {
      * Lädt alle Verfügbaren Spiele aus der Datenbank
      */
     $.holdReady(true);
-    $.get("/find/games").done(function(games) {
+    $.get("/find/games").done(function (games) {
         if (games.length > 0) {
-            for ( let index in games) {
+            for (let index in games) {
                 if (games.hasOwnProperty(index)) {
                     games[index].check = $("<input />", {
-                        type : "checkbox",
-                        id : "check-" + games[index]._id
+                        type: "checkbox",
+                        id: "check-" + games[index]._id
                     });
                     fillTable($("#events-table-games"), games[index]);
                 }
@@ -177,12 +205,26 @@ function getNeededData(eventList) {
         } else {
             fillTable($("#events-table-games"), null);
         }
-    }).fail(function() {
+    }).fail(function () {
         $("#events-load-failure").append($("<li />", {
-            text : "Die Games Daten konnten nicht geladen werden."
+            text: "Die Games Daten konnten nicht geladen werden."
         }));
         $("#events-table-games").hide();
-    }).always(function() {
+    }).always(function () {
         $.holdReady(false);
     });
+}
+
+function appendRow(pObj) {
+    //Ist die Ausstellungsliste initialisiert? Wenn nein tu es
+    if (!(Array.isArray(eventList))) {
+        eventList = [];
+    }
+
+    let tableRow = addRow($("#events-list"), pObj, {classes: "event-bs-cell " + (pObj.isNew ? "new-item" : "")},
+        {classes: "", text: "date"}
+        , {classes: "", text: "name"});
+
+    //Objekt der Liste hinzufüge
+    eventList[rowId] = pObj;
 }

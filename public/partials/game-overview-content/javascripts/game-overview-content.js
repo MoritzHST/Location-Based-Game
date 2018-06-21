@@ -100,7 +100,7 @@ function setTableContent(dataObj) {
     let mediaObj = $("#" + dataObj.location._id + "-hook");
     mediaObj.find(".overview-table-cell-location-info-name").html(dataObj.location.roomnumber + " " + dataObj.exposition.name);
     if (dataObj.exposition.thumbnail) {
-        mediaObj.find(".overview-table-cell-location-image-wrapper").css("background", "url(" + dataObj.exposition.thumbnailPath + ") no-repeat");
+        mediaObj.find(".overview-table-cell-location-image-wrapper").css("background", "url(" + dataObj.exposition.thumbnail + ") no-repeat");
     }
     mediaObj.find(".overview-table-cell-location-info-description").html(getDescriptionString(dataObj.exposition.description));
     mediaObj.find(".overview-table-cell-location-state").addClass("overview-room-state-context-" + dataObj.state);

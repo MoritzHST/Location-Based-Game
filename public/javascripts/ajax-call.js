@@ -11,6 +11,7 @@ function ajaxRequest(pUrl, pMethod, pObject, pCallback, pFailCallback) {
         type: pMethod,
         url: pUrl,
         data: pObject,
+        contentType: "application/json; charset=utf-8",
         success: pCallback,
         error: pFailCallback
     });

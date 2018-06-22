@@ -17,7 +17,7 @@
     <script src="objects/javascripts/expositions.js"></script>
 </head>
 <body>
-<div id="select-image-dialog" class="dialog">
+<div id="select-image-dialog" style="display: none" class="dialog">
     <div class="preview-image-container">
         <div class="image-preview-wrapper">
             <img src="" id="image-preview" class="image-preview">
@@ -53,34 +53,36 @@
 </table>
 <div class="button-group">
     <a href="#" id="new-exposition-button" class="create-button"></a>
-    <a href="#" id="delete-exposition-button" class="remove-button"></a>
+    <a href="#" id="delete-exposition-button" class="remove-button disabled"></a>
 </div>
 <div class="details details-2c">
     <div>
         <div class="details-element">
             <label for="exposition-name-textfield"><strong>Bezeichnung*</strong></label>
-            <input type="text" class="textfield" id="exposition-name-textfield">
+            <input type="text" class="textfield" id="exposition-name-textfield" disabled>
         </div>
         <div class="details-element">
             <label for="exposition-description-textfield"><strong>Beschreibung*</strong></label>
             <div class="button-group">
-                <a href="#" id="exposition-description-header" class="control-button">Überschrift</a><a href="#"
-                                                                                                        id="exposition-description-bold"
-                                                                                                        class="control-button">Fett</a><a
-                    href="#" id="exposition-description-italic" class="control-button">Kursiv</a><a href="#"
-                                                                                                    id="exposition-description-list"
-                                                                                                    class="control-button">Liste</a><a
-                    href="#" id="exposition-description-listelement" class="control-button">Listenelement</a><a href="#"
-                                                                                                                id="exposition-description-paragraph"
-                                                                                                                class="control-button">Absatz</a>
+                <a href="#" id="exposition-description-header" class="control-button disabled">Überschrift</a><a
+                    href="#"
+                    id="exposition-description-bold"
+                    class="control-button disabled">Fett</a><a
+                    href="#" id="exposition-description-italic" class="control-button disabled">Kursiv</a><a href="#"
+                                                                                                             id="exposition-description-list"
+                                                                                                             class="control-button disabled">Liste</a><a
+                    href="#" id="exposition-description-listelement" class="control-button disabled">Listenelement</a><a
+                    href="#"
+                    id="exposition-description-paragraph"
+                    class="control-button disabled">Absatz</a>
             </div>
-            <textarea type="text" class="textarea" id="exposition-description-textfield"></textarea>
+            <textarea type="text" class="textarea" id="exposition-description-textfield" disabled></textarea>
         </div>
     </div>
     <div class="details-element">
         <label for="exposition-thumbnail-preview"><strong>Thumbnail</strong></label>
         <a href="#">
-            <div id="exposition-thumbnail-preview" class="thumbnail-preview">
+            <div id="exposition-thumbnail-preview" class="thumbnail-preview disabled">
                 <img src="" class="image-preview" id="exposition-thumbnail">
             </div>
         </a>
@@ -88,11 +90,11 @@
     <div class="details-element grid-columns-2">
         <label for="exposition-image-preview"><strong>Ausstellungsbilder</strong></label>
         <a href="#">
-            <div id="exposition-image-preview" class="thumbnail-preview">
+            <div id="exposition-image-preview" class="thumbnail-preview disabled">
                 <img src="" class="image-preview" id="exposition-selected-image">
             </div>
         </a>
-        <div id="exposition-image-collection-wrapper" class="assigned-image-items span"></div>
+        <div id="exposition-image-collection-wrapper" class="assigned-image-items span disabled"></div>
     </div>
 </div>
 </body>

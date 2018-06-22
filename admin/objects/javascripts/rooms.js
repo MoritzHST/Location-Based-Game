@@ -1,18 +1,18 @@
-//In der Tabelle gewählter Raum
-var selectedRoom;
-//Neue Räume als Map
-var newMap = new Map();
-//Räume die gelöscht werden sollen als Map
-var delMap = new Map();
-//Bearbeitete, persistierte Räume als Map
-var updateMap = new Map();
-//Liste der Räume (Tabelle als Objektliste)
-var roomList;
-//Fehlgeschlagene Items bei persistierung
-var failedItems;
-
 $(document).ready(function () {
-    $(".ui-button").prop("disabled", false);
+    //In der Tabelle gewählter Raum
+    var selectedRoom;
+//Neue Räume als Map
+    var newMap = new Map();
+//Räume die gelöscht werden sollen als Map
+    var delMap = new Map();
+//Bearbeitete, persistierte Räume als Map
+    var updateMap = new Map();
+//Liste der Räume (Tabelle als Objektliste)
+    var roomList;
+//Fehlgeschlagene Items bei persistierung
+    var failedItems;
+
+    $("#button-save-template.ui-button, #button-import-template.ui-button").prop("disabled", true);
     //Save-Button neu registrieren
     let saveButton = $("#button-save");
     saveButton.off("click");
@@ -25,7 +25,7 @@ $(document).ready(function () {
 
         //Neue Räume persistieren
         for (let i in newList) {
-            if (newList.hasOwnProperty(i) && isValid(newList[i])) {
+            if (newList.hasOwnProperty(i) && isValid(newList[i], roomList)) {
                 calls.push(
                     $.post("/insert/locations", {
                         roomnumber: newList[i].roomnumber,
@@ -44,7 +44,7 @@ $(document).ready(function () {
         }
         //geänderte RÄume persistieren
         for (let i in updList) {
-            if (updList.hasOwnProperty(i) && isValid(updList[i])) {
+            if (updList.hasOwnProperty(i) && isValid(updList[i], roomList)) {
                 calls.push(
                     $.post("/update/locations/" + updList[i]._id, {
                         roomnumber: updList[i].roomnumber,
@@ -83,7 +83,7 @@ $(document).ready(function () {
                 .then(function () {
                     for (let i in failedItems) {
                         if (failedItems[i].isNew) {
-                            appendRow(failedItems[i]);
+                            appendRow(failedItems[i], roomList);
                             $("#" + (rowId)).addClass("failed");
                         }
                         else {
@@ -109,28 +109,29 @@ $(document).ready(function () {
         //Fake-ID geben die nicht weiter geändert wird, um es in Map ablegen zu können
         selectedRoom._id = "pseudoId-" + rowId;
 
-        appendRow(selectedRoom);
-        //click triggern
-        $("#" + (rowId)).addClass("ui-selected").siblings().removeClass("ui-selected");
-        updateDetails();
+        selectSelectableElement($("#rooms-list"), appendRow(selectedRoom), roomList);
     });
 
     $("#delete-room-button").on("click", function () {
+        if (!selectedRoom) {
+            return;
+        }
         selectedRoom.remove = true;
         $(".ui-selected").find(".bs").addClass("delete-item");
         delMap.set(selectedRoom._id, selectedRoom);
+        storeOld();
     });
 
-    init();
+    roomList = [];
+    init(roomList);
 });
 
-
-async function init() {
+async function init(roomList) {
     return new Promise(resolve => {
         $.get("/find/locations").done(function (result) {
             $(".data-row").remove();
             for (event in result) {
-                appendRow(result[event]);
+                appendRow(result[event], roomList);
             }
             resolve(true);
         }).fail(function () {
@@ -143,9 +144,20 @@ async function init() {
                 selected: function (event, ui) {
                     $(ui.selected).addClass("ui-selected").siblings().removeClass("ui-selected");
                     selectedRoom = roomList[$(".ui-selected").prop("id")];
-                    updateDetails();
+                    updateDetails(false);
+                    $("#location-identifier-textfield, #location-roomnumber-textfield").prop("disabled", false);
+                    $("#delete-room-button").removeClass("disabled");
                 },
                 unselected: function (event, ui) {
+                    selectedRoom = {};
+                    selectedRoom.roomnumber = "";
+                    selectedRoom.identifier = "";
+                    updateDetails(false);
+
+                  $("#location-identifier-textfield").removeClass("textfield-invalid");
+                  $("#location-roomnumber-textfield").removeClass("textfield-invalid");
+                  $("#location-identifier-textfield, #location-roomnumber-textfield").prop("disabled", true);
+                    $("#delete-room-button").addClass("disabled");
                 }
             });
         });
@@ -153,7 +165,7 @@ async function init() {
 }
 
 
-function appendRow(pObj) {
+function appendRow(pObj, roomList) {
     //Ist die Raumliste initialisiert? Wenn nein tu es
     if (!(Array.isArray(roomList))) {
         roomList = [];
@@ -162,20 +174,21 @@ function appendRow(pObj) {
     let tableRow = addRow($("#rooms-list"), pObj, {classes: "room-bs-cell " + (pObj.isNew ? "new-item" : "")}, {
         text: "roomnumber",
         classes: "room-number-cell"
-    }, {text: "identifier", classes: "room-identifier-cell"});
+    }, {text: "identifier", classes: "room-identifier-cell align-left"});
 
     //Row-Objekt der Objektliste hinzufügen
     roomList[rowId] = pObj;
 
     //onclick registereiren
     tableRow.on("click", function () {
-        $(this).addClass("ui-selected").siblings().removeClass("ui-selected");
+        //$(this).addClass("ui-selected").siblings().removeClass("ui-selected");
         selectedRoom = roomList[$(this).prop("id")];
-        updateDetails();
+        updateDetails(true);
     });
+    return tableRow;
 }
 
-function updateDetails() {
+function updateDetails(testInput) {
     let selRow = $(".ui-selected");
     let detailsFields = $("#location-roomnumber-textfield, #location-identifier-textfield");
     //Alten Trigger entfernen, neuen setzen
@@ -191,7 +204,8 @@ function updateDetails() {
         $(selRow).find(".room-number-cell").text(selectedRoom.roomnumber);
         $(selRow).find(".room-identifier-cell").text(selectedRoom.identifier);
         //Input validieren
-        checkInput();
+        if (testInput)
+            checkInput();
         //Eingaben in Map festhalten
         storeOld();
     });
@@ -211,7 +225,7 @@ function storeOld() {
     //Objekt ist neu -> hat keine Id -> hat aber isNew-Flag
     if (selectedRoom.isNew) {
         if (selectedRoom.remove) {
-            newMap.remove(selectedRoom._id)
+            newMap.delete(selectedRoom._id)
         }
         else {
             newMap.set(selectedRoom._id, selectedRoom);
@@ -220,7 +234,7 @@ function storeOld() {
     //Objekt ist persistiert -> hat also ID
     else if (selectedRoom._id) {
         if (selectedRoom.remove) {
-            updateMap.remove(selectedRoom._id);
+            updateMap.delete(selectedRoom._id);
         }
         else {
             updateMap.set(selectedRoom._id, selectedRoom);
@@ -266,7 +280,7 @@ function checkInput() {
 }
 
 //Validiert, ob das Objekt auf Clientseite valide ist
-function isValid(dataObj) {
+function isValid(dataObj, roomList) {
     let isValid = true;
 
     for (let i in roomList) {

@@ -1,17 +1,17 @@
-//In der Tabelle gewählter Raum
-var selectedRoom;
-//Neue Räume als Map
-var newMap = new Map();
-//Räume die gelöscht werden sollen als Map
-var delMap = new Map();
-//Bearbeitete, persistierte Räume als Map
-var updateMap = new Map();
-//Liste der Räume (Tabelle als Objektliste)
-var roomList;
-//Fehlgeschlagene Items bei persistierung
-var failedItems;
-
 $(document).ready(function () {
+    //In der Tabelle gewählter Raum
+    var selectedRoom;
+//Neue Räume als Map
+    var newMap = new Map();
+//Räume die gelöscht werden sollen als Map
+    var delMap = new Map();
+//Bearbeitete, persistierte Räume als Map
+    var updateMap = new Map();
+//Liste der Räume (Tabelle als Objektliste)
+    var roomList;
+//Fehlgeschlagene Items bei persistierung
+    var failedItems;
+
     $("#button-save-template.ui-button, #button-import-template.ui-button").prop("disabled", true);
     //Save-Button neu registrieren
     let saveButton = $("#button-save");
@@ -25,7 +25,7 @@ $(document).ready(function () {
 
         //Neue Räume persistieren
         for (let i in newList) {
-            if (newList.hasOwnProperty(i) && isValid(newList[i])) {
+            if (newList.hasOwnProperty(i) && isValid(newList[i], roomList)) {
                 calls.push(
                     $.post("/insert/locations", {
                         roomnumber: newList[i].roomnumber,
@@ -44,7 +44,7 @@ $(document).ready(function () {
         }
         //geänderte RÄume persistieren
         for (let i in updList) {
-            if (updList.hasOwnProperty(i) && isValid(updList[i])) {
+            if (updList.hasOwnProperty(i) && isValid(updList[i], roomList)) {
                 calls.push(
                     $.post("/update/locations/" + updList[i]._id, {
                         roomnumber: updList[i].roomnumber,
@@ -83,7 +83,7 @@ $(document).ready(function () {
                 .then(function () {
                     for (let i in failedItems) {
                         if (failedItems[i].isNew) {
-                            appendRow(failedItems[i]);
+                            appendRow(failedItems[i], roomList);
                             $("#" + (rowId)).addClass("failed");
                         }
                         else {
@@ -109,7 +109,7 @@ $(document).ready(function () {
         //Fake-ID geben die nicht weiter geändert wird, um es in Map ablegen zu können
         selectedRoom._id = "pseudoId-" + rowId;
 
-        selectSelectableElement ($("#rooms-list"), appendRow(selectedRoom));
+        selectSelectableElement($("#rooms-list"), appendRow(selectedRoom), roomList);
     });
 
     $("#delete-room-button").on("click", function () {
@@ -122,15 +122,16 @@ $(document).ready(function () {
         storeOld();
     });
 
-    init();
+    roomList = [];
+    init(roomList);
 });
 
-async function init() {
+async function init(roomList) {
     return new Promise(resolve => {
         $.get("/find/locations").done(function (result) {
             $(".data-row").remove();
             for (event in result) {
-                appendRow(result[event]);
+                appendRow(result[event], roomList);
             }
             resolve(true);
         }).fail(function () {
@@ -164,7 +165,7 @@ async function init() {
 }
 
 
-function appendRow(pObj) {
+function appendRow(pObj, roomList) {
     //Ist die Raumliste initialisiert? Wenn nein tu es
     if (!(Array.isArray(roomList))) {
         roomList = [];
@@ -279,7 +280,7 @@ function checkInput() {
 }
 
 //Validiert, ob das Objekt auf Clientseite valide ist
-function isValid(dataObj) {
+function isValid(dataObj, roomList) {
     let isValid = true;
 
     for (let i in roomList) {

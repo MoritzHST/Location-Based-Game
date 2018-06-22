@@ -41,8 +41,7 @@ function insertIntoDb(collection, object) {
         resolve => {
             operations.updateObject(collection, object, object, function (err, result) {
                 if (!err) {
-                    if (result.value)
-                        logging.Info(collection + " erstellt: " + result.value._id);
+                    logging.Info(collection + " erstellt: " + result.value._id);
                     resolve(result.value);
                 }
                 else {
@@ -61,17 +60,17 @@ async function insertIntoDatabase() {
     for (let locationMapping of eventJSON.locationMappings) {
         for (let game of locationMapping.games) {
             let gamesResult = await insertIntoDb(collections.GAMES, game);
-            if (gamesResult && gamesResult._id) {
+            if (gamesResult._id) {
                 game._id = gamesResult._id;
             }
         }
         let locationResult = await insertIntoDb(collections.LOCATIONS, locationMapping.location);
-        if (locationResult && locationResult._id) {
+        if (locationResult._id) {
             locationMapping.location._id = locationResult._id;
         }
 
         let expositionResult = await insertIntoDb(collections.EXPOSITIONS, locationMapping.exposition);
-        if (locationResult && expositionResult._id) {
+        if (expositionResult._id) {
             locationMapping.exposition._id = expositionResult._id;
         }
     }

@@ -4,8 +4,8 @@ let rowId;
 $(document).ready(function () {
     $("#editor").tabs({
         beforeLoad: function( event, ui ) {
-            toggleSideBarButtons(false);
-            $("input[type='submit']").off("submit");
+            toggleAction(false);
+            $("input[type='submit']").off("click");
             ui.panel.html("");
             ui.panel.addClass("center");
 
@@ -16,6 +16,7 @@ $(document).ready(function () {
             }).appendTo(ui.panel);
         },
         load: function( event, ui ) {
+            toggleField(false, $(".details"));
             ui.panel.removeClass("center");
         }
     });
@@ -170,13 +171,27 @@ function loadDataIntoTable(mainName, dataName, checkType, callBack) {
     });
 }
 
-function toggleSideBarButtons(isEnabled, buttons) {
+function toggleAction(isEnabled, buttons) {
     let toggleButtons = buttons ? buttons : $("input[type='submit']");
     toggleButtons.prop("disabled", !isEnabled);
 
     if (isEnabled) {
         toggleButtons.removeClass (function (index, className) {
             return (className.match (/\S+disabled/g) || []).join(' ');
+        });
+    } else {
+        toggleButtons.off("click");
+    }
+}
+
+function toggleField(isEnabled, field) {
+    if (field) {
+        field.find("*").each(function() {
+           $(this).prop("disabled", !isEnabled);
+
+           if (!isEnabled) {
+               $(this).off("input");
+           }
         });
     }
 }

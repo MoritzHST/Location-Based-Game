@@ -20,27 +20,21 @@ $(document).ready(function() {
             filter: 'tr',
             selected: function (event, ui) {
                 $(ui.selected).addClass("ui-selected").siblings().removeClass("ui-selected");
-                toggleField(true, $(".details"));
-                
-                // selectedRoom = roomList[$(".ui-selected").prop("id")];
-                // updateDetails(false);
-                // $("#location-identifier-textfield,
-                // #location-roomnumber-textfield").prop("disabled", false);
-                // $("#delete-room-button").removeClass("disabled");
+                toggleField(true, $(".details"), roomsList[$("#rooms-table-locations > tbody.table-list").find(ui.selected).index()]);
+
+                $("div.details").find("input").on("input", function () {
+                    let cellClass = $(this).attr('class').split(' ')[0];
+                    let selector = $("#rooms-table-locations").children("thead:first").find("th." + cellClass).index();
+                    $(ui.selected).children("td").eq(selector).text($(this).val());
+
+                    $(ui.selected).children("td").eq(0).addClass("edit-item");
+
+                    toggleAction(true, $("#button-save"));
+                });
             },
             unselected: function (event, ui) {
-                toggleField(false, $(".details"));
-                
-                // selectedRoom = {};
-                // selectedRoom.roomnumber = "";
-                // selectedRoom.identifier = "";
-                // updateDetails(false);
-
-              // $("#location-identifier-textfield").removeClass("textfield-invalid");
-              // $("#location-roomnumber-textfield").removeClass("textfield-invalid");
-              // $("#location-identifier-textfield,
-                // #location-roomnumber-textfield").prop("disabled", true);
-              // $("#delete-room-button").addClass("disabled");
+                toggleField(false, $(".details"), roomsList[$("#rooms-table-locations > tbody.table-list").find(ui.unselected).index()]);
+                $("div.details").find("input").removeClass("textfield-invalid");
             }
         });
     });

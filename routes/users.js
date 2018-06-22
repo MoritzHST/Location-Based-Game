@@ -55,10 +55,6 @@ router.post('/insert/users', function(req, res) {
 
         if (handler.checkIfValidQuery(user)) {
             operations.updateObject(userCollection, user, null, function(err, item) {
-                console.log("USER OK???: ");
-                console.log(item);
-                console.log("USER ERROR???: ");
-                console.log(err);
                 handler.dbResult(err, res, item, "Der Benutzer " + JSON.stringify(user).replace(/\"/g, '') + " kann nicht hinzugefüt werden.");
             });
         } else {

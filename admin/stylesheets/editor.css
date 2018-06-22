@@ -154,7 +154,7 @@ th.min-column {
     width: 24px;
 }
 
-.disabled {
+.button-group > input[type='submit'][disabled], .disabled {
     cursor: default;
     background: #666666;
 }
@@ -173,7 +173,7 @@ th.min-column {
     -webkit-mask-position: center;
 }
 
-.bs.edit-item {
+td.edit-item {
     background: #007fff;
     mask-image: url("../images/edit.svg");
     -webkit-mask-image: url("../images/edit.svg");

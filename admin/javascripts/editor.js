@@ -17,10 +17,11 @@ $(document).ready(function () {
         },
         load: function( event, ui ) {
             toggleField(false, $(".details"));
+            $(".remove-button").prop("disabled", true);
             ui.panel.removeClass("center");
         }
     });
-    $("input[type='submit']").button();
+    $("#sidebar > input[type='submit']").button();
 });
 
 $(document).on("click", ".table-list > tr > td > input[type='radio']", function(event) {
@@ -184,14 +185,22 @@ function toggleAction(isEnabled, buttons) {
     }
 }
 
-function toggleField(isEnabled, field) {
+function toggleField(isEnabled, field, listData) {
+    let data = listData ? listData : {};
     if (field) {
         field.find("*").each(function() {
-           $(this).prop("disabled", !isEnabled);
+           Object.keys(data).forEach(property => {
+               if ($(this).hasClass(property)) {
+                   $(this).text(isEnabled ? data[property] : "").val(isEnabled ? data[property] : "");
+               }
 
-           if (!isEnabled) {
-               $(this).off("input");
-           }
+               if (!isEnabled) {
+                   $(this).off("input");
+                   $(this).removeAttr("value");
+               }
+           });
+
+           $(this).prop("disabled", !isEnabled);
         });
     }
 }

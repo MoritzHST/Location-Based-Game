@@ -36,12 +36,13 @@ function clearCollection(pCollection) {
 
 
 function insertIntoDb(collection, object) {
-    //Objekt wird eingefügt/ersetzt
+    // Objekt wird eingefügt/ersetzt
     return new Promise(
         resolve => {
             operations.updateObject(collection, object, object, function (err, result) {
                 if (!err) {
-                    logging.Info(collection + " erstellt: " + result.value._id);
+                    if (result.value)
+                        logging.Info(collection + " erstellt: " + result.value._id);
                     resolve(result.value);
                 }
                 else {
@@ -60,17 +61,17 @@ async function insertIntoDatabase() {
     for (let locationMapping of eventJSON.locationMappings) {
         for (let game of locationMapping.games) {
             let gamesResult = await insertIntoDb(collections.GAMES, game);
-            if (gamesResult._id) {
+            if (gamesResult && gamesResult._id) {
                 game._id = gamesResult._id;
             }
         }
         let locationResult = await insertIntoDb(collections.LOCATIONS, locationMapping.location);
-        if (locationResult._id) {
+        if (locationResult && locationResult._id) {
             locationMapping.location._id = locationResult._id;
         }
 
         let expositionResult = await insertIntoDb(collections.EXPOSITIONS, locationMapping.exposition);
-        if (expositionResult._id) {
+        if (locationResult && expositionResult._id) {
             locationMapping.exposition._id = expositionResult._id;
         }
     }
@@ -78,10 +79,10 @@ async function insertIntoDatabase() {
 }
 
 async function handleDebugObjects() {
-    //Lösche die Collections
+    // Lösche die Collections
     await clearCollections();
-    //Funktionsaufruf für das File
-    //await insertIntoDatabase('example');
+    // Funktionsaufruf für das File
+    // await insertIntoDatabase('example');
     await insertIntoDatabase();
 }
 

@@ -84,26 +84,25 @@ module.exports = {
                     if (pQuery) {
                         result.db(database.Database).collection(pCollection).update(friendlyObject, {'$set': pQuery}, {upsert: true}, function (err, db) {
                             result.close();
-                            pCallback(err, db);
+                            if (pCallback)
+                                pCallback(err, db);
                             resolve(db);
                         });
                     } else {
                         result.db(database.Database).collection(pCollection).insert(friendlyObject, function (err, db) {
                             result.close();
-                            pCallback(err, db);
+                            if (pCallback)                            
+                                pCallback(err, db);
                             resolve(db);
                         });
                     }
                     /*
-                                        result.db(database.Database).collection(pCollection).findAndModify(friendlyObject, [['_id', 'asc']], {'$set': (pQuery ? pQuery : friendlyObject)}, {
-                                            new: true,
-                                            upsert: true
-                                        }, function (err, db) {
-                                            result.close();
-                                            pCallback(err, db);
-                                            resolve(db);
-                                        });
-                    */
+                     * result.db(database.Database).collection(pCollection).findAndModify(friendlyObject,
+                     * [['_id', 'asc']], {'$set': (pQuery ? pQuery :
+                     * friendlyObject)}, { new: true, upsert: true }, function
+                     * (err, db) { result.close(); pCallback(err, db);
+                     * resolve(db); });
+                     */
                 }
             });
             logging.Leaving("updateObject");

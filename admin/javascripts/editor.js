@@ -4,6 +4,8 @@ let rowId;
 $(document).ready(function () {
     $("#editor").tabs({
         beforeLoad: function( event, ui ) {
+            toggleSideBarButtons(false);
+            $("input[type='submit']").off("submit");
             ui.panel.html("");
             ui.panel.addClass("center");
 
@@ -137,6 +139,48 @@ function fillTable(table, data) {
     }
 }
 
+function loadDataIntoTable(mainName, dataName, checkType, callBack) {
+    let dataList = [];
+    $.holdReady(true);
+    $.get("/find/" + dataName).done(function (result) {
+        if (result.length > 0) {
+            for (let index in result) {
+                if (result.hasOwnProperty(index)) {
+                    if (checkType) {
+                        result[index].check = $("<input />", {
+                            id: "check-" + result[index]._id,
+                            type: checkType
+                        });
+                    }
+                    fillTable($("#" + mainName + "-table-" + dataName), result[index]);
+                    dataList.push(result[index]);
+                }
+            }
+        } else {
+            fillTable($("#" + mainName + "-table-" + result), null);
+        }
+    }).fail(function () {
+        $("#" + mainName + "-load-failure").append($("<li />", {
+            text: "Die " + dataName + " Daten konnten nicht geladen werden."
+        }));
+        $("#" + mainName + "-table-" + dataName).hide();
+    }).always(function () {
+        $.holdReady(false);
+        callBack(dataList);
+    });
+}
+
+function toggleSideBarButtons(isEnabled, buttons) {
+    let toggleButtons = buttons ? buttons : $("input[type='submit']");
+    toggleButtons.prop("disabled", !isEnabled);
+
+    if (isEnabled) {
+        toggleButtons.removeClass (function (index, className) {
+            return (className.match (/\S+disabled/g) || []).join(' ');
+        });
+    }
+}
+
 function addRow(tableBody, data, bs, ...params) {
     if (!rowId) {
         rowId = 0;
@@ -157,7 +201,7 @@ function addRow(tableBody, data, bs, ...params) {
             continue;
         }
         $("<td/>", {
-            text: "<p>" + ((data[val.text] && data[val.text].length > 120) ? data[val.text].substring(0, 117) + "..." : data[val.text]) ? data[val.text] : "" + "</p>",
+            text: "<p>" + (data[val.text] && data[val.text].length > 120 ? data[val.text].substring(0, 117) + "..." : data[val.text]) ? data[val.text] : "" + "</p>",
             class: (val.classes ? val.classes : "")
         }).appendTo(tableRow);
     }

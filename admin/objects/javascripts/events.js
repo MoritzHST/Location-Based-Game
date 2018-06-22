@@ -17,7 +17,81 @@ $(document).ready(function () {
     let saveButton = $("#button-save");
     saveButton.off("click");
     saveButton.on("click", function () {
-        console.log("ttt")
+
+        failedItems = [];
+        let calls = [];
+        let newList = Array.from(newMap.values());
+        let updList = Array.from(updateMap.values());
+        let delList = Array.from(delMap.values());
+        for (let i in newList) {
+            if (newList.hasOwnProperty(i) && isValid(newList[i])) {
+                if (newList[i]._id.startsWith("pseudoId")) {
+                    newList[i]._id = undefined;
+                }
+                newList[i].isNew = undefined;
+                calls.push(
+                    $.post("/insert/events", newList[i])
+                        .done(function () {
+
+                        })
+                        .fail(function () {
+                            failedItems.push(newList[i]);
+                        }));
+            }
+            else {
+                failedItems.push(newList[i]);
+            }
+        }
+
+        for (let i in updList) {
+            if (updList.hasOwnProperty(i) && isValid(updList[i])) {
+                calls.push(
+                    $.post("/update/events/" + updList[i]._id, updList[i])
+                        .done(function () {
+
+                        })
+                        .fail(function () {
+                            failedItems.push(updList[i]);
+                        }));
+            }
+            else {
+                failedItems.push(updList[i]);
+            }
+        }
+        for (let i in delList) {
+            if (delList.hasOwnProperty(i)) {
+                calls.push(
+                    $.post("/delete/events", {_id: delList[i]._id})
+                        .done(function () {
+
+                        })
+                        .fail(function () {
+                            failedItems.push(updList[i]);
+                        }));
+            }
+            else {
+                failedItems.push(updList[i]);
+            }
+        }
+
+        $.when.apply($, calls).done(function () {
+            init()
+                .then(function () {
+                    for (let i in failedItems) {
+                        if (failedItems[i].isNew) {
+                            appendRow(failedItems[i]);
+                            $("#" + (rowId)).addClass("failed");
+                        }
+                        else {
+                            for (let j in expositionList) {
+                                if (expositionList[j]._id && expositionList[j]._id.toString() === failedItems[i]._id.toString()) {
+                                    $("#" + j).addClass("failed");
+                                }
+                            }
+                        }
+                    }
+                });
+        });
     });
     getNeededData(eventList);
 
@@ -34,10 +108,17 @@ $(document).ready(function () {
     }).selectable({
         filter: 'tr',
         selected: function (event, ui) {
+            $("#events-table-mapping > tbody").empty();
             $(ui.selected).addClass("ui-selected").siblings().removeClass("ui-selected");
             $("#delete-event-button").removeClass("disabled");
             $("#new-mapping-button").removeClass("disabled");
             $("#duplicate-event-button").removeClass("disabled");
+            let deleteMappingButton = $("#delete-mapping-button");
+            deleteMappingButton.addClass("disabled");
+            deleteMappingButton.addClass("disabled");
+            let checkBox = $("input[type='checkbox'], input[type='radio']");
+            checkBox.prop("checked", false);
+            checkBox.prop("disabled", true);
 
             selectedEvent = eventList[$("#events-table-default > tbody.table-list").find(ui.selected).index()];
 
@@ -126,6 +207,35 @@ $(document).ready(function () {
 
         $("#" + (rowId)).addClass("ui-selected").siblings().removeClass("ui-selected");
     });
+
+    $("#new-event-button").on("click", function () {
+        //Einmal das alte Objekt speichern
+        storeOld();
+        //Neu initialisieren und flaggen
+        selectedEvent = {};
+        selectedEvent.isNew = true;
+        //Fake-ID geben die nicht weiter geändert wird, um es in Map ablegen zu können
+        selectedEvent._id = "pseudoId-" + rowId;
+        selectedEvent.name = "";
+        selectedEvent.date = undefined;
+        selectedEvent.locationMappings = [];
+
+        appendRow(selectedEvent);
+
+        $("#" + (rowId)).addClass("ui-selected").siblings().removeClass("ui-selected");
+        switchData();
+    });
+
+    $("#delete-event-button").on("click", function () {
+        //Neu initialisieren und flaggen
+        if (!selectedEvent) {
+            return;
+        }
+        selectedEvent.remove = true;
+        $(".ui-selected").find(".bs").addClass("delete-item");
+        delMap.set(selectedEvent._id, selectedEvent);
+        storeOld();
+    });
 });
 
 /*
@@ -207,4 +317,37 @@ function appendRow(pObj) {
         , {classes: "align-left", text: "name"});
     //Objekt der Liste hinzufüge
     eventList.push(pObj);
+}
+
+// Bezeichnung und Beschreibung darf nicht leer sein
+function isValid(pObj) {
+    if (!pObj.name || pObj.name.trim() === "") {
+        return false;
+    }
+
+    return true;
+}
+
+function storeOld() {
+    if (!selectedEvent) {
+        return;
+    }
+
+    if (selectedEvent._id.startsWith("pseudoId-")) {
+        if (selectedEvent.remove) {
+            newMap.delete(selectedEvent._id);
+        }
+        else {
+            newMap.set(selectedEvent._id, selectedEvent);
+        }
+    }
+    else if (selectedEvent._id) {
+        if (selectedEvent.remove) {
+            updateMap.delete(selectedEvent._id);
+        }
+        else {
+            updateMap.set(selectedEvent._id, selectedEvent);
+        }
+    }
+
 }

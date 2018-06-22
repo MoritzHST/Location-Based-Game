@@ -138,19 +138,17 @@ $(document).ready(function () {
         storeOld();
     });
 
-    $("#select-image-dialog").dialog({
-        autoOpen: false,
-        modal: true,
-        width: "80%",
-        resizable: true,
-        height: 700
-    });
-
     $("#exposition-thumbnail-preview").on("click", function () {
         if (!selectedExposition) {
             return;
         }
-        $("#select-image-dialog").dialog("open");
+
+        $("#select-image-dialog").dialog({
+            modal: true,
+            width: "80%",
+            resizable: true,
+            height: 700
+        });
         let assignedImageContainer = $("#assigned-image-items");
         assignedImageContainer.hide();
         fetchImages();
@@ -187,7 +185,12 @@ $(document).ready(function () {
         if (!selectedExposition) {
             return;
         }
-        $("#select-image-dialog").dialog("open");
+        $("#select-image-dialog").dialog({
+            modal: true,
+            width: "80%",
+            resizable: true,
+            height: 700
+        });
         let assignedImageContainer = $("#assigned-image-items");
         assignedImageContainer.show();
         updateImageContainer(assignedImageContainer);

@@ -35,14 +35,14 @@ function initViewContent(obj) {
     }
 
     // Bilder setzen
-    if (obj.exposition.imagePaths && obj.exposition.imagePaths.length > 0) {
-        let imagePaths = obj.exposition.imagePaths;
-        for (let index = 0; index < imagePaths.length; index++) {
+    if (obj.exposition.images && obj.exposition.images.length > 0) {
+        let images = obj.exposition.images;
+        for (let index = 0; index < images.length; index++) {
             let activeClass = index > 0 ? '' : 'active';
 
             $('<li data-target="#carousel-example-generic" data-slide-to="' + index + '" class="' + activeClass + '"></li>').appendTo($("ol.carousel-indicators"));
 
-            let image = $('<img src="' + imagePaths[index] + '" alt="img-' + index + '">');
+            let image = $('<img src="' + images[index] + '" alt="img-' + index + '">');
             let panel = $('<div class="item panel ' + activeClass + '"></div>');
 
             image.appendTo(panel);

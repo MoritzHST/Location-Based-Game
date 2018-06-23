@@ -99,9 +99,9 @@ function setLayer(pLayer) {
 function setTableContent(dataObj) {
     let mediaObj = $("#" + dataObj.location._id + "-hook");
     mediaObj.find(".overview-table-cell-location-info-name").html(dataObj.location.roomnumber + " " + dataObj.exposition.name);
-    if (dataObj.exposition.thumbnailPath) {
+    if (dataObj.exposition.thumbnail) {
         mediaObj.find(".overview-table-cell-location-image-wrapper").css({
-            "background": "url(" + dataObj.exposition.thumbnailPath + ") no-repeat",
+            "background": "url(" + dataObj.exposition.thumbnail + ") no-repeat",
             "background-size": "contain",
             "background-position": "center center"
         });

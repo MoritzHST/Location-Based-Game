@@ -4,7 +4,7 @@ let rowId;
 $(document).ready(function () {
     $("#editor").tabs({
         beforeLoad: function( event, ui ) {
-            toggleAction(false);
+            toggleAction(true);
             $("input[type='submit']").off("click");
             ui.panel.html("");
             ui.panel.addClass("center");

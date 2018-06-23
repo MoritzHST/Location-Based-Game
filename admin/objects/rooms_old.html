@@ -17,17 +17,16 @@
 
 </head>
 <body>
-<ul id="rooms-load-failure"></ul>
-<table id="rooms-table-locations" class="editor-table">
+<table class="editor-table">
     <thead>
     <tr class="table-header">
         <th class="min-column">
             BS
         </th>
-        <th class="roomnumber">
+        <th>
             Raumnummer
         </th>
-        <th class="identifier" abbr="align-left">
+        <th>
             Link
         </th>
     </tr>
@@ -36,18 +35,18 @@
     </tbody>
 </table>
 <div class="button-group">
-	<input type="submit" id="new-room-button" class="create-button" value="" />
-	<input type="submit" id="delete-room-button" class="remove-button" value="" />
+    <a href="#" id="new-room-button" class="create-button"></a>
+    <a href="#" id="delete-room-button" class="remove-button disabled"></a>
 </div>
 <div class="details details-5c">
     <div class="details-element">
         <label for="location-roomnumber-textfield"><strong>Raumnummer*</strong></label>
-        <input class="textfield" type="text" id="location-roomnumber-textfield">
+        <input class="textfield" type="text" id="location-roomnumber-textfield" disabled>
     </div>
 
     <div class="details-element">
         <label for="location-identifier-textfield"><strong>Link*</strong></label>
-        <input class="textfield" type="text" id="location-identifier-textfield">
+        <input class="textfield" type="text" id="location-identifier-textfield" disabled>
     </div>
 </div>
 </body>

@@ -36,7 +36,7 @@ function clearCollection(pCollection) {
 
 
 function insertIntoDb(collection, object) {
-    //Objekt wird eingefügt/ersetzt
+    // Objekt wird eingefügt/ersetzt
     return new Promise(
         resolve => {
             operations.updateObject(collection, object, object, function (err, result) {
@@ -78,10 +78,10 @@ async function insertIntoDatabase() {
 }
 
 async function handleDebugObjects() {
-    //Lösche die Collections
+    // Lösche die Collections
     await clearCollections();
-    //Funktionsaufruf für das File
-    //await insertIntoDatabase('example');
+    // Funktionsaufruf für das File
+    // await insertIntoDatabase('example');
     await insertIntoDatabase();
 }
 

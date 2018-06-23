@@ -81,11 +81,11 @@ function setLayer(pLayer) {
             var stateString = !locations[i].state || locations[i].state === RoomStates.VISITED ? " location-state location-state-undone" : " location-state location-state-done";
 
             $('<div/>', {
-                id: locations[i]._id + "-hook",
+                id: locations[i].location._id + "-hook",
                 class: "labor-frame floor-" + pLayer + stateString
             }).appendTo($("#labor-frame-container"));
 
-            setNodeHookFromFile($("#" + locations[i]._id + "-hook"),
+            setNodeHookFromFile($("#" + locations[i].location._id + "-hook"),
                 "../partials/overview-table-cell/overview-table-cell.html", setTableContent,
                 locations[i]);
         }
@@ -97,9 +97,11 @@ function setLayer(pLayer) {
  * @param dataObj
  */
 function setTableContent(dataObj) {
-    let mediaObj = $("#" + dataObj._id + "-hook");
+    let mediaObj = $("#" + dataObj.location._id + "-hook");
     mediaObj.find(".overview-table-cell-location-info-name").html(dataObj.location.roomnumber + " " + dataObj.exposition.name);
-    mediaObj.find(".overview-table-cell-location-image-wrapper").css("background", dataObj.exposition.thumbnailPath + " no-repeat");
+    if (dataObj.exposition.thumbnailPath) {
+        mediaObj.find(".overview-table-cell-location-image-wrapper").css("background", "url(" + dataObj.exposition.thumbnailPath + ") no-repeat");
+    }
     mediaObj.find(".overview-table-cell-location-info-description").html(getDescriptionString(dataObj.exposition.description));
     mediaObj.find(".overview-table-cell-location-state").addClass("overview-room-state-context-" + dataObj.state);
     mediaObj.on("click", function () {

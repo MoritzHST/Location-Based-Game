@@ -80,6 +80,7 @@ module.exports = {
                     resolve(null);
                 } else {
                     let friendlyObject = handler.idFriendlyQuery(pObject);
+
                     result.db(database.Database).collection(pCollection).findAndModify(friendlyObject, [['_id', 'asc']], {'$set': (pQuery ? pQuery : friendlyObject)}, {
                         new: true,
                         upsert: true

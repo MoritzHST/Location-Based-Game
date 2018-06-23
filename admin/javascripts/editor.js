@@ -14,13 +14,11 @@ $(document).ready(function () {
                 src: "images/ajax-loader.gif",
                 alt: "Loading..."
             }).appendTo(ui.panel);
-        },
-        load: function( event, ui ) {
-            toggleField(false, $(".details"));
-            $(".remove-button").prop("disabled", true);
-            ui.panel.removeClass("center");
+        }, load: function(event, ui) {
+        	onTabLoad(ui);
         }
     });
+        
     $("#sidebar > input[type='submit']").button();
 });
 
@@ -48,6 +46,15 @@ function selectSelectableElement (selectableContainer, elementsToSelect)
     // elements, and deselect all .ui-unselecting elements)
     selectableContainer.selectable('refresh');
     selectableContainer.data("ui-selectable")._mouseStop(null);
+}
+
+function onTabLoad(ui) {
+    toggleField(false, $(".details"));
+    $(".remove-button").prop("disabled", true);
+	$("#loadingPanel").hide();
+	
+	if (ui)
+		ui.panel.removeClass("center");
 }
 
 function displayObjects(isDisplayed, ...objectIds) {
@@ -146,6 +153,8 @@ function loadDataIntoTable(mainName, dataName, checkType, callBack) {
     $.holdReady(true);
     $.get("/find/" + dataName).done(function (result) {
         if (result.length > 0) {
+        	$("#" + mainName + "-table-" + dataName).children("tbody:first").empty();
+        	
             for (let index in result) {
                 if (result.hasOwnProperty(index)) {
                     if (checkType) {
@@ -153,7 +162,7 @@ function loadDataIntoTable(mainName, dataName, checkType, callBack) {
                             id: "check-" + result[index]._id,
                             type: checkType
                         });
-                    }
+                    }                    
                     fillTable($("#" + mainName + "-table-" + dataName), result[index]);
                     dataList.push(result[index]);
                 }
@@ -203,6 +212,77 @@ function toggleField(isEnabled, field, listData) {
            $(this).prop("disabled", !isEnabled);
         });
     }
+}
+
+function callAction(errorText, collectionName, dataList, propertyName, failureList, callback) {
+	let calls = [];
+	failureList.empty();
+	
+    for (let object in dataList) {
+    	if (dataList.hasOwnProperty(object) && dataList[object].status) {
+    		let status = dataList[object].status;
+    		let id = dataList[object]._id;
+    		
+    		delete dataList[object].status;
+    		delete dataList[object]._id;
+    		
+    		let errText = errorText.replace("{0}", dataList[object][propertyName]);
+    		
+    		switch (status) {
+        		case "insert":
+        			errText = errText.replace("{1}", "hinzugefügt");
+        			calls.push(
+            			$.post("/insert/" + collectionName, dataList[object]).fail(function(error) {
+            				$("<li />", {            					
+            					text: errText
+            				}).appendTo(failureList);
+            			})
+        			)
+        			break;
+        		case "update":
+        			errText = errText.replace("{1}", "geupdatet");
+        			calls.push(
+            			$.post("/update/" + collectionName + "/" + id, dataList[object]).fail(function(error) {
+            				$("<li />", {
+            					text: errText
+            				}).appendTo(failureList);
+            			})
+        			)
+        			break;
+        		case "delete":
+        			errText = errText.replace("{1}", "gelöscht");
+        			calls.push(
+                			$.post("/delete/" + collectionName, dataList[object]).fail(function(error) {
+                				$("<li />", {
+                					text: errText
+                				}).appendTo(failureList);
+                			})
+            			)	                			
+        			break;
+        		default:
+        			break;
+    		}
+    	}
+    }
+    
+    $.when.apply($, calls).done(function() {
+    	callback();
+    });
+}
+
+function rowIsInvalid(dataList, object) {
+	for (let element in dataList) {
+		if (dataList.hasOwnProperty(element) && dataList[element] !== object) {
+			for (let prop in object) {
+				if (String(object[prop]).trim() === "") {
+					return { reason: "empty", property: prop };
+				}
+				if (dataList[element][prop] === object[prop]) {
+					return { reason: "same", property: prop };
+				}
+			}
+		}
+	}
 }
 
 function addRow(tableBody, data, bs, ...params) {

@@ -163,7 +163,7 @@ th.min-column {
     text-align: center;
 }
 
-.bs.new-item {
+td.new-item {
     background: #007fff;
     mask-image: url("../images/create.svg") !important;
     -webkit-mask-image: url("../images/create.svg") !important;
@@ -183,7 +183,7 @@ td.edit-item {
     -webkit-mask-position: center;
 }
 
-.bs.delete-item {
+td.delete-item {
     background: #007fff;
     mask-image: url("../images/remove.svg");
     -webkit-mask-image: url("../images/remove.svg");

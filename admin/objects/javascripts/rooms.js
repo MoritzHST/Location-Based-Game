@@ -1,39 +1,107 @@
 $(document).ready(function() {
+	onTabLoad();
+	$(document).tooltip();
     var roomsList = [];
-
+    
     // Finde Räume aus der Datenbank und füge sie der Tabelle hinzu
+    
     loadDataIntoTable("rooms", "locations", null, function(result) {
         roomsList = result;
 
-        // toggleAction(true, $("#button-save"));
         $("#button-save").on("click", function() {
-            for (let room of roomsList) {
-                if (roomsList.hasOwnProperty(room)) {
-                    // ...
+        	let saveIsOk = true;
+            for (let room in roomsList) {
+            	let row = $("#rooms-table-locations > tbody.table-list").children("tr").eq(room);
+            	let result = rowIsInvalid(roomsList, roomsList[room]);
+            	
+            	row.removeAttr("title");
+            	row.removeClass("failed");
+            	
+                if (roomsList.hasOwnProperty(room) && !result) {
+                	//... nix zu tun
+                } else {
+                	let reason = result.reason;
+                	
+                	let propText = $("#rooms-table-locations > thead:first").find("th." + result.property + ":first").text(); 
+                	
+                	switch (reason) {
+	                	case "same":	                    	               
+	                    	row.attr("title", "Es gibt bereits einen anderen Raum mit dem gleichen Wert von: " + propText);	                		
+	                		break;
+	                	case "empty":
+	                		row.attr("title", "Das folgende Feld darf nicht leer sein: " + propText);
+	                		break;
+                	}
+                	
+                	row.addClass("failed");
+                	
+                	saveIsOk &= false;
                 }
             }
+            
+            if (saveIsOk) {
+            	toggleAction(false, $("#button-save"));
+            	let failureList = $("#rooms-load-failure");
+            	
+            	$("#loadingPanel").show();                
+                callAction("Der Raum mit der Nummer {0} konnte nicht {1} werden.", 
+                		"locations", roomsList, "roomnumber", failureList, function() {
+            		let activeIndex = $("#editor").find("li.ui-tabs-active.ui-state-active:first").index();
+            		//$("#editor").tabs('tabsload', activeIndex);
+            		$("#editor").tabs().tabs('load', activeIndex);
+                });
+            }
+        });
+        
+        $("#new-room-button").on("click", function() {
+        	let room = {};
+        	room.status = "insert";        	
+        	roomsList.push(room);
+        	
+        	fillTable($("#rooms-table-locations"), [ room ]);
+        	$("#rooms-table-locations > tbody").find("tr:last").children("td").eq(0).addClass("new-item");
+        	toggleAction(true, $("#button-save"));
+        });
+        
+        $("#delete-room-button").on("click", function() {
+        	let index = $("#rooms-table-locations > tbody").find("tr.ui-selectee.ui-selected").index();
+        	$("#rooms-table-locations > tbody").find("tr").eq(index).children("td").eq(0).addClass("delete-item");
+        	roomsList[index].status = "delete";
+        	toggleAction(true, $("#button-save"));
         });
 
         $("#rooms-list").bind('mousedown', function (event) {
-            event.metaKey = true;
+            event.metaKey = true;       
         }).selectable({
             filter: 'tr',
             selected: function (event, ui) {
                 $(ui.selected).addClass("ui-selected").siblings().removeClass("ui-selected");
-                toggleField(true, $(".details"), roomsList[$("#rooms-table-locations > tbody.table-list").find(ui.selected).index()]);
+                $("div.details").find("input").off("input");
+                $(".remove-button").prop("disabled", false);
+                
+                let room = roomsList[$("#rooms-table-locations > tbody.table-list").find(ui.selected).index()];
+                
+                toggleField(true, $(".details"), room);
 
                 $("div.details").find("input").on("input", function () {
                     let cellClass = $(this).attr('class').split(' ')[0];
                     let selector = $("#rooms-table-locations").children("thead:first").find("th." + cellClass).index();
+                    
+                    room[cellClass] = $(this).val();
                     $(ui.selected).children("td").eq(selector).text($(this).val());
-
-                    $(ui.selected).children("td").eq(0).addClass("edit-item");
-
+                    
+                    if (!room.status) {
+                    	room.status = "update";
+                    	$(ui.selected).children("td").eq(0).addClass("edit-item");
+                    }               	
+                	
                     toggleAction(true, $("#button-save"));
                 });
             },
             unselected: function (event, ui) {
+            	$(".remove-button").prop("disabled", true);
                 toggleField(false, $(".details"), roomsList[$("#rooms-table-locations > tbody.table-list").find(ui.unselected).index()]);
+                $("div.details").find("input").off("input");
                 $("div.details").find("input").removeClass("textfield-invalid");
             }
         });

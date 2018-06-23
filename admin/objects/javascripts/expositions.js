@@ -170,6 +170,7 @@ $(document).ready(function () {
             }
             $("#select-image-dialog").dialog("close");
             storeOld();
+            setInput();
             updateDetails();
         });
 
@@ -177,6 +178,7 @@ $(document).ready(function () {
             $("#image-preview").attr("src", "");
             selectedExposition.thumbnail = undefined;
             storeOld();
+            setInput();
             updateDetails();
         });
     });
@@ -218,6 +220,7 @@ $(document).ready(function () {
                 $("#select-image-dialog").dialog("option", "title", "Es sind maximal 5 Bilder erlaubt");
             }
             storeOld();
+            setInput();
             updateDetails();
         });
 
@@ -231,6 +234,7 @@ $(document).ready(function () {
             imagePreview.attr("src", "");
             updateImageContainer($("#assigned-image-items"));
             storeOld();
+            setInput();
             updateDetails();
         });
     });
@@ -337,7 +341,6 @@ function appendRow(pObj) {
 }
 
 function updateDetails() {
-    let selRow = $(".ui-selected");
     let detailsName = $("#exposition-name-textfield");
     let detailsTextarea = $("#exposition-description-textfield");
 
@@ -369,18 +372,19 @@ function updateDetails() {
     }
     detailsName.val(selectedExposition.name);
     detailsTextarea.val(selectedExposition.description);
+}
 
-    function setInput() {
-        checkInput();
-        if (!($(selRow).find(".bs").hasClass("delete-item") || $(selRow).find(".bs").hasClass("new-item")))
-            $(selRow).find(".bs").addClass("edit-item");
-        selectedExposition.name = $("#exposition-name-textfield").val();
-        selectedExposition.description = $("#exposition-description-textfield").prop("value");
-        $(selRow).find(".exposition-name-cell").text(selectedExposition.name);
-        $(selRow).find(".exposition-description-cell").text(selectedExposition.description);
+function setInput() {
+    let selRow = $(".ui-selected");
+    checkInput();
+    if (!($(selRow).find(".bs").hasClass("delete-item") || $(selRow).find(".bs").hasClass("new-item")))
+        $(selRow).find(".bs").addClass("edit-item");
+    selectedExposition.name = $("#exposition-name-textfield").val();
+    selectedExposition.description = $("#exposition-description-textfield").prop("value");
+    $(selRow).find(".exposition-name-cell").text(selectedExposition.name);
+    $(selRow).find(".exposition-description-cell").text(selectedExposition.description);
 
-        storeOld();
-    }
+    storeOld();
 }
 
 function fetchImages() {

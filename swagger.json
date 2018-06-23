@@ -906,10 +906,10 @@
         "description": {
           "type": "string"
         },
-        "thumbnailPath": {
+        "thumbnail": {
           "type": "string"
         },
-        "imagePaths": {
+        "images": {
           "type": "array",
           "items": {
             "type": "string"

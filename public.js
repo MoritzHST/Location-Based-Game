@@ -65,10 +65,10 @@ router.post('/login', function (req, res) {
                 req.session = null;
                 res.status(422).jsonp({"error": "Es wurde kein Nutzer zu den angegebenen Daten gefunden."});
             } else {
-                require('./helper/event').getCurrentEvent()
+                require('./helper/eventHelper').getCurrentEvent()
                     .then(function (pEvent) {
                         req.session.user = user;
-                        req.session.user.score = require('./helper/event').formatScoreObject(pEvent, user.score);
+                        req.session.user.score = require('./helper/eventHelper').formatScoreObject(pEvent, user.score);
                         req.session.login = new Date() / 1;
                         req.session.maxAge = new Date().setHours(24, 0, 0, 0) - new Date();
                         res.status(200).jsonp(user);

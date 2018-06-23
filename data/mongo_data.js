@@ -70,6 +70,12 @@ async function insertIntoDatabase() {
         }
 
         let expositionResult = await insertIntoDb(collections.EXPOSITIONS, locationMapping.exposition);
+        if (locationMapping.exposition.thumbnail) {
+            await insertIntoDb(collections.IMAGES, {data: locationMapping.exposition.thumbnail});
+        }
+        for (let image of locationMapping.exposition.images) {
+            await insertIntoDb(collections.IMAGES, {data: image});
+        }
         if (expositionResult._id) {
             locationMapping.exposition._id = expositionResult._id;
         }

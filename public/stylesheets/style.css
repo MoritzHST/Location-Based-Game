@@ -57,6 +57,10 @@ h3 {
     font-size: 1.5em;
 }
 
+.screen-able {
+    font-size: 1.7em !important;
+}
+
 @media (min-width: 0) {
     h2 {
         padding-top: 0;

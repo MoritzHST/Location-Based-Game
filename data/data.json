@@ -6,7 +6,6 @@
         "identifier": "http://qr.service.fh-stralsund.de/h4r114"
       },
       "exposition": {
-        "_id": "5b2e109eaa6a0add2a716f5f",
         "description": "<p>Im Labor Hochspannungstechnik erhalten die Studenten des Studiengangs Elektrotechnik eine Einführung in die Arbeit mit Hochspannungsanlagen und führen hochspannungstechnische Untersuchungen anhand von Gleich- und Wechselspannungen, Entladungserscheinungen im inhomogenen Feld, Erzeugung von Blitzstoß- und Schaltstoßspannungen, Prüfung von Isolatoren mit Stoßspannungen durch.</p><p><u>Das Leistungsangebot:</u><br>Das Labor Hochspannungstechnik bietet Vertragspartnern und externen Nutzern Schulungen von Fachpersonal für Hochspannungsanlagen an. Im Rahmen freier Kapazitäten können Energieversorgungsunternehmen das Labor für Qualitätsprüfungen an energietechnischen Erzeugnissen nutzen.</p><p><u>Die Ausstattung:</u><br>Das Labor Elektrische Energieversorgung ist mit hochwertiger Technik ausgerüstet, so dass das Labor neben der praktischen Ausbildung auch für die Bearbeitung von Diplomarbeitsthemen und die Durchführung von Forschungsvorhaben genutzt werden kann.</p>",
         "name": "Hochspannungstechnik",
         "images": [
@@ -39,19 +38,16 @@
               "answer": "Arbeit",
               "isCorrect": false
             }
-          ],
-          "_id": "5b2e109eaa6a0add2a716f53"
+          ]
         }
       ]
     },
     {
       "location": {
         "roomnumber": "224",
-        "identifier": "http://qr.service.fh-stralsund.de/h4r224",
-        "_id": "5b2e109eaa6a0add2a716f71"
+        "identifier": "http://qr.service.fh-stralsund.de/h4r224"
       },
       "exposition": {
-        "_id": "5b2e109eaa6a0add2a716f77",
         "description": "<p>Im Labor Computergrafik werden algorithmische Grundkenntnisse der grafischen Datenverarbeitung und der Bildverarbeitung vertieft und der Umgang mit Entwicklungsumgebungen für grafische Anwendungen erlernt, wie z.B. OpenGL und OpenInventor.</p><p><b>Aufgaben 3D-Computergrafik</b><br><u>Geometrische Modellierung</u><br>Modellerstellung und -speicherung (Polygonnetz, parametrisierte Kurven und Flächen, Triangulierung)<br><br><u>Geometrische transformation</u><br>Modell-, Ansichts-, Projektions- und Viewport-Transformation (Translation, Skalierung, Rotation, Scherung, homogene Koordinaten, Weltkoordinaten- und Kamerakoordinatensystem) <br><br><u>Rendering</u><br>Visibilitätsalgorythmen (Backface-Culling, Z-Buffer, Painter), Shading (Flat, Phong, Gouraud), Beleuchtungsrechnung, globale Beleuchtungsverfahren (Raytracing, Radiosity), Texture-Mapping</p>",
         "name": "Computergrafik / Bildverarbeitung",
         "images": [
@@ -87,8 +83,7 @@
               "answer": "Grafikkartenhersteller",
               "isCorrect": false
             }
-          ],
-          "_id": "5b2e109eaa6a0add2a716f65"
+          ]
         },
         {
           "question": "Wie heisst das Computer-Bauteil, auf dem graphische Operationen ausgeführt werden?",
@@ -119,19 +114,16 @@
               "answer": "CPU",
               "isCorrect": false
             }
-          ],
-          "_id": "5b2e109eaa6a0add2a716f6b"
+          ]
         }
       ]
     },
     {
       "location": {
         "roomnumber": "225a",
-        "identifier": "http://qr.service.fh-stralsund.de/h4r225a",
-        "_id": "5b2e109eaa6a0add2a716f89"
+        "identifier": "http://qr.service.fh-stralsund.de/h4r225a"
       },
       "exposition": {
-        "_id": "5b2e109eaa6a0add2a716f8f",
         "description": "<p>Im Labor für Medizinische Bildgebung und Visualisierung lernen die Studierenden, komplexe graphische Anwendungssysteme und Interaktionsschittstellen zu konzipieren und zu entwickeln. Das Labor verfügt über ein VR-System, dass aus einer Stereo-Rückprojektionswand inklusive zwei Beamern und einem Trackingsystem besteht. Hier können zum Beispiel neuronale Faserbahnen aus Daten der Magnetresonanztomografie dreidimensional dargestellt werden. Der Nutzer kann die dargestellte Szene interaktiv manipulieren und so zum Beispiel auswählen, welche Faserbahnen visualisiert werden sollen.</p>",
         "name": "Med. Bildverarbeitung / Visualisierung",
         "images": [
@@ -168,8 +160,7 @@
               "answer": "Ultraschall",
               "isCorrect": false
             }
-          ],
-          "_id": "5b2e109eaa6a0add2a716f7d"
+          ]
         },
         {
           "question": "Was versteht man unter VR?",
@@ -196,19 +187,16 @@
               "answer": "Vip Room",
               "isCorrect": false
             }
-          ],
-          "_id": "5b2e109eaa6a0add2a716f83"
+          ]
         }
       ]
     },
     {
       "location": {
         "roomnumber": "231",
-        "identifier": "http://qr.service.fh-stralsund.de/h4r225a",
-        "_id": "5b2e109eaa6a0add2a716fb9"
+        "identifier": "http://qr.service.fh-stralsund.de/h4r225a"
       },
       "exposition": {
-        "_id": "5b2e109eaa6a0add2a716fbf",
         "description": "MUSS NOCH GESCHRIEBEN WERDEN",
         "name": "Mikroprozessortechnik",
         "images": [
@@ -237,8 +225,7 @@
               "answer": "Landkarte von Osz",
               "isCorrect": false
             }
-          ],
-          "_id": "5b2e109eaa6a0add2a716f95"
+          ]
         },
         {
           "question": "Was ist ein RAM?",
@@ -261,8 +248,7 @@
               "answer": "spez. Elektr. Maschine",
               "isCorrect": false
             }
-          ],
-          "_id": "5b2e109eaa6a0add2a716f9b"
+          ]
         },
         {
           "question": "Was bedeutet USB?",
@@ -289,8 +275,7 @@
               "answer": "mathematischer Begriff",
               "isCorrect": false
             }
-          ],
-          "_id": "5b2e109eaa6a0add2a716fa1"
+          ]
         },
         {
           "question": "Was kennzeichnet ein digitales Signal?",
@@ -313,8 +298,7 @@
               "answer": "Begriff in der Astronomie",
               "isCorrect": false
             }
-          ],
-          "_id": "5b2e109eaa6a0add2a716fa7"
+          ]
         },
         {
           "question": "Was bedeutet Hexadezimal?",
@@ -341,8 +325,7 @@
               "answer": "Zahlenbasis 2",
               "isCorrect": false
             }
-          ],
-          "_id": "5b2e109eaa6a0add2a716fad"
+          ]
         },
         {
           "question": "Was heißt ALU?",
@@ -365,19 +348,16 @@
               "answer": "Begriff in der Astronomie",
               "isCorrect": false
             }
-          ],
-          "_id": "5b2e109eaa6a0add2a716fb3"
+          ]
         }
       ]
     },
     {
       "location": {
         "roomnumber": "320",
-        "identifier": "http://qr.service.fh-stralsund.de/h4r320",
-        "_id": "5b2e109eaa6a0add2a716fcb"
+        "identifier": "http://qr.service.fh-stralsund.de/h4r320"
       },
       "exposition": {
-        "_id": "5b2e109eaa6a0add2a716fd1",
         "description": "<p>Im Labor für Ambient Assisted Living (AAL) lernen die Studierenden Konzepte, technische Lösungen, Anwendungen und Standards des medizinischen Tele-Monitorings und des Ambient Assisted Living kennen. Sie bewerten und konzipieren hier Anwendungen des Health-Tele-Monitorings und des AAL. Das Labor verfügt über eine Vielzahl von Geräten aus der ambulanten Pflege, dem Smarthome- und dem Tele-Monitoring-Bereich.</p>",
         "name": "Ambient Assisted Living",
         "images": [
@@ -406,19 +386,16 @@
               "answer": "Blutzucker",
               "isCorrect": false
             }
-          ],
-          "_id": "5b2e109eaa6a0add2a716fc5"
+          ]
         }
       ]
     },
     {
       "location": {
         "roomnumber": "323",
-        "identifier": "http://qr.service.fh-stralsund.de/h4r323",
-        "_id": "5b2e109eaa6a0add2a716fe3"
+        "identifier": "http://qr.service.fh-stralsund.de/h4r323"
       },
       "exposition": {
-        "_id": "5b2e109eaa6a0add2a716fe9",
         "description": "<p>Im Audio- / Video-Studio erfolgt eine Praxisgerechte Ausbildung auf dem Gebiet der digitalen Audio- und Video-Signalverarbeitung. </p>Studierende arbeiten an Projekten zur Entwicklung von Multimedia-CD-ROMs und –DVDs, an der Produktion von Audio- und Videofiles, Internetseiten und anderen multimedialen Applikationen. </p><p>Das Audio- / Video-Studio bietet als Serviceleistung die Beratung zu Problemen der Entwicklung von multimedialen Präsentationen, speziell zu Fragen der Verwendung von Autorensystemen und Videoschnittsystemen, zu Problemen des Einsatzes von Videokonferenzsystemen und zu allgemeinen Problemen der multimedialen Kommunikation und Vernetzung.</p>",
         "name": "Audio- / Video-Studio",
         "images": [
@@ -456,8 +433,7 @@
               "answer": "1280 x 800",
               "isCorrect": false
             }
-          ],
-          "_id": "5b2e109eaa6a0add2a716fd7"
+          ]
         },
         {
           "question": "Wo wurde die MP3 erfunden?",
@@ -492,19 +468,16 @@
               "answer": "Amerika",
               "isCorrect": false
             }
-          ],
-          "_id": "5b2e109eaa6a0add2a716fdd"
+          ]
         }
       ]
     },
     {
       "location": {
         "roomnumber": "136",
-        "identifier": "http://qr.service.fh-stralsund.de/h4r136",
-        "_id": "5b2e109eaa6a0add2a717007"
+        "identifier": "http://qr.service.fh-stralsund.de/h4r136"
       },
       "exposition": {
-        "_id": "5b2e109eaa6a0add2a71700d",
         "description": "<p>„GameLab“ – Spiele zum Ausprobieren</p><br><p>Im GameLab werden verschiedene Spiele vorgestellt, die von Informatik-Studenten im Rahmen der Veranstaltung „Softwareprojektorganisation“ entwickelt wurden. Die Studenten bringen in diesem Kurs all ihre bisher erlernten Fähigkeiten aus dem Studium mit ein. In dieser Veranstaltung lernen die Studenten die in der Software-Entwicklung weit verbreitete Methode „Scrum“ kennen. Scrum ist ein Vorgehensmodell für das Management komplexer Projekte und erlaubt es in kürzester Zeit vorzeigbare Ergebnisse zu liefern.</p>",
         "name": "GameLab",
         "images": [
@@ -539,8 +512,7 @@
               "answer": "Regenerative Energien",
               "isCorrect": false
             }
-          ],
-          "_id": "5b2e109eaa6a0add2a716fef"
+          ]
         },
         {
           "question": "Im Rahmen welchen Moduls wurden die vorgestellten Spiele entwickelt?",
@@ -571,8 +543,7 @@
               "answer": "Künstliche Intelligenz",
               "isCorrect": false
             }
-          ],
-          "_id": "5b2e109eaa6a0add2a716ff5"
+          ]
         },
         {
           "question": "Welche Interaktionsmöglichkeit mit dem Computer wird bei den Spielen nicht verwendet?",

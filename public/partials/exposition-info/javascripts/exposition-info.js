@@ -141,6 +141,7 @@ function setCurrentGame(game) {
     renderGameByType(game);
 }
 
+//Switch-Case, der eine Funktion aufruft um ein Spiel an Hand der Spielart zu rendern
 function renderGameByType(obj) {
     obj.locationId = locationObj._id;
     for (let i in Game) {

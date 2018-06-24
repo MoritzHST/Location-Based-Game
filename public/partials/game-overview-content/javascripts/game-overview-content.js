@@ -94,6 +94,7 @@ function setLayer(pLayer) {
 
 /**
  * Für die generierten Hooks aus UpdateTable wird über die ID das Raum-ELement generiert
+ * für das generierte Objekt werden hier die Daten gesetzt
  * @param dataObj
  */
 function setTableContent(dataObj) {
@@ -114,6 +115,9 @@ function setTableContent(dataObj) {
     });
 }
 
+/**
+ * Filter-Funktion: Je nachdem was angehakt ist, werden Tabellenelemente über hide() ausgeblednet oder über show() eingeblendet
+ */
 function updateTableView() {
     let statusFilter = $("#play_rooms > label.active");
     let floorFilter = $("label.btn.btn-secondary.host-button-group-button.host-floor > input:checked");
@@ -124,6 +128,9 @@ function updateTableView() {
     });
 }
 
+/**
+ * Hilfsfunktion die den Beschreibungsstring anpasst, da er in eine rkleinen Zelle nicht mit der vollen Länge angezeigt werden sollte
+ */
 function getDescriptionString(pObj) {
     let descriptionString = pObj.slice(0, 50);
     if (descriptionString.indexOf("<") === -1 && descriptionString.indexOf(">") === -1) {

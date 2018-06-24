@@ -4,6 +4,7 @@ var scannerContext;
 
 /**
  * initialisiert den QR-Scanner
+ * https://github.com/schmich/instascan
  * @param pContextObj "beschreibt die View, aus der der QR-Scanner geöffnet wurde
  */
 function initScanner(pContextObj) {

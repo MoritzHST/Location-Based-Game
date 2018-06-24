@@ -1,0 +1,21 @@
+h2.score {
+    margin-top: 0 !important;
+}
+
+p.score {
+    font-size: 1.2em;
+}
+
+.row img {
+    width: 300px;
+    height: 300px;
+}
+
+.qr-hint {
+    width: 300px;
+    text-align: center
+}
+
+.qr-hint * {
+    display: block;
+}

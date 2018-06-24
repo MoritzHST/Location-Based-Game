@@ -61,6 +61,10 @@ h3 {
     font-size: 1.7em !important;
 }
 
+.host-color-link {
+    color: #e1232b;
+}
+
 @media (min-width: 0) {
     h2 {
         padding-top: 0;

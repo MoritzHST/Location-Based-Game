@@ -13,9 +13,9 @@ const eventCollection = require('../mongodb/collections').EVENTS;
  * @param res Result Status, welcher unter anderem den return-Code enthält
  * @returns Genau einen oder mehrere Events (oder eine Fehlermeldung)
  */
-router.get('/find/events', function (req, res) {
+router.get('/find/events', function(req, res) {
     req.query = handler.getRealRequest(req.query, req.body);
-    operations.findObject(eventCollection, (handler.checkIfValidQuery(req.query) ? req.query : null), function (err, item) {
+    operations.findObject(eventCollection, (handler.checkIfValidQuery(req.query) ? req.query : null), function(err, item) {
         handler.dbResult(err, res, item, "Das Item " + JSON.stringify(req.query).replace(/\"/g, '') + " existiert nicht.");
     });
 });
@@ -28,29 +28,30 @@ router.get('/find/events', function (req, res) {
  * @param res Result Status, welcher unter anderem den return-Code enthält
  * @returns Das hinzugefügte Event (oder eine Fehlermeldung)
  */
-router.post('/insert/events', function (req, res) {
+router.post('/insert/events', function(req, res) {
     req.query = handler.getRealRequest(req.query, req.body);
     if (handler.checkIfValidQuery(req.query)) {
 
-        operations.findObject(eventCollection, {date: req.query.date},
-            function (err, item) {
-                if (item && item.date) {
-                    res.status(422).jsonp({
-                        "error": "Es existiert bereits ein Event mit diesem Datum!"
-                    });
-                } else if (err) {
-                    res.status(422).jsonp({
-                        "error": "Das übergebene Datum ist ungültig."
-                    });
-                } else {
-                    operations.updateObject(eventCollection, req.query, null, function (err, item) {
-                        handler.dbResult(err, res, item, "Das Event " + JSON.stringify(req.query).replace(/\"/g, '') + " kann nicht hinzugefüt werden.");
-                    });
-                }
-            });
+        operations.findObject(eventCollection, {
+            date : req.query.date
+        }, function(err, item) {
+            if (item && item.date) {
+                res.status(422).jsonp({
+                    "error" : "Es existiert bereits ein Event mit diesem Datum!"
+                });
+            } else if (err) {
+                res.status(422).jsonp({
+                    "error" : "Das übergebene Datum ist ungültig."
+                });
+            } else {
+                operations.updateObject(eventCollection, req.query, null, function(err, item) {
+                    handler.dbResult(err, res, item, "Das Event " + JSON.stringify(req.query).replace(/\"/g, '') + " kann nicht hinzugefüt werden.");
+                });
+            }
+        });
     } else {
         res.status(422).jsonp({
-            "error": "Die übergebenen Parameter sind ungültig"
+            "error" : "Die übergebenen Parameter sind ungültig"
         });
     }
 });
@@ -62,38 +63,41 @@ router.post('/insert/events', function (req, res) {
  * @param res Result Status, welcher unter anderem den return-Code enthält
  * @returns Das aktualisierte Event
  */
-router.post('/update/events/:id', function (req, res) {
+router.post('/update/events/:id', function(req, res) {
     req.query = handler.getRealRequest(req.query, req.body);
     if (handler.checkIfValidQuery(req.query)) {
-        if (req.query.name) {
-            req.query._id = {$not: req.params.id};
-            operations.findObject(eventCollection, handler.idFriendlyQuery(req.query), function (err, item) {
+        if (req.query.date) {
+            req.query._id = {
+                $ne : req.params.id
+            };
+            operations.findObject(eventCollection, handler.idFriendlyQuery(req.query), function(err, item) {
                 if (item) {
                     res.status(422).jsonp({
-                        "error": "Es existiert bereits ein anderes Event mit diesem Datum!"
+                        "error" : "Es existiert bereits ein anderes Event mit diesem Datum!"
                     });
                 } else if (err) {
                     res.status(422).jsonp({
-                        "error": "Das übergebene Datum ist ungültig."
+                        "error" : "Das übergebene Datum ist ungültig."
                     });
                 } else {
+                    delete req.query._id;
                     operations.updateObject(eventCollection, handler.idFriendlyQuery({
-                        _id: req.params.id
-                    }, req.query), function (err, item) {
+                        _id : req.params.id
+                    }), req.query, function(err, item) {
                         handler.dbResult(err, res, item, "Das Event " + JSON.stringify(req.query).replace(/\"/g, '') + " kann nicht aktualisiert werden.");
                     });
                 }
             });
         } else {
             operations.updateObject(eventCollection, handler.idFriendlyQuery({
-                _id: req.params.id
-            }, req.query), function (err, item) {
+                _id : req.params.id
+            }), req.query, function(err, item) {
                 handler.dbResult(err, res, item, "Das Event " + JSON.stringify(req.query).replace(/\"/g, '') + " kann nicht aktualisiert werden.");
             });
         }
     } else {
         res.status(422).jsonp({
-            "error": "Die übergebenen Parameter sind ungültig"
+            "error" : "Die übergebenen Parameter sind ungültig"
         });
     }
 });
@@ -104,16 +108,16 @@ router.post('/update/events/:id', function (req, res) {
  * @param res Result Status, welcher unter anderem den return-Code enthält
  * @returns Das gelöschte Event
  */
-router.post('/delete/events', function (req, res) {
+router.post('/delete/events', function(req, res) {
     req.query = handler.getRealRequest(req.query, req.body);
 
     if (handler.checkIfValidQuery(req.query)) {
-        operations.deleteObjects(eventCollection, req.query, function (err, item) {
+        operations.deleteObjects(eventCollection, req.query, function(err, item) {
             handler.dbResult(err, res, item, "Die Items mit den Eigenschaften " + JSON.stringify(req.query).replace(/\"/g, '') + " konnten nicht gelöscht werden.");
         });
     } else {
         res.status(422).jsonp({
-            "error": "Die übergebenen Parameter sind ungültig"
+            "error" : "Die übergebenen Parameter sind ungültig"
         });
     }
 });

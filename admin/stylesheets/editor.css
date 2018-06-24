@@ -124,6 +124,7 @@ th.min-column {
     -webkit-mask-position: center;
     height: 24px;
     width: 24px;
+    cursor: pointer;
 }
 
 .duplicate-button {
@@ -138,6 +139,7 @@ th.min-column {
     -webkit-mask-position: center;
     height: 24px;
     width: 24px;
+    cursor: pointer;
 }
 
 .remove-button {
@@ -152,6 +154,7 @@ th.min-column {
     -webkit-mask-position: center;
     height: 24px;
     width: 24px;
+    cursor: pointer;
 }
 
 .button-group > input[type='submit'][disabled], .disabled {

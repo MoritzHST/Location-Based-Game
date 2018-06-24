@@ -3,11 +3,11 @@ $(document).ready(function() {
 	$(document).tooltip();
     var roomsList = [];
     
-    // Finde Räume aus der Datenbank und füge sie der Tabelle hinzu
-    
+    // Finde Räume aus der Datenbank und füge sie der Tabelle hinzu    
     loadDataIntoTable("rooms", "locations", null, function(result) {
         roomsList = result;
 
+        //Handlet das Click Event beim drücken des "Speichern" Buttons
         $("#button-save").on("click", function() {
         	let saveIsOk = true;
             for (let room in roomsList) {
@@ -47,12 +47,12 @@ $(document).ready(function() {
                 callAction("Der Raum mit der Nummer {0} konnte nicht {1} werden.", 
                 		"locations", roomsList, "roomnumber", failureList, function() {
             		let activeIndex = $("#editor").find("li.ui-tabs-active.ui-state-active:first").index();
-            		//$("#editor").tabs('tabsload', activeIndex);
             		$("#editor").tabs().tabs('load', activeIndex);
                 });
             }
         });
-        
+                
+        //Handlet das Click Event beim drücken des "Neu" (+) Buttons
         $("#new-room-button").on("click", function() {
         	let room = {};
         	room.status = "insert";        	
@@ -63,6 +63,7 @@ $(document).ready(function() {
         	toggleAction(true, $("#button-save"));
         });
         
+        //Handlet das Click Event beim drücken des "Löschen" (-) Buttons
         $("#delete-room-button").on("click", function() {
         	let index = $("#rooms-table-locations > tbody").find("tr.ui-selectee.ui-selected").index();
         	$("#rooms-table-locations > tbody").find("tr").eq(index).children("td").eq(0).addClass("delete-item");
@@ -70,6 +71,7 @@ $(document).ready(function() {
         	toggleAction(true, $("#button-save"));
         });
 
+        //Handlet das Click Event beim auswählen einer Reihe
         $("#rooms-list").bind('mousedown', function (event) {
             event.metaKey = true;       
         }).selectable({

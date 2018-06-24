@@ -1,11 +1,13 @@
 // Eindeutige ID-Referenz für einzelne Tabellenreihen
 let rowId;
 
-$(document).ready(function () {
+$(document).ready(function () {		
     $("#editor").tabs({
         beforeLoad: function( event, ui ) {
             toggleAction(true);
+            $("div[role='log']").remove();                       
             $("input[type='submit']").off("click");
+
             ui.panel.html("");
             ui.panel.addClass("center");
 
@@ -15,7 +17,14 @@ $(document).ready(function () {
                 alt: "Loading..."
             }).appendTo(ui.panel);
         }, load: function(event, ui) {
-        	onTabLoad(ui);
+        	onTabLoad();
+        	ui.panel.removeClass("center");
+        	            
+            //Handlet das Click Event beim drücken des "Aktualisieren" Buttons
+            $("#button-refresh").on("click", function() {
+        		let activeIndex = $("#editor").find("li.ui-tabs-active.ui-state-active:first").index();
+        		$("#editor").tabs().tabs('load', activeIndex);
+            });
         }
     });
         
@@ -48,13 +57,10 @@ function selectSelectableElement (selectableContainer, elementsToSelect)
     selectableContainer.data("ui-selectable")._mouseStop(null);
 }
 
-function onTabLoad(ui) {
+function onTabLoad() {
     toggleField(false, $(".details"));
-    $(".remove-button").prop("disabled", true);
+    $(".remove-button, .duplicate-button").prop("disabled", true);
 	$("#loadingPanel").hide();
-	
-	if (ui)
-		ui.panel.removeClass("center");
 }
 
 function displayObjects(isDisplayed, ...objectIds) {
@@ -100,7 +106,8 @@ function fillTable(table, data) {
 
         for (let cellObj of queryData) {
             let tableRow = $("<tr />");
-            tableRow.attr("id", "tr-" + cellObj._id);
+            if (cellObj._id)
+            	tableRow.attr("id", "tr-" + cellObj._id);
             let cellObjQuery = $(cellObj);
             for (let thAttributes of tableHeaderAttributes) {
 
@@ -162,6 +169,7 @@ function loadDataIntoTable(mainName, dataName, checkType, callBack) {
                             id: "check-" + result[index]._id,
                             type: checkType
                         });
+                        result[index].check.prop("disabled", true);
                     }                    
                     fillTable($("#" + mainName + "-table-" + dataName), result[index]);
                     dataList.push(result[index]);

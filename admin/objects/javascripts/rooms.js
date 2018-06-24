@@ -7,42 +7,50 @@ $(document).ready(function() {
 
     onTabLoad();
     $(document).tooltip();
-    var roomsList = [];
+
+    window.storage = {
+        roomsList : []
+    };
 
     // Finde Räume aus der Datenbank und füge sie der Tabelle hinzu
     loadDataIntoTable("rooms", "locations", null, function(result) {
-        roomsList = result;
+        storage.roomsList = result;
 
         // Handlet das Click Event beim drücken des "Speichern" Buttons
         $("div#sidebar").on("click", "#button-save", function() {
             let saveIsOk = true;
-            for ( let room in roomsList) {
-                if (roomsList.hasOwnProperty(room)) {
+            for ( let room in storage.roomsList) {
+                if (storage.roomsList.hasOwnProperty(room)) {
                     let row = $("#rooms-table-locations > tbody.table-list").children("tr").eq(room);
-                    let result = rowIsInvalid(roomsList, roomsList[room]);
+                    let result = rowIsInvalid(storage.roomsList, storage.roomsList[room]);
 
                     row.removeAttr("title");
                     row.removeClass("failed");
 
-                    if (roomsList.hasOwnProperty(room) && !result) {
+                    if (storage.roomsList.hasOwnProperty(room) && !result) {
                         // ... nix zu tun
                     } else {
-                        let reason = result.reason;
+                        for ( let r in result) {
+                            let propText = $("#rooms-table-locations > thead:first").find("th." + result[r].property + ":first").text();
 
-                        let propText = $("#rooms-table-locations > thead:first").find("th." + result.property + ":first").text();
+                            if (result[r].property === "status") continue;
 
-                        switch (reason) {
-                        case "same":
-                            row.attr("title", "Es gibt bereits einen anderen Raum mit dem gleichen Wert von: " + propText);
-                            break;
-                        case "empty":
-                            row.attr("title", "Das folgende Feld darf nicht leer sein: " + propText);
-                            break;
+                            switch (result[r].reason) {
+                            case "same":
+                                row.attr("title", "Es gibt bereits einen anderen Raum mit dem gleichen Wert von: " + propText);
+                                break;
+                            case "empty":
+                                row.attr("title", "Das folgende Feld darf nicht leer sein: " + propText);
+                                break;
+                            default:
+                                continue;
+                                break;
+                            }
+
+                            row.addClass("failed");
+
+                            saveIsOk &= false;
                         }
-
-                        row.addClass("failed");
-
-                        saveIsOk &= false;
                     }
                 }
             }
@@ -52,7 +60,7 @@ $(document).ready(function() {
                 let failureList = $("#rooms-load-failure");
 
                 $(".loadingPanel").show();
-                callAction("Der Raum mit der Nummer {0} konnte nicht {1} werden.", "locations", roomsList, "roomnumber", failureList, function() {
+                callAction("Der Raum mit der Nummer {0} konnte nicht {1} werden.", "locations", storage.roomsList, "roomnumber", failureList, function() {
                     let activeIndex = $("#editor").find("li.ui-tabs-active.ui-state-active:first").index();
                     $("#editor").tabs().tabs('load', activeIndex);
                 });
@@ -60,10 +68,11 @@ $(document).ready(function() {
         });
 
         // Handlet das Click Event beim drücken des "Neu" (+) Buttons
+        $("#new-room-button").off("click");
         $("#new-room-button").on("click", function() {
             let room = {};
             room.status = "insert";
-            roomsList.push(room);
+            storage.roomsList.push(room);
 
             let tableRow = createDataRow(event, getTableHeaderAttributes($("#rooms-table-locations > thead:first")));
             tableRow.children("td").eq(0).addClass("insert-icon");
@@ -74,10 +83,11 @@ $(document).ready(function() {
         });
 
         // Handlet das Click Event beim drücken des "Löschen" (-) Buttons
+        $("#delete-room-button").off("click");
         $("#delete-room-button").on("click", function() {
             let index = $("#rooms-table-locations > tbody").find("tr.ui-selectee.ui-selected").index();
             $("#rooms-table-locations > tbody").find("tr").eq(index).children("td").eq(0).addClass("delete-item");
-            roomsList[index].status = "delete";
+            storage.roomsList[index].status = "delete";
             toggleAction(true, $("#button-save"));
         });
 
@@ -90,7 +100,7 @@ $(document).ready(function() {
                 $("div.details").find("input").off("input");
                 $(".remove-button").prop("disabled", false);
 
-                let room = roomsList[$("#rooms-table-locations > tbody.table-list").find(ui.selected).index()];
+                let room = storage.roomsList[$("#rooms-table-locations > tbody.table-list").find(ui.selected).index()];
 
                 toggleField(true, $(".details"), room);
 
@@ -110,7 +120,7 @@ $(document).ready(function() {
                 });
             }, unselected : function(event, ui) {
                 $(".remove-button").prop("disabled", true);
-                toggleField(false, $(".details"), roomsList[$("#rooms-table-locations > tbody.table-list").find(ui.unselected).index()]);
+                toggleField(false, $(".details"), storage.roomsList[$("#rooms-table-locations > tbody.table-list").find(ui.unselected).index()]);
                 $("div.details").find("input").off("input");
                 $("div.details").find("input").removeClass("textfield-invalid");
             }

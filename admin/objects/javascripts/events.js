@@ -25,21 +25,67 @@ $(document).ready(function() {
     });
 
     $("div#sidebar").on("click", "#button-save", function() {
-        let failureList = $("#events-load-failure");
-        $(".loadingPanel").show();
+        let saveIsOk = true;
+        for ( let event in storage.eventsList) {
+            if (storage.eventsList.hasOwnProperty(event)) {
+                let row = $("#events-table-events > tbody.table-list").children("tr").eq(event);
+                let result = rowIsInvalid(storage.eventsList, storage.eventsList[event]);
 
-        for (let event in storage.eventsList) {
-            for (let map in storage.eventsList[event].locationMappings) {
-                if (storage.eventsList[event].locationMappings[map].status === "delete") {
-                    storage.eventsList[event].locationMappings.splice(map,1);
+                row.removeAttr("title");
+                row.removeClass("failed");
+
+                if (storage.eventsList.hasOwnProperty(event) && !result) {
+                    // ... nix zu tun
+                } else {
+                    for ( let r in result) {
+                        let propText = $("#events-table-events > thead:first").find("th." + result[r].property + ":first").text();
+
+                        if (result[r].property === "status" || !propText) continue;
+
+                        switch (result[r].reason) {
+                        case "date-format":
+                            if (result[r].property === "name")
+                                continue;
+
+                            row.attr("title", "Der folgende Bereich hat nicht das richtige Format: " + propText);
+                            break;
+                        case "empty":
+                            if (result[r].property === "date")
+                                continue;
+
+                            row.attr("title", "Das folgende Feld darf nicht leer sein: " + propText);
+                            break;
+                        default:
+                            continue;
+                            break;
+                        }
+
+                        row.addClass("failed");
+
+                        saveIsOk &= false;
+                    }
                 }
             }
         }
 
-        callAction("Das Event mit der ID {0} konnte nicht {1} werden.", "events", storage.eventsList, "_id", failureList, function() {
-            let activeIndex = $("#editor").find("li.ui-tabs-active.ui-state-active:first").index();
-            $("#editor").tabs().tabs('load', activeIndex);
-        });
+         if (saveIsOk) {
+         let failureList = $("#events-load-failure");
+         $(".loadingPanel").show();
+
+         for (let event in storage.eventsList) {
+             for (let map in storage.eventsList[event].locationMappings) {
+                 if (storage.eventsList[event].locationMappings[map].status === "delete") {
+                     storage.eventsList[event].locationMappings.splice(map,1);
+                 }
+             }
+         }
+
+         callAction("Das Event mit der ID {0} konnte nicht {1} werden.", "events",
+             storage.eventsList, "_id", failureList, function() {
+                 let activeIndex = $("#editor").find("li.ui-tabs-active.ui-state-active:first").index();
+                 $("#editor").tabs().tabs('load', activeIndex);
+             });
+         }
     });
 
     // Lädt alle Event Daten

@@ -354,17 +354,24 @@ function callAction(errorText, collectionName, dataList, propertyName, failureLi
 
 function rowIsInvalid(dataList, object) {
     for (let element in dataList) {
-        if (dataList.hasOwnProperty(element) && dataList[element] !== object) {
+        if (dataList.hasOwnProperty(element)) {
+            let reasons = [];
             for (let prop in object) {
+                if(!(String(object[prop]).trim() === "") && !(new RegExp('^(2[0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$').test(String(object[prop]).trim()))) {
+                    reasons.push({ reason: "date-format", property: prop });
+                }
                 if (String(object[prop]).trim() === "") {
-                    return { reason: "empty", property: prop };
-                    }
-                if (dataList[element][prop] === object[prop]) {
-                    return { reason: "same", property: prop };
-                    }
+                    reasons.push({ reason: "empty", property: prop });
+                }
+                if (dataList[element] !== object && dataList[element][prop] === object[prop]) {
+                    reasons.push({ reason: "same", property: prop });
                 }
             }
-        }
+
+            if(reasons.length > 0)
+                return reasons;
+         }
+    }
 }
 
 function addRow(tableBody, data, bs, ...params) {

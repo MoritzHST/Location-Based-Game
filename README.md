@@ -40,8 +40,7 @@ Standardwerte für die MongoDB können in der Datei `mongo.js` bearbeitet werden
 Es is ebenfalls möglich im Wurzelverzeichnis eine mongod.conf mit entsprechenden Werten anzulegen.
 
 `Bitte beachten:` 
-* Aktuell werden für das tägliche Löschen von Benutzern im Dockerfile angegeben werden muss im Sinne eines Eintrages mit dem Namen der Datenbank.
-* Sollte sich der Name der defaultDb ändern oder eine andere Datenbank verwendet werden, so muss der Name im Dockerfile angepasst werden.
+* Sollte sich der Name der defaultDb ändern oder eine andere Datenbank verwendet werden, so muss der Name im Dockerfile und in der mongod.conf angepasst werden.
 
 ## Notes
 Beim Benutzen von npm (Version > 3) sollte darauf geachtet werden, dass der `legacy-bundling` Schalter übergeben wird

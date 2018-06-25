@@ -27,9 +27,8 @@ function initGameOverviewContent() {
     });
 
     //Es darf nur ein Statusfilter aktiv sein
-    $("label.host-state-filter").on("click", function () {
-        $("label.host-state-filter").removeClass("active");
-        $(this).addClass("active");
+    $("label.host-state-filter").on("click", function () {        
+        $(this).toggleClass("active");
         updateTableView();
     });
 

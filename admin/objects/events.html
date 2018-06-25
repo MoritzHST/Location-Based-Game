@@ -17,115 +17,136 @@
 	
 </head>
 <body>
-<ul id="events-load-failure"></ul>
-<table id="events-table-default" class="editor-table">
-	  <thead>
-	  	<tr class="table-header">
-        <th class="min-column">
-            BS
-        </th>
-	      <th class="date">
-	        Datum
-	      </th>
-            <th class="name" abbr="align-left">
-	      	Name
-	      </th>
-	    </tr>
-	  </thead>
-    <tbody id="events-list" class="table-list">
-	  </tbody>
-</table>
-<div class="button-group">
-    <a href="#" id="new-event-button" class="create-button"></a>
-    <a href="#" id="delete-event-button" class="remove-button"></a>
-    <a href="#" id="duplicate-event-button" class="duplicate-button"></a>
-</div>
-<table id="events-table-mapping" class="editor-table">
-	  <thead>
-	  	<tr class="table-header">
-        <th class="min-column">
-            BS
-        </th>
-	      <th class="location.roomnumber">
-	        Raumnummer
-	      </th>
-            <th class="exposition.name" abbr="align-left">
-	      	Name
-	      </th>
-	      <th class="games" abbr="number">
-	      	Anzahl Spiele
-	      </th>	      
-	    </tr>
-	  </thead>
-	  <tbody class="table-list">
-	  </tbody>
-</table>
-<div class="button-group">
-    <a href="#" id="new-mapping-button" class="create-button"></a>
-    <a href="#" id="delete-mapping-button" class="remove-button"></a>
-</div>
-<table id="events-table-locations" class="editor-table">
-    <thead>
-    <tr class="table-header">
-        <th class="min-column">
-            BS
-        </th>
-        <th class="check min-column">
-            &#9745;
-        </th>
-        <th class="roomnumber">
-            Raumnummer
-        </th>
-        <th class="identifier" abbr="align-left">
-            Link
-        </th>
-    </tr>
-    </thead>
-    <tbody class="table-list">
-    </tbody>
-</table>
-<table id="events-table-expositions" class="editor-table">
-    <thead>
-    <tr class="table-header">
-        <th class="min-column">
-            BS
-        </th>
-        <th class="check min-column">
-            &#9745;
-        </th>
-        <th class="name" abbr="align-left">
-            Name
-        </th>
-        <th class="description" abbr="align-left">
-            Beschreibung
-        </th>
-    </tr>
-    </thead>
-    <tbody class="table-list">
-    </tbody>
-</table>
-<table id="events-table-games" class="editor-table">
-    <thead>
-    <tr class="table-header">
-        <th class="min-column">
-            BS
-        </th>
-        <th class="check min-column">
-            &#9745;
-        </th>
-        <th class="type" abbr="smooth">
-            Typ
-        </th>
-        <th class="points">
-            Punkte
-        </th>
-        <th class="question" abbr="align-left">
-            Frage
-        </th>
-    </tr>
-    </thead>
-    <tbody class="table-list">
-    </tbody>
-</table>
+	<div class="loadingPanel center">
+		<img src="images/ajax-loader.gif" alt="Loading..." />
+	</div>
+	<ul id="events-load-failure"></ul>
+	<div class="center">
+		<p>Events ohne Datum werden als Vorlagen behandelt.</p>
+	</div>
+	<table id="events-table-events" class="editor-table">
+		  <thead>
+		  	<tr class="table-header">
+	        	<th class="min-column">
+	            	BS
+	        	</th>
+		      	<th class="date">
+		        	Datum
+		      	</th>
+	            <th class="name" abbr="align-left">
+		      		Name
+		      	</th>
+		    </tr>
+		  </thead>
+	    <tbody id="events-list" class="table-list">
+		  </tbody>
+	</table>
+	<div class="button-group">
+		<input type="submit" id="new-event-button" class="create-button" value="" />
+		<input type="submit" id="delete-event-button" class="remove-button" value="" />
+		<input type="submit" id="duplicate-event-button" class="duplicate-button" value="" />    
+	</div>
+	<div class="details details-5c">
+	    <div class="details-element">
+	        <label for="events-date-textfield"><strong>Datum</strong></label>
+	        <input class="date textfield" type="text" id="events-date-textfield">
+	    </div>
+	
+	    <div class="details-element">
+	        <label for="events-name-textfield"><strong>Name*</strong></label>
+	        <input class="name textfield" type="text" id="events-name-textfield">
+	    </div>
+	</div>
+	<div id="events-div-mapping">
+		<table id="events-table-mapping" class="editor-table">
+			  <thead>
+			  	<tr class="table-header">
+		        <th class="status min-column" abbr="icon">
+		            BS
+		        </th>
+			      <th class="location.roomnumber">
+			        Raumnummer
+			      </th>
+		            <th class="exposition.name" abbr="align-left">
+			      	Name
+			      </th>
+			      <th class="games" abbr="number">
+			      	Anzahl Spiele
+			      </th>	      
+			    </tr>
+			  </thead>
+			  <tbody class="table-list">
+			  </tbody>
+		</table>
+		<div class="button-group">
+			<input type="submit" id="new-mapping-button" class="create-button" value="" />
+			<input type="submit" id="delete-mapping-button" class="remove-button" value="" />
+		</div>
+	</div>		
+	<div id="events-div-accordion">	  
+	  <p>Räume</p>
+	  <div id="events-accordion-locations">
+	    <table id="events-table-locations" class="editor-table">
+		    <thead>
+			    <tr class="table-header">
+			        <th class="check min-column">
+			            &#9745;
+			        </th>
+			        <th class="roomnumber">
+			            Raumnummer
+			        </th>
+			        <th class="identifier" abbr="align-left">
+			            Link
+			        </th>
+			    </tr>
+		    </thead>
+	    	<tbody id="location" class="table-list">
+	    	</tbody>
+		</table>
+	  </div>
+	  <p>Ausstellungen</p>
+	  <div id="events-accordion-expositions">
+		<table id="events-table-expositions" class="editor-table">
+		    <thead>
+			    <tr class="table-header">
+			        <th class="check min-column">
+			            &#9745;
+			        </th>
+			        <th class="name" abbr="align-left">
+			            Name
+			        </th>
+			        <th class="description" abbr="align-left shorten">
+			            Beschreibung
+			        </th>
+			    </tr>
+		    </thead>
+		    <tbody id="exposition" class="table-list">
+		    </tbody>
+		</table>   
+	  </div>
+	  <p>Spiele</p>
+	  <div id="events-accordion-games">
+		<table id="events-table-games" class="editor-table">
+		    <thead>
+		    <tr class="table-header">
+		        <th class="check min-column">
+		            &#9745;
+		        </th>
+		        <th class="type" abbr="smooth">
+		            Typ
+		        </th>
+		        <th class="points">
+		            Punkte
+		        </th>
+		        <th class="question" abbr="align-left">
+		            Frage
+		        </th>
+		    </tr>
+		    </thead>
+		    <tbody id="games" class="table-list">
+		    </tbody>
+		</table>
+	  </div>
+	</div>
 </body>
 </html>

@@ -75,6 +75,7 @@ th.min-column {
     grid-column-gap: 20px;
     grid-row-gap: 20px;
     margin-top: 50px;
+    margin-bottom: 50px;
     border: 1px solid #c5c5c5;
 }
 
@@ -124,6 +125,7 @@ th.min-column {
     -webkit-mask-position: center;
     height: 24px;
     width: 24px;
+    cursor: pointer;
 }
 
 .duplicate-button {
@@ -138,6 +140,7 @@ th.min-column {
     -webkit-mask-position: center;
     height: 24px;
     width: 24px;
+    cursor: pointer;
 }
 
 .remove-button {
@@ -152,9 +155,10 @@ th.min-column {
     -webkit-mask-position: center;
     height: 24px;
     width: 24px;
+    cursor: pointer;
 }
 
-.disabled {
+.button-group > input[type='submit'][disabled], .disabled {
     cursor: default;
     background: #666666;
 }
@@ -163,7 +167,7 @@ th.min-column {
     text-align: center;
 }
 
-.bs.new-item {
+td.insert-icon, td.new-item {
     background: #007fff;
     mask-image: url("../images/create.svg") !important;
     -webkit-mask-image: url("../images/create.svg") !important;
@@ -173,7 +177,7 @@ th.min-column {
     -webkit-mask-position: center;
 }
 
-.bs.edit-item {
+td.update-icon, td.edit-item {
     background: #007fff;
     mask-image: url("../images/edit.svg");
     -webkit-mask-image: url("../images/edit.svg");
@@ -183,7 +187,7 @@ th.min-column {
     -webkit-mask-position: center;
 }
 
-.bs.delete-item {
+td.delete-icon, td.delete-item {
     background: #007fff;
     mask-image: url("../images/remove.svg");
     -webkit-mask-image: url("../images/remove.svg");

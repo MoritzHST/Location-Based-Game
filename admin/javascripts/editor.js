@@ -7,7 +7,7 @@ $(document).ready(function () {
         ajaxOptions: {
             cache: false
         },
-        beforeLoad: function( event, ui ) {
+        beforeLoad: function (event, ui) {
             delete window.storage;
             // Diese toggleAction Methode müßte auf "false" gestellt werden
             // Dazu müßten spiele, ausstellungen & galerie zuvor an dem stil von
@@ -23,7 +23,7 @@ $(document).ready(function () {
                 src: "images/ajax-loader.gif",
                 alt: "Loading..."
             }).appendTo(ui.panel);
-        }, load: function(event, ui) {
+        }, load: function (event, ui) {
             // Entfernt alle Listener von der Sidebar
             // Die "off" Variante von JQuery funktioniert nicht in jedem Browser
             document.getElementById("sidebar").outerHTML = document.getElementById("sidebar").outerHTML;
@@ -33,7 +33,7 @@ $(document).ready(function () {
 
             // Handlet das Click Event beim drücken des "Aktualisieren" Buttons
             $("#button-refresh").off("click");
-            $("#button-refresh").on("click", function() {
+            $("#button-refresh").on("click", function () {
                 let activeIndex = $("#editor").find("li.ui-tabs-active.ui-state-active:first").index();
                 $("#editor").tabs().tabs('load', activeIndex);
             });
@@ -43,8 +43,8 @@ $(document).ready(function () {
     $("#sidebar > input[type='submit']").button();
 });
 
-$(document).on("click", ".table-list > tr > td > input[type='radio']", function(event) {
-    $(this).closest(".table-list").find("input[type='radio']").not($(this)).each(function() {
+$(document).on("click", ".table-list > tr > td > input[type='radio']", function (event) {
+    $(this).closest(".table-list").find("input[type='radio']").not($(this)).each(function () {
         $(this).prop("checked", false);
     });
 
@@ -54,8 +54,7 @@ $(document).on("click", ".table-list > tr > td > input[type='radio']", function(
 });
 
 // https://stackoverflow.com/questions/3140017/how-to-programmatically-select-selectables-with-jquery-ui
-function selectSelectableElement (selectableContainer, elementsToSelect)
-{
+function selectSelectableElement(selectableContainer, elementsToSelect) {
     // add unselecting class to all elements in the styleboard canvas except the
     // ones to select
     $(".ui-selected", selectableContainer).not(elementsToSelect).removeClass("ui-selected").addClass("ui-unselecting");
@@ -122,10 +121,10 @@ function fillTable(table, data) {
 // verwertet
 function getTableHeaderAttributes(tableHeader) {
     let tableHeaderAttributes = [];
-    tableHeader.children("tr:first").children("th").each(function() {
+    tableHeader.children("tr:first").children("th").each(function () {
         let abbr = $(this).attr("abbr");
         let classes = $(this).attr("class").split(" ");
-        tableHeaderAttributes.push({ "classes" : classes[0], "abbr" : abbr });
+        tableHeaderAttributes.push({"classes": classes[0], "abbr": abbr});
     });
 
     return tableHeaderAttributes;
@@ -133,7 +132,7 @@ function getTableHeaderAttributes(tableHeader) {
 
 // überschreibt die Daten einer Reihe mit den Daten einer anderen Reihe
 function updateRowContent(baseRow, newRow) {
-    newRow.children("td").each(function(index) {
+    newRow.children("td").each(function (index) {
         baseRow.children("td").eq(index).html($(this).html());
     });
 }
@@ -177,7 +176,7 @@ function createDataRow(cellObj, tableHeaderAttributes) {
                 break;
             }
 
-           property = $(property).attr(thSplitClasses[counter]);
+            property = $(property).attr(thSplitClasses[counter]);
         }
 
         switch (thAttributes.abbr) {
@@ -251,8 +250,8 @@ function toggleAction(isEnabled, buttons) {
     toggleButtons.prop("disabled", !isEnabled);
 
     if (isEnabled) {
-        toggleButtons.removeClass (function (index, className) {
-            return (className.match (/\S+disabled/g) || []).join(' ');
+        toggleButtons.removeClass(function (index, className) {
+            return (className.match(/\S+disabled/g) || []).join(' ');
         });
     } else {
         toggleButtons.off("**");
@@ -262,19 +261,19 @@ function toggleAction(isEnabled, buttons) {
 function toggleField(isEnabled, field, listData) {
     let data = listData ? listData : {};
     if (field) {
-        field.find("*").each(function() {
-           Object.keys(data).forEach(property => {
-               if ($(this).hasClass(property)) {
-                   $(this).text(isEnabled ? data[property] : "").val(isEnabled ? data[property] : "");
-               }
+        field.find("*").each(function () {
+            Object.keys(data).forEach(property => {
+                if ($(this).hasClass(property)) {
+                    $(this).text(isEnabled ? data[property] : "").val(isEnabled ? data[property] : "");
+                }
 
-               if (!isEnabled) {
-                   $(this).off("input");
-                   $(this).removeAttr("value");
-               }
-           });
+                if (!isEnabled) {
+                    $(this).off("input");
+                    $(this).removeAttr("value");
+                }
+            });
 
-           $(this).prop("disabled", !isEnabled);
+            $(this).prop("disabled", !isEnabled);
         });
     }
 }
@@ -314,40 +313,53 @@ function callAction(errorText, collectionName, dataList, propertyName, failureLi
                 case "insert":
                     errText = errText.replace("{1}", "hinzugefügt");
                     calls.push(
-                            $.post("/insert/" + collectionName, dataList[object]).fail(function() {
-                                $("<li />", {
-                                    text: errText
-                                    }).appendTo(failureList);
-                                })
-                    );
-                break;
+                        // $.post("/insert/" + collectionName, dataList[object]).fail(function() {
+                        //     $("<li />", {
+                        //         text: errText
+                        //         }).appendTo(failureList);
+                        //     })
+                        ajaxRequest("/insert/" + collectionName, "POST", dataList[object], function () {
+
+                        }, function () {
+                            $("<li />", {
+                                text: errText
+                            }).appendTo(failureList);
+                        }));
+                    break;
                 case "update":
                     errText = errText.replace("{1}", "geupdatet");
                     calls.push(
-                            $.post("/update/" + collectionName + "/" + id, dataList[object]).fail(function(error) {
-                                $("<li />", {
-                                    text: errText
-                                    }).appendTo(failureList);
-                                })
+                        // $.post("/update/" + collectionName + "/" + id, dataList[object]).fail(function (error) {
+                        //     $("<li />", {
+                        //         text: errText
+                        //     }).appendTo(failureList);
+                        // })
+                        ajaxRequest("/update/" + collectionName + "/" + id, "POST", dataList[object], function () {
+
+                        }, function () {
+                            $("<li />", {
+                                text: errText
+                            }).appendTo(failureList);
+                        })
                     );
-                break;
+                    break;
                 case "delete":
                     errText = errText.replace("{1}", "gelöscht");
                     calls.push(
-                            $.post("/delete/" + collectionName, dataList[object]).fail(function() {
-                                $("<li />", {
-                                    text: errText
-                                    }).appendTo(failureList);
-                                })
+                        $.post("/delete/" + collectionName, dataList[object]).fail(function () {
+                            $("<li />", {
+                                text: errText
+                            }).appendTo(failureList);
+                        })
                     );
-                break;
+                    break;
                 default:
                     break;
             }
         }
     }
 
-    $.when.apply($, calls).done(function() {
+    $.when.apply($, calls).done(function () {
         callback();
     });
 }
@@ -357,20 +369,20 @@ function rowIsInvalid(dataList, object) {
         if (dataList.hasOwnProperty(element)) {
             let reasons = [];
             for (let prop in object) {
-                if(!(String(object[prop]).trim() === "") && !(new RegExp('^(2[0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$').test(String(object[prop]).trim()))) {
-                    reasons.push({ reason: "date-format", property: prop });
+                if (!(String(object[prop]).trim() === "") && !(new RegExp('^(2[0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$').test(String(object[prop]).trim()))) {
+                    reasons.push({reason: "date-format", property: prop});
                 }
                 if (String(object[prop]).trim() === "") {
-                    reasons.push({ reason: "empty", property: prop });
+                    reasons.push({reason: "empty", property: prop});
                 }
                 if (dataList[element] !== object && dataList[element][prop] === object[prop]) {
-                    reasons.push({ reason: "same", property: prop });
+                    reasons.push({reason: "same", property: prop});
                 }
             }
 
-            if(reasons.length > 0)
+            if (reasons.length > 0)
                 return reasons;
-         }
+        }
     }
 }
 

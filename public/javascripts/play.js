@@ -172,7 +172,7 @@ function updateOutline() {
     let htmlString = "Spielername: " + user.name + "<br/> PIN: " + user.token;
 
     if (user.score) {
-        htmlString += "<br/> Punkte: " + user.score.score + "<br/> Räume besucht: " + user.score.locations + "<br/> Spiele gespielt: " + user.score.games;
+        htmlString += "<br/> Punkte: " + user.score.score + "<br/> Missionen: " + user.score.locations + "<br/> Spiele gespielt: " + user.score.games;
     }
 
     $('#play-user-information').html(htmlString);

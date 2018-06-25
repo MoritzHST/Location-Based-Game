@@ -38,8 +38,8 @@ $(document).ready(function () {
                     $.post("/insert/expositions", {
                         name: newList[i].name,
                         description: newList[i].description,
-                        thumbnailPath: newList[i].thumbnailPath,
-                        imagePaths: newList[i].imagePaths
+                        thumbnail: newList[i].thumbnail,
+                        images: newList[i].images
                     })
                         .done(function () {
 
@@ -59,8 +59,8 @@ $(document).ready(function () {
                     $.post("/update/expositions/" + updList[i]._id, {
                         name: updList[i].name,
                         description: updList[i].description,
-                        thumbnailPath: updList[i].thumbnailPath,
-                        imagePaths: updList[i].imagePaths
+                        thumbnail: updList[i].thumbnail,
+                        images: updList[i].images
                     })
                         .done(function () {
 
@@ -119,8 +119,8 @@ $(document).ready(function () {
         selectedExposition._id = "pseudoId-" + rowId;
         selectedExposition.name = "";
         selectedExposition.description = "";
-        selectedExposition.thumbnailPath = "";
-        selectedExposition.imagePaths = [];
+        selectedExposition.thumbnail = "";
+        selectedExposition.images = [];
 
         appendRow(selectedExposition);
 
@@ -155,8 +155,8 @@ $(document).ready(function () {
 
         let imagePreview = $("#image-preview");
         imagePreview.attr("src", "");
-        if (selectedExposition.thumbnailPath) {
-            imagePreview.attr("src", selectedExposition.thumbnailPath);
+        if (selectedExposition.thumbnail) {
+            imagePreview.attr("src", selectedExposition.thumbnail);
         }
 
         let selectImage = $("#select-image-button");
@@ -166,17 +166,19 @@ $(document).ready(function () {
         selectImage.on("click", function () {
             let imagePreview = $("#image-preview");
             if (imagePreview.attr("src").trim() !== "") {
-                selectedExposition.thumbnailPath = imagePreview.attr("src");
+                selectedExposition.thumbnail = imagePreview.attr("src");
             }
             $("#select-image-dialog").dialog("close");
             storeOld();
+            setInput();
             updateDetails();
         });
 
         deselectImage.on("click", function () {
             $("#image-preview").attr("src", "");
-            selectedExposition.thumbnailPath = undefined;
+            selectedExposition.thumbnail = undefined;
             storeOld();
+            setInput();
             updateDetails();
         });
     });
@@ -198,8 +200,8 @@ $(document).ready(function () {
 
         let imagePreview = $("#image-preview");
         imagePreview.attr("src", "");
-        if (selectedExposition.imagePaths[0]) {
-            imagePreview.attr("src", selectedExposition.imagePaths[0]);
+        if (selectedExposition.images[0]) {
+            imagePreview.attr("src", selectedExposition.images[0]);
         }
 
         let selectImage = $("#select-image-button");
@@ -207,10 +209,10 @@ $(document).ready(function () {
         selectImage.off("click");
         deselectImage.off("click");
         selectImage.on("click", function () {
-            if (selectedExposition.imagePaths.length < maximumImageItems) {
+            if (selectedExposition.images.length < maximumImageItems) {
                 let imagePreview = $("#image-preview");
                 if (imagePreview.attr("src").trim() !== "") {
-                    selectedExposition.imagePaths.push(imagePreview.attr("src"));
+                    selectedExposition.images.push(imagePreview.attr("src"));
                 }
                 updateImageContainer($("#assigned-image-items"));
             }
@@ -218,19 +220,21 @@ $(document).ready(function () {
                 $("#select-image-dialog").dialog("option", "title", "Es sind maximal 5 Bilder erlaubt");
             }
             storeOld();
+            setInput();
             updateDetails();
         });
 
         deselectImage.on("click", function () {
             let imagePreview = $("#image-preview");
-            for (let i in selectedExposition.imagePaths) {
-                if (selectedExposition.imagePaths[i] === imagePreview.attr("src")) {
-                    selectedExposition.imagePaths.splice(i, 1);
+            for (let i in selectedExposition.images) {
+                if (selectedExposition.images[i] === imagePreview.attr("src")) {
+                    selectedExposition.images.splice(i, 1);
                 }
             }
             imagePreview.attr("src", "");
             updateImageContainer($("#assigned-image-items"));
             storeOld();
+            setInput();
             updateDetails();
         });
     });
@@ -314,8 +318,8 @@ function init() {
 
 function switchData() {
     selectedExposition = expositionList[$(".ui-selected").prop("id")];
-    if (!Array.isArray(selectedExposition.imagePaths)) {
-        selectedExposition.imagePaths = [];
+    if (!Array.isArray(selectedExposition.images)) {
+        selectedExposition.images = [];
     }
     updateDetails();
 }
@@ -337,7 +341,6 @@ function appendRow(pObj) {
 }
 
 function updateDetails() {
-    let selRow = $(".ui-selected");
     let detailsName = $("#exposition-name-textfield");
     let detailsTextarea = $("#exposition-description-textfield");
 
@@ -345,16 +348,16 @@ function updateDetails() {
     detailsName.on("input", setInput);
     detailsTextarea.unbind("input propertychange");
     detailsTextarea.bind("input propertychange", setInput);
-    $("#exposition-thumbnail").attr("src", String(selectedExposition.thumbnailPath ? selectedExposition.thumbnailPath : ""));
+    $("#exposition-thumbnail").attr("src", String(selectedExposition.thumbnail ? selectedExposition.thumbnail : ""));
     let assignedImageWrapper = $("#exposition-image-collection-wrapper");
-    let assignedImage = $("#exposition-selected-image")
+    let assignedImage = $("#exposition-selected-image");
     assignedImage.attr("src", "");
     assignedImageWrapper.children().remove();
-    if (selectedExposition.imagePaths.length > 0) {
-        $("#exposition-selected-image").attr("src", selectedExposition.imagePaths[0]);
-        for (let i in selectedExposition.imagePaths) {
+    if (selectedExposition.images.length > 0) {
+        $("#exposition-selected-image").attr("src", selectedExposition.images[0]);
+        for (let i in selectedExposition.images) {
             let curImage = $("<img/>", {
-                src: selectedExposition.imagePaths[i],
+                src: selectedExposition.images[i],
                 class: "assigned-image-item image-item",
                 href: "#"
             });
@@ -369,18 +372,19 @@ function updateDetails() {
     }
     detailsName.val(selectedExposition.name);
     detailsTextarea.val(selectedExposition.description);
+}
 
-    function setInput() {
-        checkInput();
-        if (!($(selRow).find(".bs").hasClass("delete-item") || $(selRow).find(".bs").hasClass("new-item")))
-            $(selRow).find(".bs").addClass("edit-item");
-        selectedExposition.name = $("#exposition-name-textfield").val();
-        selectedExposition.description = $("#exposition-description-textfield").prop("value");
-        $(selRow).find(".exposition-name-cell").text(selectedExposition.name);
-        $(selRow).find(".exposition-description-cell").text(selectedExposition.description);
+function setInput() {
+    let selRow = $(".ui-selected");
+    checkInput();
+    if (!($(selRow).find(".bs").hasClass("delete-item") || $(selRow).find(".bs").hasClass("new-item")))
+        $(selRow).find(".bs").addClass("edit-item");
+    selectedExposition.name = $("#exposition-name-textfield").val();
+    selectedExposition.description = $("#exposition-description-textfield").prop("value");
+    $(selRow).find(".exposition-name-cell").text(selectedExposition.name);
+    $(selRow).find(".exposition-description-cell").text(selectedExposition.description);
 
-        storeOld();
-    }
+    storeOld();
 }
 
 function fetchImages() {
@@ -456,10 +460,10 @@ function updateCurrentImage(selectedImage) {
 
 function updateImageContainer(assignedImageContainer) {
     assignedImageContainer.children().remove();
-    for (let i in selectedExposition.imagePaths) {
+    for (let i in selectedExposition.images) {
         let curImg = $("<img/>", {
             id: "assigned-image-" + i,
-            src: selectedExposition.imagePaths[i],
+            src: selectedExposition.images[i],
             class: "assigned-image-item"
         });
         curImg.appendTo(assignedImageContainer);

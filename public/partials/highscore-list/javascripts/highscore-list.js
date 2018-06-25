@@ -13,10 +13,13 @@ function initHighscoreList() {
 }
 
 function getHighscoreData() {
+    //Ruft die HighScore-Liste ab
     $.get("/get/scorelist")
         .done(function (obj) {
+            //Ggf. maximale Anzahl in config.js deklariert -> überflüssige entfernen
             obj = obj.slice(0, highscoreEntries);
             alternateColorFlag = false;
+            //Alte Liste ausblenden und entfernen, neue Elemente setzen
             $(".highscore-list-entry-row").fadeOut("slow", function () {
                 $(".highscore-list-entry-row").remove();
                 for (let i in obj) {
@@ -28,6 +31,11 @@ function getHighscoreData() {
         });
 }
 
+/**
+ * Setzt die einzelnen Tabellenreihen
+ * Wenn die Seite von einem Benutzer aufgerufen wird, wird dieser selbst in der Liste fett und kursiv makiert
+ * Die Farben der Tabelle sind alternierend (alternateColorFlag)
+ */
 function newHighscoreListEntry(obj) {
     let alternateColor = " ";
 

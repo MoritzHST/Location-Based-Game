@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    //Setzt die Cookiebar
     if (!$("#cookie-bar").length) {
         $.cookieBar({
                 message: "Die Seite <a href='/'>quiz.hochschule-stralsund.de</a> benutzt Cookies, um einzelne Spielelemente zu ermöglichen.\n" +

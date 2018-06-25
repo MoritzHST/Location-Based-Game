@@ -93,13 +93,18 @@ function setLayer(pLayer) {
 
 /**
  * Für die generierten Hooks aus UpdateTable wird über die ID das Raum-ELement generiert
+ * für das generierte Objekt werden hier die Daten gesetzt
  * @param dataObj
  */
 function setTableContent(dataObj) {
     let mediaObj = $("#" + dataObj.location._id + "-hook");
     mediaObj.find(".overview-table-cell-location-info-name").html(dataObj.location.roomnumber + " " + dataObj.exposition.name);
-    if (dataObj.exposition.thumbnailPath) {
-        mediaObj.find(".overview-table-cell-location-image-wrapper").css("background", "url(" + dataObj.exposition.thumbnailPath + ") no-repeat");
+    if (dataObj.exposition.thumbnail) {
+        mediaObj.find(".overview-table-cell-location-image-wrapper").css({
+            "background": "url(" + dataObj.exposition.thumbnail + ") no-repeat",
+            "background-size": "contain",
+            "background-position": "center center"
+        });
     }
     mediaObj.find(".overview-table-cell-location-info-description").html(getDescriptionString(dataObj.exposition.description));
     mediaObj.find(".overview-table-cell-location-state").addClass("overview-room-state-context-" + dataObj.state);
@@ -109,6 +114,9 @@ function setTableContent(dataObj) {
     });
 }
 
+/**
+ * Filter-Funktion: Je nachdem was angehakt ist, werden Tabellenelemente über hide() ausgeblednet oder über show() eingeblendet
+ */
 function updateTableView() {
     let statusFilter = $("#play_rooms > label.active");
     let floorFilter = $("label.btn.btn-secondary.host-button-group-button.host-floor > input:checked");
@@ -119,6 +127,9 @@ function updateTableView() {
     });
 }
 
+/**
+ * Hilfsfunktion die den Beschreibungsstring anpasst, da er in eine rkleinen Zelle nicht mit der vollen Länge angezeigt werden sollte
+ */
 function getDescriptionString(pObj) {
     let descriptionString = pObj.slice(0, 50);
     if (descriptionString.indexOf("<") === -1 && descriptionString.indexOf(">") === -1) {

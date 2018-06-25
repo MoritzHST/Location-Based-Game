@@ -3,7 +3,7 @@ let user;
 let loginHintTimer;
 let logoutHintTimer;
 
-$(function() {
+$(function () {
     $('nav#menu').mmenu();
 });
 
@@ -15,20 +15,20 @@ function init() {
 
     setHooks();
     // Nav-Menü "Spielübersicht"
-    $("#game-play-overview").on("click", function() {
+    $("#game-play-overview").on("click", function () {
         setNodeHookFromFile($("#content-hook"), "../partials/game-overview-content/game-overview-content.html", undefined, undefined, "initGameOverviewContent");
     });
     // Nav-Menü "Score-Board"
-    $("#game-play-highscore-list").on("click", function() {
+    $("#game-play-highscore-list").on("click", function () {
         setNodeHookFromFile($("#content-hook"), "../partials/highscore-list/highscore-list.html", undefined, undefined, "initHighscoreList");
     });
     // Nav-Menü "Logout"
-    $("#game-logout").on("click", function() {
+    $("#game-logout").on("click", function () {
         setNodeHookFromFile($("#failure-hook"), "../partials/play-logout-box/play-logout-box.html");
         setNodeHookFromFile($("#warning-hook"), "../partials/play-warning-box/play-warning-box.html", setLogoutHint);
     });
     // Nav-Menü "Raumplan"
-    $("#game-room-map").on("click", function() {
+    $("#game-room-map").on("click", function () {
         setNodeHookFromFile($("#content-hook"), "../partials/room-map/room-map.html", undefined, undefined, "initRoomMap");
     });
     // Nav-Menü "Spielanleitung"
@@ -40,15 +40,15 @@ function init() {
         setNodeHookFromFile($("#content-hook"), "../partials/privacy/privacy.html");
     });
     // Nav-Menü "Impressum"
-    $("#game-impressum").on("click", function() {
+    $("#game-impressum").on("click", function () {
         setNodeHookFromFile($("#content-hook"), "../partials/impressum/impressum.html");
     });
     // Nav-Menü "Haftungsausschluss"
-    $("#game-warranty").on("click", function() {
+    $("#game-warranty").on("click", function () {
         setNodeHookFromFile($("#content-hook"), "../partials/warranty/warranty.html");
     });
     // Nav-Menü "Drittanbieter-Sofware"
-    $("#game-thirdparty").on("click", function() {
+    $("#game-thirdparty").on("click", function () {
         setNodeHookFromFile($("#content-hook"), "../partials/third-party/third-party.html");
     });
 }
@@ -61,16 +61,16 @@ function setSlideInMenu() {
     user = cookie.user;
 
     $.get("/find/events", {
-        "date" : new Date().toJSON().slice(0, 10)
-    }).then(function(result) {
+        "date": new Date().toJSON().slice(0, 10)
+    }).then(function (result) {
         $("#menu").mmenu({
-            navbar : {
-                title : ""
+            navbar: {
+                title: ""
             },
-            navbars : [ {
-                position : "top",
-                content : [ "prev", "title" ]
-            } ]
+            navbars: [{
+                position: "top",
+                content: ["prev", "title"]
+            }]
         });
         $(".mm-navbar__title").html(result.name);
         updateOutline();
@@ -87,9 +87,10 @@ function setHooks() {
     setNodeHookFromFile($("#warning-hook"), "../partials/play-warning-box/play-warning-box.html", hideWarning);
 }
 
+//Selektiert den Cookie mit pCookieName vom aktuellen document
 function getObjectFromCookie(pCookieName) {
     let cookieStrings = document.cookie.split(";");
-    for ( let i in cookieStrings) {
+    for (let i in cookieStrings) {
         cookieStrings[i] = cookieStrings[i].trim();
         if (cookieStrings[i].startsWith(pCookieName + "=")) {
             let cookieValue = cookieStrings[i].substr(pCookieName.length + 1);
@@ -99,10 +100,11 @@ function getObjectFromCookie(pCookieName) {
     }
 }
 
+//Setzt bzw. überschreibt einen Cookie
 function setCookieFromObject(pObj, pCookieName) {
     let cookieStrings = document.cookie.split(";");
 
-    for ( let i in cookieStrings) {
+    for (let i in cookieStrings) {
         if (cookieStrings[i].trim().startsWith(pCookieName + "=")) {
             document.cookie = pCookieName + "=" + btoa(JSON.stringify(pObj));
         }
@@ -113,14 +115,15 @@ function hideWarning() {
     $("#warning-box-message").html("Spielername: " + user.name + "<br/> PIN: " + user.token);
 
     if (!loginHintTimer) {
-        loginHintTimer = setTimeout(function() {
-            $("#warning-hook").fadeOut("slow", function() {
+        loginHintTimer = setTimeout(function () {
+            $("#warning-hook").fadeOut("slow", function () {
                 $("#warning-hook").show().html("");
             });
         }, notificationFadeOut);
     }
 }
 
+//Wenn der Spieler sich ausloggen möchte wird ein
 function setLogoutHint() {
     let timeleft = notificationFadeOut / 1000;
     // Main-Box ausblenden
@@ -136,7 +139,7 @@ function setLogoutHint() {
         // Timer initialisieren
         $("#warning-box-hint").html("Logout in " + timeleft);
         // Countdown beginnen
-        logoutHintTimer = setInterval(function() {
+        logoutHintTimer = setInterval(function () {
             // Runterzählen
             $("#warning-box-hint").html(("Logout in " + --timeleft));
             // Timer soll gestoppt werden wenn die Warning Box leer ist
@@ -148,7 +151,7 @@ function setLogoutHint() {
             if (timeleft <= 0) {
                 clearInterval(this);
                 logoutHintTimer = undefined;
-                $.get("sign-out").done(function() {
+                $.get("sign-out").done(function () {
                     clearLocalCookies("session");
                     window.location = "sign-up";
                 });
@@ -157,13 +160,14 @@ function setLogoutHint() {
     }
 
     // Bei Menüinteraktion soll der Timeout gestoppt werden
-    $("#play-side-menu li a").on("click", function() {
+    $("#play-side-menu li a").on("click", function () {
         clearInterval(logoutHintTimer);
         logoutHintTimer = undefined;
         clearNodeHook("warning-hook");
     });
 }
 
+//Funktion um das Menü zu aktualisieren
 function updateOutline() {
     let htmlString = "Spielername: " + user.name + "<br/> PIN: " + user.token;
 

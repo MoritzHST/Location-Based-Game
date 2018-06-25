@@ -19,6 +19,7 @@ function singleChoiceHandler(pAnswer, pGame) {
         }
     }
     logging.Leaving("singleChoiceHandler");
+    return false;
 }
 
 function multipleChoiceHandler(pAnswer, pGame) { // NOSONAR

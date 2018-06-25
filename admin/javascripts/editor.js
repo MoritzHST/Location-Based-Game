@@ -169,6 +169,9 @@ function createDataRow(cellObj, tableHeaderAttributes) {
         let thSplitClasses = thAttributes.classes.split(".");
         let property = cellObjQuery;
         let clazz = "";
+        let thSplitAbbr = [];
+        if (thAttributes.abbr)
+        	thSplitAbbr = thAttributes.abbr.split(" ");
 
         for (let counter = 0; counter < thSplitClasses.length; counter++) {
             if (!property) {
@@ -179,25 +182,29 @@ function createDataRow(cellObj, tableHeaderAttributes) {
             property = $(property).attr(thSplitClasses[counter]);
         }
 
-        switch (thAttributes.abbr) {
-            case "smooth":
-                let propStrings = property.split("_");
-                for (let i = 0; i < propStrings.length; i++) {
-                    propStrings[i] = propStrings[i].charAt(0).toUpperCase() + propStrings[i].slice(1);
-                }
-                property = propStrings.join(" ");
-                break;
-            case "number":
-                property = property.length;
-                break;
-            case "icon":
-                clazz = property + "-icon";
-                property = "";
-                break;
-            default:
-                if (thAttributes.abbr)
-                    clazz = thAttributes.abbr;
-                break;
+        for (let abbr in thSplitAbbr) {
+	        switch (thSplitAbbr[abbr]) {
+	            case "shorten":
+	            	property = shortenString(property, 125);
+	        	    break;
+	            case "smooth":
+	                let propStrings = property.split("_");
+	                for (let i = 0; i < propStrings.length; i++) {
+	                    propStrings[i] = propStrings[i].charAt(0).toUpperCase() + propStrings[i].slice(1);
+	                }
+	                property = propStrings.join(" ");
+	                break;
+	            case "number":
+	                property = property.length;
+	                break;
+	            case "icon":
+	                clazz = property + "-icon";
+	                property = "";
+	                break;
+	            default:
+	                clazz = thSplitAbbr[abbr];
+	                break;
+	        }
         }
 
         $("<td />", {
@@ -291,6 +298,18 @@ function removeAllStatus(dataObject) {
             delete dataObject[o].status;
         }
     }
+}
+
+//Verkleinert einen Text auf den übergebenen Wert, falls die Länge diesen überschritet 
+function shortenString(text, maxChars) {
+	let shorten = $('<div>').html(text);
+	
+	if (shorten.text().length > maxChars) {
+		shorten.text(shorten.text().slice(0, maxChars));
+		shorten.text(shorten.text() + "...");
+	}
+		
+	return shorten.text();
 }
 
 function callAction(errorText, collectionName, dataList, propertyName, failureList, callback) {

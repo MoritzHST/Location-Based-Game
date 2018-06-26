@@ -337,7 +337,7 @@ function callAction(errorText, collectionName, dataList, propertyName, failureLi
                         //         text: errText
                         //         }).appendTo(failureList);
                         //     })
-                        ajaxRequest("/insert/" + collectionName, "POST", dataList[object], function () {
+                        ajaxRequest("/insert/" + collectionName, "POST", JSON.stringify(dataList[object]), function () {
 
                         }, function () {
                             $("<li />", {
@@ -353,7 +353,7 @@ function callAction(errorText, collectionName, dataList, propertyName, failureLi
                         //         text: errText
                         //     }).appendTo(failureList);
                         // })
-                        ajaxRequest("/update/" + collectionName + "/" + id, "POST", dataList[object], function () {
+                        ajaxRequest("/update/" + collectionName + "/" + id, "POST", JSON.stringify(dataList[object]), function () {
 
                         }, function () {
                             $("<li />", {

@@ -11,6 +11,7 @@ function findEvents(req, res) {
 
 function insertEvent(req, res) {
     req.query = handler.getRealRequest(req.query, req.body);
+    req.query = handler.convertIdFields(req.query, "_id");
     if (handler.checkIfValidQuery(req.query)) {
 
         operations.findObject(eventCollection, {
@@ -39,12 +40,13 @@ function insertEvent(req, res) {
 
 function updateEvent(req, res) {
     req.query = handler.getRealRequest(req.query, req.body);
+    req.query = handler.convertIdFields(req.query, "_id");
     if (handler.checkIfValidQuery(req.query)) {
         if (req.query.date) {
             req.query._id = {
                 $ne: req.params.id
             };
-            operations.findObject(eventCollection, handler.idFriendlyQuery(req.query), function (err, item) {
+            operations.findObject(eventCollection, req.query, function (err, item) {
                 if (item) {
                     res.status(422).jsonp({
                         "error": "Es existiert bereits ein anderes Event mit diesem Datum!"

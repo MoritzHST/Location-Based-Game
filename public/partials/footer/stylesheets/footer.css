@@ -8,7 +8,11 @@
 
 .host-footer * {
     text-align: center;
-    color: #e1232b;
+    color: #e1232b !important;
+    width: auto;
+    line-height: 14px;
+    padding-bottom: 5px;
+    padding-top: 5px;
 }
 
 .host-privacy {

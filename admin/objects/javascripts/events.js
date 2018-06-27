@@ -144,6 +144,10 @@ $(document).ready(function() {
                 storage.selectedEventIndex = -1;
                 storage.selectedMapIndex = -1;
 
+                $("#events-div-accordion").children("p").each(function() {
+                    addInfoToAccordionHeader($(this));
+                });
+
                 $("input[type='checkbox'], input[type='radio']").prop("checked", false);
                 $("#delete-event-button, #duplicate-event-button").prop("disabled", true);
                 $("#events-table-mapping > tbody.table-list").empty();
@@ -193,6 +197,7 @@ $(document).ready(function() {
                 $("#events-table-locations > tbody.table-list").find("tr").each(function () {
                     if (String(selectedMap.location._id) === $(this).attr("id").slice(3)) {
                         $(this).find("input[type]").prop("checked", true);
+                        addInfoToAccordionHeader($("#events-div-accordion").children("p[aria-controls='events-accordion-locations']:first"), String(selectedMap.location.roomnumber));
                         return false;
                     }
                 });
@@ -201,6 +206,7 @@ $(document).ready(function() {
                 $("#events-table-expositions > tbody.table-list").find("tr").each(function () {
                     if (String(selectedMap.exposition._id) === $(this).attr("id").slice(3)) {
                         $(this).find("input[type]").prop("checked", true);
+                        addInfoToAccordionHeader($("#events-div-accordion").children("p[aria-controls='events-accordion-expositions']:first"), String(selectedMap.exposition.name));
                         return false;
                     }
                 });
@@ -210,6 +216,7 @@ $(document).ready(function() {
                     for (let game of selectedMap.games) {
                         if (String(game._id) === $(this).attr("id").slice(3)) {
                             $(this).find("input[type]").prop("checked", true);
+                            addInfoToAccordionHeader($("#events-div-accordion").children("p[aria-controls='events-accordion-games']:first"), String(selectedMap.games.length));
                         }
                     }
                 });
@@ -220,6 +227,10 @@ $(document).ready(function() {
             $("input[type='checkbox'], input[type='radio']").prop("checked", false);
             toggleField(false, $("#events-div-accordion"));
             $("#delete-mapping-button").prop("disabled", true);
+
+            $("#events-div-accordion").children("p").each(function() {
+                addInfoToAccordionHeader($(this));
+            });
         }
     });
 
@@ -274,6 +285,10 @@ $(document).ready(function() {
         }
 
         updateRowContent(selectedRow, createDataRow(selectedMap, getTableHeaderAttributes($("#events-table-mapping > thead:first"))));
+
+        addInfoToAccordionHeader($("#events-div-accordion").children("p[aria-controls='events-accordion-locations']:first"), String(selectedMap.location.roomnumber));
+        addInfoToAccordionHeader($("#events-div-accordion").children("p[aria-controls='events-accordion-expositions']:first"), String(selectedMap.exposition.name));
+        addInfoToAccordionHeader($("#events-div-accordion").children("p[aria-controls='events-accordion-games']:first"), String(selectedMap.games.length));
 
         let selectedEvent = clone(storage.eventsList[storage.selectedEventIndex]);
         selectedEvent.locationMappings[storage.selectedMapIndex] = selectedMap;
@@ -379,3 +394,11 @@ $(document).ready(function() {
         }
     });
 });
+
+function addInfoToAccordionHeader(control, text) {
+    let seperatorIndex = control.text().indexOf(" -");
+    let defaultText = seperatorIndex >= 0 ? control.text().substring(0, seperatorIndex) : control.text();
+    let extraText = text ? " - " + text : "";
+
+    control.text(defaultText + extraText);
+}

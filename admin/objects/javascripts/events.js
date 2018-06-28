@@ -101,6 +101,10 @@ $(document).ready(function() {
                 storage.selectedMapIndex = -1;
                 toggleField(false, $("#events-div-accordion"));
 
+                $("#events-div-accordion").children("p").each(function() {
+                    addInfoToAccordionHeader($(this));
+                });
+
                 $(ui.selected).addClass("ui-selected").siblings().removeClass("ui-selected");
                 $("input[type='checkbox'], input[type='radio']").prop("checked", false);
                 $("#delete-mapping-button").prop("disabled", true);
@@ -180,6 +184,11 @@ $(document).ready(function() {
             $(ui.selected).addClass("ui-selected").siblings().removeClass("ui-selected");
             $("#delete-mapping-button").prop("disabled", false);
             $("input[type='checkbox'], input[type='radio']").prop("checked", false);
+
+            $("#events-div-accordion").children("p").each(function() {
+                addInfoToAccordionHeader($(this));
+            });
+
             for (let i = 0; i < storage.eventsList.length; i++) {
                 if ("tbody-" + String(storage.eventsList[i]._id) === ui.selected.closest("tbody").id) {
                     storage.selectedMapIndex = $("#events-table-mapping > tbody.table-list").find(ui.selected).index();
@@ -197,7 +206,9 @@ $(document).ready(function() {
                 $("#events-table-locations > tbody.table-list").find("tr").each(function () {
                     if (String(selectedMap.location._id) === $(this).attr("id").slice(3)) {
                         $(this).find("input[type]").prop("checked", true);
-                        addInfoToAccordionHeader($("#events-div-accordion").children("p[aria-controls='events-accordion-locations']:first"), String(selectedMap.location.roomnumber));
+                        // if (selectedMap.location &&
+                        // selectedMap.location.roomnumber)
+                            addInfoToAccordionHeader($("#events-div-accordion").children("p[aria-controls='events-accordion-locations']:first"), selectedMap.location.roomnumber);
                         return false;
                     }
                 });
@@ -206,7 +217,8 @@ $(document).ready(function() {
                 $("#events-table-expositions > tbody.table-list").find("tr").each(function () {
                     if (String(selectedMap.exposition._id) === $(this).attr("id").slice(3)) {
                         $(this).find("input[type]").prop("checked", true);
-                        addInfoToAccordionHeader($("#events-div-accordion").children("p[aria-controls='events-accordion-expositions']:first"), String(selectedMap.exposition.name));
+                        if (selectedMap.exposition && selectedMap.exposition.name)
+                            addInfoToAccordionHeader($("#events-div-accordion").children("p[aria-controls='events-accordion-expositions']:first"), selectedMap.exposition.name);
                         return false;
                     }
                 });
@@ -216,7 +228,8 @@ $(document).ready(function() {
                     for (let game of selectedMap.games) {
                         if (String(game._id) === $(this).attr("id").slice(3)) {
                             $(this).find("input[type]").prop("checked", true);
-                            addInfoToAccordionHeader($("#events-div-accordion").children("p[aria-controls='events-accordion-games']:first"), String(selectedMap.games.length));
+                            if (selectedMap.games && selectedMap.games.length)
+                                addInfoToAccordionHeader($("#events-div-accordion").children("p[aria-controls='events-accordion-games']:first"), selectedMap.games.length);
                         }
                     }
                 });
@@ -286,9 +299,9 @@ $(document).ready(function() {
 
         updateRowContent(selectedRow, createDataRow(selectedMap, getTableHeaderAttributes($("#events-table-mapping > thead:first"))));
 
-        addInfoToAccordionHeader($("#events-div-accordion").children("p[aria-controls='events-accordion-locations']:first"), String(selectedMap.location.roomnumber));
-        addInfoToAccordionHeader($("#events-div-accordion").children("p[aria-controls='events-accordion-expositions']:first"), String(selectedMap.exposition.name));
-        addInfoToAccordionHeader($("#events-div-accordion").children("p[aria-controls='events-accordion-games']:first"), String(selectedMap.games.length));
+        addInfoToAccordionHeader($("#events-div-accordion").children("p[aria-controls='events-accordion-locations']:first"), selectedMap.location.roomnumber);
+        addInfoToAccordionHeader($("#events-div-accordion").children("p[aria-controls='events-accordion-expositions']:first"), selectedMap.exposition.name);
+        addInfoToAccordionHeader($("#events-div-accordion").children("p[aria-controls='events-accordion-games']:first"), selectedMap.games.length);
 
         let selectedEvent = clone(storage.eventsList[storage.selectedEventIndex]);
         selectedEvent.locationMappings[storage.selectedMapIndex] = selectedMap;

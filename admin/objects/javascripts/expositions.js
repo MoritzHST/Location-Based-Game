@@ -382,7 +382,7 @@ function setInput() {
     selectedExposition.name = $("#exposition-name-textfield").val();
     selectedExposition.description = $("#exposition-description-textfield").prop("value");
     $(selRow).find(".exposition-name-cell").text(selectedExposition.name);
-    $(selRow).find(".exposition-description-cell").text(selectedExposition.description);
+    $(selRow).find(".exposition-description-cell").text("<p>" + (selectedExposition.description && selectedExposition.description.length > 120) ? selectedExposition.description.substring(0, 117) + "..." : selectedExposition.description ? selectedExposition.description : "" + "</p>");
 
     storeOld();
 }

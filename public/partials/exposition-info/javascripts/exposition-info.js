@@ -78,6 +78,15 @@ function initContextCodeScanned(obj) {
             break;
         }
     }
+
+    if (!gameObj.currentGameNumber) {
+        $.get('get/answers', {identifier: btoa(locationObj.identifier)})
+            .done(function (callbackObj) {
+                if (callbackObj) {
+                    initGameFinishedView(callbackObj);
+                }
+            });
+    }
 }
 
 // Initialisierngsfunktion wenn noch kein Code gescanned wurde
